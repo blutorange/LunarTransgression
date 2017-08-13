@@ -46,91 +46,52 @@
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>all-themes</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.mariadb.jdbc</groupId>
-			<artifactId>mariadb-java-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.dagger</groupId>
-			<artifactId>dagger</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.jsoniter</groupId>
-			<artifactId>jsoniter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-jpamodelgen</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-hikaricp</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.postgresql</groupId> -->
+<!-- 			<artifactId>postgresql</artifactId> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.mariadb.jdbc</groupId> -->
+<!-- 			<artifactId>mariadb-java-client</artifactId> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.google.dagger</groupId> -->
+<!-- 			<artifactId>dagger</artifactId> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>mysql</groupId> -->
+<!-- 			<artifactId>mysql-connector-java</artifactId> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.slf4j</groupId> -->
+<!-- 			<artifactId>slf4j-api</artifactId> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.slf4j</groupId> -->
+<!-- 			<artifactId>slf4j-log4j12</artifactId> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.validation</groupId> -->
+<!-- 			<artifactId>validation-api</artifactId> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.eclipse.jdt</groupId>
 			<artifactId>org.eclipse.jdt.annotation</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.github.blutorange</groupId>
-			<artifactId>LunarTransgressionUtil</artifactId>
-		</dependency>
-		<!-- Provided dependencies -->
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>javax.annotation-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.ejb</groupId>
-			<artifactId>javax.ejb-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.websocket</groupId>
-			<artifactId>javax.websocket-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
+<!-- 		-->
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.annotation</groupId> -->
+<!-- 			<artifactId>javax.annotation-api</artifactId> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.blutorange</groupId>
+			<artifactId>LunarTransgressionLogic</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -154,112 +115,7 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
-					<compilerArgument>-proc:none</compilerArgument>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.bsc.maven</groupId>
-				<artifactId>maven-processor-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>process-jpa</id>
-						<goals>
-							<goal>process</goal>
-						</goals>
-						<phase>generate-sources</phase>
-						<configuration>
-                			<outputDirectory>${project.build.directory}/generated-sources/java/jpametamodel</outputDirectory>						
-							<options>
-								<fullyAnnotationConfigured>true</fullyAnnotationConfigured>
-								<addGeneratedAnnotation>true</addGeneratedAnnotation>
-								<addGenerationDate>true</addGenerationDate>
-								<addSuppressWarningsAnnotation>true</addSuppressWarningsAnnotation>
-							</options>
-							<processors>
-								<processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
-							</processors>
-						</configuration>
-					</execution>
-					<execution>
-						<id>process-dagger</id>
-						<goals>
-							<goal>process</goal>
-						</goals>
-						<phase>generate-sources</phase>
-						<configuration>
-                			<outputDirectory>${project.build.directory}/generated-sources/java/dagger</outputDirectory>						
-							<options>
-							</options>
-							<processors>
-								<processor>dagger.internal.codegen.ComponentProcessor</processor>
-							</processors>
-						</configuration>
-					</execution>					
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.hibernate</groupId>
-						<artifactId>hibernate-jpamodelgen</artifactId>
-						<version>${hibernate-version}</version>
-					</dependency>
-			        <dependency>
-			            <groupId>com.google.dagger</groupId>
-			            <artifactId>dagger-compiler</artifactId>
-			            <version>${dagger-version}</version>
-			        </dependency>					
-				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${project.build.directory}/generated-sources/java/jpametamodel</source>
-								<source>${project.build.directory}/generated-sources/java/dagger</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>			
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<configuration>
-							<mainClass>com.github.blutorange.translune.Sandbox</mainClass>
-							<arguments>
-							</arguments>
-						</configuration>
-						<goals>
-							<goal>java</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>static-codegen</id>
-						<phase>compile</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>java</executable>
-							<workingDirectory>${project.build.sourceDirectory}</workingDirectory>
-							<arguments>
-								<argument>-classpath</argument>
-								<classpath />
-								<argument>com.jsoniter.static_codegen.StaticCodegen</argument>
-								<argument>com.github.blutorange.translune.JsoniterConfig</argument>
-							</arguments>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -273,7 +129,6 @@
 					</webResources>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.codehaus.cargo</groupId>
 				<artifactId>cargo-maven2-plugin</artifactId>
@@ -308,7 +163,6 @@
 					</deployables>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
