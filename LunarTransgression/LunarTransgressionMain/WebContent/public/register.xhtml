@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<ui:composition template="/WEB-INF/template/common.xhtml">
+		<ui:define name="pageTitle">Login</ui:define>
+		<ui:define name="mainContent">
+			<p:layout fullPage="true">
+				<p:layoutUnit position="center">
+					<h:form id="register_form">
+						<p:messages id="messages" autoUpdate="true" />
+						<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5"
+							columnClasses="label, value">
+							<p:outputLabel for="username" value="Username" />
+							<p:inputText id="username" value="#{sessionBean.username}"
+								required="true" />
+							<p:outputLabel for="password" value="Password" />
+							<p:password id="password" value="#{sessionBean.password}"
+								required="true" />
+							<p:outputLabel for="password_repeat" value="Repeat password" />
+							<p:password id="password_repeat" value="#{sessionBean.passwordRepeat}"
+								required="true" />								
+						</h:panelGrid>
+						<p:separator />
+						<p:commandButton actionListener="#{sessionBean.register}" value="Register" icon="ui-icon-check"/>
+					</h:form>
+				</p:layoutUnit>
+			</p:layout>
+		</ui:define>
+	</ui:composition>
+</html>

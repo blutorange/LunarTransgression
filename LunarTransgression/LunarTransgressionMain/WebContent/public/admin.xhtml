@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+	<ui:composition template="/WEB-INF/template/common.xhtml">
+		<ui:define name="pageTitle">Administration</ui:define>
+		<ui:define name="mainContent">
+			<o:importConstants type="com.github.blutorange.translune.gui.EAdminPage" />
+			<o:importConstants type="com.github.blutorange.translune.gui.EUserType" />
+			<c:choose>		
+				<c:when test="#{sessionBean.userType == EUserType.SADMIN}">
+					<p:layout fullPage="true" >
+						<p:layoutUnit size="300" position="west" collapsible="true" resizable="true">
+							<h:form id="menu_form">
+								<p:panelMenu style="width:100%">
+									<p:submenu label="Info">
+										<p:menuitem value="Server status" icon="ui-icon-disk"
+											actionListener="#{adminBean.setPage(EAdminPage.SERVER_STATUS)}" update="center_content" />
+										<p:menuitem value="Game Stats" icon="ui-icon-disk"
+											actionListener="#{adminBean.setPage(EAdminPage.GAME_STATS)}" update="center_content" />
+									</p:submenu>
+									<p:separator />
+									<p:submenu label="Data management">
+										<p:menuitem value="Manage characters" icon="ui-icon-disk"
+											actionListener="#{adminBean.setPage(EAdminPage.CHARACTER)}" update="center_content" />						
+									</p:submenu>
+									<p:separator />
+									<p:submenu label="Danger Zone">
+										<p:menuitem value="Database" icon="ui-icon-disk"
+											actionListener="#{adminBean.setPage(EAdminPage.DATABASE)}" update="center_content" />
+									</p:submenu>
+									<p:separator />
+									<p:submenu label="Logout">
+										<p:menuitem value="Logout" icon="ui-icon-disk"
+											actionListener="#{sessionBean.logout()}" update="center_content"/>
+									</p:submenu>									
+								</p:panelMenu>
+							</h:form>
+						</p:layoutUnit>
+						<p:layoutUnit position="center">
+							<p:outputPanel id="center_content">
+								<p:ajaxStatus onstart="PF('statusDialog').show()"
+									onsuccess="PF('statusDialog').hide()" />
+								<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+									closable="false" resizable="false" showHeader="false">
+									<p:graphicImage library="translune" name="ajaxloadingbar.gif" />
+								</p:dialog>
+								<h:form id="admin_form">
+									<p:messages id="messages" autoUpdate="true" />
+									<ui:include src="#{adminBean.page.path}" />
+								</h:form>							
+							</p:outputPanel>
+						</p:layoutUnit>
+					</p:layout>
+				</c:when>
+				<c:otherwise>
+					<p>ACCESS_DENIED</p>
+					<p:link value="back to home" outcome="/public/index.xhtml"></p:link>
+				</c:otherwise>
+			</c:choose>
+		</ui:define>
+	</ui:composition>
+</html>
