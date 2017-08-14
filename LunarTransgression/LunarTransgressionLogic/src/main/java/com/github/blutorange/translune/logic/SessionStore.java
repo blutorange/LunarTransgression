@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -30,8 +31,20 @@ public class SessionStore implements ISessionStore {
 	}
 
 	@Override
+	public <T> T store(final String nickname, @NonNull final Session session, final Function<@Nullable Session, T> consumer) {
+		synchronized(map) {
+			final Session oldSession = map.put(nickname, session);
+			return consumer.apply(oldSession);
+		}
+	}
+
+	@Override
 	public @Nullable Session retrieve(final String nickname) {
-		return map.get(nickname);
+		final Session s = map.get(nickname);
+		if (s == null) return null;
+		if (s.isOpen()) return s;
+		map.remove(nickname);
+		return null;
 	}
 
 	@Override
@@ -50,6 +63,6 @@ public class SessionStore implements ISessionStore {
 
 	@Override
 	public boolean contains(final String nickname) {
-		return map.containsKey(nickname);
+		return retrieve(nickname) != null;
 	}
 }

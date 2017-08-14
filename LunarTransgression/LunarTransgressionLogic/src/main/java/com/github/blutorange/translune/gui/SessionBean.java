@@ -14,12 +14,12 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.github.blutorange.translune.Constants;
 import com.github.blutorange.translune.CustomProperties;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.ILunarDatabaseManager.ELunarDatabaseManagerMock;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.InjectionUtil;
+import com.github.blutorange.translune.util.Constants;
 import com.github.blutorange.translune.util.PasswordStorage;
 
 @ManagedBean(eager = true, name = "sessionBean")

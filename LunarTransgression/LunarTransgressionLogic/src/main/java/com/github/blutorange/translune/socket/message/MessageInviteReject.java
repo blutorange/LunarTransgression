@@ -4,18 +4,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.socket.ELunarMessageType;
+import com.github.blutorange.translune.socket.ILunarMessage;
 import com.jsoniter.annotation.JsonProperty;
 
-public class MessageInviteAccept extends AMessageMessage {
+public class MessageInviteReject implements ILunarMessage {
 	@JsonProperty(required = true)
 	String nickname = StringUtils.EMPTY;
 
 	@Deprecated
-	public MessageInviteAccept() {
+	public MessageInviteReject() {
 	}
 
-	public MessageInviteAccept(final String nickname, final String message) {
-		super(message);
+	public MessageInviteReject(final String nickname) {
 		this.nickname = nickname;
 	}
 
@@ -35,6 +35,6 @@ public class MessageInviteAccept extends AMessageMessage {
 
 	@Override
 	public ELunarMessageType getMessageType() {
-		return ELunarMessageType.INVITE_ACCEPT;
+		return ELunarMessageType.INVITE_REJECT;
 	}
 }

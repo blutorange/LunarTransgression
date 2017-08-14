@@ -9,16 +9,17 @@ import com.github.blutorange.translune.CustomProperties;
 import com.github.blutorange.translune.db.LunarDatabaseManager;
 import com.github.blutorange.translune.gui.AbstractBean;
 import com.github.blutorange.translune.gui.PlayerBean;
+import com.github.blutorange.translune.handler.HandlerAuthorize;
+import com.github.blutorange.translune.handler.HandlerInvite;
+import com.github.blutorange.translune.handler.HandlerInviteAccept;
+import com.github.blutorange.translune.handler.HandlerInviteReject;
+import com.github.blutorange.translune.handler.HandlerInviteRetract;
 import com.github.blutorange.translune.logic.BattleStore;
 import com.github.blutorange.translune.socket.LunarDecoder;
 import com.github.blutorange.translune.socket.LunarEncoder;
 import com.github.blutorange.translune.socket.LunarEndpoint;
 import com.github.blutorange.translune.socket.LunarMessage;
 import com.github.blutorange.translune.socket.SocketProcessing;
-import com.github.blutorange.translune.socket.TestEndpoint;
-import com.github.blutorange.translune.socket.handler.HandlerAuthorize;
-import com.github.blutorange.translune.socket.handler.HandlerInvite;
-import com.github.blutorange.translune.socket.handler.HandlerInviteAccept;
 
 import dagger.Module;
 import dagger.Provides;
@@ -47,10 +48,6 @@ public class LoggingModule {
 
 	@Provides @Singleton @Classed(CustomProperties.class) static Logger provideLogger7() {
 		return provideLogger(CustomProperties.class);
-	}
-
-	@Provides @Singleton @Classed(TestEndpoint.class) static Logger provideLogger8() {
-		return provideLogger(TestEndpoint.class);
 	}
 
 	@Provides @Singleton @Classed(DatabaseModule.class) static Logger provideLogger9() {
@@ -83,6 +80,14 @@ public class LoggingModule {
 
 	@Provides @Singleton @Classed(HandlerInviteAccept.class) static Logger provideLogger16() {
 		return provideLogger(HandlerInviteAccept.class);
+	}
+
+	@Provides @Singleton @Classed(HandlerInviteRetract.class) static Logger provideLogger17() {
+		return provideLogger(HandlerInviteRetract.class);
+	}
+
+	@Provides @Singleton @Classed(HandlerInviteReject.class) static Logger provideLogger18() {
+		return provideLogger(HandlerInviteReject.class);
 	}
 
 	private static Logger provideLogger(final Class<?> clazz) {

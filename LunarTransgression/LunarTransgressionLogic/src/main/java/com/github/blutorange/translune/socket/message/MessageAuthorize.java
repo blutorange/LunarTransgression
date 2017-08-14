@@ -5,6 +5,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ILunarMessage;
+import com.jsoniter.annotation.JsonIgnore;
 import com.jsoniter.annotation.JsonProperty;
 
 public class MessageAuthorize implements ILunarMessage {
@@ -12,6 +13,7 @@ public class MessageAuthorize implements ILunarMessage {
 	String nickname = StringUtils.EMPTY;
 
 	@JsonProperty(required = true)
+	@JsonIgnore(ignoreDecoding = false, ignoreEncoding = true)
 	String initId = StringUtils.EMPTY;
 
 	/**

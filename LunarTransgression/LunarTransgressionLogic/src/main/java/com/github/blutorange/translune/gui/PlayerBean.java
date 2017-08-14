@@ -50,8 +50,9 @@ public class PlayerBean extends AbstractBean {
 			final String nickname = saveGetSessionBean().getNickname();
 			final String initId = initIdStore.store(nickname);
 			final String wsEndpoint = contextPath + "/ws/translune";
-			final String url = String.format("%s/resources/translune/game.html?initId=%s&wsEndpoint=%s", contextPath,
-					URLEncoder.encode(initId, "UTF-8"), URLEncoder.encode(wsEndpoint, "UTF-8"));
+			final String url = String.format("%s/resources/translune/game.html?initId=%s&nickname=%s&wsEndpoint=%s",
+					contextPath, URLEncoder.encode(initId, "UTF-8"), URLEncoder.encode(nickname, "UTF-8"),
+					URLEncoder.encode(wsEndpoint, "UTF-8"));
 			RequestContext.getCurrentInstance()
 					.execute(String.format("Translune.startGame('%s')", StringEscapeUtils.escapeEcmaScript(url)));
 		});

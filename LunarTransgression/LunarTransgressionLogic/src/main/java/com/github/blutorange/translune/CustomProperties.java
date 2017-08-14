@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
+import com.github.blutorange.translune.util.Constants;
 
 @Singleton
 public class CustomProperties {

@@ -4,10 +4,14 @@ import com.github.blutorange.translune.gui.AbstractBean;
 import com.github.blutorange.translune.gui.AdminBean;
 import com.github.blutorange.translune.gui.PlayerBean;
 import com.github.blutorange.translune.gui.SessionBean;
+import com.github.blutorange.translune.handler.HandlerAuthorize;
+import com.github.blutorange.translune.handler.HandlerInvite;
+import com.github.blutorange.translune.handler.HandlerInviteAccept;
+import com.github.blutorange.translune.handler.HandlerInviteReject;
+import com.github.blutorange.translune.handler.HandlerInviteRetract;
 import com.github.blutorange.translune.socket.LunarDecoder;
 import com.github.blutorange.translune.socket.LunarEncoder;
 import com.github.blutorange.translune.socket.LunarEndpoint;
-import com.github.blutorange.translune.socket.TestEndpoint;
 
 public class InjectionUtil {
 	public static void inject(final SessionBean sessionBean) {
@@ -30,15 +34,31 @@ public class InjectionUtil {
 		DaggerSocketComponent.create().inject(lunarEncoder);
 	}
 
-	public static void inject(final TestEndpoint testEndpoint) {
-		DaggerSocketComponent.create().inject(testEndpoint);
-	}
-
 	public static void inject(final AbstractBean abstractBean) {
 		DaggerBeanComponent.create().inject(abstractBean);
 	}
 
 	public static void inject(final PlayerBean playerBean) {
 		DaggerBeanComponent.create().inject(playerBean);
+	}
+
+	public static void inject(final HandlerAuthorize handler) {
+		DaggerSocketComponent.create().inject(handler);
+	}
+
+	public static void inject(final HandlerInvite handler) {
+		DaggerSocketComponent.create().inject(handler);
+	}
+
+	public static void inject(final HandlerInviteAccept handler) {
+		DaggerSocketComponent.create().inject(handler);
+	}
+
+	public static void inject(final HandlerInviteRetract handler) {
+		DaggerSocketComponent.create().inject(handler);
+	}
+
+	public static void inject(final HandlerInviteReject handler) {
+		DaggerSocketComponent.create().inject(handler);
 	}
 }

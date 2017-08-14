@@ -6,10 +6,13 @@ import com.jsoniter.annotation.JsonProperty;
 
 public class LunarMessage {
 	@JsonProperty(required = true)
-	int id;
+	int time;
 
 	@JsonProperty(required = true)
 	ELunarMessageType type = ELunarMessageType.UNKNOWN;
+
+	@JsonProperty(required = false)
+	ELunarStatusCode status = ELunarStatusCode.OK;
 
 	@JsonProperty(required = false)
 	@Nullable
@@ -18,18 +21,30 @@ public class LunarMessage {
 	public LunarMessage() {
 	}
 
-	public LunarMessage(final int id, final ELunarMessageType type, final String payload) {
-		this.id = id;
+	public LunarMessage(final int time, final ELunarMessageType type, final ELunarStatusCode status,
+			final String payload) {
+		this.time = time;
 		this.type = type;
 		this.payload = payload;
+		this.status = status;
 	}
 
 	/**
 	 * @return the id
 	 */
 	public int getId() {
-		return id;
+		return time;
 	}
+
+
+
+	/**
+	 * @return the time
+	 */
+	public int getTime() {
+		return time;
+	}
+
 	/**
 	 * @return the payload
 	 */
@@ -41,7 +56,7 @@ public class LunarMessage {
 	 * @param id the id to set
 	 */
 	public void setId(final int id) {
-		this.id = id;
+		this.time = id;
 	}
 	/**
 	 * @param payload the payload to set
@@ -61,5 +76,19 @@ public class LunarMessage {
 	 */
 	public void setType(@Nullable final ELunarMessageType type) {
 		this.type = type != null ? type : ELunarMessageType.UNKNOWN;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public ELunarStatusCode getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(@Nullable final ELunarStatusCode status) {
+		this.status = status != null ? status : ELunarStatusCode.OK;
 	}
 }

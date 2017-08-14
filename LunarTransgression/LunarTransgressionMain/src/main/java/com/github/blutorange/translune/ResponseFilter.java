@@ -8,6 +8,8 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.ext.Provider;
 
+import com.github.blutorange.translune.util.Constants;
+
 @Provider
 public class ResponseFilter implements ContainerResponseFilter {
 	@Override
