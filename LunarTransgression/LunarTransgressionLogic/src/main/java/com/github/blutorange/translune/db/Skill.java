@@ -43,6 +43,11 @@ public class Skill extends AbstractEntity {
 	@Column(name = "power", nullable = false, unique = false)
 	private int power;
 
+	@Min(1)
+	@Max(20)
+	@Column(name = "level", nullable = false, unique = false)
+	private int level;
+	
 	/*
 	 * (non-Javadoc)
 	 *
@@ -74,6 +79,14 @@ public class Skill extends AbstractEntity {
 	 */
 	public EElement getElement() {
 		return element;
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	/**

@@ -4,7 +4,7 @@ import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.LunarMessage;
 import com.github.blutorange.translune.socket.message.MessageAuthorize;
 import com.github.blutorange.translune.socket.message.MessageInvite;
-import com.github.blutorange.translune.socket.message.MessageMessage;
+import com.github.blutorange.translune.socket.message.MessageInviteResponse;
 import com.github.blutorange.translune.util.EJsoniterEnumEncoder;
 import com.github.blutorange.translune.util.JsoniterEnumDecoder;
 import com.jsoniter.spi.JsoniterSpi;
@@ -24,7 +24,7 @@ public class JsoniterConfig implements StaticCodegenConfig {
 			TypeLiteral.create(LunarMessage.class),
 			TypeLiteral.create(MessageAuthorize.class),
 			TypeLiteral.create(MessageInvite.class),
-			TypeLiteral.create(MessageMessage.class),
+			TypeLiteral.create(MessageInviteResponse.class),
 		};
 	}
 }

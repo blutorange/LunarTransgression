@@ -29,4 +29,10 @@ public class BattleStore implements IBattleStore {
 			fromBattleMap.put(from, battle);
 		}
 	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("not implemented");
+	}
 }

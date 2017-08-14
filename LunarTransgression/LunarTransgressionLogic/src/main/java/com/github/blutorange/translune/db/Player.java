@@ -40,7 +40,7 @@ public class Player extends AbstractEntity {
 	private String description = StringUtils.EMPTY;
 
 	@NotNull
-	@Size(min = 0, max = 99)
+	@Size(min = 0, max = 30)
 	@OneToMany(targetEntity = Item.class, orphanRemoval = true, cascade = {
 			CascadeType.PERSIST }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "player", nullable = false, unique = false, foreignKey = @ForeignKey(name = "fk_player_items"))

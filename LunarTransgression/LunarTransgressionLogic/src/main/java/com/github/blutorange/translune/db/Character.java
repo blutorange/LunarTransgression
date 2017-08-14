@@ -3,6 +3,7 @@ package com.github.blutorange.translune.db;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,8 @@ import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -52,6 +55,11 @@ public class Character extends AbstractEntity {
 	@CollectionTable(name = "weaknesses", joinColumns = @JoinColumn(name = "\"character\""), foreignKey = @ForeignKey(name="fk_char_weakness"))
 	private Set<EElement> weaknesses = EnumSet.noneOf(EElement.class);
 
+	@NotNull
+	@ManyToMany(targetEntity=Skill.class, cascade={CascadeType.PERSIST, CascadeType.REMOVE})
+	@JoinTable(name="character_skills", foreignKey=@ForeignKey(name="fk_ck_char"))
+	private Set<Skill> skills;
+	
 	@Transient
 	private Set<EElement> z_unmodifiableResistances = Collections.unmodifiableSet(resistances);
 
@@ -138,6 +146,14 @@ public class Character extends AbstractEntity {
 	 */
 	void setCharacterState(final CharacterState stats) {
 		this.characterState = stats;
+	}
+
+	protected Set<Skill> getSkills() {
+		return skills;
+	}
+
+	protected void setSkills(Set<Skill> skills) {
+		this.skills = skills != null ? skills : new HashSet<>();
 	}
 
 	/**

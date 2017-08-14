@@ -15,7 +15,8 @@ import com.github.blutorange.translune.socket.ISocketProcessing;
 import com.github.blutorange.translune.socket.message.EMessageSeverity;
 import com.github.blutorange.translune.socket.message.MessageInvite;
 import com.github.blutorange.translune.socket.message.MessageInviteAccept;
-import com.github.blutorange.translune.socket.message.MessageMessage;
+import com.github.blutorange.translune.socket.message.MessageInviteAcceptResponse;
+import com.github.blutorange.translune.socket.message.MessageInviteResponse;
 import com.jsoniter.JsonIterator;
 
 @Singleton
@@ -50,14 +51,13 @@ public class HandlerInviteAccept implements ISocketHandler {
 			return;
 		if (!sessionStore.contains(inviteAccept.getNickname())) {
 			socketProcessing.dispatchMessage(session,
-					new MessageMessage(EMessageSeverity.WARN, "Cannot accept invite, user not logged in anymore"));
+					new MessageInviteAcceptResponse("Cannot accept invite, user not logged in anymore"));
 			invitationStore.removeAllWith(inviteAccept.getNickname());
 			return;
 		}
 		final MessageInvite invitation = invitationStore.remove(inviteAccept.getNickname(), user);
 		if (invitation == null) {
-			socketProcessing.dispatchMessage(session, new MessageMessage(EMessageSeverity.WARN,
-					"Cannot accept invite, no such invitation exists anymore"));
+			socketProcessing.dispatchMessage(session, new MessageInviteAcceptResponse("Cannot accept invite, no such invitation exists anymore"));
 		}
 		// TODO START BATTLE, send message to user
 		battleStore.addNewBattle(inviteAccept.getNickname(), user);

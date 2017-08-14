@@ -13,7 +13,7 @@ import com.github.blutorange.translune.socket.ISocketHandler;
 import com.github.blutorange.translune.socket.ISocketProcessing;
 import com.github.blutorange.translune.socket.message.EMessageSeverity;
 import com.github.blutorange.translune.socket.message.MessageInvite;
-import com.github.blutorange.translune.socket.message.MessageMessage;
+import com.github.blutorange.translune.socket.message.MessageInviteResponse;
 import com.jsoniter.JsonIterator;
 
 @Singleton
@@ -45,7 +45,7 @@ public class HandlerInvite implements ISocketHandler {
 			return;
 		if (!sessionStore.contains(invitation.getNickname())) {
 			socketProcessing.dispatchMessage(session,
-					new MessageMessage(EMessageSeverity.WARN, "Cannot invite, user not logged in"));
+					new MessageInviteResponse("Cannot invite, user not logged in"));
 			return;
 		}
 		invitationStore.add(user, invitation);

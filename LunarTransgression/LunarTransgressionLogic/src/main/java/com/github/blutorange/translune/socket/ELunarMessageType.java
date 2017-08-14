@@ -4,13 +4,14 @@ import javax.websocket.Session;
 
 import com.github.blutorange.translune.Constants;
 import com.github.blutorange.translune.ic.DaggerSocketComponent;
+import com.github.blutorange.translune.socket.ISocketHandler.ESocketHandler;
 
 public enum ELunarMessageType {
 	AUTHORIZE(DaggerSocketComponent.create().handlerAuthorization()),
 	INVITE(DaggerSocketComponent.create().handlerInvite()),
 	INVITE_ACCEPT(DaggerSocketComponent.create().handlerInviteAccept()),
-	MESSAGE((user,session,payload) -> {/**/}),
-	UNKNOWN((user,session,payload) -> {/**/})
+	INVITE_RESPONSE(ESocketHandler.NOOP),
+	UNKNOWN(ESocketHandler.NOOP)
 	;
 
 	ISocketHandler handler;

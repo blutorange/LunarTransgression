@@ -7,18 +7,15 @@ import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ILunarMessage;
 import com.jsoniter.annotation.JsonProperty;
 
-public class MessageMessage implements ILunarMessage {
-	@JsonProperty(required = true)
-	EMessageSeverity severity;
-
+public class MessageInviteResponse implements ILunarMessage {
 	@JsonProperty(required = true)
 	String message;
 
-	public MessageMessage() {
-		this(EMessageSeverity.INFO, StringUtils.EMPTY);
+	public MessageInviteResponse() {
+		this(StringUtils.EMPTY);
 	}
-	public MessageMessage(final EMessageSeverity severity, final String message) {
-		this.severity = severity;
+	
+	public MessageInviteResponse(final String message) {
 		this.message = message;
 	}
 	/**
@@ -33,20 +30,9 @@ public class MessageMessage implements ILunarMessage {
 	public void setMessage(@Nullable final String message) {
 		this.message = message != null ? message : StringUtils.EMPTY;
 	}
-	/**
-	 * @return the severity
-	 */
-	public EMessageSeverity getSeverity() {
-		return severity;
-	}
-	/**
-	 * @param severity the severity to set
-	 */
-	public void setSeverity(@Nullable final EMessageSeverity severity) {
-		this.severity = severity != null ? severity : EMessageSeverity.WARN;
-	}
+	
 	@Override
 	public ELunarMessageType getMessageType() {
-		return ELunarMessageType.MESSAGE;
+		return ELunarMessageType.INVITE_RESPONSE;
 	}
 }
