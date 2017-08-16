@@ -21,6 +21,8 @@ public class CustomProperties {
 
 	private long timeoutInitIdMillis = -1L;
 
+	private final long timeoutMessageQueueMillis;
+
 	@Inject
 	public CustomProperties() {
 		try (InputStream is = CustomProperties.class.getClassLoader().getResourceAsStream("custom.properties")) {
@@ -32,6 +34,10 @@ public class CustomProperties {
 		long timeoutInitIdMillis = Long.parseLong(get(Constants.CUSTOM_KEY_TIMEOUT_INITID_MILLIS, "60000"));
 		if (timeoutInitIdMillis < 1000L) timeoutInitIdMillis = 1000L;
 		this.timeoutInitIdMillis = timeoutInitIdMillis;
+
+		long timeoutMessageQueueMillis = Long.parseLong(get(Constants.CUSTOM_KEY_TIMEOUT_MESSAGEQUEUE_MILLIS, "60000"));
+		if (timeoutMessageQueueMillis < 1000L) timeoutMessageQueueMillis = 1000L;
+		this.timeoutMessageQueueMillis = timeoutMessageQueueMillis;
 	}
 
 	@Nullable
@@ -49,5 +55,9 @@ public class CustomProperties {
 
 	public long getTimeoutInitIdMillis() {
 		return timeoutInitIdMillis;
+	}
+
+	public long getTimeoutMessageQueueMillis() {
+		return timeoutMessageQueueMillis;
 	}
 }

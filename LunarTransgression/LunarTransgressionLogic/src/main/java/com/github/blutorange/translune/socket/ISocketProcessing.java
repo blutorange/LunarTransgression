@@ -1,5 +1,9 @@
 package com.github.blutorange.translune.socket;
 
+import java.util.Queue;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.Session;
 
@@ -8,7 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.github.blutorange.translune.logic.EGameState;
 
 public interface ISocketProcessing {
-	void dispatchMessage(final Session session, ELunarStatusCode status, final ILunarMessage message);
+	Future<@Nullable Void> dispatchMessage(final Session session, ELunarStatusCode status, final ILunarMessage message);
 
 	void close(final Session session, final CloseCodes closeCode, final String closeReason);
 
@@ -37,8 +41,12 @@ public interface ISocketProcessing {
 	default <T extends ILunarMessage> T getMessage(final LunarMessage message, final Class<T> clazz) {
 		return getMessage(message.getPayload(), clazz);
 	}
-	
-	void dispatchMessage(Session session, String message);
+
+	Future<@Nullable Void> dispatchMessage(Session session, String message);
 
 	void initSession(Session session);
+
+	AtomicInteger getClientTime(final Session session);
+
+	Queue<LunarMessage> getClientMessageQueue(final Session session);
 }

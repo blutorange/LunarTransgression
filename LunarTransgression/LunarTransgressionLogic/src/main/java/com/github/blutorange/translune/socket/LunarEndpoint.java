@@ -1,6 +1,8 @@
 package com.github.blutorange.translune.socket;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Queue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -16,15 +18,29 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.slf4j.Logger;
 
+import com.github.blutorange.translune.CustomProperties;
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.ic.InjectionUtil;
 import com.github.blutorange.translune.logic.IInitIdStore;
 import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.socket.message.MessageUnknown;
 
-// TODO establish order
-// only one message method for a user may be active at a time
-// message processing must be in order (of sending)
+/**
+ * <p>
+ * Messages are processed in order of sending. To accomplish this,
+ * each message contains an integer time code. This time code starts
+ * a zero (0) for the first message and must increase monotonously
+ * for every next message. Messages sent by the server and by the
+ * client have got a separate time code counter and do not share the
+ * same time code counter. Additionally, response messages for the client
+ * contain the time code of the original message so that client can
+ * associate the response with the corresponding request.
+ * </p>
+ * A message itself it sent as a JSON object - this makes it easy to
+ * handle and efficiency-wise, communications usually occur only at
+ * larger intervals.
+ * @author madgaksha
+ */
 @ServerEndpoint(value = "/ws/translune", encoders = LunarEncoder.class, decoders = LunarDecoder.class)
 public class LunarEndpoint {
 	@Inject
@@ -40,6 +56,9 @@ public class LunarEndpoint {
 	@Inject
 	ISocketProcessing socketProcessing;
 
+	@Inject
+	CustomProperties customProperties;
+
 	@PostConstruct
 	private void init() {
 		InjectionUtil.inject(this);
@@ -47,9 +66,7 @@ public class LunarEndpoint {
 
 	@OnOpen
 	public void open(final Session session) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("opening lunar session " + session.getId());
-		}
+		logger.debug("opening lunar session " + session.getId());
 		if (session.getOpenSessions().size() > 1) {
 			logger.info("more than one session open to same endpoint, closing: " + session.getId());
 			socketProcessing.close(session, CloseCodes.VIOLATED_POLICY, "Only one session may be opened.");
@@ -66,9 +83,38 @@ public class LunarEndpoint {
 
 	@OnMessage
 	public void message(final Session session, final LunarMessage message) {
-		//final boolean test = message.getTime() >= ((AtomicInteger)(session.getUserProperties().get(Constants.SESSION_KEY_CLIENT_TIME))).get() + 1 ;
 		if (logger.isDebugEnabled()) {
-			logger.debug("receiving lunar message " + session.getId());
+			logger.debug("retrieving lunar message " + session.getId());
+			logger.debug(message.toString());
+		}
+		// No synchronization needed here.
+		//     In all cases, the implementation must not invoke an
+		//     endpoint instance with more than one thread per peer at a time.
+		// - Java™ API for WebSocket, Chapter 5.1
+		final AtomicInteger clientTime = socketProcessing.getClientTime(session);
+		final Queue<LunarMessage> messageQueue = socketProcessing.getClientMessageQueue(session);
+		// Remove very old messages.
+		final long threshold = System.currentTimeMillis() - customProperties.getTimeoutMessageQueueMillis();
+		messageQueue.removeIf(msg -> msg.getReceptionTime() < threshold);
+		// Process messages in order.
+		messageQueue.add(message);
+		LunarMessage currentMessage;
+		while ((currentMessage = messageQueue.peek()) != null && currentMessage.getTime() == clientTime.get()) {
+			try {
+				processMessage(session, messageQueue.poll());
+			}
+			catch (final Exception throwable) {
+				error(session, throwable);
+			}
+			finally {
+				clientTime.incrementAndGet();
+			}
+		}
+	}
+
+	private void processMessage(final Session session, final LunarMessage message) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("processing lunar message " + session.getId());
 			logger.debug(message.toString());
 		}
 		if (socketProcessing.isAuthorized(session)) {
@@ -93,6 +139,7 @@ public class LunarEndpoint {
 			sessionStore.remove(nickname);
 		else
 			sessionStore.remove(session);
+		session.getUserProperties().clear();
 	}
 
 	@OnError

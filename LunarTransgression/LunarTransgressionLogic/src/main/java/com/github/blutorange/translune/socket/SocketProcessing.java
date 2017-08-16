@@ -1,6 +1,9 @@
 package com.github.blutorange.translune.socket;
 
 import java.io.IOException;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.websocket.CloseReason;
@@ -8,7 +11,6 @@ import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.Session;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 
@@ -27,24 +29,18 @@ public class SocketProcessing implements ISocketProcessing {
 	}
 
 	@Override
-	public void dispatchMessage(final Session session, final String message) {
-		try {
-			session.getBasicRemote().getSendWriter().write(message);
-		}
-		catch (final IOException e) {
-			logger.error("failed to dispatch message", e);
-		}
+	public Future<@Nullable Void> dispatchMessage(final Session session, final String message) {
+		return session.getAsyncRemote().sendText(message);
 	}
 
 	@Override
-	public void dispatchMessage(final Session session, final ELunarStatusCode status, final ILunarMessage message) {
+	public Future<@Nullable Void> dispatchMessage(final Session session, final ELunarStatusCode status, final ILunarMessage message) {
 		final String payload = JsonStream.serialize(message);
-		final AtomicInteger time = (AtomicInteger)session.getUserProperties().get(Constants.SESSION_KEY_SERVER_TIME);
+		final AtomicInteger time = (AtomicInteger) session.getUserProperties().get(Constants.SESSION_KEY_SERVER_TIME);
 		if (time == null)
-			throw new RuntimeException("time provider is null");
-		final LunarMessage msg = new LunarMessage(time.incrementAndGet(), message.getMessageType(), status, payload);
-		final String json = JsonStream.serialize(msg);
-		dispatchMessage(session, json);
+			throw new RuntimeException("initSession not called, sever time is null");
+		final LunarMessage msg = new LunarMessage(time.getAndIncrement(), message.getMessageType(), status, payload);
+		return session.getAsyncRemote().sendObject(msg);
 	}
 
 	@Override
@@ -65,7 +61,7 @@ public class SocketProcessing implements ISocketProcessing {
 	@Override
 	public long getStartTimeNow(final Session session) {
 		final Object startTime = session.getUserProperties().get(Constants.SESSION_KEY_STARTED);
-		return startTime != null ? ((Long)startTime).longValue() : 0;
+		return startTime != null ? ((Long) startTime).longValue() : 0;
 	}
 
 	@Override
@@ -76,7 +72,7 @@ public class SocketProcessing implements ISocketProcessing {
 	@Override
 	public EGameState getGameState(final Session session) {
 		final Object gameState = session.getUserProperties().get(Constants.SESSION_KEY_GAME_STATE);
-		return gameState != null ? (EGameState)gameState : EGameState.WAITING_FOR_AUTHORIZATION;
+		return gameState != null ? (EGameState) gameState : EGameState.WAITING_FOR_AUTHORIZATION;
 	}
 
 	@Override
@@ -87,7 +83,7 @@ public class SocketProcessing implements ISocketProcessing {
 	@Override
 	public String getNickname(final Session session) {
 		final Object nickname = session.getUserProperties().get(Constants.SESSION_KEY_NICKNAME);
-		return nickname != null ? (String)nickname : StringUtils.EMPTY;
+		return nickname != null ? (String) nickname : StringUtils.EMPTY;
 	}
 
 	@Override
@@ -118,10 +114,29 @@ public class SocketProcessing implements ISocketProcessing {
 	}
 
 	@Override
-	public void initSession(@NonNull final Session session) {
+	public AtomicInteger getClientTime(final Session session) {
+		final Object o = session.getUserProperties().get(Constants.SESSION_KEY_CLIENT_TIME);
+		if (o == null)
+			throw new RuntimeException("initSession was not called. client time is null");
+		return (AtomicInteger) o;
+	}
+
+	@Override
+	public void initSession(final Session session) {
 		session.getUserProperties().put(Constants.SESSION_KEY_SERVER_TIME, new AtomicInteger(0));
 		session.getUserProperties().put(Constants.SESSION_KEY_CLIENT_TIME, new AtomicInteger(0));
+		session.getUserProperties().put(Constants.SESSION_KEY_CLIENT_MESSAGE_QUEUE,
+				new PriorityQueue<LunarMessage>(10, (m1, m2) -> Integer.compare(m1.getTime(), m2.getTime())));
 		setStartTimeNow(session);
 		setGameState(session, EGameState.WAITING_FOR_AUTHORIZATION);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Queue<LunarMessage> getClientMessageQueue(final Session session) {
+		final Object o = session.getUserProperties().get(Constants.SESSION_KEY_CLIENT_MESSAGE_QUEUE);
+		if (o == null)
+			throw new RuntimeException("initSession was not called, message queue is null");
+		return (Queue<LunarMessage>) o;
 	}
 }
