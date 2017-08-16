@@ -14,7 +14,6 @@ import javax.websocket.PongMessage;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
@@ -73,8 +72,7 @@ public class LunarEndpoint {
 			logger.debug(message.toString());
 		}
 		if (socketProcessing.isAuthorized(session)) {
-			final String payload = message.getPayload();
-			message.getType().handle(session, payload != null ? payload : StringUtils.EMPTY);
+			message.getType().handle(session, message);
 		}
 		else {
 			handleAuthorization(session, message);
@@ -107,7 +105,6 @@ public class LunarEndpoint {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.ACCESS_DENIED, MessageUnknown.INSTANCE);
 			return;
 		}
-		final String payload = message.getPayload();
-		ELunarMessageType.AUTHORIZE.handle(session, payload != null ? payload : StringUtils.EMPTY);
+		ELunarMessageType.AUTHORIZE.handle(session, message);
 	}
 }

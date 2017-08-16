@@ -34,10 +34,10 @@ public enum ELunarMessageType {
 		this.socketProcessing = DaggerSocketComponent.create().socketProcessing();
 	}
 
-	public void handle(final Session session, final String payload) {
+	public void handle(final Session session, final LunarMessage message) {
 		final String user = socketProcessing.getNickname(session);
 		if (user.isEmpty())
 			return;
-		handler.handle(user, session, payload);
+		handler.handle(user, session, message);
 	}
 }

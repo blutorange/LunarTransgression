@@ -14,6 +14,7 @@ import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.ILunarMessageHandler;
 import com.github.blutorange.translune.socket.ISocketProcessing;
+import com.github.blutorange.translune.socket.LunarMessage;
 import com.github.blutorange.translune.socket.message.MessageAuthorize;
 import com.github.blutorange.translune.socket.message.MessageAuthorizeResponse;
 
@@ -33,8 +34,8 @@ public class HandlerAuthorize implements ILunarMessageHandler {
 	public HandlerAuthorize() {}
 
 	@Override
-	public void handle(final String user, final Session session, final String payload) {
-		final MessageAuthorize msg = socketProcessing.getMessage(payload, MessageAuthorize.class);
+	public void handle(final String user, final Session session, final LunarMessage message) {
+		final MessageAuthorize msg = socketProcessing.getMessage(message, MessageAuthorize.class);
 		if (msg == null || !initIdStore.assertAndClear(msg.getNickname(), msg.getInitId())) {
 			logger.info("found invalid credentials: " + session.getId());
 			socketProcessing.close(session, CloseCodes.CANNOT_ACCEPT, "invalid credentials");
@@ -51,6 +52,6 @@ public class HandlerAuthorize implements ILunarMessageHandler {
 			socketProcessing.markAuthorized(session);
 			socketProcessing.setGameState(session, EGameState.IN_MENU);
 		});
-		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageAuthorizeResponse());
+		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageAuthorizeResponse(message));
 	}
 }

@@ -1,5 +1,6 @@
 package com.github.blutorange.translune.socket;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.jsoniter.annotation.JsonProperty;
@@ -15,8 +16,7 @@ public class LunarMessage {
 	ELunarStatusCode status = ELunarStatusCode.OK;
 
 	@JsonProperty(required = false)
-	@Nullable
-	String payload;
+	String payload = StringUtils.EMPTY;
 
 	public LunarMessage() {
 	}
@@ -36,8 +36,6 @@ public class LunarMessage {
 		return time;
 	}
 
-
-
 	/**
 	 * @return the time
 	 */
@@ -48,7 +46,6 @@ public class LunarMessage {
 	/**
 	 * @return the payload
 	 */
-	@Nullable
 	public String getPayload() {
 		return payload;
 	}
@@ -63,7 +60,7 @@ public class LunarMessage {
 	 */
 
 	public void setPayload(@Nullable final String payload) {
-		this.payload = payload;
+		this.payload = payload != null ? payload : StringUtils.EMPTY;
 	}
 	/**
 	 * @return the type

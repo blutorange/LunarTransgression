@@ -33,6 +33,11 @@ public interface ISocketProcessing {
 	@Nullable
 	<T extends ILunarMessage> T getMessage(final String payload, final Class<T> clazz);
 
+	@Nullable
+	default <T extends ILunarMessage> T getMessage(final LunarMessage message, final Class<T> clazz) {
+		return getMessage(message.getPayload(), clazz);
+	}
+	
 	void dispatchMessage(Session session, String message);
 
 	void initSession(Session session);

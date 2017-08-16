@@ -13,6 +13,7 @@ import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.ILunarMessageHandler;
 import com.github.blutorange.translune.socket.ISocketProcessing;
+import com.github.blutorange.translune.socket.LunarMessage;
 import com.github.blutorange.translune.socket.message.MessageInvite;
 import com.github.blutorange.translune.socket.message.MessageInviteResponse;
 import com.github.blutorange.translune.socket.message.MessageInvited;
@@ -38,31 +39,31 @@ public class HandlerInvite implements ILunarMessageHandler {
 
 	@SuppressWarnings("resource")
 	@Override
-	public void handle(final String user, final Session session, final String payload) {
+	public void handle(final String user, final Session session, final LunarMessage message) {
 		if (socketProcessing.getGameState(session) != EGameState.IN_MENU) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteResponse("Game state must be menu for sending invitations"));
+					new MessageInviteResponse(message.getId(), "Game state must be menu for sending invitations"));
 			return;
 		}
 
-		final MessageInvite invitation = socketProcessing.getMessage(payload, MessageInvite.class);
+		final MessageInvite invitation = socketProcessing.getMessage(message, MessageInvite.class);
 
 		if (invitation == null) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteResponse("Bad request"));
+					new MessageInviteResponse(message, "Bad request"));
 			return;
 		}
 
 		final Session otherSession = sessionStore.retrieve(invitation.getNickname());
 		if (otherSession == null) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteResponse("Invited user not logged in."));
+					new MessageInviteResponse(message, "Invited user not logged in."));
 			return;
 		}
 
 		if (socketProcessing.getGameState(otherSession) != EGameState.IN_MENU) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteResponse("Invited user not ready for battle."));
+					new MessageInviteResponse(message, "Invited user not ready for battle."));
 			return;
 		}
 
@@ -71,7 +72,7 @@ public class HandlerInvite implements ILunarMessageHandler {
 		invitationStore.add(user, invitation);
 		socketProcessing.setGameState(session, EGameState.WAITING_FOR_INVITATION_RESPONSE);
 		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
-				new MessageInviteResponse("Invitation successful"));
+				new MessageInviteResponse(message, "Invitation successful"));
 	}
 
 	private void informOtherUser(final Session session, final MessageInvite invitation) {

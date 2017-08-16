@@ -14,6 +14,7 @@ import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.ILunarMessageHandler;
 import com.github.blutorange.translune.socket.ISocketProcessing;
+import com.github.blutorange.translune.socket.LunarMessage;
 import com.github.blutorange.translune.socket.message.MessageInvite;
 import com.github.blutorange.translune.socket.message.MessageInviteAccept;
 import com.github.blutorange.translune.socket.message.MessageInviteAcceptResponse;
@@ -32,25 +33,25 @@ public class HandlerInviteAccept implements ILunarMessageHandler {
 
 	@SuppressWarnings("resource")
 	@Override
-	public void handle(final String user, final Session session, final String payload) {
+	public void handle(final String user, final Session session, final LunarMessage message) {
 		if (socketProcessing.getGameState(session) != EGameState.IN_MENU) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteResponse("Game state must be menu for accepting invitations"));
+					new MessageInviteResponse(message, "Game state must be menu for accepting invitations"));
 			return;
 		}
 
-		final MessageInviteAccept inviteAccept = socketProcessing.getMessage(payload, MessageInviteAccept.class);
+		final MessageInviteAccept inviteAccept = socketProcessing.getMessage(message, MessageInviteAccept.class);
 
 		if (inviteAccept == null) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteAcceptResponse("Bad request."));
+					new MessageInviteAcceptResponse(message, "Bad request."));
 			return;
 		}
 
 		final Session otherSession = sessionStore.retrieve(inviteAccept.getNickname());
 		if (otherSession == null || !otherSession.isOpen()) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteAcceptResponse("Invited user not logged in anymore."));
+					new MessageInviteAcceptResponse(message, "Invited user not logged in anymore."));
 			invitationStore.removeAllWith(inviteAccept.getNickname());
 			return;
 		}
@@ -58,7 +59,7 @@ public class HandlerInviteAccept implements ILunarMessageHandler {
 		final MessageInvite invitation = invitationStore.remove(inviteAccept.getNickname(), user);
 		if (invitation == null) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteAcceptResponse("Invitation does not exist anymore, possibly because it was retracted."));
+					new MessageInviteAcceptResponse(message, "Invitation does not exist anymore, possibly because it was retracted."));
 			return;
 		}
 
