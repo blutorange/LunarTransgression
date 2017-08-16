@@ -12,7 +12,15 @@ import com.github.blutorange.translune.socket.message.MessageAuthorize;
 import com.github.blutorange.translune.socket.message.MessageAuthorizeResponse;
 import com.github.blutorange.translune.socket.message.MessageInvite;
 import com.github.blutorange.translune.socket.message.MessageInviteAccept;
+import com.github.blutorange.translune.socket.message.MessageInviteAcceptResponse;
+import com.github.blutorange.translune.socket.message.MessageInviteReject;
+import com.github.blutorange.translune.socket.message.MessageInviteRejectResponse;
 import com.github.blutorange.translune.socket.message.MessageInviteResponse;
+import com.github.blutorange.translune.socket.message.MessageInviteRetract;
+import com.github.blutorange.translune.socket.message.MessageInviteRetractResponse;
+import com.github.blutorange.translune.socket.message.MessageInviteRetracted;
+import com.github.blutorange.translune.socket.message.MessageInvited;
+import com.github.blutorange.translune.socket.message.MessageUnknown;
 import com.github.blutorange.translune.util.EJsoniterEnumEncoder;
 import com.github.blutorange.translune.util.JsoniterEnumDecoder;
 import com.jsoniter.JsonIterator;
@@ -67,7 +75,18 @@ public class JsoniterConfig implements StaticCodegenConfig {
 			TypeLiteral.create(MessageInviteResponse.class),
 
 			TypeLiteral.create(MessageInviteAccept.class),
+			TypeLiteral.create(MessageInviteAcceptResponse.class),
 
+			TypeLiteral.create(MessageInviteReject.class),
+			TypeLiteral.create(MessageInviteRejectResponse.class),
+
+			TypeLiteral.create(MessageInviteRetract.class),
+			TypeLiteral.create(MessageInviteRetractResponse.class),
+
+			TypeLiteral.create(MessageInviteRetracted.class),
+			TypeLiteral.create(MessageInvited.class),
+
+			TypeLiteral.create(MessageUnknown.class)
 		};
 	}
 }

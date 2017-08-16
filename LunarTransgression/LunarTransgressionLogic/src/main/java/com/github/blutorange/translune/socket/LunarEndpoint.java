@@ -112,19 +112,6 @@ public class LunarEndpoint {
 		}
 	}
 
-	private void processMessage(final Session session, final LunarMessage message) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("processing lunar message " + session.getId());
-			logger.debug(message.toString());
-		}
-		if (socketProcessing.isAuthorized(session)) {
-			message.getType().handle(session, message);
-		}
-		else {
-			handleAuthorization(session, message);
-		}
-	}
-
 	@OnClose
 	public void close(final Session session, final CloseReason closeReason) {
 		//TODO
@@ -149,9 +136,22 @@ public class LunarEndpoint {
 
 	private void handleAuthorization(final Session session, final LunarMessage message) {
 		if (message.getType() != ELunarMessageType.AUTHORIZE) {
-			socketProcessing.dispatchMessage(session, ELunarStatusCode.ACCESS_DENIED, MessageUnknown.INSTANCE);
+			socketProcessing.dispatchMessage(session, ELunarStatusCode.ACCESS_DENIED, new MessageUnknown());
 			return;
 		}
 		ELunarMessageType.AUTHORIZE.handle(session, message);
+	}
+
+	private void processMessage(final Session session, final LunarMessage message) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("processing lunar message " + session.getId());
+			logger.debug(message.toString());
+		}
+		if (socketProcessing.isAuthorized(session)) {
+			message.getType().handle(session, message);
+		}
+		else {
+			handleAuthorization(session, message);
+		}
 	}
 }
