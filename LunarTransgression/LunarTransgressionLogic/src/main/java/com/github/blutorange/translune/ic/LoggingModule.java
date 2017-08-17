@@ -14,6 +14,7 @@ import com.github.blutorange.translune.handler.HandlerInvite;
 import com.github.blutorange.translune.handler.HandlerInviteAccept;
 import com.github.blutorange.translune.handler.HandlerInviteReject;
 import com.github.blutorange.translune.handler.HandlerInviteRetract;
+import com.github.blutorange.translune.logic.BattleRunnable;
 import com.github.blutorange.translune.logic.BattleStore;
 import com.github.blutorange.translune.socket.LunarDecoder;
 import com.github.blutorange.translune.socket.LunarEncoder;
@@ -88,6 +89,10 @@ public class LoggingModule {
 
 	@Provides @Singleton @Classed(HandlerInviteReject.class) static Logger provideLogger18() {
 		return provideLogger(HandlerInviteReject.class);
+	}
+	
+	@Provides @Singleton @Classed(BattleRunnable.class) static Logger provideLogger19() {
+		return provideLogger(BattleRunnable.class);
 	}
 
 	private static Logger provideLogger(final Class<?> clazz) {

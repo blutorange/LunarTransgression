@@ -1,9 +1,13 @@
 package com.github.blutorange.translune.ic;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 
+import com.github.blutorange.translune.CustomProperties;
 import com.github.blutorange.translune.logic.BattleStore;
 import com.github.blutorange.translune.logic.IBattleStore;
 import com.github.blutorange.translune.logic.IInitIdStore;
@@ -28,6 +32,9 @@ public class StorageModule {
 		return new InvitationStore();
 	}
 	@Provides @Singleton static IBattleStore provideBattleStore(@Classed(BattleStore.class) final Logger logger) {
-		return new BattleStore(logger);
+		return DaggerStorageComponent.create().battleStore();
+	}
+	@Provides @Singleton static ExecutorService provideExecutorService(final CustomProperties customProperties) {
+		return Executors.newFixedThreadPool(customProperties.getMaxThreadCount());
 	}
 }

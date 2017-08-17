@@ -87,27 +87,32 @@ public class LunarEndpoint {
 			logger.debug("retrieving lunar message " + session.getId());
 			logger.debug(message.toString());
 		}
-		// No synchronization needed here.
+		// For the same session, only one message handler is called at the same time.
 		//     In all cases, the implementation must not invoke an
 		//     endpoint instance with more than one thread per peer at a time.
-		// - Java™ API for WebSocket, Chapter 5.1
-		final AtomicInteger clientTime = socketProcessing.getClientTime(session);
-		final Queue<LunarMessage> messageQueue = socketProcessing.getClientMessageQueue(session);
-		// Remove very old messages.
-		final long threshold = System.currentTimeMillis() - customProperties.getTimeoutMessageQueueMillis();
-		messageQueue.removeIf(msg -> msg.getReceptionTime() < threshold);
-		// Process messages in order.
-		messageQueue.add(message);
-		LunarMessage currentMessage;
-		while ((currentMessage = messageQueue.peek()) != null && currentMessage.getTime() == clientTime.get()) {
-			try {
-				processMessage(session, messageQueue.poll());
-			}
-			catch (final Exception throwable) {
-				error(session, throwable);
-			}
-			finally {
-				clientTime.incrementAndGet();
+		//   - Java™ API for WebSocket, Chapter 5.1
+		// However, for battles we need to synchronize on the session of
+		// the opposing user.
+		// TODO HandlerInvite/Battle -> synchronize on the other user
+		synchronized(session) {
+			final AtomicInteger clientTime = socketProcessing.getClientTime(session);
+			final Queue<LunarMessage> messageQueue = socketProcessing.getClientMessageQueue(session);
+			// Remove very old messages.
+			final long threshold = System.currentTimeMillis() - customProperties.getTimeoutMessageQueueMillis();
+			messageQueue.removeIf(msg -> msg.getReceptionTime() < threshold);
+			// Process messages in order.
+			messageQueue.add(message);
+			LunarMessage currentMessage;
+			while ((currentMessage = messageQueue.peek()) != null && currentMessage.getTime() == clientTime.get()) {
+				try {
+					processMessage(session, messageQueue.poll());
+				}
+				catch (final Exception throwable) {
+					error(session, throwable);
+				}
+				finally {
+					clientTime.incrementAndGet();
+				}
 			}
 		}
 	}

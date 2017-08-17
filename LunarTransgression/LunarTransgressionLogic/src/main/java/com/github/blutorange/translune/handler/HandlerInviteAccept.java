@@ -64,6 +64,8 @@ public class HandlerInviteAccept implements ILunarMessageHandler {
 		}
 
 		// TODO START BATTLE, send message to user
+		socketProcessing.setGameState(session, EGameState.BATTLE_PREPARATION);
+		socketProcessing.setGameState(otherSession, EGameState.BATTLE_PREPARATION);
 		battleStore.addNewBattle(inviteAccept.getNickname(), user);
 	}
 }

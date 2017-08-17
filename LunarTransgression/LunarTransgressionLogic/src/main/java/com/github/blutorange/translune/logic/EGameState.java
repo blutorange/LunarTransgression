@@ -21,5 +21,10 @@ public enum EGameState {
 	 * User is battling another user.
 	 */
 	IN_BATTLE,
+	/**
+	 * User is choosing the characters and items for
+	 * the battle that is about to begin.
+	 */
+	BATTLE_PREPARATION,
 	;
 }

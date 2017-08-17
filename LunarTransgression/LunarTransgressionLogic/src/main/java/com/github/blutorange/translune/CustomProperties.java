@@ -23,6 +23,12 @@ public class CustomProperties {
 
 	private final long timeoutMessageQueueMillis;
 
+	private final int maxThreadCount;
+
+	private final int battlePreparationTimeoutMillis;
+
+	private final int battleRoundTimeoutMillis;
+
 	@Inject
 	public CustomProperties() {
 		try (InputStream is = CustomProperties.class.getClassLoader().getResourceAsStream("custom.properties")) {
@@ -38,6 +44,18 @@ public class CustomProperties {
 		long timeoutMessageQueueMillis = Long.parseLong(get(Constants.CUSTOM_KEY_TIMEOUT_MESSAGEQUEUE_MILLIS, "60000"));
 		if (timeoutMessageQueueMillis < 1000L) timeoutMessageQueueMillis = 1000L;
 		this.timeoutMessageQueueMillis = timeoutMessageQueueMillis;
+
+		int maxThreadCount = Integer.parseInt(get(Constants.CUSTOM_KEY_MAX_THREAD_COUNT, "100"));
+		if (maxThreadCount < 1) maxThreadCount = 1;
+		this.maxThreadCount = maxThreadCount;
+
+		int battlePreparationTimeoutMillis = Integer.parseInt(get(Constants.CUSTOM_KEY_BATTLE_PREPARATION_TIMEOUT, "30000"));
+		if (battlePreparationTimeoutMillis < 1000) battlePreparationTimeoutMillis = 1000;
+		this.battlePreparationTimeoutMillis = battlePreparationTimeoutMillis;
+
+		int battleRoundTimeoutMillis = Integer.parseInt(get(Constants.CUSTOM_KEY_BATTLE_ROUND_TIMEOUT, "60000"));
+		if (battleRoundTimeoutMillis < 1000) battleRoundTimeoutMillis = 1000;
+		this.battleRoundTimeoutMillis = battleRoundTimeoutMillis;
 	}
 
 	@Nullable
@@ -59,5 +77,17 @@ public class CustomProperties {
 
 	public long getTimeoutMessageQueueMillis() {
 		return timeoutMessageQueueMillis;
+	}
+
+	public int getMaxThreadCount() {
+		return maxThreadCount;
+	}
+
+	public int getBattlePreparationTimeoutMillis() {
+		return battlePreparationTimeoutMillis;
+	}
+	
+	public int getBattleRoundTimeoutMillis() {
+		return battleRoundTimeoutMillis;
 	}
 }
