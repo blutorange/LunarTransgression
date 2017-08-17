@@ -87,7 +87,7 @@ public class CustomProperties {
 		return battlePreparationTimeoutMillis;
 	}
 	
-	public int getBattleRoundTimeoutMillis() {
+	public int getBattleStepTimeoutMillis() {
 		return battleRoundTimeoutMillis;
 	}
 }

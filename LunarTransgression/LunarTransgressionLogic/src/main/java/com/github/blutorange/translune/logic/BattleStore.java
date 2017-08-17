@@ -10,17 +10,17 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
-import com.github.blutorange.translune.ic.DaggerLogicComponent;
+import com.github.blutorange.translune.ic.ComponentFactory;
 
 @Singleton
 public class BattleStore implements IBattleStore {
 	@Inject @Classed(BattleStore.class)
 	Logger logger;
-	
+
 	@Inject
 	ExecutorService executorService;
-	
-	Map<String, BattleRunnable> fromBattleMap;
+
+	Map<String, IBattleRunner> fromBattleMap;
 	Map<String, String> toFromMap;
 
 	@Inject
@@ -30,9 +30,9 @@ public class BattleStore implements IBattleStore {
 	}
 
 	@Override
-	public void addNewBattle(final String from, final String to) {
+	public void startBattle(final String from, final String to) {
 		synchronized(this) {
-			final BattleRunnable battle = DaggerLogicComponent.create().battle();
+			final IBattleRunner battle = ComponentFactory.createLogicComponent().battleRunner();
 			battle.forPlayers(from, to);
 			executorService.submit(battle);
 			toFromMap.put(to, from);
@@ -41,8 +41,10 @@ public class BattleStore implements IBattleStore {
 	}
 
 	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("not implemented");
+	public void removeBattle(final String from, final String to) {
+		synchronized(this) {
+			fromBattleMap.remove(from);
+			toFromMap.remove(to);
+		}
 	}
 }

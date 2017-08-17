@@ -11,7 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
-import com.github.blutorange.translune.ic.InjectionUtil;
+import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.util.ThrowingRunnable;
 import com.github.blutorange.translune.util.ThrowingSupplier;
 
@@ -20,7 +20,7 @@ public abstract class AbstractBean {
 	Logger logger;
 
 	public AbstractBean() {
-		InjectionUtil.inject(this);
+		ComponentFactory.createBeanComponent().inject(this);
 	}
 
 	protected void addMessage(final Severity severity, final String summary, @Nullable final String details) {

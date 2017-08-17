@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.translune.util.PasswordStorage;
 import com.github.blutorange.translune.util.PasswordStorage.CannotPerformOperationException;
@@ -28,12 +28,13 @@ import com.github.blutorange.translune.util.PasswordStorage.InvalidHashException
 @Entity
 @Table(name = "player")
 public class Player extends AbstractEntity {
+
 	@NotNull
 	@Size(min = 4, max = 20)
-	@OneToMany(targetEntity = Character.class, orphanRemoval = true, cascade = {
+	@OneToMany(targetEntity = CharacterState.class, orphanRemoval = true, cascade = {
 			CascadeType.PERSIST }, fetch = FetchType.LAZY)
-	@JoinColumn(name = "player", nullable = false, unique = false, foreignKey = @ForeignKey(name = "fk_player_chars"))
-	private Set<Character> characters = new HashSet<>();
+	@JoinColumn(name = "characterstates", nullable = false, unique = false, foreignKey = @ForeignKey(name = "fk_player_charstates"))
+	private Set<CharacterState> characterStates = new HashSet<>();
 
 	@NotNull
 	@Column(name = "description", nullable = false, length = 1023, unique = false)
@@ -43,7 +44,7 @@ public class Player extends AbstractEntity {
 	@Size(min = 0, max = 30)
 	@OneToMany(targetEntity = Item.class, orphanRemoval = true, cascade = {
 			CascadeType.PERSIST }, fetch = FetchType.LAZY)
-	@JoinColumn(name = "player", nullable = false, unique = false, foreignKey = @ForeignKey(name = "fk_player_items"))
+	@JoinColumn(name = "items", nullable = false, unique = false, foreignKey = @ForeignKey(name = "fk_player_items"))
 	private Set<Item> items = new HashSet<>();
 
 	@Id
@@ -56,35 +57,16 @@ public class Player extends AbstractEntity {
 	private String passwordHash = StringUtils.EMPTY;
 
 	@Transient
-	private Set<Character> z_unmodifiableCharacters = Collections.unmodifiableSet(characters);
+	private Set<CharacterState> z_unmodifiableCharacterStates = Collections.unmodifiableSet(characterStates);
 
 	@Transient
 	private Set<Item> z_unmodifiableItems = Collections.unmodifiableSet(items);
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(@Nullable final Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Player))
-			return false;
-		final Player other = (Player) obj;
-		if (!nickname.equals(other.nickname))
-			return false;
-		return true;
-	}
-
 	/**
 	 * @return the characters
 	 */
-	Set<Character> getCharacters() {
-		return characters;
+	Set<CharacterState> getCharacterStates() {
+		return characterStates;
 	}
 
 	/**
@@ -118,37 +100,24 @@ public class Player extends AbstractEntity {
 	/**
 	 * @return the characters
 	 */
-	public Set<Character> getUnmodifiableCharacters() {
-		return z_unmodifiableCharacters;
+	public Set<CharacterState> getCharacterStatesUnmodifiable() {
+		return z_unmodifiableCharacterStates;
 	}
 
 	/**
 	 * @return the items
 	 */
-	public Set<Item> getUnmodifiableItems() {
+	public Set<Item> getItemsUnmodifiable() {
 		return z_unmodifiableItems;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + nickname.hashCode();
-		return result;
 	}
 
 	/**
 	 * @param characters
 	 *            the characters to set
 	 */
-	void setCharacters(final Set<Character> characters) {
-		this.characters = characters;
-		this.z_unmodifiableCharacters = Collections.unmodifiableSet(this.characters);
+	void setCharacterStates(final Set<CharacterState> characterStates) {
+		this.characterStates = characterStates;
+		this.z_unmodifiableCharacterStates = Collections.unmodifiableSet(this.characterStates);
 	}
 
 	/**
@@ -176,7 +145,7 @@ public class Player extends AbstractEntity {
 		this.nickname = nickname;
 	}
 
-	void setPassword(final String password) throws CannotPerformOperationException {
+	void setPassword(@NonNull final String password) throws CannotPerformOperationException {
 		passwordHash = PasswordStorage.createHash(password);
 	}
 
@@ -193,7 +162,7 @@ public class Player extends AbstractEntity {
 		return String.format("Player(%s)", nickname);
 	}
 
-	public boolean verifyPassword(final String password) throws CannotPerformOperationException, InvalidHashException {
+	public boolean verifyPassword(@NonNull final String password) throws CannotPerformOperationException, InvalidHashException {
 		final String hash = passwordHash;
 		if (hash.isEmpty())
 			throw new InvalidHashException("password hash must not be empty");
@@ -209,4 +178,18 @@ public class Player extends AbstractEntity {
 	public EEntityMeta getEntityMeta() {
 		return EEntityMeta.PLAYER;
 	}
+
+//	public boolean containsCharacter(final String characterName) {
+//		for (final Character c : characters)
+//			if (characterName.equals(c.getPrimaryKey()))
+//				return true;
+//		return false;
+//	}
+
+//	public boolean containsItem(final String itemName) {
+//		for (final Item item : items)
+//			if (itemName.equals(item.getPrimaryKey()))
+//				return true;
+//		return false;
+//	}
 }

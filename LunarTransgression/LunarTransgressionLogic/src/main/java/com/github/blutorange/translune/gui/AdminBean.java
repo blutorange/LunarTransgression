@@ -13,7 +13,7 @@ import com.github.blutorange.translune.db.Character;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.Item;
 import com.github.blutorange.translune.db.Player;
-import com.github.blutorange.translune.ic.InjectionUtil;
+import com.github.blutorange.translune.ic.ComponentFactory;
 
 @ManagedBean(eager = true, name = "adminBean")
 @ViewScoped
@@ -30,7 +30,7 @@ public class AdminBean extends AbstractBean {
 	@PostConstruct
 	public void init() {
 		adminPage = EAdminPage.SERVER_STATUS;
-		InjectionUtil.inject(this);
+		ComponentFactory.createBeanComponent().inject(this);
 	}
 
 	@Nullable

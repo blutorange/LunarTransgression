@@ -2,11 +2,12 @@ package com.github.blutorange.translune.socket;
 
 import javax.websocket.Session;
 
+import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.ic.DaggerSocketComponent;
 import com.github.blutorange.translune.socket.ILunarMessageHandler.ELunarMessageHandler;
 
 public enum ELunarMessageType {
-	AUTHORIZE(DaggerSocketComponent.create().handlerAuthorization()),
+	AUTHORIZE(DaggerSocketComponent.create().handlerAuthorize()),
 	AUTHORIZE_RESPONSE(ELunarMessageHandler.NOOP),
 
 	INVITE(DaggerSocketComponent.create().handlerInvite()),
@@ -15,6 +16,7 @@ public enum ELunarMessageType {
 
 	INVITE_ACCEPT(DaggerSocketComponent.create().handlerInviteAccept()),
 	INVITE_ACCEPT_RESPONSE(ELunarMessageHandler.NOOP),
+	INVITE_ACCEPTED(ELunarMessageHandler.NOOP),
 
 	INVITE_RETRACT(DaggerSocketComponent.create().handlerInviteRetract()),
 	INVITE_RETRACT_RESPONSE(ELunarMessageHandler.NOOP),
@@ -22,6 +24,16 @@ public enum ELunarMessageType {
 
 	INVITE_REJECT(DaggerSocketComponent.create().handlerInviteReject()),
 	INVITE_REJECT_RESPONSE(ELunarMessageHandler.NOOP),
+
+	PREPARE_BATTLE(DaggerSocketComponent.create().handlerPrepareBattle()),
+	PREPARE_BATTLE_RESPONSE(ELunarMessageHandler.NOOP),
+
+	STEP_BATTLE(DaggerSocketComponent.create().handlerStepBattle()),
+	STEP_BATTLE_RESPONSE(ELunarMessageHandler.NOOP),
+
+	BATTLE_PREPARED(ELunarMessageHandler.NOOP),
+	BATTLE_STEPPED(ELunarMessageHandler.NOOP),
+	BATTLE_CANCELLED(ELunarMessageHandler.NOOP),
 
 	UNKNOWN(ELunarMessageHandler.NOOP),
 	;
@@ -31,7 +43,7 @@ public enum ELunarMessageType {
 
 	private ELunarMessageType(final ILunarMessageHandler handler) {
 		this.handler = handler;
-		this.socketProcessing = DaggerSocketComponent.create().socketProcessing();
+		this.socketProcessing = ComponentFactory.createSocketComponent().socketProcessing();
 	}
 
 	public void handle(final Session session, final LunarMessage message) {

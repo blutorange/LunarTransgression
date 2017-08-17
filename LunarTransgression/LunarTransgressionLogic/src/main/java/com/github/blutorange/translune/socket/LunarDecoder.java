@@ -9,7 +9,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
-import com.github.blutorange.translune.ic.InjectionUtil;
+import com.github.blutorange.translune.ic.ComponentFactory;
 import com.jsoniter.JsonIterator;
 
 public class LunarDecoder implements Decoder.Text<LunarMessage> {
@@ -22,7 +22,7 @@ public class LunarDecoder implements Decoder.Text<LunarMessage> {
 
 	@Override
 	public void init(final EndpointConfig endpointConfig) {
-		InjectionUtil.inject(this);
+		ComponentFactory.createSocketComponent().inject(this);
 	}
 
 	@Override

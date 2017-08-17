@@ -8,7 +8,7 @@ import javax.websocket.EndpointConfig;
 import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
-import com.github.blutorange.translune.ic.InjectionUtil;
+import com.github.blutorange.translune.ic.ComponentFactory;
 import com.jsoniter.output.JsonStream;
 
 public class LunarEncoder implements Encoder.Text<LunarMessage> {
@@ -21,7 +21,7 @@ public class LunarEncoder implements Encoder.Text<LunarMessage> {
 
 	@Override
 	public void init(final EndpointConfig endpointConfig) {
-		InjectionUtil.inject(this);
+		ComponentFactory.createSocketComponent().inject(this);
 	}
 
 	@Override

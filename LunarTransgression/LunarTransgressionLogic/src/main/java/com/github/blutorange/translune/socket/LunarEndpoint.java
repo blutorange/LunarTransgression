@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 
 import com.github.blutorange.translune.CustomProperties;
 import com.github.blutorange.translune.ic.Classed;
-import com.github.blutorange.translune.ic.InjectionUtil;
+import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.logic.IInitIdStore;
 import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.socket.message.MessageUnknown;
@@ -61,7 +61,7 @@ public class LunarEndpoint {
 
 	@PostConstruct
 	private void init() {
-		InjectionUtil.inject(this);
+		ComponentFactory.createSocketComponent().inject(this);
 	}
 
 	@OnOpen
@@ -93,7 +93,6 @@ public class LunarEndpoint {
 		//   - Java™ API for WebSocket, Chapter 5.1
 		// However, for battles we need to synchronize on the session of
 		// the opposing user.
-		// TODO HandlerInvite/Battle -> synchronize on the other user
 		synchronized(session) {
 			final AtomicInteger clientTime = socketProcessing.getClientTime(session);
 			final Queue<LunarMessage> messageQueue = socketProcessing.getClientMessageQueue(session);

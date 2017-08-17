@@ -18,7 +18,7 @@ import com.github.blutorange.translune.CustomProperties;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.ILunarDatabaseManager.ELunarDatabaseManagerMock;
 import com.github.blutorange.translune.db.Player;
-import com.github.blutorange.translune.ic.InjectionUtil;
+import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.util.Constants;
 import com.github.blutorange.translune.util.PasswordStorage;
 
@@ -45,7 +45,7 @@ public class SessionBean extends AbstractBean implements Serializable {
 
 	@PostConstruct
 	void init() {
-		InjectionUtil.inject(this);
+		ComponentFactory.createBeanComponent().inject(this);
 	}
 
 	/**

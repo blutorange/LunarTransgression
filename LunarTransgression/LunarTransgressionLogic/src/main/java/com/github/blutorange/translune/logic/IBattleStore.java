@@ -1,6 +1,6 @@
 package com.github.blutorange.translune.logic;
 
 public interface IBattleStore {
-	void addNewBattle(String from, String to);
-	void update();
+	void startBattle(String from, String to);
+	void removeBattle(String from, String to);
 }

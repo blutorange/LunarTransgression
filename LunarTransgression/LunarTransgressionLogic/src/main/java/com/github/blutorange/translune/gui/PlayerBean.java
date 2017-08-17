@@ -16,7 +16,7 @@ import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
-import com.github.blutorange.translune.ic.InjectionUtil;
+import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.logic.IInitIdStore;
 
 @ManagedBean(eager = true, name = "playerBean")
@@ -36,7 +36,7 @@ public class PlayerBean extends AbstractBean {
 
 	@PostConstruct
 	public void init() {
-		InjectionUtil.inject(this);
+		ComponentFactory.createBeanComponent().inject(this);
 	}
 
 	public void startGame() {

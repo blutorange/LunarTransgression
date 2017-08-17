@@ -11,13 +11,11 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
@@ -25,18 +23,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.logic.EElement;
 
 @Entity
 @Table(name = "\"character\"", uniqueConstraints = {@UniqueConstraint(columnNames="charstate", name = "uq_character_charstate")})
 public class Character extends AbstractEntity {
-	@NotNull
-	@OneToOne(targetEntity = CharacterState.class, cascade = CascadeType.ALL, orphanRemoval = true, optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "charstate", updatable = false, insertable = true, nullable = false, unique = true, foreignKey = @ForeignKey(name = "fk_player_cstat"))
-	private CharacterState characterState = new CharacterState();
-
 	@Id
 	@NotNull
 	@Size(min = 1, max = 63)
@@ -59,38 +51,12 @@ public class Character extends AbstractEntity {
 	@ManyToMany(targetEntity=Skill.class, cascade={CascadeType.PERSIST, CascadeType.REMOVE})
 	@JoinTable(name="character_skills", foreignKey=@ForeignKey(name="fk_ck_char"))
 	private Set<Skill> skills;
-	
+
 	@Transient
 	private Set<EElement> z_unmodifiableResistances = Collections.unmodifiableSet(resistances);
 
 	@Transient
 	private Set<EElement> z_unmodifiableWeaknesses = Collections.unmodifiableSet(weaknesses);
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(final @Nullable Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Character))
-			return false;
-		final Character other = (Character) obj;
-		if (!name.equals(other.name))
-			return false;
-		return true;
-	}
-
-	/**
-	 * @return the stats
-	 */
-	public CharacterState getCharacterState() {
-		return characterState;
-	}
 
 	/**
 	 * @return the resistances
@@ -127,32 +93,11 @@ public class Character extends AbstractEntity {
 		return weaknesses;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + name.hashCode();
-		return result;
-	}
-
-	/**
-	 * @param stats
-	 *            the stats to set
-	 */
-	void setCharacterState(final CharacterState stats) {
-		this.characterState = stats;
-	}
-
 	protected Set<Skill> getSkills() {
 		return skills;
 	}
 
-	protected void setSkills(Set<Skill> skills) {
+	protected void setSkills(final Set<Skill> skills) {
 		this.skills = skills != null ? skills : new HashSet<>();
 	}
 

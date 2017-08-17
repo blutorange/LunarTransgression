@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.websocket.Session;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
@@ -18,6 +19,7 @@ import com.github.blutorange.translune.socket.LunarMessage;
 import com.github.blutorange.translune.socket.message.MessageInvite;
 import com.github.blutorange.translune.socket.message.MessageInviteAccept;
 import com.github.blutorange.translune.socket.message.MessageInviteAcceptResponse;
+import com.github.blutorange.translune.socket.message.MessageInviteAccepted;
 import com.github.blutorange.translune.socket.message.MessageInviteResponse;
 
 @Singleton
@@ -44,14 +46,14 @@ public class HandlerInviteAccept implements ILunarMessageHandler {
 
 		if (inviteAccept == null) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteAcceptResponse(message, "Bad request."));
+					new MessageInviteAcceptResponse(message, StringUtils.EMPTY, "Bad request."));
 			return;
 		}
 
 		final Session otherSession = sessionStore.retrieve(inviteAccept.getNickname());
 		if (otherSession == null || !otherSession.isOpen()) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteAcceptResponse(message, "Invited user not logged in anymore."));
+					new MessageInviteAcceptResponse(message, inviteAccept.getNickname(), "Invited user not logged in anymore."));
 			invitationStore.removeAllWith(inviteAccept.getNickname());
 			return;
 		}
@@ -59,13 +61,15 @@ public class HandlerInviteAccept implements ILunarMessageHandler {
 		final MessageInvite invitation = invitationStore.remove(inviteAccept.getNickname(), user);
 		if (invitation == null) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteAcceptResponse(message, "Invitation does not exist anymore, possibly because it was retracted."));
+					new MessageInviteAcceptResponse(message, inviteAccept.getNickname(), "Invitation does not exist anymore, possibly because it was retracted."));
 			return;
 		}
 
-		// TODO START BATTLE, send message to user
 		socketProcessing.setGameState(session, EGameState.BATTLE_PREPARATION);
 		socketProcessing.setGameState(otherSession, EGameState.BATTLE_PREPARATION);
-		battleStore.addNewBattle(inviteAccept.getNickname(), user);
+		battleStore.startBattle(inviteAccept.getNickname(), user);
+
+		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageInviteAcceptResponse(message, inviteAccept.getNickname(), "Battle negotiated."));
+		socketProcessing.dispatchMessage(otherSession, ELunarStatusCode.OK, new MessageInviteAccepted(inviteAccept.getNickname()));
 	}
 }

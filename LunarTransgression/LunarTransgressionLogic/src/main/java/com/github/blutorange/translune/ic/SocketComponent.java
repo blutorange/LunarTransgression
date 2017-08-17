@@ -2,12 +2,8 @@ package com.github.blutorange.translune.ic;
 
 import javax.inject.Singleton;
 
-import com.github.blutorange.translune.handler.HandlerAuthorize;
-import com.github.blutorange.translune.handler.HandlerInvite;
-import com.github.blutorange.translune.handler.HandlerInviteAccept;
-import com.github.blutorange.translune.handler.HandlerInviteReject;
-import com.github.blutorange.translune.handler.HandlerInviteRetract;
-import com.github.blutorange.translune.logic.ISessionStore;
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ILunarMessageHandler;
 import com.github.blutorange.translune.socket.ISocketProcessing;
@@ -24,18 +20,13 @@ public interface SocketComponent {
 	void inject(LunarDecoder injectable);
 	void inject(LunarEncoder sessionBean);
 
-	void inject(HandlerAuthorize handler);
-	void inject(HandlerInvite handler);
-	void inject(HandlerInviteAccept handler);
-	void inject(HandlerInviteRetract handler);
-	void inject(HandlerInviteReject handler);
+	@NonNull @LunarMessageTyped(ELunarMessageType.AUTHORIZE) ILunarMessageHandler handlerAuthorize();
+	@NonNull @LunarMessageTyped(ELunarMessageType.INVITE) ILunarMessageHandler handlerInvite();
+	@NonNull @LunarMessageTyped(ELunarMessageType.INVITE_ACCEPT) ILunarMessageHandler handlerInviteAccept();
+	@NonNull @LunarMessageTyped(ELunarMessageType.INVITE_RETRACT) ILunarMessageHandler handlerInviteRetract();
+	@NonNull @LunarMessageTyped(ELunarMessageType.INVITE_REJECT) ILunarMessageHandler handlerInviteReject();
+	@NonNull @LunarMessageTyped(ELunarMessageType.PREPARE_BATTLE) ILunarMessageHandler handlerPrepareBattle();
+	@NonNull @LunarMessageTyped(ELunarMessageType.STEP_BATTLE) ILunarMessageHandler handlerStepBattle();
 
-	@LunarMessageTyped(ELunarMessageType.AUTHORIZE) ILunarMessageHandler handlerAuthorization();
-	@LunarMessageTyped(ELunarMessageType.INVITE) ILunarMessageHandler handlerInvite();
-	@LunarMessageTyped(ELunarMessageType.INVITE_ACCEPT) ILunarMessageHandler handlerInviteAccept();
-	@LunarMessageTyped(ELunarMessageType.INVITE_RETRACT) ILunarMessageHandler handlerInviteRetract();
-	@LunarMessageTyped(ELunarMessageType.INVITE_REJECT) ILunarMessageHandler handlerInviteReject();
-
-	ISessionStore sessionStore();
-	ISocketProcessing socketProcessing();
+	@NonNull ISocketProcessing socketProcessing();
 }

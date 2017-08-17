@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.logic.EItemEffect;
 
@@ -36,23 +35,6 @@ public class Item extends AbstractEntity {
 	@Column(name = "power", nullable = false, unique = false)
 	private int power;
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(@Nullable final Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Item))
-			return false;
-		final Item other = (Item) obj;
-		if (!name.equals(other.name))
-			return false;
-		return true;
-	}
-
 	/**
 	 * @return the effect
 	 */
@@ -72,17 +54,6 @@ public class Item extends AbstractEntity {
 	 */
 	public int getPower() {
 		return power;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + name.hashCode();
-		return result;
 	}
 
 	/**

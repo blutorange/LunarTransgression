@@ -3,9 +3,14 @@ package com.github.blutorange.translune.db;
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -13,11 +18,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jdt.annotation.Nullable;
 
 @Entity
 @Table(name = "charstate")
 public class CharacterState extends AbstractEntity {
+	@NotNull
+	@OneToOne(targetEntity = Character.class, cascade = CascadeType.ALL, orphanRemoval = true, optional = false, fetch = FetchType.EAGER)
+	@JoinColumn(name = "character", updatable = false, insertable = true, nullable = false, unique = true, foreignKey = @ForeignKey(name = "fk_char_cstate"))
+	private Character character;
+
 	@Min(0)
 	@Max(9999)
 	@Column(name = "exp", nullable = false, unique = false)
@@ -83,21 +92,16 @@ public class CharacterState extends AbstractEntity {
 	@Column(name = "speed", nullable = false, unique = false)
 	private int speed;
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * @return the character
 	 */
+	public Character getCharacter() {
+		return character;
+	}
+
 	@Override
-	public boolean equals(@Nullable final Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof CharacterState))
-			return false;
-		final CharacterState other = (CharacterState) obj;
-		if (!id.equals(other.id))
-			return false;
-		return true;
+	public EEntityMeta getEntityMeta() {
+		return EEntityMeta.CHARACTER_STATE;
 	}
 
 	/**
@@ -128,7 +132,6 @@ public class CharacterState extends AbstractEntity {
 		return level;
 	}
 
-
 	/**
 	 * @return the magicalAttack
 	 */
@@ -142,6 +145,7 @@ public class CharacterState extends AbstractEntity {
 	public int getMagicalDefense() {
 		return magicalDefense;
 	}
+
 	/**
 	 * @return the maxHp
 	 */
@@ -184,6 +188,11 @@ public class CharacterState extends AbstractEntity {
 		return physicalDefense;
 	}
 
+	@Override
+	public Serializable getPrimaryKey() {
+		return id;
+	}
+
 	/**
 	 * @return the speed
 	 */
@@ -191,15 +200,11 @@ public class CharacterState extends AbstractEntity {
 		return speed;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * @param character the character to set
 	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id.hashCode();
-		return result;
+	void setCharacter(final Character character) {
+		this.character = character;
 	}
 
 	/**
@@ -309,16 +314,8 @@ public class CharacterState extends AbstractEntity {
 	@SuppressWarnings("boxing")
 	@Override
 	public String toString() {
-		return String.format("CharacterState(level=%d,maxHp=%d,maxMp=%d,pAttack=%d,pDefense=%d,mAttack=%d,mDefense=%d,speed=%d)", level, maxHp, maxMp, physicalAttack, physicalDefense, magicalAttack, magicalDefense, speed);
-	}
-
-	@Override
-	public Serializable getPrimaryKey() {
-		return id;
-	}
-
-	@Override
-	public EEntityMeta getEntityMeta() {
-		return EEntityMeta.CHARACTER_STATE;
+		return String.format(
+				"CharacterState(level=%d,maxHp=%d,maxMp=%d,pAttack=%d,pDefense=%d,mAttack=%d,mDefense=%d,speed=%d)",
+				level, maxHp, maxMp, physicalAttack, physicalDefense, magicalAttack, magicalDefense, speed);
 	}
 }
