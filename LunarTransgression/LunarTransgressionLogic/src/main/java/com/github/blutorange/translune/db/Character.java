@@ -1,75 +1,133 @@
 package com.github.blutorange.translune.db;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.github.blutorange.translune.logic.EElement;
+import com.github.blutorange.translune.util.Constants;
+import com.github.blutorange.translune.util.IAccessible;
 
 @Entity
-@Table(name = "\"character\"", uniqueConstraints = {@UniqueConstraint(columnNames="charstate", name = "uq_character_charstate")})
-public class Character extends AbstractEntity {
+@Table(name = "\"character\"")
+public class Character extends AbstractStoredEntity {
+	@NotNull
+	@Column(name = "elements", nullable = false, unique = false, updatable = false)
+	@ElementCollection(targetClass = EElement.class)
+	@CollectionTable(name = "charelements", joinColumns = @JoinColumn(name = "\"character\""), foreignKey = @ForeignKey(name = "fk_charelements_char"))
+	private Set<EElement> elements = EnumSet.of(EElement.NORMAL);
+
+	@Min(0)
+	@Max(Constants.MAX_MAGICAL_ATTACK)
+	@Column(name = "magicalattack", nullable = false, unique = false, updatable = false)
+	private int magicalAttack;
+
+	@Min(0)
+	@Max(Constants.MAX_MAGICAL_DEFENSE)
+	@Column(name = "magicaldefense", nullable = false, unique = false, updatable = false)
+	private int magicalDefense;
+
+	@Min(0)
+	@Max(Constants.MAX_HP)
+	@Column(name = "maxhp", nullable = false, unique = false, updatable = false)
+	private int maxHp;
+
+	@Min(0)
+	@Max(Constants.MAX_MP)
+	@Column(name = "maxmp", nullable = false, unique = false, updatable = false)
+	private int maxMp;
+
 	@Id
 	@NotNull
 	@Size(min = 1, max = 63)
-	@Column(name = "name", nullable = false, unique = true, length = 63)
+	@Column(name = "name", nullable = false, unique = true, length = 63, updatable = false)
 	private String name = StringUtils.EMPTY;
 
-	@NotNull
-	@Column(name = "resistance", nullable = false, unique = false)
-	@ElementCollection(targetClass = EElement.class)
-	@CollectionTable(name = "resistances", joinColumns = @JoinColumn(name = "\"character\""), foreignKey = @ForeignKey(name="fk_char_resist"))
-	private Set<EElement> resistances = EnumSet.noneOf(EElement.class);
+	@Min(0)
+	@Max(Constants.MAX_PHYSICAL_ATTACK)
+	@Column(name = "physicalattack", nullable = false, unique = false, updatable = false)
+	private int physicalAttack;
+
+	@Min(0)
+	@Max(Constants.MAX_PHYSICAL_DEFENSE)
+	@Column(name = "physicaldefense", nullable = false, unique = false, updatable = false)
+	private int physicalDefense;
 
 	@NotNull
-	@Column(name = "weakness", nullable = false, unique = false)
-	@ElementCollection(targetClass = EElement.class)
-	@CollectionTable(name = "weaknesses", joinColumns = @JoinColumn(name = "\"character\""), foreignKey = @ForeignKey(name="fk_char_weakness"))
-	private Set<EElement> weaknesses = EnumSet.noneOf(EElement.class);
+	@ManyToMany(targetEntity = Skill.class, cascade = {}, fetch = FetchType.LAZY)
+	@JoinTable(name = "charskill", joinColumns = @JoinColumn(name = "charskill_char", updatable = false, nullable = false, foreignKey = @ForeignKey(name="fk_charskill_char")), inverseJoinColumns = @JoinColumn(name = "charskill_skill", updatable = false, nullable = false, foreignKey = @ForeignKey(name="fk_charskill_skill")))
+	@MapKeyColumn(name = "level", updatable = false, nullable = false, unique = false)
+	private Map<Integer, Skill> skills;
 
-	@NotNull
-	@ManyToMany(targetEntity=Skill.class, cascade={CascadeType.PERSIST, CascadeType.REMOVE})
-	@JoinTable(name="character_skills", foreignKey=@ForeignKey(name="fk_ck_char"))
-	private Set<Skill> skills;
-
-	@Transient
-	private Set<EElement> z_unmodifiableResistances = Collections.unmodifiableSet(resistances);
-
-	@Transient
-	private Set<EElement> z_unmodifiableWeaknesses = Collections.unmodifiableSet(weaknesses);
+	@Min(0)
+	@Max(Constants.MAX_SPEED)
+	@Column(name = "speed", nullable = false, unique = false, updatable = false)
+	private int speed;
 
 	/**
-	 * @return the resistances
+	 * @return the elements
 	 */
-	public Set<EElement> getUnmodifiableResistances() {
-		return z_unmodifiableResistances;
+	Set<EElement> getElements() {
+		return elements;
+	}
+
+	public Set<EElement> getUnmodifiableElements() {
+		return elements;
+	}
+
+	@Override
+	public EEntityMeta getEntityMeta() {
+		return EEntityMeta.CHARACTER;
 	}
 
 	/**
-	 * @return the weaknesses
+	 * @return the magicalAttack
 	 */
-	public Set<EElement> getUnmodifiableWeaknesses() {
-		return Collections.unmodifiableSet(weaknesses);
+	public int getMagicalAttack() {
+		return magicalAttack;
+	}
+
+	/**
+	 * @return the magicalDefense
+	 */
+	public int getMagicalDefense() {
+		return magicalDefense;
+	}
+
+	/**
+	 * @return the maxHp
+	 */
+	public int getMaxHp() {
+		return maxHp;
+	}
+
+	/**
+	 * @return the maxMp
+	 */
+	public int getMaxMp() {
+		return maxMp;
 	}
 
 	/**
@@ -80,25 +138,88 @@ public class Character extends AbstractEntity {
 	}
 
 	/**
-	 * @return the resistances
+	 * @return the physicalAttack
 	 */
-	Set<EElement> getResistances() {
-		return resistances;
+	public int getPhysicalAttack() {
+		return physicalAttack;
 	}
 
 	/**
-	 * @return the weaknesses
+	 * @return the physicalDefense
 	 */
-	Set<EElement> getWeaknesses() {
-		return weaknesses;
+	public int getPhysicalDefense() {
+		return physicalDefense;
 	}
 
-	protected Set<Skill> getSkills() {
+	@Override
+	public Serializable getPrimaryKey() {
+		return name;
+	}
+
+	/**
+	 * @return the speed
+	 */
+	public int getSpeed() {
+		return speed;
+	}
+
+	public Map<Integer, Skill> getUnmodifiableSkills() {
 		return skills;
 	}
 
-	protected void setSkills(final Set<Skill> skills) {
-		this.skills = skills != null ? skills : new HashSet<>();
+	/**
+	 * @param elements
+	 *            the elements to set
+	 */
+	void setElements(final Set<EElement> elements) {
+		this.elements = elements != null ? elements : EnumSet.noneOf(EElement.class);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Character(%s,hp=%d,mp=%s,patt=%d,pdef=%d,matt=%d,mdef=%s,speed=%s)", name, maxHp, maxMp,
+				physicalAttack, physicalDefense, magicalAttack, magicalDefense, speed);
+	}
+
+	@Override
+	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
+		associated(skills.values(), consumer);
+	}
+
+	Map<Integer, Skill> getSkills() {
+		return skills;
+	}
+
+	/**
+	 * @param magicalAttack
+	 *            the magicalAttack to set
+	 */
+	void setMagicalAttack(final int magicalAttack) {
+		this.magicalAttack = magicalAttack;
+	}
+
+	/**
+	 * @param magicalDefense
+	 *            the magicalDefense to set
+	 */
+	void setMagicalDefense(final int magicalDefense) {
+		this.magicalDefense = magicalDefense;
+	}
+
+	/**
+	 * @param maxHp
+	 *            the maxHp to set
+	 */
+	void setMaxHp(final int maxHp) {
+		this.maxHp = maxHp;
+	}
+
+	/**
+	 * @param maxMp
+	 *            the maxMp to set
+	 */
+	void setMaxMp(final int maxMp) {
+		this.maxMp = maxMp;
 	}
 
 	/**
@@ -110,35 +231,30 @@ public class Character extends AbstractEntity {
 	}
 
 	/**
-	 * @param resistances
-	 *            the resistances to set
+	 * @param physicalAttack
+	 *            the physicalAttack to set
 	 */
-	void setResistances(final Set<EElement> resistances) {
-		this.resistances = resistances;
-		this.z_unmodifiableResistances = Collections.unmodifiableSet(this.resistances);
+	void setPhysicalAttack(final int physicalAttack) {
+		this.physicalAttack = physicalAttack;
 	}
 
 	/**
-	 * @param weaknesses
-	 *            the weaknesses to set
+	 * @param physicalDefense
+	 *            the physicalDefense to set
 	 */
-	void setWeaknesses(final Set<EElement> weaknesses) {
-		this.weaknesses = weaknesses;
-		this.z_unmodifiableWeaknesses = Collections.unmodifiableSet(this.weaknesses);
+	void setPhysicalDefense(final int physicalDefense) {
+		this.physicalDefense = physicalDefense;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("Character(%s)", name);
+	void setSkills(final Map<Integer, Skill> skills) {
+		this.skills = skills != null ? skills : new HashMap<>();
 	}
 
-	@Override
-	public Serializable getPrimaryKey() {
-		return name;
-	}
-
-	@Override
-	public EEntityMeta getEntityMeta() {
-		return EEntityMeta.CHARACTER;
+	/**
+	 * @param speed
+	 *            the speed to set
+	 */
+	void setSpeed(final int speed) {
+		this.speed = speed;
 	}
 }

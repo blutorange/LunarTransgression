@@ -12,7 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.github.blutorange.translune.logic.EGameState;
 
 public interface ISocketProcessing {
-	Future<@Nullable Void> dispatchMessage(final Session session, ELunarStatusCode status, final ILunarMessage message);
+	Future<@Nullable Void> dispatchMessage(final Session session, ELunarStatusCode status, final ILunarPayload message);
 
 	void close(final Session session, final CloseCodes closeCode, final String closeReason);
 
@@ -35,10 +35,10 @@ public interface ISocketProcessing {
 	void transfer(Session oldSession, Session session);
 
 	@Nullable
-	<T extends ILunarMessage> T getMessage(final String payload, final Class<T> clazz);
+	<T extends ILunarPayload> T getMessage(final String payload, final Class<T> clazz);
 
 	@Nullable
-	default <T extends ILunarMessage> T getMessage(final LunarMessage message, final Class<T> clazz) {
+	default <T extends ILunarPayload> T getMessage(final LunarMessage message, final Class<T> clazz) {
 		return getMessage(message.getPayload(), clazz);
 	}
 

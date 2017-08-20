@@ -30,8 +30,10 @@ public class DatabaseModule {
 	}
 
 	@Provides @Singleton
-	static ILunarDatabaseManager provideLunarDatabaseManager(@Classed(LunarDatabaseManager.class) final Logger logger,
-			final EntityManagerFactory entityManagerFactory, final IEntityStore entityStore) {
-		return new LunarDatabaseManager(logger, entityManagerFactory, entityStore);
+	static ILunarDatabaseManager provideLunarDatabaseManager() {
+		final LunarDatabaseManager ldm  = new LunarDatabaseManager();
+		ComponentFactory.getDatabaseComponent().inject(ldm);
+		ldm.init();
+		return ldm;
 	}
 }

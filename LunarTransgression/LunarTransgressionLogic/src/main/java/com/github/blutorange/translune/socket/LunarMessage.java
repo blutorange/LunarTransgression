@@ -96,4 +96,9 @@ public class LunarMessage {
 	public long getReceptionTime() {
 		return receptionTime;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("LunarMessage(%s,%s,%s)", type, status, time);
+	}
 }

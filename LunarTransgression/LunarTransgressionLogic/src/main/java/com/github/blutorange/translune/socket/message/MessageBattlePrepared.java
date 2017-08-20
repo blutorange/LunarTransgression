@@ -1,9 +1,9 @@
 package com.github.blutorange.translune.socket.message;
 
 import com.github.blutorange.translune.socket.ELunarMessageType;
-import com.github.blutorange.translune.socket.ILunarMessage;
+import com.github.blutorange.translune.socket.ILunarPayload;
 
-public class MessageBattlePrepared implements ILunarMessage {
+public class MessageBattlePrepared implements ILunarPayload {
 	public MessageBattlePrepared() {
 	}
 

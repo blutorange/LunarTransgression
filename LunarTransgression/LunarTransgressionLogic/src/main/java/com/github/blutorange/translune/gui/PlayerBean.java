@@ -36,7 +36,7 @@ public class PlayerBean extends AbstractBean {
 
 	@PostConstruct
 	public void init() {
-		ComponentFactory.createBeanComponent().inject(this);
+		ComponentFactory.getBeanComponent().inject(this);
 	}
 
 	public void startGame() {

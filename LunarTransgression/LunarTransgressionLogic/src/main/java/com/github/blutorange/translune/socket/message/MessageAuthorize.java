@@ -4,11 +4,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.socket.ELunarMessageType;
-import com.github.blutorange.translune.socket.ILunarMessage;
+import com.github.blutorange.translune.socket.ILunarPayload;
 import com.jsoniter.annotation.JsonIgnore;
 import com.jsoniter.annotation.JsonProperty;
 
-public class MessageAuthorize implements ILunarMessage {
+public class MessageAuthorize implements ILunarPayload {
 	@JsonProperty(required = true)
 	String nickname = StringUtils.EMPTY;
 

@@ -14,8 +14,8 @@ import com.jsoniter.JsonIterator;
 import com.jsoniter.spi.DecodingMode;
 
 @SuppressWarnings("nls")
-public class LunarInitializer implements ServletContainerInitializer {
-	private final static Logger LOG = LoggerFactory.getLogger(LunarInitializer.class);
+public class LunarServletContainerInitializer implements ServletContainerInitializer {
+	private final static Logger LOG = LoggerFactory.getLogger(ServletContainerInitializer.class);
 
 	@Override
 	public void onStartup(final @Nullable Set<@Nullable Class<?>> classes, final @Nullable ServletContext servletContext)

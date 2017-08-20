@@ -1,6 +1,11 @@
 package com.github.blutorange.translune.ic;
 
+import java.util.Random;
+
+import javax.inject.Named;
 import javax.inject.Singleton;
+
+import org.quartz.Scheduler;
 
 import com.github.blutorange.translune.logic.BattleProcessing;
 import com.github.blutorange.translune.logic.BattleRunner;
@@ -16,4 +21,7 @@ public interface LogicComponent {
 	void inject(BattleProcessing battle);
 	IBattleRunner battleRunner();
 	IBattleProcessing battleProcessing();
+	@Named("default") Scheduler defaultScheduler();
+	@Named("secure") Random randomSecure();
+	@Named("basic") Random randomBasic();
 }

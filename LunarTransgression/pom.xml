@@ -9,7 +9,7 @@
 
 	<name>LunarTransgression</name>
 	<url>https://github.com/blutorange/LunarTransgression</url>
-	
+
 	<modules>
 		<module>LunarTransgressionLogic</module>
 		<module>LunarTransgressionMain</module>
@@ -58,6 +58,7 @@
 		<primefaces-themes-version>1.0.10</primefaces-themes-version>
 		<primefaces-version>6.1</primefaces-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<quartz-version>2.3.0</quartz-version>
 		<slf4j-api-version>1.7.25</slf4j-api-version>
 		<slf4j-log4j12-version>1.7.25</slf4j-log4j12-version>
 		<tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
@@ -66,6 +67,16 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz</artifactId>
+				<version>${quartz-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz-jobs</artifactId>
+				<version>${quartz-version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-text</artifactId>

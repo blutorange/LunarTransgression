@@ -1,6 +1,7 @@
 package com.github.blutorange.translune.db;
 
 import java.io.Serializable;
+import java.util.function.Consumer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,23 +17,34 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.translune.logic.EItemEffect;
+import com.github.blutorange.translune.util.IAccessible;
 
 @Entity
 @Table(name = "item")
-public class Item extends AbstractEntity {
+public class Item extends AbstractStoredEntity {
+	@Deprecated
+	public Item() {
+	}
+
+	public Item(final String name, final EItemEffect effect, final int power) {
+		this.name = name;
+		this.effect = effect;
+		this.power = power;
+	}
+
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
-	@Column(name = "effect", unique = false, nullable = false)
+	@Column(name = "effect", unique = false, nullable = false, updatable = false)
 	private EItemEffect effect = EItemEffect.HEAL;
 
 	@NotNull
 	@Id
-	@Column(name = "name", unique = true, nullable = false, length = 63)
+	@Column(name = "name", unique = true, nullable = false, length = 63, updatable = false)
 	private String name = StringUtils.EMPTY;
 
 	@Min(0)
 	@Max(999)
-	@Column(name = "power", nullable = false, unique = false)
+	@Column(name = "power", nullable = false, unique = false, updatable = false)
 	private int power;
 
 	/**
@@ -93,5 +105,20 @@ public class Item extends AbstractEntity {
 	@Override
 	public EEntityMeta getEntityMeta() {
 		return EEntityMeta.ITEM;
+	}
+
+	@Override
+	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
+//		consumer.accept(new IAccessible<AbstractStoredEntity>() {
+//			@Override
+//			public AbstractStoredEntity get() {
+//				return getPlayer();
+//			}
+//
+//			@Override
+//			public void set(final AbstractStoredEntity replacement) {
+//				setPlayer((Player) replacement);
+//			}
+//		});
 	}
 }

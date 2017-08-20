@@ -4,20 +4,23 @@ import org.eclipse.jdt.annotation.Nullable;
 
 public interface IEntityStore {
 	@Nullable
-	<T extends AbstractEntity> T retrieve(Class<T> clazz, Object primaryKey);
+	<T extends AbstractStoredEntity> T retrieve(Class<T> clazz, Object primaryKey);
 	@Nullable
-	<T extends AbstractEntity> T retrieve(EEntityMeta entityMeta, Object primaryKey);
+	<T extends AbstractStoredEntity> T retrieve(EEntityMeta entityMeta, Object primaryKey);
 
-	void store(AbstractEntity entity);
+	void store(AbstractStoredEntity entity);
+	@Nullable
+	<T extends AbstractStoredEntity> T storeIfAbsent(@Nullable T entity);
+
 	/**
 	 *
 	 * @param entity
 	 * @return True iff the entity was removed, false iff the entity was not stored.
 	 */
-	boolean remove(AbstractEntity entity);
+	boolean remove(AbstractStoredEntity entity);
 
 	@Nullable
-	<T extends AbstractEntity> T remove(Class<T> clazz, Object primaryKey);
+	<T extends AbstractStoredEntity> T remove(Class<T> clazz, Object primaryKey);
 	@Nullable
-	public <T extends AbstractEntity> T remove(final EEntityMeta entityMeta, final Object primaryKey);
+	public <T extends AbstractStoredEntity> T remove(final EEntityMeta entityMeta, final Object primaryKey);
 }

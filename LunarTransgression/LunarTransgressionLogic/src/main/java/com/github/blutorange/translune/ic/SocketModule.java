@@ -21,36 +21,41 @@ public class SocketModule {
 
 	@Provides @Singleton @LunarMessageTyped(ELunarMessageType.AUTHORIZE)
 	static ILunarMessageHandler provideMessageHandlerAuthorize() {
-		return ComponentFactory.createSocketComponent().handlerAuthorize();
+		return ComponentFactory.getSocketComponent().handlerAuthorize();
 	}
 
 	@Provides @Singleton @LunarMessageTyped(ELunarMessageType.INVITE)
 	static ILunarMessageHandler provideMessageHandlerInvite() {
-		return ComponentFactory.createSocketComponent().handlerInvite();
+		return ComponentFactory.getSocketComponent().handlerInvite();
 	}
 
 	@Provides @Singleton @LunarMessageTyped(ELunarMessageType.INVITE_ACCEPT)
 	static ILunarMessageHandler provideMessageHandlerInviteAccept() {
-		return ComponentFactory.createSocketComponent().handlerInviteAccept();
+		return ComponentFactory.getSocketComponent().handlerInviteAccept();
 	}
 
 	@Provides @Singleton @LunarMessageTyped(ELunarMessageType.INVITE_RETRACT)
 	static ILunarMessageHandler provideMessageHandlerInviteRetract() {
-		return ComponentFactory.createSocketComponent().handlerInviteRetract();
+		return ComponentFactory.getSocketComponent().handlerInviteRetract();
 	}
 
 	@Provides @Singleton @LunarMessageTyped(ELunarMessageType.INVITE_REJECT)
 	static ILunarMessageHandler provideMessageHandlerInviteReject() {
-		return ComponentFactory.createSocketComponent().handlerInviteReject();
+		return ComponentFactory.getSocketComponent().handlerInviteReject();
 	}
 
 	@Provides @Singleton @LunarMessageTyped(ELunarMessageType.PREPARE_BATTLE)
 	static ILunarMessageHandler provideMessageHandlerPrepareBattle() {
-		return ComponentFactory.createSocketComponent().handlerPrepareBattle();
+		return ComponentFactory.getSocketComponent().handlerPrepareBattle();
 	}
 
 	@Provides @Singleton @LunarMessageTyped(ELunarMessageType.STEP_BATTLE)
 	static ILunarMessageHandler provideMessageHandlerStepBattle() {
-		return ComponentFactory.createSocketComponent().handlerStepBattle();
+		return ComponentFactory.getSocketComponent().handlerStepBattle();
+	}
+
+	@Provides @Singleton @LunarMessageTyped(ELunarMessageType.LOOT)
+	static ILunarMessageHandler provideMessageHandlerLoot() {
+		return ComponentFactory.getSocketComponent().handlerLoot();
 	}
 }

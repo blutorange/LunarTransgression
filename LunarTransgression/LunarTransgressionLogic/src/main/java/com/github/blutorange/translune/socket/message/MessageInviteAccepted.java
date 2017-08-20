@@ -4,10 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.socket.ELunarMessageType;
-import com.github.blutorange.translune.socket.ILunarMessage;
+import com.github.blutorange.translune.socket.ILunarPayload;
 import com.jsoniter.annotation.JsonProperty;
 
-public class MessageInviteAccepted implements ILunarMessage {
+public class MessageInviteAccepted implements ILunarPayload {
 	@JsonProperty(required = true)
 	String nickname = StringUtils.EMPTY;
 

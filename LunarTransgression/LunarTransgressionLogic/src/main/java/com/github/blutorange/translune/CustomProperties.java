@@ -32,10 +32,11 @@ public class CustomProperties {
 	@Inject
 	public CustomProperties() {
 		try (InputStream is = CustomProperties.class.getClassLoader().getResourceAsStream("custom.properties")) {
-			properties.load(is);
+			if (is != null)
+				properties.load(is);
 		}
 		catch (final IOException e) {
-			logger.error("failed to load custom properties", e);
+			e.printStackTrace();
 		}
 		long timeoutInitIdMillis = Long.parseLong(get(Constants.CUSTOM_KEY_TIMEOUT_INITID_MILLIS, "60000"));
 		if (timeoutInitIdMillis < 1000L) timeoutInitIdMillis = 1000L;
@@ -86,7 +87,7 @@ public class CustomProperties {
 	public int getBattlePreparationTimeoutMillis() {
 		return battlePreparationTimeoutMillis;
 	}
-	
+
 	public int getBattleStepTimeoutMillis() {
 		return battleRoundTimeoutMillis;
 	}

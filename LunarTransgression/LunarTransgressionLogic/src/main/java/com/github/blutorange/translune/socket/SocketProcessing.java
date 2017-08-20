@@ -34,7 +34,7 @@ public class SocketProcessing implements ISocketProcessing {
 	}
 
 	@Override
-	public Future<@Nullable Void> dispatchMessage(final Session session, final ELunarStatusCode status, final ILunarMessage message) {
+	public Future<@Nullable Void> dispatchMessage(final Session session, final ELunarStatusCode status, final ILunarPayload message) {
 		final String payload = JsonStream.serialize(message);
 		final AtomicInteger time = (AtomicInteger) session.getUserProperties().get(Constants.SESSION_KEY_SERVER_TIME);
 		if (time == null)
@@ -103,12 +103,12 @@ public class SocketProcessing implements ISocketProcessing {
 
 	@Nullable
 	@Override
-	public <T extends ILunarMessage> T getMessage(final String payload, final Class<T> clazz) {
+	public <T extends ILunarPayload> T getMessage(final String payload, final Class<T> clazz) {
 		try {
 			return JsonIterator.deserialize(payload, clazz);
 		}
 		catch (final Exception e) {
-			logger.error("failed to parse message invite", e);
+			logger.error("failed to parse message " + clazz.getCanonicalName(), e);
 		}
 		return null;
 	}

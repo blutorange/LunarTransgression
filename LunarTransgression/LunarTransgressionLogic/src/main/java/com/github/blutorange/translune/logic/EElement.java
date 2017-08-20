@@ -2,11 +2,23 @@ package com.github.blutorange.translune.logic;
 
 public enum EElement {
 	PHYSICAL,
+	NORMAL,
 	FIRE,
+	FIGHTING,
 	WATER,
-	EARTH,
-	WIND,
+	FLYING,
+	GRASS,
+	POISON,
+	ELECTRIC,
+	GROUND,
+	PSYCHIC,
+	ROCK,
 	ICE,
-	LIGHTNING,
-	DARKNESS;
+	BUG,
+	DRAGON,
+	GHOST,
+	DARK,
+	STEEL,
+	FAIRY
+	;
 }

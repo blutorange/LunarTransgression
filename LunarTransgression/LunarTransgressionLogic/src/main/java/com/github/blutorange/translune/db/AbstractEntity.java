@@ -41,6 +41,4 @@ public abstract class AbstractEntity {
 	public abstract String toString();
 
 	public abstract Serializable getPrimaryKey();
-
-	public abstract EEntityMeta getEntityMeta();
 }

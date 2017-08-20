@@ -30,7 +30,7 @@ public class AdminBean extends AbstractBean {
 	@PostConstruct
 	public void init() {
 		adminPage = EAdminPage.SERVER_STATUS;
-		ComponentFactory.createBeanComponent().inject(this);
+		ComponentFactory.getBeanComponent().inject(this);
 	}
 
 	@Nullable

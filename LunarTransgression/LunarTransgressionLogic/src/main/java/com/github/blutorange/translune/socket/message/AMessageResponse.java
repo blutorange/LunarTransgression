@@ -1,10 +1,10 @@
 package com.github.blutorange.translune.socket.message;
 
-import com.github.blutorange.translune.socket.ILunarMessage;
+import com.github.blutorange.translune.socket.ILunarPayload;
 import com.github.blutorange.translune.socket.IMessageResponse;
 import com.jsoniter.annotation.JsonIgnore;
 
-abstract class AMessageResponse implements ILunarMessage, IMessageResponse {
+abstract class AMessageResponse implements ILunarPayload, IMessageResponse {
 	@JsonIgnore(ignoreDecoding = true, ignoreEncoding = false)
 	int origin;
 

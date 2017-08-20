@@ -61,7 +61,7 @@ public class LunarEndpoint {
 
 	@PostConstruct
 	private void init() {
-		ComponentFactory.createSocketComponent().inject(this);
+		ComponentFactory.getSocketComponent().inject(this);
 	}
 
 	@OnOpen

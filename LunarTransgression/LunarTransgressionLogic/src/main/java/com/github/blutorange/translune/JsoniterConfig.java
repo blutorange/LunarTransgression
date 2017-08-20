@@ -5,6 +5,10 @@ import java.io.IOException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.github.blutorange.translune.logic.BattleAction;
+import com.github.blutorange.translune.logic.BattleCommand;
+import com.github.blutorange.translune.logic.IBattleAction;
+import com.github.blutorange.translune.logic.IBattleCommand;
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.LunarMessage;
@@ -29,7 +33,8 @@ import com.github.blutorange.translune.socket.message.MessagePrepareBattleRespon
 import com.github.blutorange.translune.socket.message.MessageStepBattle;
 import com.github.blutorange.translune.socket.message.MessageStepBattleResponse;
 import com.github.blutorange.translune.socket.message.MessageUnknown;
-import com.github.blutorange.translune.util.EJsoniterEnumEncoder;
+import com.github.blutorange.translune.util.EJsoniterEncoder;
+import com.github.blutorange.translune.util.JsoniterDelegateDecoder;
 import com.github.blutorange.translune.util.JsoniterEnumDecoder;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.ValueType;
@@ -43,8 +48,12 @@ import com.jsoniter.static_codegen.StaticCodegenConfig;
 public class JsoniterConfig implements StaticCodegenConfig {
 	@Override
 	public void setup() {
-		JsoniterSpi.registerPropertyEncoder(LunarMessage.class, "type", EJsoniterEnumEncoder.WITHOUT_CLASS);
+		JsoniterSpi.registerPropertyEncoder(LunarMessage.class, "type", EJsoniterEncoder.ENUM_WITHOUT_CLASS);
         JsoniterSpi.registerPropertyDecoder(LunarMessage.class, "type", new JsoniterEnumDecoder<>(ELunarMessageType.class));
+
+        JsoniterSpi.registerTypeEncoder(IBattleAction.class, EJsoniterEncoder.THROUGHPASS);
+        JsoniterSpi.registerTypeDecoder(IBattleAction.class, new JsoniterDelegateDecoder(BattleAction[].class));
+        JsoniterSpi.registerTypeDecoder(IBattleCommand.class, new JsoniterDelegateDecoder(BattleCommand[].class));
 
         JsoniterSpi.registerPropertyEncoder(LunarMessage.class, "status", new Encoder() {
 			@Override
@@ -104,6 +113,8 @@ public class JsoniterConfig implements StaticCodegenConfig {
 			TypeLiteral.create(MessageBattlePrepared.class),
 			TypeLiteral.create(MessageBattleStepped.class),
 			TypeLiteral.create(MessageBattleCancelled.class),
+
+			TypeLiteral.create(BattleAction.class),
 
 			TypeLiteral.create(MessageUnknown.class)
 		};

@@ -7,8 +7,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.jsoniter.output.JsonStream;
 import com.jsoniter.spi.Encoder;
 
-public enum EJsoniterEnumEncoder implements Encoder {
-	WITH_CLASS {
+public enum EJsoniterEncoder implements Encoder {
+	ENUM_WITH_CLASS {
 		@Override
 		public void encode(final @Nullable Object obj, final JsonStream stream) throws IOException {
 			if (obj == null) {
@@ -24,7 +24,7 @@ public enum EJsoniterEnumEncoder implements Encoder {
 			}
 		}
 	},
-	WITHOUT_CLASS {
+	ENUM_WITHOUT_CLASS {
 		@Override
 		public void encode(final @Nullable Object obj, final JsonStream stream) throws IOException {
 			if (obj == null)
@@ -34,7 +34,14 @@ public enum EJsoniterEnumEncoder implements Encoder {
 				stream.writeVal(e.name());
 			}
 		}
-	};
+	},
+	THROUGHPASS {
+		@Override
+		public void encode(@Nullable final Object obj, final JsonStream stream) throws IOException {
+			stream.writeVal(obj);
+		}
+	}
+	;
 
 	@Override
 	public abstract void encode(@Nullable Object obj, JsonStream stream) throws IOException;

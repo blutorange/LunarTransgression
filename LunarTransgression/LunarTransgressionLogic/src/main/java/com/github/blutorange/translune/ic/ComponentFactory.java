@@ -1,19 +1,29 @@
 package com.github.blutorange.translune.ic;
 
 public class ComponentFactory {
-	public static StorageComponent createStorageComponent() {
-		return DaggerStorageComponent.create();
+	private static final StorageComponent storageComponent = DaggerStorageComponent.create();
+	private static final BeanComponent beanComponent = DaggerBeanComponent.create();
+	private static final DatabaseComponent databaseComponent = DaggerDatabaseComponent.create();
+	private static final SocketComponent socketComponent = DaggerSocketComponent.create();
+	private static final LogicComponent logicComponent = DaggerLogicComponent.create();
+
+	public static StorageComponent getStorageComponent() {
+		return storageComponent;
 	}
 
-	public static BeanComponent createBeanComponent() {
-		return DaggerBeanComponent.create();
+	public static BeanComponent getBeanComponent() {
+		return beanComponent;
 	}
 
-	public static SocketComponent createSocketComponent() {
-		return DaggerSocketComponent.create();
+	public static SocketComponent getSocketComponent() {
+		return socketComponent;
 	}
 
-	public static LogicComponent createLogicComponent() {
-		return DaggerLogicComponent.create();
+	public static LogicComponent getLogicComponent() {
+		return logicComponent;
+	}
+
+	public static DatabaseComponent getDatabaseComponent() {
+		return databaseComponent;
 	}
 }

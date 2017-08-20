@@ -3,10 +3,10 @@ package com.github.blutorange.translune.socket.message;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.github.blutorange.translune.socket.ILunarMessage;
+import com.github.blutorange.translune.socket.ILunarPayload;
 import com.jsoniter.annotation.JsonProperty;
 
-abstract class AMessageMessage implements ILunarMessage {
+abstract class AMessageMessage implements ILunarPayload {
 	@JsonProperty(required = true)
 	String message = StringUtils.EMPTY;
 

@@ -20,7 +20,7 @@ public abstract class AbstractBean {
 	Logger logger;
 
 	public AbstractBean() {
-		ComponentFactory.createBeanComponent().inject(this);
+		ComponentFactory.getBeanComponent().inject(this);
 	}
 
 	protected void addMessage(final Severity severity, final String summary, @Nullable final String details) {

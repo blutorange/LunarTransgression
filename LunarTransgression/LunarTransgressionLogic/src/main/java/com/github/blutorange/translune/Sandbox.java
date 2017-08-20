@@ -1,26 +1,61 @@
 package com.github.blutorange.translune;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
+import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.Item;
-import com.github.blutorange.translune.db.Item_;
+import com.github.blutorange.translune.db.ModifiableItem;
+import com.github.blutorange.translune.db.Player;
+import com.github.blutorange.translune.ic.ComponentFactory;
+import com.github.blutorange.translune.logic.BattleAction;
+import com.github.blutorange.translune.logic.IBattleAction;
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
+import com.github.blutorange.translune.socket.ILunarPayload;
 import com.github.blutorange.translune.socket.LunarMessage;
+import com.github.blutorange.translune.socket.message.MessageBattleStepped;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.output.JsonStream;
 
 public class Sandbox {
 	public static void main(final String[] args) {
 		// testing...
+		jsoniter();
+	}
+
+	static void ldm() {
+		final ServletContextListener scl = new LunarServletContextListener();
+		scl.contextInitialized(new ServletContextEvent(null));
+		final ILunarDatabaseManager ldm = ComponentFactory.getDatabaseComponent().iLunarDatabaseManager();
+
+//		ldm.createSchema();
+
+//		final Player player = new Player("player2", "123", "im a me", new HashSet<>(), new HashSet<>());
+//		final Item item = new Item("item2", player, EItemEffect.HEAL, 20);
+
+		final Item item = ldm.find(Item.class, "item");
+		final Player player = ldm.find(Player.class, "player");
+
+		//		ldm.persist(player);
+//		ldm.persist(item);
+
+//		ldm.delete(item);
+//		ldm.delete(player);
+
+		if (item != null)
+			ldm.modify(item, ModifiableItem.class, s -> s.setPower(43));
+
+		System.out.println("OK");
+		scl.contextDestroyed(new ServletContextEvent(null));
+	}
+
+	static void jsoniter() {
 		new JsoniterConfig().setup();
 		final LunarMessage msg = new LunarMessage(2, ELunarMessageType.AUTHORIZE, ELunarStatusCode.OK, "test");
+		final ILunarPayload m = new MessageBattleStepped(new IBattleAction[] {
+				new BattleAction(new String[] { "Hello world" }, "baz", new String[] { "foo", "bar" }) });
+		msg.setPayload(JsonStream.serialize(m));
 		final String json = JsonStream.serialize(msg);
 		System.out.println(json);
 		final LunarMessage de = JsonIterator.deserialize(json, LunarMessage.class);
@@ -29,32 +64,5 @@ public class Sandbox {
 		System.out.println(de.getType());
 		System.out.println(de.getPayload());
 		System.exit(0);
-
-		final EntityManagerFactory emf = Persistence.createEntityManagerFactory("hibernate");
-		doIt(emf);
-		doIt(emf);
-		doIt(emf);
-	}
-
-	public static void doIt(final EntityManagerFactory emf) {
-		final EntityManager em = emf.createEntityManager();
-		try {
-			final CriteriaBuilder cb = em.getCriteriaBuilder();
-			final CriteriaQuery<Item> q = cb.createQuery(Item.class);
-			final Root<Item> r = q.from(Item.class);
-			q.where(cb.equal(r.get(Item_.name), "test")).select(r);
-			final TypedQuery<Item> typedQuery = em.createQuery(q);
-			for (final Object o : typedQuery.getResultList()) {
-				System.out.println(o);
-			}
-			System.out.println("");
-			System.out.println("");
-			System.out.println("");
-			System.out.println("");
-			System.out.println("");
-		}
-		finally {
-			em.close();
-		}
 	}
 }

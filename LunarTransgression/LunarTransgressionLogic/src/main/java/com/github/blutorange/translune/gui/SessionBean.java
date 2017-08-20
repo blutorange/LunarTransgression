@@ -15,13 +15,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.CustomProperties;
+import com.github.blutorange.translune.db.Character;
+import com.github.blutorange.translune.db.CharacterState;
+import com.github.blutorange.translune.db.CharacterStateBuilder;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.ILunarDatabaseManager.ELunarDatabaseManagerMock;
 import com.github.blutorange.translune.db.Player;
+import com.github.blutorange.translune.db.PlayerBuilder;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.util.Constants;
 import com.github.blutorange.translune.util.PasswordStorage;
+import com.github.blutorange.translune.util.PasswordStorage.CannotPerformOperationException;
 
+@SuppressWarnings("serial")
 @ManagedBean(eager = true, name = "sessionBean")
 @SessionScoped
 public class SessionBean extends AbstractBean implements Serializable {
@@ -35,7 +41,7 @@ public class SessionBean extends AbstractBean implements Serializable {
 
 	@Transient
 	@Inject
-	ILunarDatabaseManager dbManager = ELunarDatabaseManagerMock.INSTANCE;
+	ILunarDatabaseManager databaseManager = ELunarDatabaseManagerMock.INSTANCE;
 
 	@Transient
 	@Inject
@@ -45,7 +51,7 @@ public class SessionBean extends AbstractBean implements Serializable {
 
 	@PostConstruct
 	void init() {
-		ComponentFactory.createBeanComponent().inject(this);
+		ComponentFactory.getBeanComponent().inject(this);
 	}
 
 	/**
@@ -118,7 +124,7 @@ public class SessionBean extends AbstractBean implements Serializable {
 	}
 
 	public void register(final ActionEvent actionEvent) {
-		if (StringUtils.isAllBlank(username) || StringUtils.isAllBlank(password)) {
+		if (StringUtils.isAllBlank(this.username) || StringUtils.isAllBlank(password)) {
 			addMessage(FacesMessage.SEVERITY_WARN, "username or password missing");
 			return;
 		}
@@ -126,16 +132,45 @@ public class SessionBean extends AbstractBean implements Serializable {
 			addMessage(FacesMessage.SEVERITY_WARN, "password repeat not matching password");
 			return;
 		}
-		final String username = this.username.trim();
+		final String nickname = this.username.trim();
 		final String password = this.password;
-		if (Constants.CUSTOM_KEY_SADMIN_PASS.equals(username) || dbManager.find(Player.class, username) != null) {
+		if (Constants.CUSTOM_KEY_SADMIN_PASS.equals(nickname) || databaseManager.find(Player.class, nickname) != null) {
 			addMessage(FacesMessage.SEVERITY_WARN, "nickname exists already");
 			return;
 		}
-		// TODO create new player with chars and stuff
+		try {
+			createPlayer(nickname, password);
+		}
+		catch (final CannotPerformOperationException e) {
+			addMessage(FacesMessage.SEVERITY_ERROR, "Failed to create player: " + e.getMessage());
+			return;
+		}
 		addMessage(FacesMessage.SEVERITY_INFO, "registration complete");
 	}
 
+	private void createPlayer(final String nickname, final String password) throws CannotPerformOperationException {
+		final Character[] characters = databaseManager.findRandom(Character.class, 4);
+		if (characters.length != 4) {
+			addMessage(FacesMessage.SEVERITY_ERROR, "Failed to generate characters");
+			return;
+		}
+		final CharacterStateBuilder characterStateBuilder = new CharacterStateBuilder();
+		final CharacterState cs1 = characterStateBuilder.randomIvs().randomNature().setCharacter(characters[0]).build();
+		final CharacterState cs2 = characterStateBuilder.randomIvs().randomNature().setCharacter(characters[1]).build();
+		final CharacterState cs3 = characterStateBuilder.randomIvs().randomNature().setCharacter(characters[2]).build();
+		final CharacterState cs4 = characterStateBuilder.randomIvs().randomNature().setCharacter(characters[3]).build();
+		final Player player = new PlayerBuilder(nickname).setPassword(password).addCharacterStates(cs1,cs2,cs3,cs4).build();
+
+		databaseManager.persist(player);
+		databaseManager.persist(cs1);
+		databaseManager.persist(cs2);
+		databaseManager.persist(cs3);
+		databaseManager.persist(cs4);
+		databaseManager.persist(characters[0]);
+		databaseManager.persist(characters[1]);
+		databaseManager.persist(characters[2]);
+		databaseManager.persist(characters[3]);
+	}
 
 	public void login(final ActionEvent actionEvent) {
 		if (StringUtils.isAllBlank(username) || StringUtils.isEmpty(password)) {
@@ -157,7 +192,7 @@ public class SessionBean extends AbstractBean implements Serializable {
 				redirect = "/public/admin.xhtml";
 			}
 			else {
-				final Player player = dbManager.find(Player.class, username);
+				final Player player = databaseManager.find(Player.class, username);
 				if (player == null || !player.verifyPassword(password)) {
 					addMessage(FacesMessage.SEVERITY_ERROR, "username or password wrong");
 					return;

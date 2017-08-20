@@ -21,4 +21,28 @@ public final class Constants {
 	public static final String SESSION_KEY_CLIENT_MESSAGE_QUEUE = "msq";
 
 	public static final String USERNAME_SADMIN = "sadmin";
+
+	public static final int MIN_LEVEL = 1;
+	public static final int MIN_ITEMS = 0;
+	public static final int MIN_CHARACTERS = 4;
+
+	public static final int MAX_RELATIVE_HP = 9999;
+	public static final int MAX_RELATIVE_MP = 9999;
+	public static final int MAX_IV = 31;
+	public static final int MAX_ITEMS = 30;
+	public static final int MAX_CHARACTERS = 20;
+	public static final int MAX_LEVEL = 100;
+	public static final int MAX_HP = 999;
+	public static final int MAX_MP = 999;
+	public static final int MAX_EXP = 9999;
+	public static final int MAX_PHYSICAL_ATTACK = 999;
+	public static final int MAX_PHYSICAL_DEFENSE = 999;
+	public static final int MAX_MAGICAL_ATTACK = 999;
+	public static final int MAX_MAGICAL_DEFENSE = 999;
+	public static final int MAX_SPEED = 999;
+
+	public static final int CONFIG_DATABASE_SAVE_MINUTES = 1;
+
+	public static final String QUARTZ_KEY_LDM = "ldm";
+
 }

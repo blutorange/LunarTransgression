@@ -21,7 +21,7 @@ public class LunarEncoder implements Encoder.Text<LunarMessage> {
 
 	@Override
 	public void init(final EndpointConfig endpointConfig) {
-		ComponentFactory.createSocketComponent().inject(this);
+		ComponentFactory.getSocketComponent().inject(this);
 	}
 
 	@Override

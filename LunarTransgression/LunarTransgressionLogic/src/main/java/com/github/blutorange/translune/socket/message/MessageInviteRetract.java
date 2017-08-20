@@ -4,9 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.socket.ELunarMessageType;
-import com.github.blutorange.translune.socket.ILunarMessage;
+import com.github.blutorange.translune.socket.ILunarPayload;
 
-public class MessageInviteRetract implements ILunarMessage {
+public class MessageInviteRetract implements ILunarPayload {
 	private String nickname = StringUtils.EMPTY;
 
 	public MessageInviteRetract() {

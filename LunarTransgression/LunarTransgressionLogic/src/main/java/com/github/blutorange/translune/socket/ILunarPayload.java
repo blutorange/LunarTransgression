@@ -1,5 +1,5 @@
 package com.github.blutorange.translune.socket;
 
-public interface ILunarMessage {
+public interface ILunarPayload {
 	ELunarMessageType getMessageType();
 }

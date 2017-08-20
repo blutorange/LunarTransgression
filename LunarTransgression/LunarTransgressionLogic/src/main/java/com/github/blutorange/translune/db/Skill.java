@@ -1,6 +1,7 @@
 package com.github.blutorange.translune.db;
 
 import java.io.Serializable;
+import java.util.function.Consumer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,34 +18,35 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.ESkillEffect;
+import com.github.blutorange.translune.util.IAccessible;
 
 @Entity
 @Table(name = "skill")
-public class Skill extends AbstractEntity {
+public class Skill extends AbstractStoredEntity {
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
-	@Column(name = "effect", unique = false, nullable = false)
+	@Column(name = "effect", unique = false, nullable = false, updatable = false)
 	private ESkillEffect effect = ESkillEffect.DAMAGE;
 
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
-	@Column(name = "element", nullable = false, unique = false)
+	@Column(name = "element", nullable = false, unique = false, updatable = false)
 	private EElement element = EElement.PHYSICAL;
 
 	@Id
 	@NotNull
 	@Size(min = 1, max = 63)
-	@Column(name = "name", nullable = false, unique = true, length = 63)
+	@Column(name = "name", nullable = false, unique = true, length = 63, updatable = false)
 	private String name = StringUtils.EMPTY;
 
 	@Min(0)
 	@Max(999)
-	@Column(name = "power", nullable = false, unique = false)
+	@Column(name = "power", nullable = false, unique = false, updatable = false)
 	private int power;
 
 	@Min(1)
 	@Max(20)
-	@Column(name = "level", nullable = false, unique = false)
+	@Column(name = "level", nullable = false, unique = false, updatable = false)
 	private int level;
 
 	/**
@@ -65,7 +67,7 @@ public class Skill extends AbstractEntity {
 		return level;
 	}
 
-	public void setLevel(final int level) {
+	void setLevel(final int level) {
 		this.level = level;
 	}
 
@@ -128,5 +130,10 @@ public class Skill extends AbstractEntity {
 	@Override
 	public EEntityMeta getEntityMeta() {
 		return EEntityMeta.SKILL;
+	}
+
+	@Override
+	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
+		// No associations
 	}
 }
