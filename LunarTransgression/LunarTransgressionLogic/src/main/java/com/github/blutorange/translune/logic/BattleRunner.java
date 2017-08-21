@@ -44,6 +44,11 @@ public class BattleRunner implements IBattleRunner {
 	private final @NonNull String[] players = new String[]{StringUtils.EMPTY,StringUtils.EMPTY};
 
 	private int round;
+	
+	private final BattleStatus[][] battleStatus = new BattleStatus[][] {
+		new BattleStatus[] {new BattleStatus(), new BattleStatus(), new BattleStatus(), new BattleStatus()},
+		new BattleStatus[] {new BattleStatus(), new BattleStatus(), new BattleStatus(), new BattleStatus()},
+	};
 
 	@Inject
 	IBattleProcessing battleProcessing;
@@ -250,7 +255,7 @@ public class BattleRunner implements IBattleRunner {
 	}
 
 	private void checkBattleEnd() {
-		final int winner = battleProcessing.checkBattleEnd(characterStates);
+		final int winner = battleProcessing.checkBattleEnd(battleStatus);
 		if (winner >= 0) {
 				battleDone = true;
 				battleStore.addLoot(players[winner], characterStates.get(winner), items.get(winner));

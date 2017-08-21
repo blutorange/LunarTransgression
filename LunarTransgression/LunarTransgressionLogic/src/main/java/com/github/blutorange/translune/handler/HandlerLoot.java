@@ -113,7 +113,8 @@ public class HandlerLoot implements ILunarMessageHandler {
 		final CharacterState dropCharacterState;
 		final Item dropItem;
 
-		if (player.getItemsUnmodifiable().size() >= Constants.MAX_ITEMS) {
+		// Get character state to drop, if necessary.
+		if (player.getItemsUnmodifiable().size() >= Constants.MAX_CHARACTERS) {
 			final String characterStateToDrop = messageLoot.getDropCharacterState();
 			if (characterStateToDrop == null) {
 				socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
@@ -130,6 +131,7 @@ public class HandlerLoot implements ILunarMessageHandler {
 		else
 			dropCharacterState = null;
 
+		// Get item to drop, if necessary.
 		if (player.getItemsUnmodifiable().size() >= Constants.MAX_ITEMS) {
 			final String itemToDrop = messageLoot.getDropItem();
 			if (itemToDrop == null) {
@@ -147,6 +149,8 @@ public class HandlerLoot implements ILunarMessageHandler {
 		else
 			dropItem = null;
 
+		// Create a new character state with the same character
+		// and new random IVs and nature.
 		final CharacterState newCharacterState;
 		if (addCharacterState != null)
 			newCharacterState = new CharacterStateBuilder().setCharacter(addCharacterState.getCharacter())
@@ -154,9 +158,7 @@ public class HandlerLoot implements ILunarMessageHandler {
 		else
 			newCharacterState = null;
 
-		// TODO Implement drop and add
-		// Drop dropItem, dropCharacterState if not null
-		// Add addItem, addCharacterState if not null
+		// Write changes to database.
 		databaseManager.modify(player, ModifiablePlayer.class, mp -> {
 			if (dropItem != null)
 				mp.removeItem(dropItem);

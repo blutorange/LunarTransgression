@@ -39,14 +39,6 @@ public class CharacterState extends AbstractStoredEntity {
 	@Column(name = "exp", nullable = false, unique = false)
 	private int exp;
 
-	/**
-	 * The current HP, from 0 to 9999. This is relative to the max HP.
-	 */
-	@Min(0)
-	@Max(Constants.MAX_RELATIVE_HP)
-	@Column(name = "hp", nullable = false, unique = false)
-	private int hp;
-
 	@NotNull
 	@Size(min = 36, max = 36)
 	@Id
@@ -92,14 +84,6 @@ public class CharacterState extends AbstractStoredEntity {
 	@Column(name = "level", nullable = false, unique = false)
 	private int level;
 
-	/**
-	 * The current MP, from 0 to 9999. This is relative to the max HP.
-	 */
-	@Min(0)
-	@Max(Constants.MAX_RELATIVE_MP)
-	@Column(name = "mp", nullable = false, unique = false)
-	private int mp;
-
 	// TODO Make nature an entity, so that they are not fixed at compile time.
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
@@ -120,13 +104,11 @@ public class CharacterState extends AbstractStoredEntity {
 	public CharacterState() {
 	}
 
-	public CharacterState(final Character character, final String nickname, final ENature nature,
-			final int exp, final int level, final int hp, final int mp, final int ivHp, final int ivMp,
-			final int ivPhysicalAttack, final int ivPhysicalDefense, final int ivMagicalAttack,
-			final int ivMagicalDefense, final int ivSpeed) {
+	public CharacterState(final Character character, final String nickname, final ENature nature, final int exp,
+			final int level, final int ivHp, final int ivMp, final int ivPhysicalAttack, final int ivPhysicalDefense,
+			final int ivMagicalAttack, final int ivMagicalDefense, final int ivSpeed) {
 		this.character = character;
 		this.exp = exp;
-		this.hp = hp;
 		this.ivHp = ivHp;
 		this.ivMagicalAttack = ivMagicalAttack;
 		this.ivMagicalDefense = ivMagicalDefense;
@@ -136,7 +118,6 @@ public class CharacterState extends AbstractStoredEntity {
 		this.ivPhysicalDefense = ivPhysicalDefense;
 		this.ivSpeed = ivSpeed;
 		this.level = level;
-		this.mp = mp;
 		this.nature = nature;
 		this.nickname = nickname;
 	}
@@ -158,13 +139,6 @@ public class CharacterState extends AbstractStoredEntity {
 	 */
 	public int getExp() {
 		return exp;
-	}
-
-	/**
-	 * @return the hp
-	 */
-	public int getHp() {
-		return hp;
 	}
 
 	/**
@@ -228,13 +202,6 @@ public class CharacterState extends AbstractStoredEntity {
 	 */
 	public int getLevel() {
 		return level;
-	}
-
-	/**
-	 * @return the mp
-	 */
-	public int getMp() {
-		return mp;
 	}
 
 	/**
@@ -322,8 +289,7 @@ public class CharacterState extends AbstractStoredEntity {
 	@SuppressWarnings("boxing")
 	@Override
 	public String toString() {
-		return String.format("CharacterState(id=%s,level=%d,nature=%s,exp=%d,hp=%d,mp=%d)", id, level, nature, exp, hp,
-				mp);
+		return String.format("CharacterState(id=%s,level=%d,nature=%s,exp=%d)", id, level, nature, exp);
 	}
 
 	@Override
@@ -358,14 +324,6 @@ public class CharacterState extends AbstractStoredEntity {
 	}
 
 	/**
-	 * @param hp
-	 *            the hp to set
-	 */
-	void setHp(final int hp) {
-		this.hp = hp;
-	}
-
-	/**
 	 * @param id
 	 *            the id to set
 	 */
@@ -379,14 +337,6 @@ public class CharacterState extends AbstractStoredEntity {
 	 */
 	void setLevel(final int level) {
 		this.level = level;
-	}
-
-	/**
-	 * @param mp
-	 *            the mp to set
-	 */
-	void setMp(final int mp) {
-		this.mp = mp;
 	}
 
 	/**

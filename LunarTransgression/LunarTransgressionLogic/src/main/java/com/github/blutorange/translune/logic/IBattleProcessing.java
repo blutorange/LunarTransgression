@@ -19,5 +19,5 @@ public interface IBattleProcessing {
 	 * @param characterStates
 	 * @return <0 iff there is no winner yet, 0 iff it is player 1, 1 iff it is player 2.
 	 */
-	int checkBattleEnd(List<String[]> characterStates);
+	int checkBattleEnd(BattleStatus[][] characterStates);
 }

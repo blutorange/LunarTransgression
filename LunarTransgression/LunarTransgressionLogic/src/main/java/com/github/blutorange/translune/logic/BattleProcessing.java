@@ -15,7 +15,15 @@ public class BattleProcessing implements IBattleProcessing {
 
 	@Inject
 	public BattleProcessing() {
+		
+	}
 
+	public IComputedStatus getComputedStatus(final CharacterState characterState, final BattleStatus status) {
+		
+	}
+
+	public IComputedStatus getComputedStatus(final String characterState, final BattleStatus status) {
+		return getComputedStatus(databaseManager.find(CharacterState.class), characterState);
 	}
 
 	@Override
@@ -26,20 +34,18 @@ public class BattleProcessing implements IBattleProcessing {
 	}
 
 	@Override
-	public int checkBattleEnd(final List<String[]> characterStates) {
-		final CharacterState[] states1 = databaseManager.findAll(CharacterState.class, characterStates.get(0));
-		final CharacterState[] states2 = databaseManager.findAll(CharacterState.class, characterStates.get(1));
-		if (getKnockoutCount(states1) >= 2)
+	public int checkBattleEnd(final BattleStatus[][] battleStatus) {
+		if (getKnockoutCount(battleStatus[0]) >= 2)
 			return 0;
-		if (getKnockoutCount(states2) >= 2)
+		if (getKnockoutCount(battleStatus[1]) >= 2)
 			return 1;
 		return -1;
 	}
 
-	private int getKnockoutCount(final CharacterState[] characterStates) {
+	private int getKnockoutCount(final BattleStatus[] battleStatus) {
 		int count = 0;
-		for (final CharacterState characterState : characterStates) {
-			if (characterState.getHp() <= 0)
+		for (final BattleStatus bs : battleStatus) {
+			if (bs.getHp() <= 0)
 				++count;
 		}
 		return count;

@@ -70,7 +70,7 @@ public class CharacterStateBuilder {
 			throw new IllegalStateException("no character set");
 		if (nickname.isEmpty())
 			nickname = character.getName();
-		return new CharacterState(character, nickname, nature, exp, level, hp, mp, ivHp, ivMp, ivPhysicalAttack,
+		return new CharacterState(character, nickname, nature, exp, level, ivHp, ivMp, ivPhysicalAttack,
 				ivPhysicalDefense, ivMagicalAttack, ivMagicalDefense, ivSpeed);
 	}
 }

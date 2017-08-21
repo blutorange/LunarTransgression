@@ -11,10 +11,6 @@ public class ModifiableCharacterState extends ModifiableEntity<CharacterState> {
 		entity.setExp(exp);
 	}
 
-	public void setHp(final int hp) {
-		entity.setHp(hp);
-	}
-
 	public void setId(final String id) {
 		entity.setId(id);
 	}
@@ -77,11 +73,6 @@ public class ModifiableCharacterState extends ModifiableEntity<CharacterState> {
 	 */
 	public void setIvSpeed(final int ivSpeed) {
 		entity.setIvSpeed(ivSpeed);
-	}
-
-
-	public void setMp(final int mp) {
-		entity.setMp(mp);
 	}
 
 	public void setNature(final ENature nature) {

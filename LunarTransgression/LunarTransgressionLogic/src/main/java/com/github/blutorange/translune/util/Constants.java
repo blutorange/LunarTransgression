@@ -25,7 +25,9 @@ public final class Constants {
 	public static final int MIN_LEVEL = 1;
 	public static final int MIN_ITEMS = 0;
 	public static final int MIN_CHARACTERS = 4;
+	public static final int MIN_STAGE = -6;
 
+	public static final int MAX_STAGE = 6;
 	public static final int MAX_RELATIVE_HP = 9999;
 	public static final int MAX_RELATIVE_MP = 9999;
 	public static final int MAX_IV = 31;
@@ -44,5 +46,4 @@ public final class Constants {
 	public static final int CONFIG_DATABASE_SAVE_MINUTES = 1;
 
 	public static final String QUARTZ_KEY_LDM = "ldm";
-
 }
