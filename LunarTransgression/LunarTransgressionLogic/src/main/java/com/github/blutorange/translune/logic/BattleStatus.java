@@ -8,101 +8,47 @@ import com.github.blutorange.translune.util.MathUtil;
 public class BattleStatus {
 	private int hp;
 	private int mp;
-	private int stagePhysicalAttack;
-	private int stagePhysicalDefense;
+	private int stageAccuracy;
+	private int stageEvasion;
 	private int stageMagicalAttack;
 	private int stageMagicalDefense;
+	private int stagePhysicalAttack;
+	private int stagePhysicalDefense;
 	private int stageSpeed;
 	@Nullable
-	private final EStatusCondition statusConditions  = null;
-	
+	private EStatusCondition statusConditions = null;
+
 	public BattleStatus() {
 		hp = Constants.MAX_RELATIVE_HP;
 		mp = Constants.MAX_RELATIVE_MP;
 	}
 
-	/**
-	 * @return the stagePhysicalAttack
-	 */
-	public int getStagePhysicalAttack() {
-		return stagePhysicalAttack;
+	public void changeStageAccuracy(final int amount) {
+		stageAccuracy += amount;
 	}
 
-	/**
-	 * @param stagePhysicalAttack the stagePhysicalAttack to set
-	 */
-	public void setStagePhysicalAttack(final int stagePhysicalAttack) {
-		this.stagePhysicalAttack = clampStage(stagePhysicalAttack);
+	public void changeStageEvasion(final int amount) {
+		stageEvasion += amount;
 	}
 
-	/**
-	 * @param hp the hp to set
-	 */
-	public void setHp(final int hp) {
-		this.hp = MathUtil.clamp(hp, 0 ,Constants.MAX_RELATIVE_HP);
+	public void changeStageMagicalAttack(final int amount) {
+		stageMagicalAttack += amount;
 	}
 
-	/**
-	 * @param mp the mp to set
-	 */
-	public void setMp(final int mp) {
-		this.mp = MathUtil.clamp(mp, 0 ,Constants.MAX_RELATIVE_MP);
+	public void changeStageMagicalDefense(final int amount) {
+		stageMagicalDefense += amount;
 	}
 
-	/**
-	 * @return the stagePhysicalDefense
-	 */
-	public int getStagePhysicalDefense() {
-		return stagePhysicalDefense;
+	public void changeStagePhysicalAttack(final int amount) {
+		stagePhysicalAttack += amount;
 	}
 
-	/**
-	 * @param stagePhysicalDefense the stagePhysicalDefense to set
-	 */
-	public void setStagePhysicalDefense(final int stagePhysicalDefense) {
-		this.stagePhysicalDefense = clampStage(stagePhysicalDefense);
+	public void changeStagePhysicalDefense(final int amount) {
+		stagePhysicalDefense += amount;
 	}
 
-	/**
-	 * @return the stageMagicalAttack
-	 */
-	public int getStageMagicalAttack() {
-		return stageMagicalAttack;
-	}
-
-	/**
-	 * @param stageMagicalAttack the stageMagicalAttack to set
-	 */
-	public void setStageMagicalAttack(final int stageMagicalAttack) {
-		this.stageMagicalAttack = clampStage(stageMagicalAttack);
-	}
-
-	/**
-	 * @return the stageMagicalDefense
-	 */
-	public int getStageMagicalDefense() {
-		return stageMagicalDefense;
-	}
-
-	/**
-	 * @param stageMagicalDefense the stageMagicalDefense to set
-	 */
-	public void setStageMagicalDefense(final int stageMagicalDefense) {
-		this.stageMagicalDefense = clampStage(stageMagicalDefense);
-	}
-
-	/**
-	 * @return the stageSpeed
-	 */
-	public int getStageSpeed() {
-		return stageSpeed;
-	}
-
-	/**
-	 * @param stageSpeed the stageSpeed to set
-	 */
-	public void setStageSpeed(final int stageSpeed) {
-		this.stageSpeed = clampStage(stageSpeed);
+	public void changeStageSpeed(final int amount) {
+		stageSpeed += amount;
 	}
 
 	/**
@@ -120,31 +66,140 @@ public class BattleStatus {
 	}
 
 	/**
+	 * @return the stageAccuracy
+	 */
+	public int getStageAccuracy() {
+		return clampStage(stageAccuracy);
+	}
+
+	/**
+	 * @return the stageEvasion
+	 */
+	public int getStageEvasion() {
+		return clampStage(stageEvasion);
+	}
+
+	/**
+	 * @return the stageMagicalAttack
+	 */
+	public int getStageMagicalAttack() {
+		return clampStage(stageMagicalAttack);
+	}
+
+	/**
+	 * @return the stageMagicalDefense
+	 */
+	public int getStageMagicalDefense() {
+		return clampStage(stageMagicalDefense);
+	}
+
+	/**
+	 * @return the stagePhysicalAttack
+	 */
+	public int getStagePhysicalAttack() {
+		return clampStage(stagePhysicalAttack);
+	}
+
+	/**
+	 * @return the stagePhysicalDefense
+	 */
+	public int getStagePhysicalDefense() {
+		return clampStage(stagePhysicalDefense);
+	}
+
+	/**
+	 * @return the stageSpeed
+	 */
+	public int getStageSpeed() {
+		return clampStage(stageSpeed);
+	}
+
+	/**
 	 * @return the statusConditions
 	 */
 	@Nullable
 	public EStatusCondition getStatusConditions() {
 		return statusConditions;
 	}
-	
-	public void changeStagePhysicalAttack(final int amount) {
-		stagePhysicalAttack = clampStage(stagePhysicalAttack+amount);
+
+	/**
+	 * @param hp
+	 *            the hp to set
+	 */
+	public void setCurrentHp(final int hp) {
+		this.hp = MathUtil.clamp(hp, 0, Constants.MAX_RELATIVE_HP);
 	}
 
-	public void changeStagePhysicalDefense(final int amount) {
-		stagePhysicalDefense = clampStage(stagePhysicalDefense+amount);
+	/**
+	 * @param mp
+	 *            the mp to set
+	 */
+	public void setCurrentMp(final int mp) {
+		this.mp = MathUtil.clamp(mp, 0, Constants.MAX_RELATIVE_MP);
 	}
 
-	public void changeStageMagicalAttack(final int amount) {
-		stageMagicalAttack = clampStage(stageMagicalAttack+amount);
+	/**
+	 * @param stageAccuracy
+	 *            the stageAccuracy to set
+	 */
+	public void setStageAccuracy(final int stageAccuracy) {
+		this.stageAccuracy = stageAccuracy;
 	}
 
-	public void changeStageMagicalDefense(final int amount) {
-		stageMagicalDefense = clampStage(stageMagicalDefense+amount);
+	/**
+	 * @param stageEvasion
+	 *            the stageEvasion to set
+	 */
+	public void setStageEvasion(final int stageEvasion) {
+		this.stageEvasion = stageEvasion;
 	}
 
-	public void changeStageSpeed(final int amount) {
-		stageSpeed = clampStage(stageSpeed+amount);
+	/**
+	 * @param stageMagicalAttack
+	 *            the stageMagicalAttack to set
+	 */
+	public void setStageMagicalAttack(final int stageMagicalAttack) {
+		this.stageMagicalAttack = stageMagicalAttack;
+	}
+
+	/**
+	 * @param stageMagicalDefense
+	 *            the stageMagicalDefense to set
+	 */
+	public void setStageMagicalDefense(final int stageMagicalDefense) {
+		this.stageMagicalDefense = stageMagicalDefense;
+	}
+
+	/**
+	 * @param stagePhysicalAttack
+	 *            the stagePhysicalAttack to set
+	 */
+	public void setStagePhysicalAttack(final int stagePhysicalAttack) {
+		this.stagePhysicalAttack = stagePhysicalAttack;
+	}
+
+	/**
+	 * @param stagePhysicalDefense
+	 *            the stagePhysicalDefense to set
+	 */
+	public void setStagePhysicalDefense(final int stagePhysicalDefense) {
+		this.stagePhysicalDefense = stagePhysicalDefense;
+	}
+
+	/**
+	 * @param stageSpeed
+	 *            the stageSpeed to set
+	 */
+	public void setStageSpeed(final int stageSpeed) {
+		this.stageSpeed = stageSpeed;
+	}
+
+	/**
+	 * @param statusConditions
+	 *            the statusConditions to set
+	 */
+	public void setStatusConditions(final EStatusCondition statusConditions) {
+		this.statusConditions = statusConditions;
 	}
 
 	private int clampStage(final int stage) {

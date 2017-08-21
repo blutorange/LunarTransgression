@@ -18,11 +18,17 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.ESkillEffect;
+import com.github.blutorange.translune.util.Constants;
 import com.github.blutorange.translune.util.IAccessible;
 
 @Entity
 @Table(name = "skill")
 public class Skill extends AbstractStoredEntity {
+	@Min(0)
+	@Max(Constants.MAX_ACCURACY)
+	@Column(name = "accuracy", nullable = false, unique = false, updatable = false)
+	private int accuracy;
+
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "effect", unique = false, nullable = false, updatable = false)
@@ -33,6 +39,22 @@ public class Skill extends AbstractStoredEntity {
 	@Column(name = "element", nullable = false, unique = false, updatable = false)
 	private EElement element = EElement.PHYSICAL;
 
+	@Column(name = "isphysical", nullable = false, unique = false, updatable = false)
+	private boolean isPhysical;
+
+	@Min(1)
+	@Max(20)
+	@Column(name = "level", nullable = false, unique = false, updatable = false)
+	private int level;
+
+	/**
+	 * The MP this skill consumes. May be 0.
+	 */
+	@Min(0)
+	@Max(Constants.MAX_MP)
+	@Column(name = "mp", nullable = false, unique = false, updatable = false)
+	private int mp;
+
 	@Id
 	@NotNull
 	@Size(min = 1, max = 63)
@@ -40,14 +62,21 @@ public class Skill extends AbstractStoredEntity {
 	private String name = StringUtils.EMPTY;
 
 	@Min(0)
-	@Max(999)
+	@Max(Constants.MAX_SKILL_POWER)
 	@Column(name = "power", nullable = false, unique = false, updatable = false)
 	private int power;
 
-	@Min(1)
-	@Max(20)
-	@Column(name = "level", nullable = false, unique = false, updatable = false)
-	private int level;
+	@Min(Constants.MIN_PRIORITY)
+	@Max(Constants.MAX_PRIORITY)
+	@Column(name = "priority", nullable = false, unique = false, updatable = false)
+	private int priority;
+
+	/**
+	 * @return the accuracy
+	 */
+	public int getAccuracy() {
+		return accuracy;
+	}
 
 	/**
 	 * @return the effect
@@ -63,12 +92,27 @@ public class Skill extends AbstractStoredEntity {
 		return element;
 	}
 
+	@Override
+	public EEntityMeta getEntityMeta() {
+		return EEntityMeta.SKILL;
+	}
+
+	/**
+	 * @return the isPhysical
+	 */
+	public boolean getIsPhysical() {
+		return isPhysical;
+	}
+
 	public int getLevel() {
 		return level;
 	}
 
-	void setLevel(final int level) {
-		this.level = level;
+	/**
+	 * @return the mp
+	 */
+	public int getMp() {
+		return mp;
 	}
 
 	/**
@@ -83,6 +127,36 @@ public class Skill extends AbstractStoredEntity {
 	 */
 	public int getPower() {
 		return power;
+	}
+
+	@Override
+	public Serializable getPrimaryKey() {
+		return name;
+	}
+
+	/**
+	 * @return the priority
+	 */
+	public int getPriority() {
+		return priority;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Skill(%s,%s,%d,%s)", name, element, Integer.valueOf(power), effect);
+	}
+
+	@Override
+	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
+		// No associations
+	}
+
+	/**
+	 * @param accuracy
+	 *            the accuracy to set
+	 */
+	void setAccuracy(final int accuracy) {
+		this.accuracy = accuracy;
 	}
 
 	/**
@@ -102,6 +176,26 @@ public class Skill extends AbstractStoredEntity {
 	}
 
 	/**
+	 * @param isPhysical
+	 *            the isPhysical to set
+	 */
+	void setIsPhysical(final boolean isPhysical) {
+		this.isPhysical = isPhysical;
+	}
+
+	void setLevel(final int level) {
+		this.level = level;
+	}
+
+	/**
+	 * @param mp
+	 *            the mp to set
+	 */
+	void setMp(final int mp) {
+		this.mp = mp;
+	}
+
+	/**
 	 * @param name
 	 *            the name to set
 	 */
@@ -117,23 +211,11 @@ public class Skill extends AbstractStoredEntity {
 		this.power = power;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("Skill(%s,%s,%d,%s)", name, element, Integer.valueOf(power), effect);
-	}
-
-	@Override
-	public Serializable getPrimaryKey() {
-		return name;
-	}
-
-	@Override
-	public EEntityMeta getEntityMeta() {
-		return EEntityMeta.SKILL;
-	}
-
-	@Override
-	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
-		// No associations
+	/**
+	 * @param priority
+	 *            the priority to set
+	 */
+	void setPriority(final int priority) {
+		this.priority = priority;
 	}
 }

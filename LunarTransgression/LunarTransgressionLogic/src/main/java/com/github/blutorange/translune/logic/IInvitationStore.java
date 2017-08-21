@@ -2,7 +2,7 @@ package com.github.blutorange.translune.logic;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.github.blutorange.translune.socket.message.MessageInvite;
+import com.github.blutorange.translune.message.MessageInvite;
 
 public interface IInvitationStore {
 	void add(String nicknameFrom, MessageInvite invitation);

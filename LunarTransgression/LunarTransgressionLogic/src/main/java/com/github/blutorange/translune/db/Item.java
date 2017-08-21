@@ -17,21 +17,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.translune.logic.EItemEffect;
+import com.github.blutorange.translune.util.Constants;
 import com.github.blutorange.translune.util.IAccessible;
 
 @Entity
 @Table(name = "item")
 public class Item extends AbstractStoredEntity {
-	@Deprecated
-	public Item() {
-	}
-
-	public Item(final String name, final EItemEffect effect, final int power) {
-		this.name = name;
-		this.effect = effect;
-		this.power = power;
-	}
-
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "effect", unique = false, nullable = false, updatable = false)
@@ -43,15 +34,35 @@ public class Item extends AbstractStoredEntity {
 	private String name = StringUtils.EMPTY;
 
 	@Min(0)
-	@Max(999)
+	@Max(Constants.MAX_ITEM_POWER)
 	@Column(name = "power", nullable = false, unique = false, updatable = false)
 	private int power;
+
+	@Min(Constants.MIN_PRIORITY)
+	@Max(Constants.MAX_PRIORITY)
+	@Column(name = "power", nullable = false, unique = false, updatable = false)
+	private int priority = Constants.PRIORITY_ITEM;
+
+	@Deprecated
+	public Item() {
+	}
+
+	public Item(final String name, final EItemEffect effect, final int power) {
+		this.name = name;
+		this.effect = effect;
+		this.power = power;
+	}
 
 	/**
 	 * @return the effect
 	 */
 	public EItemEffect getEffect() {
 		return effect;
+	}
+
+	@Override
+	public EEntityMeta getEntityMeta() {
+		return EEntityMeta.ITEM;
 	}
 
 	/**
@@ -66,6 +77,28 @@ public class Item extends AbstractStoredEntity {
 	 */
 	public int getPower() {
 		return power;
+	}
+
+	@Override
+	public Serializable getPrimaryKey() {
+		return name;
+	}
+
+	/**
+	 * @return the priority
+	 */
+	public int getPriority() {
+		return priority;
+	}
+
+	@Override
+	public @NonNull String toString() {
+		return String.format("Item(%s,%d,%s)", name, Integer.valueOf(power), effect);
+	}
+
+	@Override
+	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
+		// no associations
 	}
 
 	/**
@@ -92,33 +125,11 @@ public class Item extends AbstractStoredEntity {
 		this.power = power;
 	}
 
-	@Override
-	public @NonNull String toString() {
-		return String.format("Item(%s,%d,%s)", name, Integer.valueOf(power), effect);
-	}
-
-	@Override
-	public Serializable getPrimaryKey() {
-		return name;
-	}
-
-	@Override
-	public EEntityMeta getEntityMeta() {
-		return EEntityMeta.ITEM;
-	}
-
-	@Override
-	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
-//		consumer.accept(new IAccessible<AbstractStoredEntity>() {
-//			@Override
-//			public AbstractStoredEntity get() {
-//				return getPlayer();
-//			}
-//
-//			@Override
-//			public void set(final AbstractStoredEntity replacement) {
-//				setPlayer((Player) replacement);
-//			}
-//		});
+	/**
+	 * @param priority
+	 *            the priority to set
+	 */
+	void setPriority(final int priority) {
+		this.priority = priority;
 	}
 }

@@ -8,16 +8,16 @@ import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.logic.EGameState;
-import com.github.blutorange.translune.logic.IBattleCommand;
 import com.github.blutorange.translune.logic.IBattleRunner;
 import com.github.blutorange.translune.logic.IBattleStore;
+import com.github.blutorange.translune.message.MessagePrepareBattleResponse;
+import com.github.blutorange.translune.message.MessageStepBattle;
+import com.github.blutorange.translune.message.MessageStepBattleResponse;
+import com.github.blutorange.translune.socket.BattleCommand;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.ILunarMessageHandler;
 import com.github.blutorange.translune.socket.ISocketProcessing;
 import com.github.blutorange.translune.socket.LunarMessage;
-import com.github.blutorange.translune.socket.message.MessagePrepareBattleResponse;
-import com.github.blutorange.translune.socket.message.MessageStepBattle;
-import com.github.blutorange.translune.socket.message.MessageStepBattleResponse;
 
 @Singleton
 public class HandlerStepBattle implements ILunarMessageHandler {
@@ -56,10 +56,10 @@ public class HandlerStepBattle implements ILunarMessageHandler {
 			return;
 		}
 
-		final IBattleCommand battleAction1 = stepBattle.getBattleCommandCharacter1();
-		final IBattleCommand battleAction2 = stepBattle.getBattleCommandCharacter2();
-		final IBattleCommand battleAction3 = stepBattle.getBattleCommandCharacter3();
-		final IBattleCommand battleAction4 = stepBattle.getBattleCommandCharacter4();
+		final BattleCommand battleAction1 = stepBattle.getBattleCommandCharacter1();
+		final BattleCommand battleAction2 = stepBattle.getBattleCommandCharacter2();
+		final BattleCommand battleAction3 = stepBattle.getBattleCommandCharacter3();
+		final BattleCommand battleAction4 = stepBattle.getBattleCommandCharacter4();
 
 		try {
 			battleRunner.battlePlayer(user, battleAction1, battleAction2, battleAction3, battleAction4);

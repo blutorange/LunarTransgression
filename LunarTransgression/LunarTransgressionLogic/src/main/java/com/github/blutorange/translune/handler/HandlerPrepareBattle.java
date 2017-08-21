@@ -10,12 +10,12 @@ import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.logic.EGameState;
 import com.github.blutorange.translune.logic.IBattleRunner;
 import com.github.blutorange.translune.logic.IBattleStore;
+import com.github.blutorange.translune.message.MessagePrepareBattle;
+import com.github.blutorange.translune.message.MessagePrepareBattleResponse;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.ILunarMessageHandler;
 import com.github.blutorange.translune.socket.ISocketProcessing;
 import com.github.blutorange.translune.socket.LunarMessage;
-import com.github.blutorange.translune.socket.message.MessagePrepareBattle;
-import com.github.blutorange.translune.socket.message.MessagePrepareBattleResponse;
 
 
 @Singleton

@@ -6,7 +6,7 @@ import javax.inject.Singleton;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.github.blutorange.translune.socket.message.MessageInvite;
+import com.github.blutorange.translune.message.MessageInvite;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 

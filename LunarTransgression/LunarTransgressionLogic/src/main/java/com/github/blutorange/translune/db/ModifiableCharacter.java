@@ -6,14 +6,6 @@ import java.util.Set;
 import com.github.blutorange.translune.logic.EElement;
 
 public class ModifiableCharacter extends ModifiableEntity<Character> {
-	public void setName(final String name) {
-		entity.setName(name);
-	}
-
-	public void setElements(final Set<EElement> elements) {
-		entity.setElements(elements);
-	}
-
 	public Set<EElement> getElements() {
 		return entity.getElements();
 	}
@@ -22,8 +14,16 @@ public class ModifiableCharacter extends ModifiableEntity<Character> {
 		return entity.getSkills();
 	}
 
-	public void setSkills(final Map<Integer, Skill> skills) {
-		entity.setSkills(skills);
+	public void setAccuracy(final int accuracy) {
+		entity.setAccuracy(accuracy);
+	}
+
+	public void setElements(final Set<EElement> elements) {
+		entity.setElements(elements);
+	}
+
+	public void setEvasion(final int evasion) {
+		entity.setEvasion(evasion);
 	}
 
 	public void setMagicalAttack(final int magicalAttack) {
@@ -42,12 +42,20 @@ public class ModifiableCharacter extends ModifiableEntity<Character> {
 		entity.setMaxMp(maxMp);
 	}
 
+	public void setName(final String name) {
+		entity.setName(name);
+	}
+
 	public void setPhysicalAttack(final int physicalAttack) {
 		entity.setPhysicalAttack(physicalAttack);
 	}
 
 	public void setPhysicalDefense(final int physicalDefense) {
 		entity.setPhysicalDefense(physicalDefense);
+	}
+
+	public void setSkills(final Map<Integer, Skill> skills) {
+		entity.setSkills(skills);
 	}
 
 	public void setSpeed(final int speed) {

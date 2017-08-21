@@ -33,11 +33,21 @@ import com.github.blutorange.translune.util.IAccessible;
 @Entity
 @Table(name = "\"character\"")
 public class Character extends AbstractStoredEntity {
+	@Min(0)
+	@Max(Constants.MAX_ACCURACY)
+	@Column(name = "accuracy", nullable = false, unique = false, updatable = false)
+	private int accuracy;
+
 	@NotNull
 	@Column(name = "elements", nullable = false, unique = false, updatable = false)
 	@ElementCollection(targetClass = EElement.class)
 	@CollectionTable(name = "charelements", joinColumns = @JoinColumn(name = "\"character\""), foreignKey = @ForeignKey(name = "fk_charelements_char"))
 	private Set<EElement> elements = EnumSet.of(EElement.NORMAL);
+
+	@Min(0)
+	@Max(Constants.MAX_EVASION)
+	@Column(name = "evasion", nullable = false, unique = false, updatable = false)
+	private int evasion;
 
 	@Min(0)
 	@Max(Constants.MAX_MAGICAL_ATTACK)
@@ -77,7 +87,7 @@ public class Character extends AbstractStoredEntity {
 
 	@NotNull
 	@ManyToMany(targetEntity = Skill.class, cascade = {}, fetch = FetchType.LAZY)
-	@JoinTable(name = "charskill", joinColumns = @JoinColumn(name = "charskill_char", updatable = false, nullable = false, foreignKey = @ForeignKey(name="fk_charskill_char")), inverseJoinColumns = @JoinColumn(name = "charskill_skill", updatable = false, nullable = false, foreignKey = @ForeignKey(name="fk_charskill_skill")))
+	@JoinTable(name = "charskill", joinColumns = @JoinColumn(name = "charskill_char", updatable = false, nullable = false, foreignKey = @ForeignKey(name = "fk_charskill_char")), inverseJoinColumns = @JoinColumn(name = "charskill_skill", updatable = false, nullable = false, foreignKey = @ForeignKey(name = "fk_charskill_skill")))
 	@MapKeyColumn(name = "level", updatable = false, nullable = false, unique = false)
 	private Map<Integer, Skill> skills;
 
@@ -87,19 +97,22 @@ public class Character extends AbstractStoredEntity {
 	private int speed;
 
 	/**
-	 * @return the elements
+	 * @return the accuracy
 	 */
-	Set<EElement> getElements() {
-		return elements;
-	}
-
-	public Set<EElement> getUnmodifiableElements() {
-		return elements;
+	public int getAccuracy() {
+		return accuracy;
 	}
 
 	@Override
 	public EEntityMeta getEntityMeta() {
 		return EEntityMeta.CHARACTER;
+	}
+
+	/**
+	 * @return the evasion
+	 */
+	public int getEvasion() {
+		return evasion;
 	}
 
 	/**
@@ -163,8 +176,44 @@ public class Character extends AbstractStoredEntity {
 		return speed;
 	}
 
+	public Set<EElement> getUnmodifiableElements() {
+		return elements;
+	}
+
 	public Map<Integer, Skill> getUnmodifiableSkills() {
 		return skills;
+	}
+
+	@Override
+	public String toString() {
+		return String.format(
+				"Character(%s,%s,hp=%d,mp=%s,patt=%d,pdef=%d,matt=%d,mdef=%s,speed=%s,acc=%d,ev=%d)", name,
+				elements, maxHp, maxMp, physicalAttack, physicalDefense, magicalAttack, magicalDefense, speed,
+				accuracy);
+	}
+
+	@Override
+	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
+		associated(skills.values(), consumer);
+	}
+
+	/**
+	 * @return the elements
+	 */
+	Set<EElement> getElements() {
+		return elements;
+	}
+
+	Map<Integer, Skill> getSkills() {
+		return skills;
+	}
+
+	/**
+	 * @param accuracy
+	 *            the accuracy to set
+	 */
+	void setAccuracy(final int accuracy) {
+		this.accuracy = accuracy;
 	}
 
 	/**
@@ -175,19 +224,12 @@ public class Character extends AbstractStoredEntity {
 		this.elements = elements != null ? elements : EnumSet.noneOf(EElement.class);
 	}
 
-	@Override
-	public String toString() {
-		return String.format("Character(%s,hp=%d,mp=%s,patt=%d,pdef=%d,matt=%d,mdef=%s,speed=%s)", name, maxHp, maxMp,
-				physicalAttack, physicalDefense, magicalAttack, magicalDefense, speed);
-	}
-
-	@Override
-	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
-		associated(skills.values(), consumer);
-	}
-
-	Map<Integer, Skill> getSkills() {
-		return skills;
+	/**
+	 * @param evasion
+	 *            the evasion to set
+	 */
+	void setEvasion(final int evasion) {
+		this.evasion = evasion;
 	}
 
 	/**

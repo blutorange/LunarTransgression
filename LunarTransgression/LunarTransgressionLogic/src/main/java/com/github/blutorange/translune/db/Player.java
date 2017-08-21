@@ -116,14 +116,14 @@ public class Player extends AbstractStoredEntity {
 	/**
 	 * @return the characters
 	 */
-	public Set<CharacterState> getCharacterStatesUnmodifiable() {
+	public Set<CharacterState> getUnmodifiableCharacterStates() {
 		return characterStates;
 	}
 
 	/**
 	 * @return the items
 	 */
-	public Set<Item> getItemsUnmodifiable() {
+	public Set<Item> getUnmodifiableItems() {
 		return items;
 	}
 
@@ -183,6 +183,10 @@ public class Player extends AbstractStoredEntity {
 	 */
 	public Set<CharacterState> getUnmodifiableReleasedCharacterStates() {
 		return releasedCharacterStates;
+	}
+
+	public int getReleasedCharacterStatesCount() {
+		return releasedCharacterStates.size();
 	}
 
 	/**

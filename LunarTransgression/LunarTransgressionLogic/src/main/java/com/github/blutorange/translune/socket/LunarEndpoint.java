@@ -23,7 +23,7 @@ import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.logic.IInitIdStore;
 import com.github.blutorange.translune.logic.ISessionStore;
-import com.github.blutorange.translune.socket.message.MessageUnknown;
+import com.github.blutorange.translune.message.MessageUnknown;
 
 /**
  * <p>
@@ -118,8 +118,7 @@ public class LunarEndpoint {
 
 	@OnClose
 	public void close(final Session session, final CloseReason closeReason) {
-		//TODO
-		// Remove open invitations and inform the other user
+		//TODO Remove open invitations and inform the other user
 		if (logger.isDebugEnabled()) {
 			logger.debug("closing lunar session " + session.getId());
 			logger.debug(

@@ -14,4 +14,8 @@ public class ModifiableItem extends ModifiableEntity<Item> {
 	public void setPower(final int power) {
 		entity.setPower(power);
 	}
+
+	public void setPriority(final int priority) {
+		entity.setPriority(priority);
+	}
 }

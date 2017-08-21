@@ -20,12 +20,12 @@ import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.logic.EGameState;
 import com.github.blutorange.translune.logic.IBattleStore;
 import com.github.blutorange.translune.logic.ILootable;
+import com.github.blutorange.translune.message.MessageLoot;
+import com.github.blutorange.translune.message.MessageLootResponse;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.ILunarMessageHandler;
 import com.github.blutorange.translune.socket.ISocketProcessing;
 import com.github.blutorange.translune.socket.LunarMessage;
-import com.github.blutorange.translune.socket.message.MessageLoot;
-import com.github.blutorange.translune.socket.message.MessageLootResponse;
 import com.github.blutorange.translune.util.Constants;
 
 @Singleton
@@ -76,13 +76,16 @@ public class HandlerLoot implements ILunarMessageHandler {
 			return;
 		}
 
-		doLoot(session, message, player, messageLoot, lootable);
+		if (!doLoot(session, message, player, messageLoot, lootable)) {
+			return;
+		}
 
+		socketProcessing.setGameState(session, EGameState.IN_MENU);
 		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
 				new MessageLootResponse(message, "Battle step accepted."));
 	}
 
-	private void doLoot(final Session session, final LunarMessage message, final Player player,
+	private boolean doLoot(final Session session, final LunarMessage message, final Player player,
 			final MessageLoot messageLoot, final ILootable lootable) {
 		final String characterToLoot = messageLoot.getCharacterState();
 		final CharacterState addCharacterState;
@@ -91,7 +94,7 @@ public class HandlerLoot implements ILunarMessageHandler {
 			if (addCharacterState == null) {
 				socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
 						new MessageLootResponse(message, "Could not find the requested character."));
-				return;
+				return false;
 			}
 		}
 		else
@@ -104,7 +107,7 @@ public class HandlerLoot implements ILunarMessageHandler {
 			if (addItem == null) {
 				socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
 						new MessageLootResponse(message, "Could not find the requested item."));
-				return;
+				return false;
 			}
 		}
 		else
@@ -114,36 +117,36 @@ public class HandlerLoot implements ILunarMessageHandler {
 		final Item dropItem;
 
 		// Get character state to drop, if necessary.
-		if (player.getItemsUnmodifiable().size() >= Constants.MAX_CHARACTERS) {
+		if (player.getUnmodifiableItems().size() >= Constants.MAX_CHARACTERS) {
 			final String characterStateToDrop = messageLoot.getDropCharacterState();
 			if (characterStateToDrop == null) {
 				socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
 						new MessageLootResponse(message, "A character must be dropped to loot the character."));
-				return;
+				return false;
 			}
 			dropCharacterState = findDropCharacter(player, characterStateToDrop);
 			if (dropCharacterState == null) {
 				socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
 						new MessageLootResponse(message, "Character to drop does not exist."));
-				return;
+				return false;
 			}
 		}
 		else
 			dropCharacterState = null;
 
 		// Get item to drop, if necessary.
-		if (player.getItemsUnmodifiable().size() >= Constants.MAX_ITEMS) {
+		if (player.getUnmodifiableItems().size() >= Constants.MAX_ITEMS) {
 			final String itemToDrop = messageLoot.getDropItem();
 			if (itemToDrop == null) {
 				socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
 						new MessageLootResponse(message, "An item must be dropped to loot the item."));
-				return;
+				return false;
 			}
 			dropItem = findDropItem(player, itemToDrop);
 			if (dropItem == null) {
 				socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
 						new MessageLootResponse(message, "Item to drop does not exist."));
-				return;
+				return false;
 			}
 		}
 		else
@@ -173,11 +176,13 @@ public class HandlerLoot implements ILunarMessageHandler {
 			databaseManager.delete(dropCharacterState);
 		if (newCharacterState != null)
 			databaseManager.persist(newCharacterState);
+
+		return true;
 	}
 
 	@Nullable
 	private Item findDropItem(final Player player, final String dropItem) {
-		for (final Item item : player.getItemsUnmodifiable()) {
+		for (final Item item : player.getUnmodifiableItems()) {
 			if (item.getPrimaryKey().equals(dropItem))
 				return item;
 		}
@@ -186,7 +191,7 @@ public class HandlerLoot implements ILunarMessageHandler {
 
 	@Nullable
 	private CharacterState findDropCharacter(final Player player, final String dropCharacterState) {
-		for (final CharacterState characterState : player.getCharacterStatesUnmodifiable()) {
+		for (final CharacterState characterState : player.getUnmodifiableCharacterStates()) {
 			if (characterState.getPrimaryKey().equals(dropCharacterState))
 				return characterState;
 		}

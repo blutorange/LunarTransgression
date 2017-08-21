@@ -5,36 +5,34 @@ import java.io.IOException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.github.blutorange.translune.logic.BattleAction;
-import com.github.blutorange.translune.logic.BattleCommand;
-import com.github.blutorange.translune.logic.IBattleAction;
-import com.github.blutorange.translune.logic.IBattleCommand;
+import com.github.blutorange.translune.logic.EBattleCommandType;
+import com.github.blutorange.translune.message.MessageAuthorize;
+import com.github.blutorange.translune.message.MessageAuthorizeResponse;
+import com.github.blutorange.translune.message.MessageBattleCancelled;
+import com.github.blutorange.translune.message.MessageBattlePrepared;
+import com.github.blutorange.translune.message.MessageBattleStepped;
+import com.github.blutorange.translune.message.MessageInvite;
+import com.github.blutorange.translune.message.MessageInviteAccept;
+import com.github.blutorange.translune.message.MessageInviteAcceptResponse;
+import com.github.blutorange.translune.message.MessageInviteAccepted;
+import com.github.blutorange.translune.message.MessageInviteReject;
+import com.github.blutorange.translune.message.MessageInviteRejectResponse;
+import com.github.blutorange.translune.message.MessageInviteResponse;
+import com.github.blutorange.translune.message.MessageInviteRetract;
+import com.github.blutorange.translune.message.MessageInviteRetractResponse;
+import com.github.blutorange.translune.message.MessageInviteRetracted;
+import com.github.blutorange.translune.message.MessageInvited;
+import com.github.blutorange.translune.message.MessagePrepareBattle;
+import com.github.blutorange.translune.message.MessagePrepareBattleResponse;
+import com.github.blutorange.translune.message.MessageStepBattle;
+import com.github.blutorange.translune.message.MessageStepBattleResponse;
+import com.github.blutorange.translune.message.MessageUnknown;
+import com.github.blutorange.translune.socket.BattleAction;
+import com.github.blutorange.translune.socket.BattleCommand;
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.LunarMessage;
-import com.github.blutorange.translune.socket.message.MessageAuthorize;
-import com.github.blutorange.translune.socket.message.MessageAuthorizeResponse;
-import com.github.blutorange.translune.socket.message.MessageBattleCancelled;
-import com.github.blutorange.translune.socket.message.MessageBattlePrepared;
-import com.github.blutorange.translune.socket.message.MessageBattleStepped;
-import com.github.blutorange.translune.socket.message.MessageInvite;
-import com.github.blutorange.translune.socket.message.MessageInviteAccept;
-import com.github.blutorange.translune.socket.message.MessageInviteAcceptResponse;
-import com.github.blutorange.translune.socket.message.MessageInviteAccepted;
-import com.github.blutorange.translune.socket.message.MessageInviteReject;
-import com.github.blutorange.translune.socket.message.MessageInviteRejectResponse;
-import com.github.blutorange.translune.socket.message.MessageInviteResponse;
-import com.github.blutorange.translune.socket.message.MessageInviteRetract;
-import com.github.blutorange.translune.socket.message.MessageInviteRetractResponse;
-import com.github.blutorange.translune.socket.message.MessageInviteRetracted;
-import com.github.blutorange.translune.socket.message.MessageInvited;
-import com.github.blutorange.translune.socket.message.MessagePrepareBattle;
-import com.github.blutorange.translune.socket.message.MessagePrepareBattleResponse;
-import com.github.blutorange.translune.socket.message.MessageStepBattle;
-import com.github.blutorange.translune.socket.message.MessageStepBattleResponse;
-import com.github.blutorange.translune.socket.message.MessageUnknown;
 import com.github.blutorange.translune.util.EJsoniterEncoder;
-import com.github.blutorange.translune.util.JsoniterDelegateDecoder;
 import com.github.blutorange.translune.util.JsoniterEnumDecoder;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.ValueType;
@@ -48,14 +46,13 @@ import com.jsoniter.static_codegen.StaticCodegenConfig;
 public class JsoniterConfig implements StaticCodegenConfig {
 	@Override
 	public void setup() {
-		JsoniterSpi.registerPropertyEncoder(LunarMessage.class, "type", EJsoniterEncoder.ENUM_WITHOUT_CLASS);
-        JsoniterSpi.registerPropertyDecoder(LunarMessage.class, "type", new JsoniterEnumDecoder<>(ELunarMessageType.class));
+		JsoniterSpi.registerTypeEncoder(ELunarMessageType.class, EJsoniterEncoder.ENUM_WITHOUT_CLASS);
+        JsoniterSpi.registerTypeDecoder(ELunarMessageType.class, new JsoniterEnumDecoder<>(ELunarMessageType.class));
 
-        JsoniterSpi.registerTypeEncoder(IBattleAction.class, EJsoniterEncoder.THROUGHPASS);
-        JsoniterSpi.registerTypeDecoder(IBattleAction.class, new JsoniterDelegateDecoder(BattleAction[].class));
-        JsoniterSpi.registerTypeDecoder(IBattleCommand.class, new JsoniterDelegateDecoder(BattleCommand[].class));
+		JsoniterSpi.registerTypeEncoder(EBattleCommandType.class, EJsoniterEncoder.ENUM_WITHOUT_CLASS);
+        JsoniterSpi.registerTypeDecoder(EBattleCommandType.class, new JsoniterEnumDecoder<>(EBattleCommandType.class));
 
-        JsoniterSpi.registerPropertyEncoder(LunarMessage.class, "status", new Encoder() {
+         JsoniterSpi.registerPropertyEncoder(LunarMessage.class, "status", new Encoder() {
 			@Override
 			public void encode(@Nullable final Object obj, @NonNull final JsonStream stream) throws IOException {
 				final ELunarStatusCode status = obj == null ? ELunarStatusCode.OK : (ELunarStatusCode)obj;
@@ -115,6 +112,7 @@ public class JsoniterConfig implements StaticCodegenConfig {
 			TypeLiteral.create(MessageBattleCancelled.class),
 
 			TypeLiteral.create(BattleAction.class),
+			TypeLiteral.create(BattleCommand.class),
 
 			TypeLiteral.create(MessageUnknown.class)
 		};

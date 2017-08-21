@@ -11,15 +11,15 @@ import com.github.blutorange.translune.logic.EGameState;
 import com.github.blutorange.translune.logic.IBattleStore;
 import com.github.blutorange.translune.logic.IInvitationStore;
 import com.github.blutorange.translune.logic.ISessionStore;
+import com.github.blutorange.translune.message.MessageInvite;
+import com.github.blutorange.translune.message.MessageInviteResponse;
+import com.github.blutorange.translune.message.MessageInviteRetract;
+import com.github.blutorange.translune.message.MessageInviteRetractResponse;
+import com.github.blutorange.translune.message.MessageInviteRetracted;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.ILunarMessageHandler;
 import com.github.blutorange.translune.socket.ISocketProcessing;
 import com.github.blutorange.translune.socket.LunarMessage;
-import com.github.blutorange.translune.socket.message.MessageInvite;
-import com.github.blutorange.translune.socket.message.MessageInviteResponse;
-import com.github.blutorange.translune.socket.message.MessageInviteRetract;
-import com.github.blutorange.translune.socket.message.MessageInviteRetractResponse;
-import com.github.blutorange.translune.socket.message.MessageInviteRetracted;
 
 @Singleton
 public class HandlerInviteRetract implements ILunarMessageHandler {

@@ -11,12 +11,12 @@ import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.logic.EGameState;
 import com.github.blutorange.translune.logic.IInitIdStore;
 import com.github.blutorange.translune.logic.ISessionStore;
+import com.github.blutorange.translune.message.MessageAuthorize;
+import com.github.blutorange.translune.message.MessageAuthorizeResponse;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.ILunarMessageHandler;
 import com.github.blutorange.translune.socket.ISocketProcessing;
 import com.github.blutorange.translune.socket.LunarMessage;
-import com.github.blutorange.translune.socket.message.MessageAuthorize;
-import com.github.blutorange.translune.socket.message.MessageAuthorizeResponse;
 
 @Singleton
 public class HandlerAuthorize implements ILunarMessageHandler {
