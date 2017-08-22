@@ -2,6 +2,7 @@ package com.github.blutorange.translune.db;
 
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.ESkillEffect;
+import com.github.blutorange.translune.logic.ESkillTarget;
 
 public class ModifiableSkill extends ModifiableEntity<Skill> {
 	public void setAccuracy(final int accuracy) {
@@ -20,10 +21,6 @@ public class ModifiableSkill extends ModifiableEntity<Skill> {
 		entity.setIsPhysical(isPhysical);
 	}
 
-	public void setLevel(final int level) {
-		entity.setLevel(level);
-	}
-
 	public void setName(final String name) {
 		entity.setName(name);
 	}
@@ -32,11 +29,15 @@ public class ModifiableSkill extends ModifiableEntity<Skill> {
 		entity.setPower(power);
 	}
 
-	void setPriority(final int priority) {
-		entity.setPriority(priority);
+	public void setTtarget(final ESkillTarget target) {
+		entity.setTarget(target);
 	}
 
 	void setMp(final int mp) {
 		entity.setMp(mp);
+	}
+
+	void setPriority(final int priority) {
+		entity.setPriority(priority);
 	}
 }

@@ -4,18 +4,27 @@ import java.util.Map;
 import java.util.Set;
 
 import com.github.blutorange.translune.logic.EElement;
+import com.github.blutorange.translune.logic.EExperienceGroup;
 
 public class ModifiableCharacter extends ModifiableEntity<Character> {
 	public Set<EElement> getElements() {
 		return entity.getElements();
 	}
 
-	public Map<Integer, Skill> getSkills() {
+	public Map<Skill, Integer> getSkills() {
 		return entity.getSkills();
 	}
 
 	public void setAccuracy(final int accuracy) {
 		entity.setAccuracy(accuracy);
+	}
+
+	public void setCry(final String cry) {
+		entity.setCry(cry);
+	}
+
+	public void setDescription(final String description) {
+		entity.setDescription(description);
 	}
 
 	public void setElements(final Set<EElement> elements) {
@@ -24,6 +33,18 @@ public class ModifiableCharacter extends ModifiableEntity<Character> {
 
 	public void setEvasion(final int evasion) {
 		entity.setEvasion(evasion);
+	}
+
+	public void setExperienceGroup(final EExperienceGroup experienceGroup) {
+		entity.setExperienceGroup(experienceGroup);
+	}
+
+	public void setGifFront(final String gifFront) {
+		entity.setGifFront(gifFront);
+	}
+
+	public void setGifBack(final String gifBack) {
+		entity.setGifBack(gifBack);
 	}
 
 	public void setMagicalAttack(final int magicalAttack) {
@@ -54,7 +75,7 @@ public class ModifiableCharacter extends ModifiableEntity<Character> {
 		entity.setPhysicalDefense(physicalDefense);
 	}
 
-	public void setSkills(final Map<Integer, Skill> skills) {
+	public void setSkills(final Map<Skill, Integer> skills) {
 		entity.setSkills(skills);
 	}
 

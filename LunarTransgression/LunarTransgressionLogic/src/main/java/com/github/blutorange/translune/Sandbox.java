@@ -1,6 +1,5 @@
 package com.github.blutorange.translune;
 
-import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
@@ -12,15 +11,23 @@ import com.github.blutorange.translune.ic.ComponentFactory;
 public class Sandbox {
 	public static void main(final String[] args) {
 		// testing...
-		jsoniter();
+		final ServletContextListener scl = new LunarServletContextListener();
+		scl.contextInitialized(null);
+		try {
+			schema();
+		}
+		finally {
+			scl.contextDestroyed(null);
+		}
+	}
+
+	static void schema() {
+		final ILunarDatabaseManager ldm = ComponentFactory.getDatabaseComponent().iLunarDatabaseManager();
+		ldm.createSchema();
 	}
 
 	static void ldm() {
-		final ServletContextListener scl = new LunarServletContextListener();
-		scl.contextInitialized(new ServletContextEvent(null));
 		final ILunarDatabaseManager ldm = ComponentFactory.getDatabaseComponent().iLunarDatabaseManager();
-
-//		ldm.createSchema();
 
 //		final Player player = new Player("player2", "123", "im a me", new HashSet<>(), new HashSet<>());
 //		final Item item = new Item("item2", player, EItemEffect.HEAL, 20);
@@ -38,7 +45,6 @@ public class Sandbox {
 			ldm.modify(item, ModifiableItem.class, s -> s.setPower(43));
 
 		System.out.println("OK");
-		scl.contextDestroyed(new ServletContextEvent(null));
 	}
 
 	static void jsoniter() {

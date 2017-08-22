@@ -16,15 +16,15 @@ public class BattleCommandHandlerSkill extends ABattleCommandHandler {
 	public BattleCommandHandlerSkill(final IBattleContext battleContext, final int player, final int character,
 			final BattleCommand battleCommand) {
 		super(battleContext, player, character, battleCommand);
-		final Optional<Entry<Integer, Skill>> entry = context.getCharacterState(player, character).getCharacter()
-				.getUnmodifiableSkills().entrySet().stream().filter(e -> e.getValue().getPrimaryKey().equals(battleCommand.getAction()))
+		final Optional<Entry<Skill, Integer>> entry = context.getCharacterState(player, character).getCharacter()
+				.getUnmodifiableSkills().entrySet().stream().filter(e -> e.getKey().getPrimaryKey().equals(battleCommand.getAction()))
 				.findAny();
 		if (!entry.isPresent())
 			throw new IllegalArgumentException("character does not know skill");
-		final Entry<Integer, Skill> skill = entry.get();
-		if (context.getCharacterState(player, character).getLevel() < skill.getKey().intValue())
+		final Entry<Skill, Integer> skill = entry.get();
+		if (context.getCharacterState(player, character).getLevel() < skill.getValue().intValue())
 			throw new IllegalArgumentException("character does not know skill yet");
-		this.skill = skill.getValue();
+		this.skill = skill.getKey();
 	}
 
 	@Override

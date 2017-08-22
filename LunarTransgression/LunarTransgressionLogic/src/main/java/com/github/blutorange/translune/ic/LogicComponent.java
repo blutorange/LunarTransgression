@@ -7,6 +7,8 @@ import javax.inject.Singleton;
 
 import org.quartz.Scheduler;
 
+import com.github.blutorange.translune.i18n.ILocalizationBundle;
+import com.github.blutorange.translune.i18n.LocalizationBundle;
 import com.github.blutorange.translune.logic.BattleProcessing;
 import com.github.blutorange.translune.logic.BattleRunner;
 import com.github.blutorange.translune.logic.IBattleProcessing;
@@ -21,6 +23,8 @@ public interface LogicComponent {
 	void inject(BattleProcessing battle);
 	IBattleRunner battleRunner();
 	IBattleProcessing battleProcessing();
+	LocalizationBundle localizationBundle();
+	ILocalizationBundle iLocalizationBundle();
 	@Named("default") Scheduler defaultScheduler();
 	@Named("secure") Random randomSecure();
 	@Named("basic") Random randomBasic();

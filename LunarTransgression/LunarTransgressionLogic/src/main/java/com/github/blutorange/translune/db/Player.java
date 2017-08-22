@@ -60,7 +60,7 @@ public class Player extends AbstractStoredEntity {
 
 	@NotNull
 	@Size(min = Constants.MIN_ITEMS, max = Constants.MAX_ITEMS)
-	@ManyToMany(targetEntity = Item.class, cascade = {}, fetch = FetchType.LAZY, mappedBy = "player")
+	@ManyToMany(targetEntity = Item.class, cascade = {}, fetch = FetchType.LAZY)
 	@JoinTable(name = "playeritem", joinColumns = @JoinColumn(name = "playeritem_player", nullable = false, foreignKey = @ForeignKey(name = "fk_playeritem_player")), inverseJoinColumns = @JoinColumn(name = "playeritem_item", foreignKey = @ForeignKey(name = "fk_playeritem_item")))
 	private Set<Item> items = new HashSet<>();
 

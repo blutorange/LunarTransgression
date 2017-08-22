@@ -68,18 +68,22 @@ public class EffectorStatusCondition implements IGlobalBattleEffector {
 		final int newHp = bs.getHp()*cbs.getComputedBattleHp()/Constants.MAX_RELATIVE_HP - damage;
 		final int newRelativeHp = newHp*Constants.MAX_RELATIVE_HP/cbs.getComputedBattleHp();
 		bs.setCurrentHp(newRelativeHp);
-		final BattleAction action = new BattleAction(cs.getId(), new String[0],
-				String.format(condition.getTurnEndDamageMessage(), cs.getNickname(), damage));
+		final BattleAction action = new BattleAction(id, new String[0],
+				String.format(condition.getTurnEndDamageMessage(), cs.getNickname(), Integer.valueOf(damage)));
 		context.getBattleAction(0).add(action);
 		context.getBattleAction(1).add(action);
 	}
 
 	@Override
 	public void onAdd(final IBattleContext context) {
-		id = context.getCharacterState(player, character).getId();
+		final String id = context.getCharacterState(player, character).getId();
+		if (id == null)
+			throw new IllegalStateException("character state does not exits: " + id);
+		this.id = id;
 	}
 
 	@Override
 	public void onRemove(final IBattleContext battleContext) {
+		// nothing
 	}
 }

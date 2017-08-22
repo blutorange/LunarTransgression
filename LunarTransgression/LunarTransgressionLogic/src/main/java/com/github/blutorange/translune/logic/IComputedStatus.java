@@ -10,5 +10,4 @@ public interface IComputedStatus {
 	int getComputedPhysicalAttack();
 	int getComputedPhysicalDefense();
 	int getComputedSpeed();
-	void update();
 }

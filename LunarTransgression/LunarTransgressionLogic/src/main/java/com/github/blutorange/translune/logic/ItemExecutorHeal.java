@@ -8,14 +8,14 @@ import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 import com.github.blutorange.translune.util.Constants;
 
-public class ItemExecutorHeal implements IItemExecutor {
+public class ItemExecutorHeal extends AItemExecutor {
 	@Override
 	public void execute(final Item item, final IBattleContext context, final BattleCommand battleCommand,
 			final List<BattleAction> battleActionsMe, final List<BattleAction> battleActionsHim, final int player,
 			final int character) {
 		final String[] targets = battleCommand.getTargets();
 		if (targets.length != 1) {
-			handleError(context, battleActionsMe, battleActionsHim, item, player, character, "But it had no effect!");
+			handleError(context, battleActionsMe, battleActionsHim, item, player, character, "But the target is gone!");
 			return;
 		}
 		if (!context.removeItem(item, player)) {

@@ -22,6 +22,8 @@ public interface IBattleContext {
 
 	CharacterState[] getCharacterStates(int player);
 
+	CharacterState[] getCharacterStatesOpponent(int player);
+
 	CharacterState[][] getCharacterStates();
 
 	CharacterState getCharacterState(int player, int character);

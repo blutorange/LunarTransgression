@@ -12,6 +12,7 @@ import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 
+import com.github.blutorange.translune.i18n.ILocalizationBundle;
 import com.github.blutorange.translune.logic.BattleProcessing;
 import com.github.blutorange.translune.logic.BattleRunner;
 import com.github.blutorange.translune.logic.IBattleProcessing;
@@ -39,6 +40,12 @@ public class LogicModule {
 	static SchedulerFactory provideSchedulerFactory() {
 		final SchedulerFactory sf = new StdSchedulerFactory();
 		return sf;
+	}
+
+	@Provides
+	@Singleton
+	static ILocalizationBundle provideLocalizationBundle() {
+		return ComponentFactory.getLogicComponent().localizationBundle();
 	}
 
 	@Provides

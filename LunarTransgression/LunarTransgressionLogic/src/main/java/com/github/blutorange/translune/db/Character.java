@@ -11,16 +11,17 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.MapKeyColumn;
+import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -28,6 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.github.blutorange.common.IAccessible;
 import com.github.blutorange.translune.logic.EElement;
+import com.github.blutorange.translune.logic.EExperienceGroup;
 import com.github.blutorange.translune.util.Constants;
 
 @Entity
@@ -37,6 +39,14 @@ public class Character extends AbstractStoredEntity {
 	@Max(Constants.MAX_ACCURACY)
 	@Column(name = "accuracy", nullable = false, unique = false, updatable = false)
 	private int accuracy;
+
+	@NotEmpty
+	@Column(name = "cry", nullable = false, unique = false, updatable = false)
+	private String cry;
+
+	@NotEmpty
+	@Column(name = "description", nullable = false, unique = false, updatable = false)
+	private String description;
 
 	@NotNull
 	@Column(name = "elements", nullable = false, unique = false, updatable = false)
@@ -48,6 +58,19 @@ public class Character extends AbstractStoredEntity {
 	@Max(Constants.MAX_EVASION)
 	@Column(name = "evasion", nullable = false, unique = false, updatable = false)
 	private int evasion;
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(name = "experiencegroup", nullable = false, unique = false, updatable = false)
+	private EExperienceGroup experienceGroup;
+
+	@NotEmpty
+	@Column(name = "gifback", nullable = false, unique = false, updatable = false)
+	private String gifBack;
+
+	@NotEmpty
+	@Column(name = "giffront", nullable = false, unique = false, updatable = false)
+	private String gifFront;
 
 	@Min(0)
 	@Max(Constants.MAX_MAGICAL_ATTACK)
@@ -86,10 +109,11 @@ public class Character extends AbstractStoredEntity {
 	private int physicalDefense;
 
 	@NotNull
-	@ManyToMany(targetEntity = Skill.class, cascade = {}, fetch = FetchType.LAZY)
-	@JoinTable(name = "charskill", joinColumns = @JoinColumn(name = "charskill_char", updatable = false, nullable = false, foreignKey = @ForeignKey(name = "fk_charskill_char")), inverseJoinColumns = @JoinColumn(name = "charskill_skill", updatable = false, nullable = false, foreignKey = @ForeignKey(name = "fk_charskill_skill")))
-	@MapKeyColumn(name = "level", updatable = false, nullable = false, unique = false)
-	private Map<Integer, Skill> skills;
+	@ElementCollection
+	@CollectionTable(name="charskill", uniqueConstraints=@UniqueConstraint(name="uk_charskill", columnNames={"level", "skill", "\"character\""}), foreignKey=@ForeignKey(name="fk_charskill_char"),  joinColumns=@JoinColumn(name="\"character\"", nullable=false, unique = false, updatable = false, insertable = true))
+	@MapKeyJoinColumn(name="skill", foreignKey=@ForeignKey(name="fk_charskill_skill"))
+	@Column(name = "level", updatable = false, insertable = true, unique = false, nullable = false)
+	private Map<Skill, Integer> skills;
 
 	@Min(0)
 	@Max(Constants.MAX_SPEED)
@@ -103,6 +127,20 @@ public class Character extends AbstractStoredEntity {
 		return accuracy;
 	}
 
+	/**
+	 * @return the cry
+	 */
+	public String getCry() {
+		return cry;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
 	@Override
 	public EEntityMeta getEntityMeta() {
 		return EEntityMeta.CHARACTER;
@@ -113,6 +151,27 @@ public class Character extends AbstractStoredEntity {
 	 */
 	public int getEvasion() {
 		return evasion;
+	}
+
+	/**
+	 * @return the experienceGroup
+	 */
+	public EExperienceGroup getExperienceGroup() {
+		return experienceGroup;
+	}
+
+	/**
+	 * @return the gifBack
+	 */
+	public String getGifBack() {
+		return gifBack;
+	}
+
+	/**
+	 * @return the gif
+	 */
+	public String getGifFront() {
+		return gifFront;
 	}
 
 	/**
@@ -180,21 +239,20 @@ public class Character extends AbstractStoredEntity {
 		return elements;
 	}
 
-	public Map<Integer, Skill> getUnmodifiableSkills() {
+	public Map<Skill, Integer> getUnmodifiableSkills() {
 		return skills;
 	}
 
 	@Override
 	public String toString() {
-		return String.format(
-				"Character(%s,%s,hp=%d,mp=%s,patt=%d,pdef=%d,matt=%d,mdef=%s,speed=%s,acc=%d,ev=%d)", name,
+		return String.format("Character(%s,%s,hp=%d,mp=%s,patt=%d,pdef=%d,matt=%d,mdef=%s,speed=%s,acc=%d,ev=%d)", name,
 				elements, maxHp, maxMp, physicalAttack, physicalDefense, magicalAttack, magicalDefense, speed,
 				accuracy);
 	}
 
 	@Override
 	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
-		associated(skills.values(), consumer);
+		associated(skills.keySet(), consumer);
 	}
 
 	/**
@@ -204,7 +262,7 @@ public class Character extends AbstractStoredEntity {
 		return elements;
 	}
 
-	Map<Integer, Skill> getSkills() {
+	Map<Skill, Integer> getSkills() {
 		return skills;
 	}
 
@@ -214,6 +272,22 @@ public class Character extends AbstractStoredEntity {
 	 */
 	void setAccuracy(final int accuracy) {
 		this.accuracy = accuracy;
+	}
+
+	/**
+	 * @param cry
+	 *            the cry to set
+	 */
+	void setCry(final String cry) {
+		this.cry = cry;
+	}
+
+	/**
+	 * @param description
+	 *            the description to set
+	 */
+	void setDescription(final String description) {
+		this.description = description;
 	}
 
 	/**
@@ -230,6 +304,30 @@ public class Character extends AbstractStoredEntity {
 	 */
 	void setEvasion(final int evasion) {
 		this.evasion = evasion;
+	}
+
+	/**
+	 * @param experienceGroup
+	 *            the experienceGroup to set
+	 */
+	void setExperienceGroup(final EExperienceGroup experienceGroup) {
+		this.experienceGroup = experienceGroup;
+	}
+
+	/**
+	 * @param gifBack
+	 *            the gifBack to set
+	 */
+	void setGifBack(final String gifBack) {
+		this.gifBack = gifBack;
+	}
+
+	/**
+	 * @param gif
+	 *            the gif to set
+	 */
+	void setGifFront(final String gifFront) {
+		this.gifFront = gifFront;
 	}
 
 	/**
@@ -288,7 +386,7 @@ public class Character extends AbstractStoredEntity {
 		this.physicalDefense = physicalDefense;
 	}
 
-	void setSkills(final Map<Integer, Skill> skills) {
+	void setSkills(final Map<Skill, Integer> skills) {
 		this.skills = skills != null ? skills : new HashMap<>();
 	}
 

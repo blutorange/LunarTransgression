@@ -66,11 +66,6 @@ class ComputedStatus implements IComputedStatus {
 		return speed;
 	}
 
-	@Override
-	public void update() {
-		_update();
-	}
-
 	private void _update() {
 		hp = computedHp();
 		mp = computedMp();

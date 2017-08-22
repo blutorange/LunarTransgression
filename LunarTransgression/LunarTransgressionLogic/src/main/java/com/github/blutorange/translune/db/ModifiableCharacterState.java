@@ -15,10 +15,6 @@ public class ModifiableCharacterState extends ModifiableEntity<CharacterState> {
 		entity.setId(id);
 	}
 
-	public void setLevel(final int level) {
-		entity.setLevel(level);
-	}
-
 	/**
 	 * @param ivHp
 	 *            the ivHp to set
@@ -73,6 +69,10 @@ public class ModifiableCharacterState extends ModifiableEntity<CharacterState> {
 	 */
 	public void setIvSpeed(final int ivSpeed) {
 		entity.setIvSpeed(ivSpeed);
+	}
+
+	public void setLevel(final int level) {
+		entity.setLevel(level);
 	}
 
 	public void setNature(final ENature nature) {

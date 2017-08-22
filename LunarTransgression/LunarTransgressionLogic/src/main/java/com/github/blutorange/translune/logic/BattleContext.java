@@ -53,6 +53,13 @@ class BattleContext implements IBattleContext {
 		return characterStates[player];
 	}
 
+
+	@Override
+	public CharacterState[] getCharacterStatesOpponent(final int player) {
+		final int opponent = player == 0 ? 1 : 0;
+		return getCharacterStates(opponent);
+	}
+
 	@Override
 	public IComputedBattleStatus[][] getComputedBattleStatus() {
 		return computedBattleStatus;

@@ -40,7 +40,7 @@ public class Item extends AbstractStoredEntity {
 
 	@Min(Constants.MIN_PRIORITY)
 	@Max(Constants.MAX_PRIORITY)
-	@Column(name = "power", nullable = false, unique = false, updatable = false)
+	@Column(name = "priority", nullable = false, unique = false, updatable = false)
 	private int priority = Constants.PRIORITY_ITEM;
 
 	@Deprecated

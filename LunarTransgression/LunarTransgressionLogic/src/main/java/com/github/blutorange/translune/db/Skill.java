@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.github.blutorange.common.IAccessible;
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.ESkillEffect;
+import com.github.blutorange.translune.logic.ESkillTarget;
 import com.github.blutorange.translune.util.Constants;
 
 @Entity
@@ -32,7 +33,7 @@ public class Skill extends AbstractStoredEntity {
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "effect", unique = false, nullable = false, updatable = false)
-	private ESkillEffect effect = ESkillEffect.DAMAGE;
+	private ESkillEffect effect = ESkillEffect.PHYSICAL_DAMAGE;
 
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
@@ -41,11 +42,6 @@ public class Skill extends AbstractStoredEntity {
 
 	@Column(name = "isphysical", nullable = false, unique = false, updatable = false)
 	private boolean isPhysical;
-
-	@Min(1)
-	@Max(20)
-	@Column(name = "level", nullable = false, unique = false, updatable = false)
-	private int level;
 
 	/**
 	 * The MP this skill consumes. May be 0.
@@ -70,6 +66,11 @@ public class Skill extends AbstractStoredEntity {
 	@Max(Constants.MAX_PRIORITY)
 	@Column(name = "priority", nullable = false, unique = false, updatable = false)
 	private int priority;
+
+	@NotNull
+	@Enumerated(value = EnumType.STRING)
+	@Column(name = "target", nullable = false, unique = false, updatable = false)
+	private ESkillTarget target = ESkillTarget.OPPONENTS_FIELD;
 
 	/**
 	 * @return the accuracy
@@ -104,10 +105,6 @@ public class Skill extends AbstractStoredEntity {
 		return isPhysical;
 	}
 
-	public int getLevel() {
-		return level;
-	}
-
 	/**
 	 * @return the mp
 	 */
@@ -139,6 +136,13 @@ public class Skill extends AbstractStoredEntity {
 	 */
 	public int getPriority() {
 		return priority;
+	}
+
+	/**
+	 * @return the target
+	 */
+	public ESkillTarget getTarget() {
+		return target;
 	}
 
 	@Override
@@ -183,10 +187,6 @@ public class Skill extends AbstractStoredEntity {
 		this.isPhysical = isPhysical;
 	}
 
-	void setLevel(final int level) {
-		this.level = level;
-	}
-
 	/**
 	 * @param mp
 	 *            the mp to set
@@ -217,5 +217,13 @@ public class Skill extends AbstractStoredEntity {
 	 */
 	void setPriority(final int priority) {
 		this.priority = priority;
+	}
+
+	/**
+	 * @param target
+	 *            the target to set
+	 */
+	void setTarget(final ESkillTarget target) {
+		this.target = target;
 	}
 }
