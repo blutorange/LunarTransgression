@@ -1,9 +1,9 @@
 package com.github.blutorange.translune.logic;
 
+import com.github.blutorange.common.IntToIntFunction;
+import com.github.blutorange.common.MathUtil;
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.util.Constants;
-import com.github.blutorange.translune.util.IntIntFunction;
-import com.github.blutorange.translune.util.MathUtil;
 
 class ComputedStatus implements IComputedStatus {
 	private int accuracy;
@@ -83,7 +83,7 @@ class ComputedStatus implements IComputedStatus {
 		evasion = computedEvasion();
 	}
 
-	private int computed(final int base, final int level, final int iv, final int max, final IntIntFunction nature) {
+	private int computed(final int base, final int level, final int iv, final int max, final IntToIntFunction nature) {
 		final int releaseCount = characterState.getPlayer().getReleasedCharacterStatesCount();
 		final int pre = ((2 * base + iv) * (level + releaseCount / 4)) / 100 + 5;
 		final int post = nature.apply(pre);
@@ -104,7 +104,7 @@ class ComputedStatus implements IComputedStatus {
 				characterState.getIvHp(), Constants.MAX_HP, nature::adjustHp);
 	}
 
-	private int computedHpMp(final int base, final int level, final int iv, final int max, final IntIntFunction nature) {
+	private int computedHpMp(final int base, final int level, final int iv, final int max, final IntToIntFunction nature) {
 		final int releaseCount = characterState.getPlayer().getReleasedCharacterStatesCount();
 		final int pre = ((((2*base+iv)*(level+releaseCount/4))/100)+level+10);
 		final int post = nature.apply(pre);

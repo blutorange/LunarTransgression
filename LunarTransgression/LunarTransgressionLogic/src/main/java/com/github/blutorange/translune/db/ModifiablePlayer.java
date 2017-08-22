@@ -4,7 +4,8 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.github.blutorange.translune.util.PasswordStorage.CannotPerformOperationException;
+import com.github.blutorange.common.PasswordStorage.CannotPerformOperationException;
+
 
 public class ModifiablePlayer extends ModifiableEntity<Player> {
 	public void addCharacterState(final CharacterState characterState) {

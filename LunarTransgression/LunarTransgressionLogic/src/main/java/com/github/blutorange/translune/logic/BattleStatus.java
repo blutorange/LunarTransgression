@@ -2,8 +2,8 @@ package com.github.blutorange.translune.logic;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.github.blutorange.common.MathUtil;
 import com.github.blutorange.translune.util.Constants;
-import com.github.blutorange.translune.util.MathUtil;
 
 public class BattleStatus {
 	private int hp;

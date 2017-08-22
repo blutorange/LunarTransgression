@@ -16,10 +16,10 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.github.blutorange.common.IAccessible;
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.ESkillEffect;
 import com.github.blutorange.translune.util.Constants;
-import com.github.blutorange.translune.util.IAccessible;
 
 @Entity
 @Table(name = "skill")

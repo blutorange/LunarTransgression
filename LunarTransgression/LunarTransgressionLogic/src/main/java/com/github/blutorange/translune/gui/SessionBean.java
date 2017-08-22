@@ -14,6 +14,8 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.github.blutorange.common.PasswordStorage;
+import com.github.blutorange.common.PasswordStorage.CannotPerformOperationException;
 import com.github.blutorange.translune.CustomProperties;
 import com.github.blutorange.translune.db.Character;
 import com.github.blutorange.translune.db.CharacterState;
@@ -24,8 +26,6 @@ import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.db.PlayerBuilder;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.util.Constants;
-import com.github.blutorange.translune.util.PasswordStorage;
-import com.github.blutorange.translune.util.PasswordStorage.CannotPerformOperationException;
 
 @SuppressWarnings("serial")
 @ManagedBean(eager = true, name = "sessionBean")

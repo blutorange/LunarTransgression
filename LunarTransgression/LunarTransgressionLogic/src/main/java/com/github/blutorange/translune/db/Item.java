@@ -16,9 +16,9 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.github.blutorange.common.IAccessible;
 import com.github.blutorange.translune.logic.EItemEffect;
 import com.github.blutorange.translune.util.Constants;
-import com.github.blutorange.translune.util.IAccessible;
 
 @Entity
 @Table(name = "item")

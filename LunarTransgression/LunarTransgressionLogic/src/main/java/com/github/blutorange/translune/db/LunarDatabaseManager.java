@@ -38,11 +38,12 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.slf4j.Logger;
 
+import com.github.blutorange.common.ThrowingConsumer;
+import com.github.blutorange.common.ThrowingFunction;
+import com.github.blutorange.translune.db.LunarDatabaseManager.IChange;
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.util.Constants;
-import com.github.blutorange.translune.util.ThrowingConsumer;
-import com.github.blutorange.translune.util.ThrowingFunction;
 
 @Singleton
 public class LunarDatabaseManager implements ILunarDatabaseManager {

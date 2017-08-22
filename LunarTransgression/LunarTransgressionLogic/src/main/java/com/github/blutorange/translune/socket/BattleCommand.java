@@ -54,15 +54,15 @@ public class BattleCommand {
 	 * @param targets
 	 *            the target to set
 	 */
-	public void setTargets(final String[] targets) {
-		this.targets = targets;
+	public void setTargets(final String@Nullable[] targets) {
+		this.targets = targets != null ? targets : ArrayUtils.EMPTY_STRING_ARRAY;
 	}
 
 	/**
 	 * @param type
 	 *            the type to set
 	 */
-	public void setType(final EBattleCommandType type) {
-		this.type = type;
+	public void setType(@Nullable final EBattleCommandType type) {
+		this.type = type != null ? type : EBattleCommandType.DEFEND;
 	}
 }

@@ -2,16 +2,18 @@ package com.github.blutorange.translune.logic;
 
 import java.util.function.Consumer;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.github.blutorange.translune.db.CharacterState;
 
 class EffectorBattleStatus implements IGlobalBattleEffector {
 	int player;
 	int character;
-	private final Consumer<BattleStatus> consumerAdd;
-	private final Consumer<BattleStatus> consumerRemove;
+	private final Consumer<@NonNull BattleStatus> consumerAdd;
+	private final Consumer<@NonNull BattleStatus> consumerRemove;
 
-	public EffectorBattleStatus(final Consumer<BattleStatus> consumerAdd, final int player, final int character,
-			final Consumer<BattleStatus> consumerRemove) {
+	public EffectorBattleStatus(final Consumer<@NonNull BattleStatus> consumerAdd, final int player, final int character,
+			final Consumer<@NonNull BattleStatus> consumerRemove) {
 		this.player = player;
 		this.character = character;
 		this.consumerAdd = consumerAdd;

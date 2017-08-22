@@ -8,14 +8,6 @@ import com.github.blutorange.translune.db.Item;
 import com.github.blutorange.translune.db.ModifiableItem;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.ComponentFactory;
-import com.github.blutorange.translune.message.MessageBattleStepped;
-import com.github.blutorange.translune.socket.BattleAction;
-import com.github.blutorange.translune.socket.ELunarMessageType;
-import com.github.blutorange.translune.socket.ELunarStatusCode;
-import com.github.blutorange.translune.socket.ILunarPayload;
-import com.github.blutorange.translune.socket.LunarMessage;
-import com.jsoniter.JsonIterator;
-import com.jsoniter.output.JsonStream;
 
 public class Sandbox {
 	public static void main(final String[] args) {
@@ -50,18 +42,18 @@ public class Sandbox {
 	}
 
 	static void jsoniter() {
-		new JsoniterConfig().setup();
-		final LunarMessage msg = new LunarMessage(2, ELunarMessageType.AUTHORIZE, ELunarStatusCode.OK, "test");
-		final ILunarPayload m = new MessageBattleStepped(new BattleAction[] {
-				new BattleAction(new String[] { "Hello world" }, "baz", new String[] { "foo", "bar" }) });
-		msg.setPayload(JsonStream.serialize(m));
-		final String json = JsonStream.serialize(msg);
-		System.out.println(json);
-		final LunarMessage de = JsonIterator.deserialize(json, LunarMessage.class);
-		System.out.println(de);
-		System.out.println(de.getId());
-		System.out.println(de.getType());
-		System.out.println(de.getPayload());
-		System.exit(0);
+//		new JsoniterConfig().setup();
+//		final LunarMessage msg = new LunarMessage(2, ELunarMessageType.AUTHORIZE, ELunarStatusCode.OK, "test");
+//		final ILunarPayload m = new MessageBattleStepped(new BattleAction[] {
+//				new BattleAction(new String[] { "Hello world" }, "baz", new String[] { "foo", "bar" }) });
+//		msg.setPayload(JsonStream.serialize(m));
+//		final String json = JsonStream.serialize(msg);
+//		System.out.println(json);
+//		final LunarMessage de = JsonIterator.deserialize(json, LunarMessage.class);
+//		System.out.println(de);
+//		System.out.println(de.getId());
+//		System.out.println(de.getType());
+//		System.out.println(de.getPayload());
+//		System.exit(0);
 	}
 }

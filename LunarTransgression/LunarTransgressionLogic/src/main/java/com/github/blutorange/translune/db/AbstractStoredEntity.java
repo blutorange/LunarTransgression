@@ -7,7 +7,7 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import com.github.blutorange.translune.util.IAccessible;
+import com.github.blutorange.common.IAccessible;
 
 public abstract class AbstractStoredEntity extends AbstractEntity {
 	public abstract EEntityMeta getEntityMeta();

@@ -8,9 +8,9 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.github.blutorange.common.PasswordStorage;
+import com.github.blutorange.common.PasswordStorage.CannotPerformOperationException;
 import com.github.blutorange.translune.ic.ComponentFactory;
-import com.github.blutorange.translune.util.PasswordStorage;
-import com.github.blutorange.translune.util.PasswordStorage.CannotPerformOperationException;
 
 public class PlayerBuilder {
 	private final String nickname;

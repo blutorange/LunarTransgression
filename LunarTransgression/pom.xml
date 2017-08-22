@@ -8,6 +8,7 @@
 	<packaging>pom</packaging>
 
 	<name>LunarTransgression</name>
+	<description>Simple web based online game</description>
 	<url>https://github.com/blutorange/LunarTransgression</url>
 
 	<modules>
@@ -15,7 +16,48 @@
 		<module>LunarTransgressionMain</module>
 	</modules>
 
+	<scm>
+		<connection>scm:git:git://github.com/blutorange/LunarTransgression.git</connection>
+		<developerConnection>scm:git:ssh://github.com:blutorange/LunarTransgression.git</developerConnection>
+		<url>https://github.com/blutorange/LunarTransgression/tree/master</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<name>Andre Wachsmuth</name>
+			<email>wachsmuth.andre@gmx.de</email>
+			<organization>Homelab</organization>
+			<organizationUrl>https://github.com/blutorange</organizationUrl>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>The Unlicense</name>
+			<url>http://unlicense.org/</url>
+		</license>
+	</licenses>
+
+	<repositories>
+		<repository>
+			<id>oss-sonatype</id>
+			<name>oss-sonatype</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>prime-repo</id>
+			<name>PrimeFaces Maven Repository</name>
+			<url>http://repository.primefaces.org</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+
 	<properties>
+		<blutorange-common-java-version>0.0.1-SNAPSHOT</blutorange-common-java-version>
+		<blutorange-nullannotation-version>0.0.1-SNAPSHOT</blutorange-nullannotation-version>
 		<build-helper-maven-plugin-version>3.0.0</build-helper-maven-plugin-version>
 		<cargo-maven2-plugin-version>1.6.4</cargo-maven2-plugin-version>
 		<commons-dbcp-version>1.4</commons-dbcp-version>
@@ -220,6 +262,11 @@
 			<dependency>
 				<groupId>com.github.blutorange</groupId>
 				<artifactId>nullannotation</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.blutorange</groupId>
+				<artifactId>common</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>

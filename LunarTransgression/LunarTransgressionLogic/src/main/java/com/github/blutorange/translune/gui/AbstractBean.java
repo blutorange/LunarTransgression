@@ -10,10 +10,10 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 
+import com.github.blutorange.common.ThrowingRunnable;
+import com.github.blutorange.common.ThrowingSupplier;
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.ic.ComponentFactory;
-import com.github.blutorange.translune.util.ThrowingRunnable;
-import com.github.blutorange.translune.util.ThrowingSupplier;
 
 public abstract class AbstractBean {
 	@Inject @Classed(AbstractBean.class)

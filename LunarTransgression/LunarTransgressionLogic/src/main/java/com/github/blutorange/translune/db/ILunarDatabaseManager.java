@@ -5,7 +5,7 @@ import javax.persistence.PersistenceException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.github.blutorange.translune.util.ThrowingConsumer;
+import com.github.blutorange.common.ThrowingConsumer;
 
 public interface ILunarDatabaseManager {
 

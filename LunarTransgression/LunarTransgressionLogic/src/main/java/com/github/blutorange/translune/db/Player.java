@@ -21,11 +21,11 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.github.blutorange.common.IAccessible;
+import com.github.blutorange.common.PasswordStorage;
+import com.github.blutorange.common.PasswordStorage.CannotPerformOperationException;
+import com.github.blutorange.common.PasswordStorage.InvalidHashException;
 import com.github.blutorange.translune.util.Constants;
-import com.github.blutorange.translune.util.IAccessible;
-import com.github.blutorange.translune.util.PasswordStorage;
-import com.github.blutorange.translune.util.PasswordStorage.CannotPerformOperationException;
-import com.github.blutorange.translune.util.PasswordStorage.InvalidHashException;
 
 @Entity
 @Table(name = "player")

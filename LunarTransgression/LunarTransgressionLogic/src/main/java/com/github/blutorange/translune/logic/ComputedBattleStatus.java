@@ -2,10 +2,10 @@ package com.github.blutorange.translune.logic;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.github.blutorange.common.IntToIntFunction;
+import com.github.blutorange.common.MathUtil;
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.util.Constants;
-import com.github.blutorange.translune.util.IntIntFunction;
-import com.github.blutorange.translune.util.MathUtil;
 
 class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStatus {
 	private final static int[] stageMultiplierAccEvDenominator = new int[]{
@@ -103,13 +103,13 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 		_evasion = computedBattleEvasion();
 	}
 
-	private int computed(final int base, final int stage, final int max, @Nullable final IntIntFunction condition) {
+	private int computed(final int base, final int stage, final int max, @Nullable final IntToIntFunction condition) {
 		final int pre = base * stageMultiplierNumerator[stage] / stageMultiplierDenominator[stage];
 		final int post = condition == null ? pre : condition.apply(pre);
 		return MathUtil.clamp(post, 0, max);
 	}
 
-	private int computedAccEv(final int base, final int stage, final int max, @Nullable final IntIntFunction condition) {
+	private int computedAccEv(final int base, final int stage, final int max, @Nullable final IntToIntFunction condition) {
 		final int pre = base * stageMultiplierAccEvNumerator[stage] / stageMultiplierAccEvDenominator[stage];
 		final int post = condition == null ? pre : condition.apply(pre);
 		return MathUtil.clamp(post, 0, max);
