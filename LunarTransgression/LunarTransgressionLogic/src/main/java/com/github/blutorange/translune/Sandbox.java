@@ -7,18 +7,26 @@ import com.github.blutorange.translune.db.Item;
 import com.github.blutorange.translune.db.ModifiableItem;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.ComponentFactory;
+import com.github.blutorange.translune.logic.EExperienceGroup;
 
 public class Sandbox {
 	public static void main(final String[] args) {
 		// testing...
-		final ServletContextListener scl = new LunarServletContextListener();
-		scl.contextInitialized(null);
+//		final ServletContextListener scl = new LunarServletContextListener();
+//		scl.contextInitialized(null);
 		try {
-			schema();
+			exp();
 		}
 		finally {
-			scl.contextDestroyed(null);
+//			scl.contextDestroyed(null);
 		}
+	}
+	
+	static void exp() {
+		EExperienceGroup g = EExperienceGroup.SLOW;
+		System.out.println(String.format("Showing table for %s", g));
+		for (int level = 1; level <= 100; ++level)
+			System.out.println(String.format("Exp for level %d is %d", level, g.getExperienceForLevel(level)));
 	}
 
 	static void schema() {
