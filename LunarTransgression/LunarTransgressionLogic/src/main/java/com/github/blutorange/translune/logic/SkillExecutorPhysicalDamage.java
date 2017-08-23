@@ -6,7 +6,7 @@ import com.github.blutorange.translune.db.Skill;
 import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 
-public class SkillExecutorPhysicalDamage implements ISkillExecutor {
+public class SkillExecutorPhysicalDamage extends ASkillExecutor {
 	@Override
 	public void execute(final Skill skill, final IBattleContext context, final BattleCommand battleCommand,
 			final List<BattleAction> battleActionsMe, final List<BattleAction> battleActionsHim,

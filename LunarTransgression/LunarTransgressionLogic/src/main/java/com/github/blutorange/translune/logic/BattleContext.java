@@ -165,4 +165,9 @@ class BattleContext implements IBattleContext {
 			return battleActions1;
 		return battleActions2;
 	}
+
+	@Override
+	public int[] getCharacterIndex(CharacterState target) {
+		return getCharacterIndex(target.getPrimaryKey().toString());
+	}
 }

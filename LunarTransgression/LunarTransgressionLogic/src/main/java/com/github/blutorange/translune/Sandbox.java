@@ -24,9 +24,7 @@ public class Sandbox {
 	
 	static void exp() {
 		EExperienceGroup g = EExperienceGroup.SLOW;
-		System.out.println(String.format("Showing table for %s", g));
-		for (int level = 1; level <= 100; ++level)
-			System.out.println(String.format("Exp for level %d is %d", level, g.getExperienceForLevel(level)));
+		System.err.println(g.getLevelForExperience(6141));
 	}
 
 	static void schema() {

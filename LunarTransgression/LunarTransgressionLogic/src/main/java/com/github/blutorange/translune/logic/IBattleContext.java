@@ -55,4 +55,6 @@ public interface IBattleContext {
 	List<BattleAction> getBattleAction(int player);
 
 	List<IGlobalBattleEffector> getEffectorStack();
+
+	int[] getCharacterIndex(CharacterState target);
 }

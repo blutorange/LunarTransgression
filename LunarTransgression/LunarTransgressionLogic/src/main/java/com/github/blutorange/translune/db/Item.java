@@ -17,12 +17,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.common.IAccessible;
+import com.github.blutorange.translune.logic.EActionTarget;
 import com.github.blutorange.translune.logic.EItemEffect;
+import com.github.blutorange.translune.logic.ITargettable;
 import com.github.blutorange.translune.util.Constants;
 
 @Entity
 @Table(name = "item")
-public class Item extends AbstractStoredEntity {
+public class Item extends AbstractStoredEntity implements ITargettable {
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "effect", unique = false, nullable = false, updatable = false)
@@ -43,6 +45,11 @@ public class Item extends AbstractStoredEntity {
 	@Column(name = "priority", nullable = false, unique = false, updatable = false)
 	private int priority = Constants.PRIORITY_ITEM;
 
+	@NotNull
+	@Enumerated(value = EnumType.STRING)
+	@Column(name = "target", nullable = false, unique = false, updatable = false)
+	private EActionTarget target = EActionTarget.OPPONENTS_FIELD;
+
 	@Deprecated
 	public Item() {
 	}
@@ -51,6 +58,11 @@ public class Item extends AbstractStoredEntity {
 		this.name = name;
 		this.effect = effect;
 		this.power = power;
+	}
+
+	@Override
+	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
+		// no associations
 	}
 
 	/**
@@ -91,14 +103,8 @@ public class Item extends AbstractStoredEntity {
 		return priority;
 	}
 
-	@Override
-	public @NonNull String toString() {
-		return String.format("Item(%s,%d,%s)", name, Integer.valueOf(power), effect);
-	}
-
-	@Override
-	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
-		// no associations
+	public EActionTarget getTarget() {
+		return target;
 	}
 
 	/**
@@ -131,5 +137,14 @@ public class Item extends AbstractStoredEntity {
 	 */
 	void setPriority(final int priority) {
 		this.priority = priority;
+	}
+
+	void setTarget(EActionTarget target) {
+		this.target = target;
+	}
+
+	@Override
+	public @NonNull String toString() {
+		return String.format("Item(%s,%d,%s)", name, Integer.valueOf(power), effect);
 	}
 }

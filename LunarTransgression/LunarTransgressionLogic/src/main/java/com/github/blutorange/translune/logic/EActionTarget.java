@@ -7,7 +7,7 @@ import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.socket.BattleCommand;
 import com.google.common.collect.ObjectArrays;
 
-public enum ESkillTarget {
+public enum EActionTarget {
 	/**
 	 * Move targets all characters of the opponent. Player must not specify a
 	 * target.
@@ -76,7 +76,7 @@ public enum ESkillTarget {
 		@Override
 		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
-			return ESkillTarget.ALL_POKEMON.getTargets(context, battleCommand, player, character);
+			return EActionTarget.ALL_POKEMON.getTargets(context, battleCommand, player, character);
 		}
 	},
 

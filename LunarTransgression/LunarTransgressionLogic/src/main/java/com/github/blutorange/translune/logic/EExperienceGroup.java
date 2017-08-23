@@ -39,4 +39,24 @@ public enum EExperienceGroup {
 		return cumulated[level-1];
 	}
 	
+	public int getLevelForExperience(int experience) {
+		if (experience < 0)
+			return 1;
+		if (experience >= cumulated[99])
+			return 100;
+		// binary search
+		int left = 1;
+		int right = 100;
+		while (right - left > 1) {
+			int mid = (right+left)/2;
+			if (experience >= cumulated[mid-1])
+				left = mid;
+			else
+				right = mid;
+		}
+		if (experience >= cumulated[right-1])
+			return right;
+		return left;
+
+	}
 }

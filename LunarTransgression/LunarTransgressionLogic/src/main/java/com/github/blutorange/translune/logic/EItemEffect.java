@@ -7,7 +7,7 @@ import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 
 public enum EItemEffect implements IItemExecutor {
-	HEAL(new ItemExecutorHeal());
+	HEAL(new ItemExecutorSingleHeal());
 
 	private IItemExecutor executor;
 

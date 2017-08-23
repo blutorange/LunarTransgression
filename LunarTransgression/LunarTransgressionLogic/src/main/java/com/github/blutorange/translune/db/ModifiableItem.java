@@ -1,5 +1,6 @@
 package com.github.blutorange.translune.db;
 
+import com.github.blutorange.translune.logic.EActionTarget;
 import com.github.blutorange.translune.logic.EItemEffect;
 
 public class ModifiableItem extends ModifiableEntity<Item> {
@@ -17,5 +18,9 @@ public class ModifiableItem extends ModifiableEntity<Item> {
 
 	public void setPriority(final int priority) {
 		entity.setPriority(priority);
+	}
+
+	public void setTarget(final EActionTarget target) {
+		entity.setTarget(target);
 	}
 }

@@ -19,12 +19,13 @@ import org.apache.commons.lang3.StringUtils;
 import com.github.blutorange.common.IAccessible;
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.ESkillEffect;
-import com.github.blutorange.translune.logic.ESkillTarget;
+import com.github.blutorange.translune.logic.ITargettable;
+import com.github.blutorange.translune.logic.EActionTarget;
 import com.github.blutorange.translune.util.Constants;
 
 @Entity
 @Table(name = "skill")
-public class Skill extends AbstractStoredEntity {
+public class Skill extends AbstractStoredEntity implements ITargettable {
 	@Min(0)
 	@Max(Constants.MAX_ACCURACY)
 	@Column(name = "accuracy", nullable = false, unique = false, updatable = false)
@@ -70,7 +71,7 @@ public class Skill extends AbstractStoredEntity {
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "target", nullable = false, unique = false, updatable = false)
-	private ESkillTarget target = ESkillTarget.OPPONENTS_FIELD;
+	private EActionTarget target = EActionTarget.OPPONENTS_FIELD;
 
 	/**
 	 * @return the accuracy
@@ -141,7 +142,7 @@ public class Skill extends AbstractStoredEntity {
 	/**
 	 * @return the target
 	 */
-	public ESkillTarget getTarget() {
+	public EActionTarget getTarget() {
 		return target;
 	}
 
@@ -223,7 +224,7 @@ public class Skill extends AbstractStoredEntity {
 	 * @param target
 	 *            the target to set
 	 */
-	void setTarget(final ESkillTarget target) {
+	void setTarget(final EActionTarget target) {
 		this.target = target;
 	}
 }
