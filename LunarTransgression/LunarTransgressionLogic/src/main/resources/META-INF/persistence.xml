@@ -11,6 +11,7 @@
 		<class>com.github.blutorange.translune.db.Item</class>
 		<class>com.github.blutorange.translune.db.Player</class>
 		<class>com.github.blutorange.translune.db.Skill</class>
+		<class>com.github.blutorange.translune.db.Resource</class>
 		
 		<properties>
 			<property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>

@@ -84,7 +84,7 @@ public class CharacterState extends AbstractStoredEntity {
 	@Column(name = "level", nullable = false, unique = false)
 	private int level;
 
-	// TODO Make nature an entity, so that they are not fixed at compile time.
+	// TODO [LOW] Make nature an entity, so that they are not fixed at compile time.
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "nature", nullable = false, unique = false, updatable = false, insertable = true)

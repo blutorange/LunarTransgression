@@ -1,13 +1,16 @@
 package com.github.blutorange.translune.logic;
 
+import com.github.blutorange.translune.db.CharacterState;
+
 public interface IComputedStatus {
 	int getComputedAccuracy();
 	int getComputedEvasion();
-	int getComputedHp();
+	int getComputedMaxHp();
 	int getComputedMagicalAttack();
 	int getComputedMagicalDefense();
-	int getComputedMp();
+	int getComputedMaxMp();
 	int getComputedPhysicalAttack();
 	int getComputedPhysicalDefense();
 	int getComputedSpeed();
+	CharacterState getCharacterState();
 }

@@ -17,10 +17,10 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 
 import com.github.blutorange.common.IAccessible;
+import com.github.blutorange.translune.logic.EActionTarget;
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.ESkillEffect;
 import com.github.blutorange.translune.logic.ITargettable;
-import com.github.blutorange.translune.logic.EActionTarget;
 import com.github.blutorange.translune.util.Constants;
 
 @Entity
@@ -40,6 +40,9 @@ public class Skill extends AbstractStoredEntity implements ITargettable {
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "element", nullable = false, unique = false, updatable = false)
 	private EElement element = EElement.PHYSICAL;
+
+	@Column(name = "highcritical", nullable = false, unique = false, updatable = false)
+	private boolean highCritical;
 
 	@Column(name = "isphysical", nullable = false, unique = false, updatable = false)
 	private boolean isPhysical;
@@ -100,6 +103,13 @@ public class Skill extends AbstractStoredEntity implements ITargettable {
 	}
 
 	/**
+	 * @return the highCritical
+	 */
+	public boolean getHighCritical() {
+		return highCritical;
+	}
+
+	/**
 	 * @return the isPhysical
 	 */
 	public boolean getIsPhysical() {
@@ -142,6 +152,7 @@ public class Skill extends AbstractStoredEntity implements ITargettable {
 	/**
 	 * @return the target
 	 */
+	@Override
 	public EActionTarget getTarget() {
 		return target;
 	}
@@ -178,6 +189,14 @@ public class Skill extends AbstractStoredEntity implements ITargettable {
 	 */
 	void setElement(final EElement element) {
 		this.element = element;
+	}
+
+	/**
+	 * @param highCritical
+	 *            the highCritical to set
+	 */
+	void setHighCritical(final boolean highCritical) {
+		this.highCritical = highCritical;
 	}
 
 	/**

@@ -18,7 +18,7 @@ public class EntityStore implements IEntityStore {
 		emf.getMetamodel().getEntities().forEach(entity -> {
 			final Class<?> entityClazz = entity.getJavaType();
 			if (!AbstractStoredEntity.class.isAssignableFrom(entityClazz))
-				throw new RuntimeException("all entities must extend AbstractEntity");
+				return;
 			@SuppressWarnings("unchecked")
 			final Class<? extends AbstractStoredEntity> abstractEntityClazz = (Class<? extends AbstractStoredEntity>)entityClazz;
 			final EEntityMeta entityType = EEntityMeta.valueOf(abstractEntityClazz);

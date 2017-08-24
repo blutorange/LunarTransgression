@@ -25,6 +25,7 @@ public interface LogicComponent {
 	IBattleProcessing battleProcessing();
 	LocalizationBundle localizationBundle();
 	ILocalizationBundle iLocalizationBundle();
+
 	@Named("default") Scheduler defaultScheduler();
 	@Named("secure") Random randomSecure();
 	@Named("basic") Random randomBasic();

@@ -1,11 +1,14 @@
 package com.github.blutorange.translune.db;
 
+import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.quartz.JobExecutionException;
 
 import com.github.blutorange.common.ThrowingConsumer;
+import com.github.blutorange.common.ThrowingFunction;
 
 public interface ILunarDatabaseManager {
 
@@ -81,6 +84,15 @@ public interface ILunarDatabaseManager {
 			throw new RuntimeException("mock - injection probably failed");
 		}
 
+		@Override
+		public <@Nullable T> @Nullable T withEm(final boolean transactional, final ThrowingFunction<EntityManager, T, Exception> runnable) {
+			throw new RuntimeException("mock - injection probably failed");
+		}
+
+		@Override
+		public void runPeriodically() {
+			throw new RuntimeException("mock - injection probably failed");
+		}
 	}
 
 	<T extends AbstractStoredEntity, @NonNull S extends ModifiableEntity<T>, E extends Exception> void modify(
@@ -101,6 +113,8 @@ public interface ILunarDatabaseManager {
 
 	<@NonNull T extends AbstractStoredEntity> long count(final Class<T> clazz);
 
+	void runPeriodically() throws JobExecutionException;
+
 	void createSchema() throws PersistenceException;
 
 	<@NonNull T extends AbstractStoredEntity> void persist(T entity);
@@ -112,4 +126,7 @@ public interface ILunarDatabaseManager {
 	<@NonNull T extends AbstractStoredEntity> T[] findRandom(Class<T> clazz, int amount);
 
 	<@NonNull T extends AbstractStoredEntity> T[] findRandom(EEntityMeta entityMeta, int amount);
+
+	@Nullable
+	<@Nullable T> T withEm(boolean transactional, ThrowingFunction<EntityManager, T, Exception> runnable);
 }

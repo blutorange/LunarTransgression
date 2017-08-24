@@ -1,10 +1,8 @@
 package com.github.blutorange.translune.logic;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.github.blutorange.translune.db.Item;
-import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 
 public class BattleCommandHandlerItem extends ABattleCommandHandler {
@@ -31,9 +29,8 @@ public class BattleCommandHandlerItem extends ABattleCommandHandler {
 	}
 
 	@Override
-	public void execute(final List<BattleAction> battleActionsMe,
-			final List<BattleAction> battleActionsHim) {
-		item.getEffect().execute(item, context, battleCommand, battleActionsMe, battleActionsHim, player, character);
+	public void execute() {
+		item.getEffect().execute(item, context, battleCommand, player, character);
 	}
 
 	@Override

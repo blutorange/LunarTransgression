@@ -24,26 +24,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.hibernate.Session;
-import org.quartz.Job;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.quartz.ScheduleBuilder;
 import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SimpleScheduleBuilder;
-import org.quartz.SimpleTrigger;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
 import org.slf4j.Logger;
 
 import com.github.blutorange.common.ThrowingConsumer;
 import com.github.blutorange.common.ThrowingFunction;
-import com.github.blutorange.translune.db.LunarDatabaseManager.IChange;
 import com.github.blutorange.translune.ic.Classed;
-import com.github.blutorange.translune.ic.ComponentFactory;
-import com.github.blutorange.translune.util.Constants;
 
 @Singleton
 public class LunarDatabaseManager implements ILunarDatabaseManager {
@@ -66,15 +53,6 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 		changeList = Collections.synchronizedList(new ArrayList<>());
 	}
 
-	public void init() {
-		try {
-			addJobSaveDb();
-		}
-		catch (final SchedulerException e) {
-			throw new RuntimeException("could not create job(s)", e);
-		}
-	}
-
 	@Override
 	public void shutdown() {
 		try {
@@ -85,16 +63,6 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 		catch (final Exception e) {
 			logger.error("failed to save pending data to the database", e);
 		}
-	}
-
-	private void addJobSaveDb() throws SchedulerException {
-		logger.debug("adding job saveDb");
-		final JobDetail jobDetail = JobBuilder.newJob(SaveDb.class).withIdentity("jobSaveDb", "db").build();
-		final ScheduleBuilder<SimpleTrigger> scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-				.withIntervalInMinutes(Constants.CONFIG_DATABASE_SAVE_MINUTES).repeatForever();
-		final Trigger jobTrigger = TriggerBuilder.newTrigger().withIdentity("triggerSaveDb", "db").startNow()
-				.withSchedule(scheduleBuilder).build();
-		scheduler.scheduleJob(jobDetail, jobTrigger);
 	}
 
 	@Override
@@ -268,7 +236,8 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 	}
 
 	@Nullable
-	private <T> T withEm(final boolean transactional, final ThrowingFunction<EntityManager, T, Exception> runnable) {
+	@Override
+	public <@Nullable T> T withEm(final boolean transactional, final ThrowingFunction<EntityManager, T, Exception> runnable) {
 		logger.debug("opening entity manager");
 		final EntityManager em = entityManagerFactory.createEntityManager();
 		try {
@@ -327,24 +296,6 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 		}
 	}
 
-	public static class SaveDb implements Job {
-		@Override
-		public void execute(final JobExecutionContext context) throws JobExecutionException {
-			LunarDatabaseManager ldm;
-			try {
-				ldm = (LunarDatabaseManager)(ComponentFactory.getDatabaseComponent().iLunarDatabaseManager());
-			}
-			catch (final ClassCastException e) {
-				throw new JobExecutionException("failed to acquire lunar database manager", e);
-			}
-			if (ldm == null || ldm.changeList.isEmpty())
-				return;
-			synchronized (ldm.entityStore) {
-				ldm.saveChangesToDatabase();
-			}
-		}
-	}
-
 	protected static interface IChange {
 		void perform(EntityManager em, Session session);
 	}
@@ -388,6 +339,15 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 			if (!session.contains(entity))
 				session.saveOrUpdate(entity);
 			session.delete(entity);
+		}
+	}
+
+	@Override
+	public void runPeriodically() throws JobExecutionException {
+		if (changeList.isEmpty())
+			return;
+		synchronized (entityStore) {
+			saveChangesToDatabase();
 		}
 	}
 }

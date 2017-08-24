@@ -1,7 +1,7 @@
-package com.github.blutorange.translune;
+package com.github.blutorange.translune.util;
 
+import com.github.blutorange.common.CannotPerformOperationException;
 import com.github.blutorange.common.PasswordStorage;
-import com.github.blutorange.common.PasswordStorage.CannotPerformOperationException;
 
 public class HashPassword {
 	public static void main(final String[] args) {

@@ -55,10 +55,14 @@ public final class Constants {
 	public static final int PRIORITY_ITEM = 2;
 	public static final int PRIORITY_DEFEND = MAX_PRIORITY;
 
-	// TODO move this to the config file (CustomProperties)
+	// TODO [LOW] move this to the config file (CustomProperties)
 	public static final int CONFIG_DATABASE_SAVE_MINUTES = 10;
 
 	public static final String QUARTZ_KEY_LDM = "ldm";
 
-
+	public static final String IMPORT_DIR_CHARACTER_CRY = "character-cry";
+	public static final String IMPORT_DIR_CHARACTER_IMG = "character-img";
+	public static final String IMPORT_FILE_CHARACTER = "character.csv";
+	public static final String IMPORT_FILE_CHARACTER_SKILL = "character_skill.csv";
+	public static final String IMPORT_FILE_SKILL = "skill.csv";
 }

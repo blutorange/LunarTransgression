@@ -24,6 +24,11 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 	}
 
 	@Override
+	public BattleStatus getBattleStatus() {
+		return battleStatus;
+	}
+
+	@Override
 	public int getComputedBattleAccuracy() {
 		return computedBattleAccuracy();
 	}
@@ -34,8 +39,8 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 	}
 
 	@Override
-	public int getComputedBattleHp() {
-		return computedBattleHp();
+	public int getComputedBattleHpAbsolute() {
+		return battleStatus.getHp() * getComputedBattleMaxHp() / Constants.MAX_RELATIVE_HP;
 	}
 
 	@Override
@@ -49,8 +54,18 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 	}
 
 	@Override
-	public int getComputedBattleMp() {
-		return computedBattleMp();
+	public int getComputedBattleMaxHp() {
+		return computedBattleMaxHp();
+	}
+
+	@Override
+	public int getComputedBattleMaxMp() {
+		return computedBattleMaxMp();
+	}
+
+	@Override
+	public int getComputedBattleMpAbsolute() {
+		return battleStatus.getMp() * getComputedBattleMaxMp() / Constants.MAX_RELATIVE_MP;
 	}
 
 	@Override
@@ -68,6 +83,16 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 		return computedBattleSpeed();
 	}
 
+	@Override
+	public void setHpAbsolute(final int absoluteHp) {
+		battleStatus.setHp(absoluteHp * Constants.MAX_RELATIVE_HP / getComputedBattleMaxHp());
+	}
+
+	@Override
+	public void setMpAbsolute(final int absoluteMp) {
+		battleStatus.setMp(absoluteMp * Constants.MAX_RELATIVE_MP / getComputedBattleMaxMp());
+	}
+
 	private int computed(final int base, final int stage, final int max, @Nullable final IntToIntFunction condition) {
 		final int pre = base * stageMultiplierNumerator[stage] / stageMultiplierDenominator[stage];
 		final int post = condition == null ? pre : condition.apply(pre);
@@ -83,18 +108,14 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 
 	private int computedBattleAccuracy() {
 		final EStatusCondition condition = battleStatus.getStatusConditions();
-		return computed(super.getComputedAccuracy(), battleStatus.getStageAccuracy(), Constants.MAX_ACCURACY,
+		return computedAccEv(super.getComputedAccuracy(), battleStatus.getStageAccuracy(), Constants.MAX_ACCURACY,
 				condition != null ? condition::adjustAccuracy : null);
 	}
 
 	private int computedBattleEvasion() {
 		final EStatusCondition condition = battleStatus.getStatusConditions();
-		return computed(super.getComputedEvasion(), battleStatus.getStageEvasion(), Constants.MAX_EVASION,
+		return computedAccEv(super.getComputedEvasion(), battleStatus.getStageEvasion(), Constants.MAX_EVASION,
 				condition != null ? condition::adjustEvasion : null);
-	}
-
-	private int computedBattleHp() {
-		return super.getComputedHp();
 	}
 
 	private int computedBattleMagicalAttack() {
@@ -109,8 +130,12 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 				Constants.MAX_MAGICAL_DEFENSE, condition != null ? condition::adjustMagicalDefense : null);
 	}
 
-	private int computedBattleMp() {
-		return super.getComputedMp();
+	private int computedBattleMaxHp() {
+		return super.getComputedMaxHp();
+	}
+
+	private int computedBattleMaxMp() {
+		return super.getComputedMaxMp();
 	}
 
 	private int computedBattlePhysicalAttack() {
@@ -129,5 +154,19 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 		final EStatusCondition condition = battleStatus.getStatusConditions();
 		return computed(super.getComputedSpeed(), battleStatus.getStageSpeed(), Constants.MAX_SPEED,
 				condition != null ? condition::adjustSpeed : null);
+	}
+
+	@Override
+	public void modifyHp(final int amountAbsolute) {
+		final int currentHp = getComputedBattleHpAbsolute();
+		final int newHp = currentHp + amountAbsolute;
+		setHpAbsolute(newHp);
+	}
+
+	@Override
+	public void modifyMp(final int amountAbsolute) {
+		final int currentMp = getComputedBattleMpAbsolute();
+		final int newMp = currentMp + amountAbsolute;
+		setMpAbsolute(newMp);
 	}
 }

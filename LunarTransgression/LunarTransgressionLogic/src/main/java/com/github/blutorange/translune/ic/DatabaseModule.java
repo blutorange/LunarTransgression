@@ -33,7 +33,6 @@ public class DatabaseModule {
 	static ILunarDatabaseManager provideLunarDatabaseManager() {
 		final LunarDatabaseManager ldm  = new LunarDatabaseManager();
 		ComponentFactory.getDatabaseComponent().inject(ldm);
-		ldm.init();
 		return ldm;
 	}
 }

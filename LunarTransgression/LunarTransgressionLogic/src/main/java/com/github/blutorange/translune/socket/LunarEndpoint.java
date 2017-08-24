@@ -18,12 +18,12 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.slf4j.Logger;
 
-import com.github.blutorange.translune.CustomProperties;
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.logic.IInitIdStore;
 import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.message.MessageUnknown;
+import com.github.blutorange.translune.util.CustomProperties;
 
 /**
  * <p>
@@ -118,7 +118,7 @@ public class LunarEndpoint {
 
 	@OnClose
 	public void close(final Session session, final CloseReason closeReason) {
-		//TODO Remove open invitations and inform the other user
+		//TODO [HIGH] Remove open invitations and inform the other user
 		if (logger.isDebugEnabled()) {
 			logger.debug("closing lunar session " + session.getId());
 			logger.debug(

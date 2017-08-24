@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.blutorange.translune.serial.JsoniterConfig;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.spi.DecodingMode;
 

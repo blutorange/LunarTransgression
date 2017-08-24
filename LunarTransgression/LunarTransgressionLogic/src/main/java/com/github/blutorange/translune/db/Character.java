@@ -26,6 +26,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.common.IAccessible;
 import com.github.blutorange.translune.logic.EElement;
@@ -235,7 +236,8 @@ public class Character extends AbstractStoredEntity {
 		return speed;
 	}
 
-	public Set<EElement> getUnmodifiableElements() {
+	@NonNull
+	public Set<@NonNull EElement> getUnmodifiableElements() {
 		return elements;
 	}
 

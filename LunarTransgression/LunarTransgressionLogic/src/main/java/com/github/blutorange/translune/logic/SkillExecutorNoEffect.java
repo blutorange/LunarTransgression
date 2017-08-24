@@ -1,7 +1,5 @@
 package com.github.blutorange.translune.logic;
 
-import java.util.List;
-
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.github.blutorange.translune.db.CharacterState;
@@ -14,12 +12,11 @@ public enum SkillExecutorNoEffect implements ISkillExecutor {
 
 	@Override
 	public void execute(final Skill skill, final IBattleContext context, final BattleCommand battleCommand,
-			final List<BattleAction> battleActionsMe, final List<BattleAction> battleActionsHim, final int player,
-			final int character) {
-		final CharacterState cs = context.getCharacterState(player, character);
-		final BattleAction action = new BattleAction(cs.getId(), ArrayUtils.EMPTY_STRING_ARRAY,
-				String.format("%s used %s.", cs.getNickname(), skill.getName()), "But nothing happended.");
-		battleActionsMe.add(action);
-		battleActionsHim.add(action);
+			final int player, final int character) {
+		final CharacterState user = context.getCharacterState(player, character);
+		final BattleAction action = new BattleAction(user.getId(), ArrayUtils.EMPTY_STRING_ARRAY,
+				String.format("%s used %s.", user.getNickname(), skill.getName()), "But nothing happended.");
+		context.getBattleActions(player).add(action);
+		context.getBattleActionsOpponent(player).add(action);
 	}
 }

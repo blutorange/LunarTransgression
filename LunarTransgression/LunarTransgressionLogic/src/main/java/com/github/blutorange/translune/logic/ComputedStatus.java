@@ -26,13 +26,14 @@ class ComputedStatus implements IComputedStatus {
 	public int getComputedAccuracy() {
 		return accuracy;
 	}
+
 	@Override
 	public int getComputedEvasion() {
 		return evasion;
 	}
 
 	@Override
-	public int getComputedHp() {
+	public int getComputedMaxHp() {
 		return hp;
 	}
 
@@ -47,7 +48,7 @@ class ComputedStatus implements IComputedStatus {
 	}
 
 	@Override
-	public int getComputedMp() {
+	public int getComputedMaxMp() {
 		return mp;
 	}
 
@@ -99,9 +100,10 @@ class ComputedStatus implements IComputedStatus {
 				characterState.getIvHp(), Constants.MAX_HP, nature::adjustHp);
 	}
 
-	private int computedHpMp(final int base, final int level, final int iv, final int max, final IntToIntFunction nature) {
+	private int computedHpMp(final int base, final int level, final int iv, final int max,
+			final IntToIntFunction nature) {
 		final int releaseCount = characterState.getPlayer().getReleasedCharacterStatesCount();
-		final int pre = ((((2*base+iv)*(level+releaseCount/4))/100)+level+10);
+		final int pre = ((((2 * base + iv) * (level + releaseCount / 4)) / 100) + level + 10);
 		final int post = nature.apply(pre);
 		return MathUtil.clamp(post, 0, max);
 	}
@@ -140,5 +142,10 @@ class ComputedStatus implements IComputedStatus {
 		final ENature nature = characterState.getNature();
 		return computed(characterState.getCharacter().getSpeed(), characterState.getLevel(),
 				characterState.getIvSpeed(), Constants.MAX_SPEED, nature::adjustSpeed);
+	}
+
+	@Override
+	public CharacterState getCharacterState() {
+		return characterState;
 	}
 }

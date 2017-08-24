@@ -8,16 +8,24 @@ import com.github.blutorange.translune.socket.ILunarPayload;
 import com.jsoniter.annotation.JsonProperty;
 
 public class MessageBattleStepped implements ILunarPayload {
-	@JsonProperty(required = true, implementation = BattleAction.class)
+	@JsonProperty(required = true)
 	private BattleAction[] battleResults;
+
+	/**
+	 * 0 iff the battle is not over. 1 iff the player won. -1 iff the player
+	 * lost.
+	 */
+	@JsonProperty(required = true)
+	private int causesEnd;
 
 	@Deprecated
 	public MessageBattleStepped() {
 		battleResults = new BattleAction[0];
 	}
 
-	public MessageBattleStepped(final BattleAction[] battleResults) {
+	public MessageBattleStepped(final BattleAction[] battleResults, final int causesEnd) {
 		this.battleResults = battleResults;
+		this.causesEnd = causesEnd;
 	}
 
 	/**
@@ -27,16 +35,31 @@ public class MessageBattleStepped implements ILunarPayload {
 		return battleResults;
 	}
 
+	@Override
+	public ELunarMessageType getMessageType() {
+		return ELunarMessageType.BATTLE_STEPPED;
+	}
+
+	/**
+	 * @return the winLoseState
+	 */
+	public int getCausesEnd() {
+		return causesEnd;
+	}
+
 	/**
 	 * @param battleResults
 	 *            the battleResults to set
 	 */
-	public void setBattleResults(final BattleAction@Nullable[] battleResults) {
+	public void setBattleResults(final BattleAction @Nullable [] battleResults) {
 		this.battleResults = battleResults != null ? battleResults : new BattleAction[0];
 	}
 
-	@Override
-	public ELunarMessageType getMessageType() {
-		return ELunarMessageType.BATTLE_STEPPED;
+	/**
+	 * @param causesEnd
+	 *            the winLoseState to set
+	 */
+	public void setCausesEnd(final int causesEnd) {
+		this.causesEnd = causesEnd;
 	}
 }

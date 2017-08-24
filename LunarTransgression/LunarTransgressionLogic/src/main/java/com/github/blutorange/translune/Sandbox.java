@@ -1,7 +1,5 @@
 package com.github.blutorange.translune;
 
-import javax.servlet.ServletContextListener;
-
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.Item;
 import com.github.blutorange.translune.db.ModifiableItem;
@@ -15,15 +13,15 @@ public class Sandbox {
 //		final ServletContextListener scl = new LunarServletContextListener();
 //		scl.contextInitialized(null);
 		try {
-			exp();
+			schema();
 		}
 		finally {
 //			scl.contextDestroyed(null);
 		}
 	}
-	
+
 	static void exp() {
-		EExperienceGroup g = EExperienceGroup.SLOW;
+		final EExperienceGroup g = EExperienceGroup.SLOW;
 		System.err.println(g.getLevelForExperience(6141));
 	}
 

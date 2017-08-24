@@ -52,14 +52,14 @@ public class BattleStatus {
 	}
 
 	/**
-	 * @return the hp
+	 * @return The current HP, relative. The denominator is {@link Constants#MAX_RELATIVE_HP}
 	 */
 	public int getHp() {
 		return hp;
 	}
 
 	/**
-	 * @return the mp
+	 * @return The current MP, relative. The denominator is {@link Constants#MAX_RELATIVE_MP}
 	 */
 	public int getMp() {
 		return mp;
@@ -126,7 +126,7 @@ public class BattleStatus {
 	 * @param hp
 	 *            the hp to set
 	 */
-	public void setCurrentHp(final int hp) {
+	public void setHp(final int hp) {
 		this.hp = MathUtil.clamp(hp, 0, Constants.MAX_RELATIVE_HP);
 	}
 
@@ -134,7 +134,7 @@ public class BattleStatus {
 	 * @param mp
 	 *            the mp to set
 	 */
-	public void setCurrentMp(final int mp) {
+	public void setMp(final int mp) {
 		this.mp = MathUtil.clamp(mp, 0, Constants.MAX_RELATIVE_MP);
 	}
 

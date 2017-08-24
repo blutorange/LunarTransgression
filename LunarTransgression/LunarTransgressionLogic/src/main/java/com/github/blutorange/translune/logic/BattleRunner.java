@@ -16,7 +16,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 
-import com.github.blutorange.translune.CustomProperties;
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.Item;
@@ -28,8 +27,10 @@ import com.github.blutorange.translune.message.MessageBattlePrepared;
 import com.github.blutorange.translune.message.MessageBattleStepped;
 import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
+import com.github.blutorange.translune.socket.BattleResult;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.ISocketProcessing;
+import com.github.blutorange.translune.util.CustomProperties;
 
 public class BattleRunner implements IBattleRunner {
 	private boolean battleDone;
@@ -129,21 +130,6 @@ public class BattleRunner implements IBattleRunner {
 		}
 	}
 
-	// private IBattleCommandHandler[] makeCommandHandler(final int playerIndex,
-	// final BattleCommand... battleCommands) {
-	// final IBattleCommandHandler[] handlers = new IBattleCommandHandler[4];
-	// final String[] states = characterStates.get(playerIndex);
-	// for (int i = 4; i-->0;) {
-	// final CharacterState characterState =
-	// databaseManager.find(CharacterState.class, states[i]);
-	// if (characterState == null)
-	// throw new IllegalArgumentException("Character state does not exist: " +
-	// states[i]);
-	// IBattleCommandHandler.create(battleCommands[i], characterState);
-	// }
-	// return handlers;
-	// }
-
 	private static void assertBattleStep(final IBattleCommandHandler[] commands) {
 		// nothing to assert yet
 	}
@@ -183,17 +169,6 @@ public class BattleRunner implements IBattleRunner {
 		for (final String item : items)
 			if (!player.getUnmodifiableItems().contains(databaseManager.find(Item.class, item)))
 				throw new IllegalArgumentException("Player does not own this item: " + item);
-		// for (final String character : characters)
-		// for (final CharacterState cs :
-		// player.getCharacterStatesUnmodifiable())
-		// if (!character.equals(cs.getPrimaryKey()))
-		// throw new IllegalArgumentException("Player does not own this
-		// character: " + character);
-		// for (final String item : items)
-		// for (final Item i : player.getItemsUnmodifiable())
-		// if (!item.equals(i.getPrimaryKey()))
-		// throw new IllegalArgumentException("Player does not own this item: "
-		// + item);
 	}
 
 	private void battlePreparations() {
@@ -274,33 +249,34 @@ public class BattleRunner implements IBattleRunner {
 			cancelBattle("The other player did enter battle commands in time.");
 			return;
 		}
-		processBattle();
-		checkBattleEnd();
+		final int winner = processBattle();
+		if (winner >= 0)
+			processBattleEnd(winner);
 	}
 
-	private void checkBattleEnd() {
-		final int winner = battleProcessing.checkBattleEnd(battleStatus);
-		if (winner >= 0) {
-			battleDone = true;
-			battleStore.addLoot(players[winner], characterStates.get(winner), items.get(winner));
-			endBattle();
-			if (winner == 0)
-				setGameStateForBoth(EGameState.BATTLE_LOOT, EGameState.IN_BATTLE);
-			else
-				setGameStateForBoth(EGameState.IN_BATTLE, EGameState.BATTLE_LOOT);
-			informPlayerAboutEnd(0, winner == 0);
-			informPlayerAboutEnd(0, winner == 1);
-		}
+	private void processBattleEnd(final int winner) {
+		battleDone = true;
+		final BattleResult[][] battleResults = battleProcessing.distributeExperience(players, characterStates, battleStatus);
+		battleStore.addLoot(players[winner], characterStates.get(winner), items.get(winner));
+		endBattle();
+		if (winner == 0)
+			setGameStateForBoth(EGameState.BATTLE_LOOT, EGameState.IN_BATTLE);
+		else
+			setGameStateForBoth(EGameState.IN_BATTLE, EGameState.BATTLE_LOOT);
+		informPlayerAboutEnd(0, winner == 0, battleResults[0]);
+		informPlayerAboutEnd(0, winner == 1, battleResults[1]);
 	}
 
-	private void processBattle() {
+	private int processBattle() {
 		@SuppressWarnings("null")
 		final List<@NonNull BattleCommand[]> c = (List<BattleCommand[]>) commands;
 		final BattleAction[][] battleResults = battleProcessing.simulateBattleStep(c, players, characterStates, items,
 				battleStatus, effectorStack, round);
 		clearCommands();
-		informPlayerAboutStepped(0, battleResults);
-		informPlayerAboutStepped(1, battleResults);
+		final int winner = battleProcessing.checkBattleEnd(battleStatus);
+		informPlayerAboutStepped(0, winner, battleResults);
+		informPlayerAboutStepped(1, winner, battleResults);
+		return winner;
 	}
 
 	private void clearCommands() {
@@ -345,12 +321,12 @@ public class BattleRunner implements IBattleRunner {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattleCancelled(message));
 	}
 
-	private void informPlayerAboutEnd(final int playerIndex, final boolean isVictory) {
+	private void informPlayerAboutEnd(final int playerIndex, final boolean isVictory, final BattleResult[] battleResults) {
 		// We already checked when battle processing began.
 		@SuppressWarnings("resource")
 		final Session session = sessionStore.retrieve(players[playerIndex]);
 		if (session != null)
-			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattleEnded(isVictory));
+			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattleEnded(isVictory, battleResults));
 	}
 
 	private void informPlayerAboutPrepared(final int playerIndex) {
@@ -361,13 +337,14 @@ public class BattleRunner implements IBattleRunner {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattlePrepared());
 	}
 
-	private void informPlayerAboutStepped(final int playerIndex, final BattleAction[][] battleResults) {
+	private void informPlayerAboutStepped(final int playerIndex, final int winner, final BattleAction[][] battleResults) {
+		final int causesEnd = winner < 0 ? 0 : winner == playerIndex ? 1 : -1;
 		final BattleAction[] br = battleResults[playerIndex];
 		if (br == null)
 			return;
 		@SuppressWarnings("resource")
 		final Session session = sessionStore.retrieve(players[playerIndex]);
 		if (session != null)
-			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattleStepped(br));
+			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattleStepped(br, causesEnd));
 	}
 }

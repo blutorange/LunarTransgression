@@ -1,8 +1,5 @@
 package com.github.blutorange.translune.logic;
 
-import java.util.List;
-
-import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 import com.github.blutorange.translune.util.Constants;
 
@@ -23,7 +20,7 @@ public class BattleCommandHandlerDefend extends ABattleCommandHandler {
 	}
 
 	@Override
-	public void execute(final List<BattleAction> battleActionsMe, final List<BattleAction> battleActionsHim) {
+	public void execute() {
 		context.pushBattleEffector(new EffectorTurnTimed(1,
 				new EffectorBattleStatus(bs -> bs.changeStagePhysicalDefense(Constants.BATTLE_DEFEND_STAGE_INCREASE),
 						player, character,

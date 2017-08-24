@@ -2,7 +2,7 @@ package com.github.blutorange.translune.gui;
 
 public enum EAdminPage {
 	DATABASE("/public/admin_database.xhtml"),
-	CHARACTER("/public/admin_character.xhtml"),
+	CHARACTER("/public/admin_manage.xhtml"),
 	GAME_STATS("/public/admin_gamestats.xhtml"),
 	SERVER_STATUS("/public/admin_serverstatus.xhtml"),
 	;

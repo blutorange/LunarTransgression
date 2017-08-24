@@ -5,6 +5,7 @@ import java.util.List;
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
+import com.github.blutorange.translune.socket.BattleResult;
 
 public interface IBattleProcessing {
 	/**
@@ -31,4 +32,7 @@ public interface IBattleProcessing {
 	IComputedBattleStatus getComputedStatus(CharacterState characterState, BattleStatus battleStatus);
 
 	IComputedBattleStatus getComputedStatus(String characterState, BattleStatus status);
+
+	BattleResult[][] distributeExperience(String[] players, List<String[]> characterStates,
+			BattleStatus[][] battleStatus);
 }

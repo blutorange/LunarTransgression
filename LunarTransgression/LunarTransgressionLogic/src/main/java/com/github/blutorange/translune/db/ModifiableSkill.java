@@ -1,8 +1,8 @@
 package com.github.blutorange.translune.db;
 
+import com.github.blutorange.translune.logic.EActionTarget;
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.ESkillEffect;
-import com.github.blutorange.translune.logic.EActionTarget;
 
 public class ModifiableSkill extends ModifiableEntity<Skill> {
 	public void setAccuracy(final int accuracy) {
@@ -29,8 +29,12 @@ public class ModifiableSkill extends ModifiableEntity<Skill> {
 		entity.setPower(power);
 	}
 
-	public void setTtarget(final EActionTarget target) {
+	public void setTarget(final EActionTarget target) {
 		entity.setTarget(target);
+	}
+
+	void setHighCritical(final boolean highCritical) {
+		entity.setHighCritical(highCritical);
 	}
 
 	void setMp(final int mp) {

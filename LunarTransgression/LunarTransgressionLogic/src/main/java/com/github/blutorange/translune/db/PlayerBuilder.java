@@ -8,8 +8,8 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.github.blutorange.common.CannotPerformOperationException;
 import com.github.blutorange.common.PasswordStorage;
-import com.github.blutorange.common.PasswordStorage.CannotPerformOperationException;
 import com.github.blutorange.translune.ic.ComponentFactory;
 
 public class PlayerBuilder {

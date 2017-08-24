@@ -4,13 +4,22 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.ScheduleBuilder;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.SimpleScheduleBuilder;
+import org.quartz.SimpleTrigger;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.ic.ComponentFactory;
+import com.github.blutorange.translune.job.SaveDb;
+import com.github.blutorange.translune.util.Constants;
 
 @WebListener(value="Listener for the lunar application")
 public class LunarServletContextListener implements ServletContextListener {
@@ -21,11 +30,22 @@ public class LunarServletContextListener implements ServletContextListener {
 		final Scheduler defaultScheduler = ComponentFactory.getLogicComponent().defaultScheduler();
 		try {
 			defaultScheduler.start();
+			addJobSaveDb(defaultScheduler);
 		}
 		catch (final SchedulerException e) {
 			LOG.error("failed to start quartz", e);
 			throw new RuntimeException("failed to start scheduler", e);
 		}
+	}
+
+	private void addJobSaveDb(final Scheduler scheduler) throws SchedulerException {
+		LOG.debug("adding job saveDb");
+		final JobDetail jobDetail = JobBuilder.newJob(SaveDb.class).withIdentity("jobSaveDb", "db").build();
+		final ScheduleBuilder<SimpleTrigger> scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
+				.withIntervalInMinutes(Constants.CONFIG_DATABASE_SAVE_MINUTES).repeatForever();
+		final Trigger jobTrigger = TriggerBuilder.newTrigger().withIdentity("triggerSaveDb", "db").startNow()
+				.withSchedule(scheduleBuilder).build();
+		scheduler.scheduleJob(jobDetail, jobTrigger);
 	}
 
 	@Override

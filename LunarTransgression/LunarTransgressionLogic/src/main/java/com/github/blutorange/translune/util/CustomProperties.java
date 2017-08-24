@@ -1,4 +1,4 @@
-package com.github.blutorange.translune;
+package com.github.blutorange.translune.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +11,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
-import com.github.blutorange.translune.util.Constants;
 
 @Singleton
 public class CustomProperties {

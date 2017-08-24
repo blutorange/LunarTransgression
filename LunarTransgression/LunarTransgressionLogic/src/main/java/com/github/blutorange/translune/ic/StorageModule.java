@@ -7,7 +7,6 @@ import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 
-import com.github.blutorange.translune.CustomProperties;
 import com.github.blutorange.translune.logic.BattleStore;
 import com.github.blutorange.translune.logic.IBattleStore;
 import com.github.blutorange.translune.logic.IInitIdStore;
@@ -16,6 +15,7 @@ import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.logic.InitIdStore;
 import com.github.blutorange.translune.logic.InvitationStore;
 import com.github.blutorange.translune.logic.SessionStore;
+import com.github.blutorange.translune.util.CustomProperties;
 
 import dagger.Module;
 import dagger.Provides;

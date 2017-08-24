@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.github.blutorange.common.PasswordStorage.CannotPerformOperationException;
+import com.github.blutorange.common.CannotPerformOperationException;
 
 
 public class ModifiablePlayer extends ModifiableEntity<Player> {

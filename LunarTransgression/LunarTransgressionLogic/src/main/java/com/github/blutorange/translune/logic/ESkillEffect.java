@@ -1,14 +1,12 @@
 package com.github.blutorange.translune.logic;
 
-import java.util.List;
-
 import com.github.blutorange.translune.db.Skill;
-import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 
+// TODO [MID] Allow damaging attacks to cause status conditions.
 public enum ESkillEffect implements ISkillExecutor {
-	PHYSICAL_DAMAGE(new SkillExecutorPhysicalDamage()),
-	MAGICAL_DAMAGE(new SkillExecutorMagicalDamage()),
+	PHYSICAL_DAMAGE(new SkillExecutorDamage()),
+	MAGICAL_DAMAGE(new SkillExecutorDamage()),
 	ACID_ARMOR(SkillExecutorNoEffect.INSTANCE),
 	ACUPRESSURE(SkillExecutorNoEffect.INSTANCE),
 	AFTER_YOU(SkillExecutorNoEffect.INSTANCE),
@@ -239,8 +237,7 @@ public enum ESkillEffect implements ISkillExecutor {
 	WONDER_ROOM(SkillExecutorNoEffect.INSTANCE),
 	WORK_UP(SkillExecutorNoEffect.INSTANCE),
 	WORRY_SEED(SkillExecutorNoEffect.INSTANCE),
-	YAWN(SkillExecutorNoEffect.INSTANCE),
-	;
+	YAWN(SkillExecutorNoEffect.INSTANCE),;
 
 	private ISkillExecutor executor;
 
@@ -250,8 +247,7 @@ public enum ESkillEffect implements ISkillExecutor {
 
 	@Override
 	public void execute(final Skill skill, final IBattleContext context, final BattleCommand battleCommand,
-			final List<BattleAction> battleActionsMe, final List<BattleAction> battleActionsHim, final int player,
-			final int character) {
-		executor.execute(skill, context, battleCommand, battleActionsMe, battleActionsHim, player, character);
+			final int player, final int character) {
+		executor.execute(skill, context, battleCommand, player, character);
 	}
 }

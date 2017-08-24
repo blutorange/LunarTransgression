@@ -1,8 +1,5 @@
 package com.github.blutorange.translune.logic;
 
-import java.util.List;
-
-import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 import com.github.blutorange.translune.util.Constants;
 
@@ -22,9 +19,8 @@ public class BattleCommandHandlerBasicAttack extends ABattleCommandHandler {
 	}
 
 	@Override
-	public void execute(final List<BattleAction> battleActionsMe,
-			final List<BattleAction> battleActionsHim) {
-		// TODO Implement basic attack
+	public void execute() {
+		// TODO [HIGH] Implement basic attack
 		throw new RuntimeException("TODO - not yet implemented");
 	}
 

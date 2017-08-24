@@ -2,7 +2,6 @@ package com.github.blutorange.translune.logic;
 
 import java.util.Random;
 
-import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.socket.BattleCommand;
 import com.google.common.collect.ObjectArrays;
@@ -14,28 +13,28 @@ public enum EActionTarget {
 	 */
 	ALL_OPPONENTS {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
-			return context.getCharacterStatesOpponent(player);
+			return context.getComputedBattleStatusOpponent(player);
 		}
 	},
 
 	/**
-	 * Move targets one character except for the character that uses this
-	 * move. Player must select one target.
+	 * Move targets one character except for the character that uses this move.
+	 * Player must select one target.
 	 */
 	ALL_OTHER_POKEMON {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
 			final String[] targets = battleCommand.getTargets();
 			if (targets.length != 1)
-				return new CharacterState[0];
+				return new IComputedBattleStatus[0];
 			final int[] characterIndex = context.getCharacterIndex(targets[0]);
 			if (characterIndex[0] == player && characterIndex[1] == character) {
-				return new CharacterState[0];
+				return new IComputedBattleStatus[0];
 			}
-			return new CharacterState[]{ context.getCharacterState(characterIndex) };
+			return new IComputedBattleStatus[] { context.getComputedBattleStatus(characterIndex) };
 		}
 	},
 
@@ -44,9 +43,10 @@ public enum EActionTarget {
 	 */
 	ALL_POKEMON {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
-			return ObjectArrays.concat(context.getCharacterStates(0), context.getCharacterStates(1), CharacterState.class);
+			return ObjectArrays.concat(context.getComputedBattleStatus(0), context.getComputedBattleStatus(1),
+					IComputedBattleStatus.class);
 		}
 	},
 
@@ -56,16 +56,16 @@ public enum EActionTarget {
 	 */
 	ALLY {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
 			final String[] targets = battleCommand.getTargets();
 			if (targets.length != 1)
-				return new CharacterState[0];
+				return new IComputedBattleStatus[0];
 			final int[] characterIndex = context.getCharacterIndex(targets[0]);
 			if (characterIndex[0] != player || characterIndex[1] == character) {
-				return new CharacterState[0];
+				return new IComputedBattleStatus[0];
 			}
-			return new CharacterState[]{ context.getCharacterState(characterIndex) };
+			return new IComputedBattleStatus[] { context.getComputedBattleStatus(characterIndex) };
 		}
 	},
 
@@ -74,7 +74,7 @@ public enum EActionTarget {
 	 */
 	ENTIRE_FIELD {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
 			return EActionTarget.ALL_POKEMON.getTargets(context, battleCommand, player, character);
 		}
@@ -85,16 +85,16 @@ public enum EActionTarget {
 	 */
 	OPPONENTS_FIELD {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
 			final String[] targets = battleCommand.getTargets();
 			if (targets.length != 1)
-				return new CharacterState[0];
+				return new IComputedBattleStatus[0];
 			final int[] characterIndex = context.getCharacterIndex(targets[0]);
 			if (characterIndex[0] == player) {
-				return new CharacterState[0];
+				return new IComputedBattleStatus[0];
 			}
-			return new CharacterState[]{ context.getCharacterState(characterIndex) };
+			return new IComputedBattleStatus[] { context.getComputedBattleStatus(characterIndex) };
 		}
 	},
 
@@ -104,10 +104,10 @@ public enum EActionTarget {
 	 */
 	RANDOM_OPPONENT {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
-			final CharacterState[] characterStates = context.getCharacterStatesOpponent(player);
-			return new CharacterState[]{ characterStates[random.nextInt(characterStates.length)] };
+			final IComputedBattleStatus[] computedBattleStatus = context.getComputedBattleStatusOpponent(player);
+			return new IComputedBattleStatus[] { computedBattleStatus[random.nextInt(computedBattleStatus.length)] };
 		}
 	},
 
@@ -116,13 +116,13 @@ public enum EActionTarget {
 	 */
 	SELECTED_POKEMON {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
 			final String[] targets = battleCommand.getTargets();
 			if (targets.length != 1)
-				return new CharacterState[0];
+				return new IComputedBattleStatus[0];
 			final int[] characterIndex = context.getCharacterIndex(targets[0]);
-			return new CharacterState[]{ context.getCharacterState(characterIndex) };
+			return new IComputedBattleStatus[] { context.getComputedBattleStatus(characterIndex) };
 		}
 	},
 
@@ -132,9 +132,9 @@ public enum EActionTarget {
 	 */
 	SELECTED_POKEMON_ME_FIRST {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
-			return new CharacterState[0];
+			return new IComputedBattleStatus[0];
 		}
 	},
 
@@ -144,9 +144,9 @@ public enum EActionTarget {
 	 */
 	SPECIFIC_MOVE {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
-			return new CharacterState[0];
+			return new IComputedBattleStatus[0];
 		}
 	},
 
@@ -156,9 +156,9 @@ public enum EActionTarget {
 	 */
 	USER {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
-			return new CharacterState[] { context.getCharacterState(player, character) };
+			return new IComputedBattleStatus[] { context.getComputedBattleStatus(player, character) };
 		}
 	},
 
@@ -167,9 +167,9 @@ public enum EActionTarget {
 	 */
 	USER_AND_ALLIES {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
-			return context.getCharacterStates(player);
+			return context.getComputedBattleStatus(player);
 		}
 	},
 
@@ -178,7 +178,7 @@ public enum EActionTarget {
 	 */
 	USER_OR_ALLY {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
 			return USERS_FIELD.getTargets(context, battleCommand, player, character);
 		}
@@ -189,21 +189,21 @@ public enum EActionTarget {
 	 */
 	USERS_FIELD {
 		@Override
-		public CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
 			final String[] targets = battleCommand.getTargets();
 			if (targets.length != 1)
-				return new CharacterState[0];
+				return new IComputedBattleStatus[0];
 			final int[] characterIndex = context.getCharacterIndex(targets[0]);
 			if (characterIndex[0] != player) {
-				return new CharacterState[0];
+				return new IComputedBattleStatus[0];
 			}
-			return new CharacterState[]{ context.getCharacterState(characterIndex) };
+			return new IComputedBattleStatus[] { context.getComputedBattleStatus(characterIndex) };
 		}
 	},;
 
 	private static Random random = ComponentFactory.getLogicComponent().randomBasic();
 
-	public abstract CharacterState[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
+	public abstract IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 			int player, int character);
 }

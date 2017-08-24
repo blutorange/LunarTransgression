@@ -21,9 +21,9 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.github.blutorange.common.CannotPerformOperationException;
 import com.github.blutorange.common.IAccessible;
 import com.github.blutorange.common.PasswordStorage;
-import com.github.blutorange.common.PasswordStorage.CannotPerformOperationException;
 import com.github.blutorange.common.PasswordStorage.InvalidHashException;
 import com.github.blutorange.translune.util.Constants;
 

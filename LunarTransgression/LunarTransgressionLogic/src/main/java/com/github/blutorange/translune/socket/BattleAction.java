@@ -14,10 +14,10 @@ import com.jsoniter.annotation.JsonProperty;
  */
 public class BattleAction {
 	/**
-	 *
-	 * @return 0 iff the battle continues, >0 iff this command makes the player
-	 *         win, <0 iff it makes the player lose.
+	 * @return 0 iff the battle continues, 1 iff this command makes the player
+	 *         win, -1 iff it makes the player lose.
 	 */
+	@JsonProperty(required = true)
 	private int causesEnd;
 
 	/**
@@ -119,5 +119,12 @@ public class BattleAction {
 	 */
 	public void setUser(@Nullable final String user) {
 		this.user = user != null ? user : StringUtils.EMPTY;
+	}
+
+	/**
+	 * @param causesEnd the causesEnd to set
+	 */
+	public void setCausesEnd(final int causesEnd) {
+		this.causesEnd = causesEnd;
 	}
 }

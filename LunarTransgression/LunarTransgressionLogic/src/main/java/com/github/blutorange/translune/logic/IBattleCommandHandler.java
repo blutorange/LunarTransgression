@@ -1,9 +1,6 @@
 package com.github.blutorange.translune.logic;
 
-import java.util.List;
-
 import com.github.blutorange.translune.db.CharacterState;
-import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 
 public interface IBattleCommandHandler {
@@ -29,7 +26,7 @@ public interface IBattleCommandHandler {
 
 	void preProcess();
 
-	void execute(List<BattleAction> battleActionsMe, List<BattleAction> battleActionsHim);
+	void execute();
 
 	void postProcess();
 

@@ -1,13 +1,7 @@
 package com.github.blutorange.translune.logic;
 
-import java.util.List;
-
-import org.eclipse.jdt.annotation.NonNull;
-
-import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 
-// TODO implement  specials
 public class BattleCommandHandlerSpecial extends ABattleCommandHandler {
 
 	public BattleCommandHandlerSpecial(final IBattleContext battleContext, final int player, final int character,
@@ -26,9 +20,8 @@ public class BattleCommandHandlerSpecial extends ABattleCommandHandler {
 	}
 
 	@Override
-	public void execute(@NonNull final List<BattleAction> battleActionsMe,
-			final List<BattleAction> battleActionsHim) {
-		// TODO Implement special
+	public void execute() {
+		// TODO [MID] implement  specials
 		throw new RuntimeException("TODO - not yet implemented");
 	}
 

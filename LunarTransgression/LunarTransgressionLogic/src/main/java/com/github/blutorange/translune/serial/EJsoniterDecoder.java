@@ -1,4 +1,4 @@
-package com.github.blutorange.translune.util;
+package com.github.blutorange.translune.serial;
 
 import java.io.IOException;
 

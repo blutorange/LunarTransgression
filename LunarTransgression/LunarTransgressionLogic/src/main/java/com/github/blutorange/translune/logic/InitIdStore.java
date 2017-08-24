@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.github.blutorange.translune.CustomProperties;
+import com.github.blutorange.translune.util.CustomProperties;
 
 @Singleton
 public class InitIdStore implements IInitIdStore {

@@ -8,15 +8,22 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.github.blutorange.common.CollectionUtil;
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
+import com.github.blutorange.translune.db.ModifiablePlayer;
+import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
+import com.github.blutorange.translune.socket.BattleResult;
 
 @Singleton
 public class BattleProcessing implements IBattleProcessing {
+	private static final BattleAction[] EMPTY_BATTLE_ACTION = new BattleAction[0];
+
 	@Inject
 	ILunarDatabaseManager databaseManager;
 
@@ -47,15 +54,32 @@ public class BattleProcessing implements IBattleProcessing {
 		final IBattleCommandHandler[] battleCommandHandlers = new IBattleCommandHandler[8];
 		final List<BattleAction> battleActions1 = new ArrayList<>(2 * battleCommandHandlers.length);
 		final List<BattleAction> battleActions2 = new ArrayList<>(2 * battleCommandHandlers.length);
+		final Player[] playerEntities = databaseManager.findAll(Player.class, players);
 		final IBattleContext battleContext = new BattleContext(getCharacterStates(characterStates),
-				computedBattleStatus, items, battleStatus, effectorStack, players, battleActions1, battleActions2, turn);
+				computedBattleStatus, items, getItemRemovable(playerEntities), battleStatus, effectorStack, players,
+				battleActions1, battleActions2, turn);
 		makeCommandHandler(battleContext, 0, battleCommandHandlers, 0, commands.get(0));
 		makeCommandHandler(battleContext, 1, battleCommandHandlers, 4, commands.get(1));
 		sortBattleAction(battleCommandHandlers);
 		effectorBefore(battleContext, effectorStack);
-		final BattleAction[][] result = executeBattleActions(battleCommandHandlers, battleActions1, battleActions2);
+		executeBattleActions(battleCommandHandlers);
 		effectorAfter(battleContext, effectorStack);
-		return result;
+		return new BattleAction[][] { battleActions1.toArray(EMPTY_BATTLE_ACTION),
+				battleActions2.toArray(EMPTY_BATTLE_ACTION) };
+	}
+
+	@Override
+	public BattleResult[][] distributeExperience(final String[] players, final List<String[]> characterStates,
+			final BattleStatus[][] battleStatus) {
+		final IComputedBattleStatus[][] computedBattleStatus = computedBattleStatus(characterStates, battleStatus);
+		final Player[] playerEntities = databaseManager.findAll(Player.class, players);
+		// TODO [HIGH] compute experience, return exp gain and level up messages
+		throw new NotImplementedException("implement me");
+	}
+
+	private IItemRemovable getItemRemovable(final Player[] players) {
+		return (player, item) -> databaseManager.modify(players[player], ModifiablePlayer.class,
+				mp -> mp.removeItem(item));
 	}
 
 	private void effectorAfter(final IBattleContext battleContext, final List<IGlobalBattleEffector> effectorStack) {
@@ -79,7 +103,8 @@ public class BattleProcessing implements IBattleProcessing {
 	}
 
 	private boolean effectorAllowTurn(final IBattleCommandHandler handler) {
-		for (final Iterator<IGlobalBattleEffector> it = handler.getBattleContext().getEffectorStack().iterator(); it.hasNext();) {
+		for (final Iterator<IGlobalBattleEffector> it = handler.getBattleContext().getEffectorStack().iterator(); it
+				.hasNext();) {
 			final IGlobalBattleEffector effector = it.next();
 			if (!effector.allowTurn(handler.getBattleContext(), handler.getCharacterState()))
 				return false;
@@ -102,8 +127,7 @@ public class BattleProcessing implements IBattleProcessing {
 		return retrievedCharacterStates;
 	}
 
-	private BattleAction[][] executeBattleActions(final IBattleCommandHandler[] battleCommandHandlers,
-			final List<BattleAction> battleActions1, final List<BattleAction> battleActions2) {
+	private void executeBattleActions(final IBattleCommandHandler[] battleCommandHandlers) {
 		for (final IBattleCommandHandler battleCommandHandler : battleCommandHandlers) {
 			battleCommandHandler.preProcess();
 		}
@@ -111,9 +135,9 @@ public class BattleProcessing implements IBattleProcessing {
 			if (effectorAllowTurn(battleCommandHandler)) {
 				final int player = battleCommandHandler.getPlayerIndex();
 				if (player == 0)
-					battleCommandHandler.execute(battleActions1, battleActions2);
+					battleCommandHandler.execute();
 				else
-					battleCommandHandler.execute(battleActions2, battleActions1);
+					battleCommandHandler.execute();
 			}
 			final int winningPlayer = checkBattleEnd(battleCommandHandler.getBattleContext().getBattleStatus());
 			if (winningPlayer >= 0) {
@@ -124,13 +148,15 @@ public class BattleProcessing implements IBattleProcessing {
 		for (final IBattleCommandHandler battleCommandHandler : battleCommandHandlers) {
 			battleCommandHandler.postProcess();
 		}
-		return new BattleAction[][] { battleActions1.toArray(new BattleAction[0]),
-				battleActions2.toArray(new BattleAction[0]) };
 	}
 
-	private void processBattleEnd(final IBattleContext battleContext, final int winningPlayer) {
-		// TODO Process battle win. Add message with isWin=true, think about EXP gain? Send message?
-		throw new RuntimeException("TODO - not yet implemented");
+	private void processBattleEnd(final IBattleContext context, final int winningPlayer) {
+		final BattleAction actionWinning = CollectionUtil.last(context.getBattleActions(winningPlayer));
+		final BattleAction actionLosing = CollectionUtil.last(context.getBattleActionsOpponent(winningPlayer));
+		if (actionWinning != null)
+			actionWinning.setCausesEnd(1);
+		if (actionLosing != null)
+			actionLosing.setCausesEnd(-1);
 	}
 
 	private int getPlayerIndex(final String[] players, final IBattleCommandHandler battleCommandHandler) {

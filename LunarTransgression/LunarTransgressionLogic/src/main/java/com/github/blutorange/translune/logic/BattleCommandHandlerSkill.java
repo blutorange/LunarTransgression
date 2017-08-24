@@ -1,10 +1,7 @@
 package com.github.blutorange.translune.logic;
 
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
-
-import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.translune.db.Skill;
 import com.github.blutorange.translune.socket.BattleCommand;
@@ -16,14 +13,15 @@ public class BattleCommandHandlerSkill extends ABattleCommandHandler {
 	public BattleCommandHandlerSkill(final IBattleContext battleContext, final int player, final int character,
 			final BattleCommand battleCommand) {
 		super(battleContext, player, character, battleCommand);
+		@SuppressWarnings("null")
 		final Optional<Entry<Skill, Integer>> entry = context.getCharacterState(player, character).getCharacter()
-				.getUnmodifiableSkills().entrySet().stream().filter(e -> e.getKey().getPrimaryKey().equals(battleCommand.getAction()))
-				.findAny();
+				.getUnmodifiableSkills().entrySet().stream()
+				.filter(e -> e.getKey().getPrimaryKey().equals(battleCommand.getAction())).findAny();
 		if (!entry.isPresent())
-			throw new IllegalArgumentException("character does not know skill");
+			throw new IllegalArgumentException("character does not know skill: " + battleCommand.getAction());
 		final Entry<Skill, Integer> skill = entry.get();
 		if (context.getCharacterState(player, character).getLevel() < skill.getValue().intValue())
-			throw new IllegalArgumentException("character does not know skill yet");
+			throw new IllegalArgumentException("character does not know skill yet: " + battleCommand.getAction());
 		this.skill = skill.getKey();
 	}
 
@@ -37,10 +35,9 @@ public class BattleCommandHandlerSkill extends ABattleCommandHandler {
 	}
 
 	@Override
-	public void execute(@NonNull final List<com.github.blutorange.translune.socket.BattleAction> battleActionsMe,
-			@NonNull final List<com.github.blutorange.translune.socket.BattleAction> battleActionsHim) {
-		// TODO Implement skill
-		throw new RuntimeException("TODO - not yet implemented");
+	public void execute() {
+		skill.getEffect().execute(skill, context, battleCommand, player, character);
+
 	}
 
 	@Override

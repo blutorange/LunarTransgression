@@ -1,4 +1,4 @@
-package com.github.blutorange.translune;
+package com.github.blutorange.translune.serial;
 
 import java.io.IOException;
 
@@ -6,6 +6,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.logic.EBattleCommandType;
+import com.github.blutorange.translune.logic.IComputedBattleStatus;
 import com.github.blutorange.translune.message.MessageAuthorize;
 import com.github.blutorange.translune.message.MessageAuthorizeResponse;
 import com.github.blutorange.translune.message.MessageBattleCancelled;
@@ -29,11 +30,10 @@ import com.github.blutorange.translune.message.MessageStepBattleResponse;
 import com.github.blutorange.translune.message.MessageUnknown;
 import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
+import com.github.blutorange.translune.socket.BattleResult;
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.LunarMessage;
-import com.github.blutorange.translune.util.EJsoniterEncoder;
-import com.github.blutorange.translune.util.JsoniterEnumDecoder;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.ValueType;
 import com.jsoniter.output.JsonStream;
@@ -51,6 +51,8 @@ public class JsoniterConfig implements StaticCodegenConfig {
 
 		JsoniterSpi.registerTypeEncoder(EBattleCommandType.class, EJsoniterEncoder.ENUM_WITHOUT_CLASS);
         JsoniterSpi.registerTypeDecoder(EBattleCommandType.class, new JsoniterEnumDecoder<>(EBattleCommandType.class));
+
+        JsoniterSpi.registerTypeEncoder(IComputedBattleStatus.class, IComputedBattleStatus::encodeJson);
 
          JsoniterSpi.registerPropertyEncoder(LunarMessage.class, "status", new Encoder() {
 			@Override
@@ -113,6 +115,7 @@ public class JsoniterConfig implements StaticCodegenConfig {
 
 			TypeLiteral.create(BattleAction.class),
 			TypeLiteral.create(BattleCommand.class),
+			TypeLiteral.create(BattleResult.class),
 
 			TypeLiteral.create(MessageUnknown.class)
 		};
