@@ -9,6 +9,10 @@ public class ModifiableSkill extends ModifiableEntity<Skill> {
 		entity.setAccuracy(accuracy);
 	}
 
+	public void setDescription(final String description) {
+		entity.setDescription(description);
+	}
+
 	public void setEffect(final ESkillEffect effect) {
 		entity.setEffect(effect);
 	}
@@ -17,8 +21,16 @@ public class ModifiableSkill extends ModifiableEntity<Skill> {
 		entity.setElement(element);
 	}
 
+	void setHighCritical(final boolean highCritical) {
+		entity.setHighCritical(highCritical);
+	}
+	
 	public void setIsPhysical(final boolean isPhysical) {
 		entity.setIsPhysical(isPhysical);
+	}
+
+	void setMp(final int mp) {
+		entity.setMp(mp);
 	}
 
 	public void setName(final String name) {
@@ -29,19 +41,11 @@ public class ModifiableSkill extends ModifiableEntity<Skill> {
 		entity.setPower(power);
 	}
 
-	public void setTarget(final EActionTarget target) {
-		entity.setTarget(target);
-	}
-
-	void setHighCritical(final boolean highCritical) {
-		entity.setHighCritical(highCritical);
-	}
-
-	void setMp(final int mp) {
-		entity.setMp(mp);
-	}
-
 	void setPriority(final int priority) {
 		entity.setPriority(priority);
+	}
+
+	public void setTarget(final EActionTarget target) {
+		entity.setTarget(target);
 	}
 }

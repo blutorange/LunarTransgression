@@ -1,17 +1,19 @@
 package com.github.blutorange.translune.serial;
 
+import java.util.Locale;
+
+import com.github.blutorange.translune.db.Skill;
+import com.github.blutorange.translune.db.SkillBuilder;
+import com.github.blutorange.translune.logic.EActionTarget;
+import com.github.blutorange.translune.logic.EElement;
+import com.github.blutorange.translune.logic.ESkillEffect;
+
 public class SkillCsvModel {
-	private int accuracy;
-	private String description;
-	private String effect;
-	private String element;
-	private boolean highCritical;
-	private boolean isPhysical;
-	private int mp;
-	private String name;
-	private int power;
-	private int priority;
-	private String target;
+	private SkillBuilder builder;
+
+	public SkillCsvModel() {
+		this.builder = new SkillBuilder();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -24,79 +26,14 @@ public class SkillCsvModel {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof SkillCsvModel))
+		if (!(obj instanceof CharacterCsvModel))
 			return false;
 		final SkillCsvModel other = (SkillCsvModel) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		}
-		else if (!name.equals(other.name))
+		if (builder.getId() == null || other.builder.getId() == null)
+			throw new IllegalStateException("name must be set");
+		if (!builder.getId().equals(other.builder.getId()))
 			return false;
 		return true;
-	}
-
-	/**
-	 * @return the accuracy
-	 */
-	public int getAccuracy() {
-		return accuracy;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @return the effect
-	 */
-	public String getEffect() {
-		return effect;
-	}
-
-	/**
-	 * @return the element
-	 */
-	public String getElement() {
-		return element;
-	}
-
-	/**
-	 * @return the mp
-	 */
-	public int getMp() {
-		return mp;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @return the power
-	 */
-	public int getPower() {
-		return power;
-	}
-
-	/**
-	 * @return the priority
-	 */
-	public int getPriority() {
-		return priority;
-	}
-
-	/**
-	 * @return the target
-	 */
-	public String getTarget() {
-		return target;
 	}
 
 	/*
@@ -106,32 +43,28 @@ public class SkillCsvModel {
 	 */
 	@Override
 	public int hashCode() {
+		if (builder.getId() == null)
+			throw new IllegalStateException("name must be set");
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + builder.getId().hashCode();
 		return result;
 	}
 
-	/**
-	 * @return the highCritical
-	 */
-	public boolean isHighCritical() {
-		return highCritical;
+	public String getKey() {
+		String id = builder.getId();
+		if (id == null)
+			throw new IllegalStateException("name must be set");
+		return id;
 	}
-
-	/**
-	 * @return the isPhysical
-	 */
-	public boolean isPhysical() {
-		return isPhysical;
-	}
-
+	
+	
 	/**
 	 * @param accuracy
 	 *            the accuracy to set
 	 */
 	public void setAccuracy(final int accuracy) {
-		this.accuracy = accuracy;
+		builder.setAccuracy(accuracy);
 	}
 
 	/**
@@ -139,7 +72,7 @@ public class SkillCsvModel {
 	 *            the description to set
 	 */
 	public void setDescription(final String description) {
-		this.description = description;
+		builder.setDescription(description);
 	}
 
 	/**
@@ -147,7 +80,7 @@ public class SkillCsvModel {
 	 *            the effect to set
 	 */
 	public void setEffect(final String effect) {
-		this.effect = effect;
+		builder.setEffect(ESkillEffect.valueOf(effect.toUpperCase(Locale.ROOT)));
 	}
 
 	/**
@@ -155,7 +88,7 @@ public class SkillCsvModel {
 	 *            the element to set
 	 */
 	public void setElement(final String element) {
-		this.element = element;
+		builder.setElement(EElement.valueOf(element.toUpperCase(Locale.ROOT)));
 	}
 
 	/**
@@ -163,7 +96,7 @@ public class SkillCsvModel {
 	 *            the highCritical to set
 	 */
 	public void setHighCritical(final boolean highCritical) {
-		this.highCritical = highCritical;
+		builder.setHighCritical(highCritical);
 	}
 
 	/**
@@ -171,7 +104,7 @@ public class SkillCsvModel {
 	 *            the mp to set
 	 */
 	public void setMp(final int mp) {
-		this.mp = mp;
+		builder.setMp(mp);
 	}
 
 	/**
@@ -179,7 +112,7 @@ public class SkillCsvModel {
 	 *            the name to set
 	 */
 	public void setName(final String name) {
-		this.name = name;
+		builder.setName(name);
 	}
 
 	/**
@@ -187,7 +120,7 @@ public class SkillCsvModel {
 	 *            the isPhysical to set
 	 */
 	public void setPhysical(final boolean isPhysical) {
-		this.isPhysical = isPhysical;
+		builder.setPhysical(isPhysical);
 	}
 
 	/**
@@ -195,7 +128,7 @@ public class SkillCsvModel {
 	 *            the power to set
 	 */
 	public void setPower(final int power) {
-		this.power = power;
+		builder.setPower(power);
 	}
 
 	/**
@@ -203,7 +136,7 @@ public class SkillCsvModel {
 	 *            the priority to set
 	 */
 	public void setPriority(final int priority) {
-		this.priority = priority;
+		builder.setPriority(priority);
 	}
 
 	/**
@@ -211,7 +144,10 @@ public class SkillCsvModel {
 	 *            the target to set
 	 */
 	public void setTarget(final String target) {
-		this.target = target;
+		builder.setTarget(EActionTarget.valueOf(target.toUpperCase(Locale.ROOT)));
 	}
 
+	public Skill toEntity() {
+		return builder.build();
+	}
 }

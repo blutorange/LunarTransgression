@@ -2,11 +2,13 @@ package com.github.blutorange.translune.db;
 
 import java.util.Random;
 
+import org.apache.commons.lang3.builder.Builder;
+
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.logic.ENature;
 import com.github.blutorange.translune.util.Constants;
 
-public class CharacterStateBuilder {
+public class CharacterStateBuilder implements Builder<CharacterState> {
 	private Character character;
 	private int exp = 0;
 	private int ivHp;

@@ -6,13 +6,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.Builder;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.common.CannotPerformOperationException;
 import com.github.blutorange.common.PasswordStorage;
 import com.github.blutorange.translune.ic.ComponentFactory;
 
-public class PlayerBuilder {
+public class PlayerBuilder implements Builder<Player> {
 	private final String nickname;
 	@Nullable private String passwordHash = null;
 

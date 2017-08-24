@@ -293,7 +293,7 @@
 								<argument>-classpath</argument>
 								<classpath />
 								<argument>com.jsoniter.static_codegen.StaticCodegen</argument>
-								<argument>com.github.blutorange.translune.JsoniterConfig</argument>
+								<argument>com.github.blutorange.translune.serial.JsoniterConfig</argument>
 								<argument>${project.build.directory}/generated-sources/java/jsoniter</argument>
 							</arguments>
 						</configuration>

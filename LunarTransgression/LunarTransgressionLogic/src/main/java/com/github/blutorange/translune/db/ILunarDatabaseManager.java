@@ -1,5 +1,7 @@
 package com.github.blutorange.translune.db;
 
+import java.util.Collection;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
@@ -75,22 +77,30 @@ public interface ILunarDatabaseManager {
 		}
 
 		@Override
-		public <@NonNull T extends AbstractStoredEntity> @NonNull T[] findRandom(final Class<@NonNull T> clazz, final int amount) {
+		public <@NonNull T extends AbstractStoredEntity> @NonNull T[] findRandom(final Class<@NonNull T> clazz,
+				final int amount) {
 			throw new RuntimeException("mock - injection probably failed");
 		}
 
 		@Override
-		public <@NonNull T extends AbstractStoredEntity> @NonNull T[] findRandom(final EEntityMeta entityMeta, final int amount) {
+		public <@NonNull T extends AbstractStoredEntity> @NonNull T[] findRandom(final EEntityMeta entityMeta,
+				final int amount) {
 			throw new RuntimeException("mock - injection probably failed");
 		}
 
 		@Override
-		public <@Nullable T> @Nullable T withEm(final boolean transactional, final ThrowingFunction<EntityManager, T, Exception> runnable) {
+		public <@Nullable T> @Nullable T withEm(final boolean transactional,
+				final ThrowingFunction<EntityManager, T, Exception> runnable) {
 			throw new RuntimeException("mock - injection probably failed");
 		}
 
 		@Override
 		public void runPeriodically() {
+			throw new RuntimeException("mock - injection probably failed");
+		}
+
+		@Override
+		public <T extends AbstractStoredEntity> void persist(Collection<@NonNull T> entity) {
 			throw new RuntimeException("mock - injection probably failed");
 		}
 	}
@@ -119,6 +129,8 @@ public interface ILunarDatabaseManager {
 
 	<@NonNull T extends AbstractStoredEntity> void persist(T entity);
 
+	<@NonNull T extends AbstractStoredEntity> void persist(Collection<T> entity);
+
 	<@NonNull T extends AbstractStoredEntity> void delete(T entity);
 
 	void shutdown();
@@ -129,4 +141,6 @@ public interface ILunarDatabaseManager {
 
 	@Nullable
 	<@Nullable T> T withEm(boolean transactional, ThrowingFunction<EntityManager, T, Exception> runnable);
+
+	void flush();
 }

@@ -115,10 +115,10 @@ public class LoggingModule {
 		return provideLogger(LogicModule.class);
 	}
 
-	@Provides @Singleton @Classed(LogicModule.class) static Logger provideLogger24() {
+	@Provides @Singleton @Classed(ManageBean.class) static Logger provideLogger24() {
 		return provideLogger(ManageBean.class);
 	}
-
+	
 	private static Logger provideLogger(final Class<?> clazz) {
 		return LoggerFactory.getLogger(clazz);
 	}

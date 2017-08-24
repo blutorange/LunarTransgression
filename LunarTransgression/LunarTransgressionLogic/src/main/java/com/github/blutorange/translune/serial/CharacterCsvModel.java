@@ -1,20 +1,23 @@
 package com.github.blutorange.translune.serial;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import com.github.blutorange.common.StringUtil;
+import com.github.blutorange.translune.db.Character;
+import com.github.blutorange.translune.db.CharacterBuilder;
+import com.github.blutorange.translune.db.Skill;
+import com.github.blutorange.translune.logic.EElement;
+import com.github.blutorange.translune.logic.EExperienceGroup;
+
 public class CharacterCsvModel {
-	private int attack;
-	private String cry;
-	private int defense;
-	private int description;
-	private String elements;
-	private String experienceGroup;
-	private String imgBack;
-	private String imgFront;
-	private int magicalAttack;
-	private int magicalDefense;
-	private int maxHp;
-	private int maxMp;
-	private String name;
-	private int speed;
+
+	private CharacterBuilder builder;
+
+	public CharacterCsvModel() {
+		this.builder = new CharacterBuilder();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -30,111 +33,11 @@ public class CharacterCsvModel {
 		if (!(obj instanceof CharacterCsvModel))
 			return false;
 		final CharacterCsvModel other = (CharacterCsvModel) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		}
-		else if (!name.equals(other.name))
+		if (builder.getId() == null || other.builder.getId() == null)
+			throw new IllegalStateException("name must be set");
+		if (!builder.getId().equals(other.builder.getId()))
 			return false;
 		return true;
-	}
-
-	/**
-	 * @return the attack
-	 */
-	public int getAttack() {
-		return attack;
-	}
-
-	/**
-	 * @return the cry
-	 */
-	public String getCry() {
-		return cry;
-	}
-
-	/**
-	 * @return the defense
-	 */
-	public int getDefense() {
-		return defense;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public int getDescription() {
-		return description;
-	}
-
-	/**
-	 * @return the elements
-	 */
-	public String getElements() {
-		return elements;
-	}
-
-	/**
-	 * @return the experienceGroup
-	 */
-	public String getExperienceGroup() {
-		return experienceGroup;
-	}
-
-	/**
-	 * @return the imgBack
-	 */
-	public String getImgBack() {
-		return imgBack;
-	}
-
-	/**
-	 * @return the imgFront
-	 */
-	public String getImgFront() {
-		return imgFront;
-	}
-
-	/**
-	 * @return the magicalAttack
-	 */
-	public int getMagicalAttack() {
-		return magicalAttack;
-	}
-
-	/**
-	 * @return the magicalDefense
-	 */
-	public int getMagicalDefense() {
-		return magicalDefense;
-	}
-
-	/**
-	 * @return the maxHp
-	 */
-	public int getMaxHp() {
-		return maxHp;
-	}
-
-	/**
-	 * @return the maxMp
-	 */
-	public int getMaxMp() {
-		return maxMp;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @return the speed
-	 */
-	public int getSpeed() {
-		return speed;
 	}
 
 	/*
@@ -144,18 +47,27 @@ public class CharacterCsvModel {
 	 */
 	@Override
 	public int hashCode() {
+		if (builder.getId() == null)
+			throw new IllegalStateException("name must be set");
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + builder.getId().hashCode();
 		return result;
 	}
 
+	public String getKey() {
+		String id = builder.getId();
+		if (id == null)
+			throw new IllegalStateException("name must be set");
+		return id;
+	}
+	
 	/**
 	 * @param attack
 	 *            the attack to set
 	 */
-	public void setAttack(final int attack) {
-		this.attack = attack;
+	public void setPhysicalAttack(final int physicalAttack) {
+		builder.setPhysicalAttack(physicalAttack);
 	}
 
 	/**
@@ -163,23 +75,23 @@ public class CharacterCsvModel {
 	 *            the cry to set
 	 */
 	public void setCry(final String cry) {
-		this.cry = cry;
+		builder.setCry(cry);
 	}
 
 	/**
 	 * @param defense
 	 *            the defense to set
 	 */
-	public void setDefense(final int defense) {
-		this.defense = defense;
+	public void setPhysicalDefense(final int physicalDefense) {
+		builder.setPhysicalDefense(physicalDefense);
 	}
 
 	/**
 	 * @param description
 	 *            the description to set
 	 */
-	public void setDescription(final int description) {
-		this.description = description;
+	public void setDescription(final String description) {
+		builder.setDescription(description);
 	}
 
 	/**
@@ -187,7 +99,8 @@ public class CharacterCsvModel {
 	 *            the elements to set
 	 */
 	public void setElements(final String elements) {
-		this.elements = elements;
+		builder.addElements(Arrays.stream(elements.split(",")).map(String::trim).map(StringUtil::toRootUpperCase)
+				.map(EElement::valueOf).collect(Collectors.toSet()));
 	}
 
 	/**
@@ -195,7 +108,7 @@ public class CharacterCsvModel {
 	 *            the experienceGroup to set
 	 */
 	public void setExperienceGroup(final String experienceGroup) {
-		this.experienceGroup = experienceGroup;
+		builder.setExperienceGroup(EExperienceGroup.valueOf(experienceGroup));
 	}
 
 	/**
@@ -203,7 +116,7 @@ public class CharacterCsvModel {
 	 *            the imgBack to set
 	 */
 	public void setImgBack(final String imgBack) {
-		this.imgBack = imgBack;
+		builder.setImgBack(imgBack);
 	}
 
 	/**
@@ -211,7 +124,7 @@ public class CharacterCsvModel {
 	 *            the imgFront to set
 	 */
 	public void setImgFront(final String imgFront) {
-		this.imgFront = imgFront;
+		builder.setImgFront(imgFront);
 	}
 
 	/**
@@ -219,7 +132,7 @@ public class CharacterCsvModel {
 	 *            the magicalAttack to set
 	 */
 	public void setMagicalAttack(final int magicalAttack) {
-		this.magicalAttack = magicalAttack;
+		builder.setMagicalAttack(magicalAttack);
 	}
 
 	/**
@@ -227,7 +140,7 @@ public class CharacterCsvModel {
 	 *            the magicalDefense to set
 	 */
 	public void setMagicalDefense(final int magicalDefense) {
-		this.magicalDefense = magicalDefense;
+		builder.setMagicalDefense(magicalDefense);
 	}
 
 	/**
@@ -235,7 +148,7 @@ public class CharacterCsvModel {
 	 *            the maxHp to set
 	 */
 	public void setMaxHp(final int maxHp) {
-		this.maxHp = maxHp;
+		builder.setMaxHp(maxHp);
 	}
 
 	/**
@@ -243,7 +156,7 @@ public class CharacterCsvModel {
 	 *            the maxMp to set
 	 */
 	public void setMaxMp(final int maxMp) {
-		this.maxMp = maxMp;
+		builder.setMaxMp(maxMp);
 	}
 
 	/**
@@ -251,7 +164,7 @@ public class CharacterCsvModel {
 	 *            the name to set
 	 */
 	public void setName(final String name) {
-		this.name = name;
+		builder.setName(name);
 	}
 
 	/**
@@ -259,7 +172,14 @@ public class CharacterCsvModel {
 	 *            the speed to set
 	 */
 	public void setSpeed(final int speed) {
-		this.speed = speed;
+		builder.setSpeed(speed);
+	}
+	
+	public Character toEntity() {
+		return builder.build();
 	}
 
+	public void addSkill(int level, Skill skill) {
+		builder.addSkill(level, skill);
+	}
 }

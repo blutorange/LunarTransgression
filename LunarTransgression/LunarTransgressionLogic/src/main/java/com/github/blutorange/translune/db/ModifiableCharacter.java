@@ -40,11 +40,11 @@ public class ModifiableCharacter extends ModifiableEntity<Character> {
 	}
 
 	public void setGifFront(final String gifFront) {
-		entity.setGifFront(gifFront);
+		entity.setImgFront(gifFront);
 	}
 
 	public void setGifBack(final String gifBack) {
-		entity.setGifBack(gifBack);
+		entity.setImgBack(gifBack);
 	}
 
 	public void setMagicalAttack(final int magicalAttack) {

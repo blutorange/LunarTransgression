@@ -320,7 +320,7 @@ public class Character extends AbstractStoredEntity {
 	 * @param gifBack
 	 *            the gifBack to set
 	 */
-	void setGifBack(final String gifBack) {
+	void setImgBack(final String gifBack) {
 		this.gifBack = gifBack;
 	}
 
@@ -328,7 +328,7 @@ public class Character extends AbstractStoredEntity {
 	 * @param gif
 	 *            the gif to set
 	 */
-	void setGifFront(final String gifFront) {
+	void setImgFront(final String gifFront) {
 		this.gifFront = gifFront;
 	}
 

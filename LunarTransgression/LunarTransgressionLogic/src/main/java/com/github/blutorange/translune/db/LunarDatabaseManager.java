@@ -135,8 +135,8 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 
 	@Override
 	public <@NonNull T extends AbstractStoredEntity> void persist(final T entity) {
-		entityStore.store(entity);
 		synchronized (entityStore) {
+			entityStore.store(entity);
 			changeList.add(new ChangePersist(entity));
 		}
 	}

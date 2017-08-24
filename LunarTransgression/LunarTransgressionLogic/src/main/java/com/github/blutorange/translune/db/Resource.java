@@ -1,5 +1,7 @@
 package com.github.blutorange.translune.db;
 
+import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +13,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "resource")
-public class Resource {
+public class Resource extends AbstractEntity {
 
 	@Lob
 	@Basic(optional = false, fetch = FetchType.EAGER)
@@ -69,5 +71,15 @@ public class Resource {
 	 */
 	public void setName(final String name) {
 		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Resource(%s,%s,%dbytes)", name, mime, data.length);
+	}
+
+	@Override
+	public Serializable getPrimaryKey() {
+		return name;
 	}
 }

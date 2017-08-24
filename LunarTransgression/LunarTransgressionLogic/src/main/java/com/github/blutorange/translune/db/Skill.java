@@ -32,6 +32,11 @@ public class Skill extends AbstractStoredEntity implements ITargettable {
 	private int accuracy;
 
 	@NotNull
+	@Size(min = 1, max = 512)
+	@Column(name = "description", nullable = false, unique = true, length = 63, updatable = false)
+	private String description = StringUtils.EMPTY;
+
+	@NotNull
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "effect", unique = false, nullable = false, updatable = false)
 	private ESkillEffect effect = ESkillEffect.PHYSICAL_DAMAGE;
@@ -76,11 +81,20 @@ public class Skill extends AbstractStoredEntity implements ITargettable {
 	@Column(name = "target", nullable = false, unique = false, updatable = false)
 	private EActionTarget target = EActionTarget.OPPONENTS_FIELD;
 
+	@Override
+	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
+		// No associations
+	}
+
 	/**
 	 * @return the accuracy
 	 */
 	public int getAccuracy() {
 		return accuracy;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	/**
@@ -157,22 +171,16 @@ public class Skill extends AbstractStoredEntity implements ITargettable {
 		return target;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("Skill(%s,%s,%d,%s)", name, element, Integer.valueOf(power), effect);
-	}
-
-	@Override
-	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
-		// No associations
-	}
-
 	/**
 	 * @param accuracy
 	 *            the accuracy to set
 	 */
 	void setAccuracy(final int accuracy) {
 		this.accuracy = accuracy;
+	}
+
+	void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**
@@ -245,5 +253,10 @@ public class Skill extends AbstractStoredEntity implements ITargettable {
 	 */
 	void setTarget(final EActionTarget target) {
 		this.target = target;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Skill(%s,%s,%d,%s)", name, element, Integer.valueOf(power), effect);
 	}
 }
