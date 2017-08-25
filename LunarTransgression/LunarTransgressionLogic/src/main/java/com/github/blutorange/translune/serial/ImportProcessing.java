@@ -102,9 +102,9 @@ public final class ImportProcessing implements IImportProcessing {
 				.collect(Collectors.toSet());
 		final List<Pair<ZipEntry, String>> requiredFiles = new ArrayList<>();
 		for (final Character character : characters) {
-			filterCharFile(filesImg, requiredFiles, character.getGifBack(), Constants.FILE_PREFIX_CHARACTER_IMG,
+			filterCharFile(filesImg, requiredFiles, character.getImgBack(), Constants.FILE_PREFIX_CHARACTER_IMG,
 					character);
-			filterCharFile(filesImg, requiredFiles, character.getGifFront(), Constants.FILE_PREFIX_CHARACTER_IMG,
+			filterCharFile(filesImg, requiredFiles, character.getImgFront(), Constants.FILE_PREFIX_CHARACTER_IMG,
 					character);
 			filterCharFile(filesCry, requiredFiles, character.getCry(), Constants.FILE_PREFIX_CHARACTER_CRY, character);
 		}

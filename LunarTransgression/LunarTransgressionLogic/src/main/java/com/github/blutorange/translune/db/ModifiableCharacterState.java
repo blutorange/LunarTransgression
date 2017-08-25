@@ -46,7 +46,7 @@ public class ModifiableCharacterState extends ModifiableEntity<CharacterState> {
 	public void setIvMp(final int ivMp) {
 		entity.setIvMp(ivMp);
 	}
-
+	
 	/**
 	 * @param ivPhysicalAttack
 	 *            the ivPhysicalAttack to set

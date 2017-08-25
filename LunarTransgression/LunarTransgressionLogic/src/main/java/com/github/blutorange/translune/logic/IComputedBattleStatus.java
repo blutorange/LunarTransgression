@@ -23,6 +23,7 @@ public interface IComputedBattleStatus extends IComputedStatus {
 	int getComputedBattlePhysicalAttack();
 	int getComputedBattlePhysicalDefense();
 	int getComputedBattleSpeed();
+	
 	/**
 	 * @param amountAbsolute Positive for healing, negative for damage.
 	 */
@@ -34,6 +35,9 @@ public interface IComputedBattleStatus extends IComputedStatus {
 	void setHpAbsolute(int absoluteHp);
 	void setMpAbsolute(int absoluteMp);
 
+	@Override
+	IComputedBattleStatus getSnapshot();
+	
 	public final static String JSON_ACCURACY = "accuracy";
 	public final static String JSON_EVASION = "evasion";
 	public final static String JSON_MAGICAL_ATTACK = "magicalAttack";

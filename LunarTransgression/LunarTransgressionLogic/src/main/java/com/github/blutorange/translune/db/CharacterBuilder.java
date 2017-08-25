@@ -20,6 +20,7 @@ public class CharacterBuilder implements Builder<Character> {
 	private EExperienceGroup experienceGroup;
 	private String imgBack;
 	private String imgFront;
+	private String imgIcon;
 	private int magicalAttack = -1;
 	private int magicalDefense = -1;
 	private int maxHp = -1;
@@ -57,6 +58,8 @@ public class CharacterBuilder implements Builder<Character> {
 			throw new IllegalStateException("evasion not set or negative");
 		if (this.experienceGroup == null)
 			throw new IllegalStateException("experience group not set");
+		if (this.imgIcon == null)
+			throw new IllegalStateException("img icon not set");
 		if (this.imgBack == null)
 			throw new IllegalStateException("img back not set");
 		if (this.imgFront == null)
@@ -129,6 +132,11 @@ public class CharacterBuilder implements Builder<Character> {
 
 	public CharacterBuilder setImgBack(final String imgBack) {
 		this.imgBack = imgBack;
+		return this;
+	}
+	
+	public CharacterBuilder setImgIcon(final String imgIcon) {
+		this.imgIcon = imgIcon;
 		return this;
 	}
 

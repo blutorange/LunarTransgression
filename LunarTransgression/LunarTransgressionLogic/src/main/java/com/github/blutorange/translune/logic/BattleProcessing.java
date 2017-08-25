@@ -4,19 +4,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.math.Fraction;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.common.CollectionUtil;
+import com.github.blutorange.common.ComparatorUtil;
 import com.github.blutorange.translune.db.Character;
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
+import com.github.blutorange.translune.db.ModifiableCharacterState;
 import com.github.blutorange.translune.db.ModifiablePlayer;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.socket.BattleAction;
@@ -77,13 +79,13 @@ public class BattleProcessing implements IBattleProcessing {
 			final BattleStatus[][] battleStatus, final int turn) {
 		final IComputedBattleStatus[][] computedBattleStatus = computedBattleStatus(characterStates, battleStatus);
 		final Player[] playerEntities = databaseManager.findAll(Player.class, players);
-		// TODO [HIGH] compute experience, return exp gain and level up messages
-		distributeExperience(playerEntities, computedBattleStatus, 0, turn);
-		distributeExperience(playerEntities, computedBattleStatus, 1, turn);
-		throw new NotImplementedException("implement me");
+		BattleResult[][] result = new BattleResult[2][];
+		result[0] = distributeExperience(playerEntities, computedBattleStatus, 0, turn);
+		result[1] = distributeExperience(playerEntities, computedBattleStatus, 1, turn);
+		return result;
 	}
 
-	public void distributeExperience(final Player[] players, final IComputedBattleStatus[][] computedBattleStatus,
+	public BattleResult[] distributeExperience(final Player[] players, final IComputedBattleStatus[][] computedBattleStatus,
 			final int player, final int turn) {
 		final int opponent = 1-player;
 		// Get total experience by summing the experience for each opponent
@@ -107,22 +109,46 @@ public class BattleProcessing implements IBattleProcessing {
 		int levelTotal = 0;
 		for (int i = 4; i --> 0;)
 			levelTotal += 101-computedBattleStatus[opponent][i].getCharacterState().getLevel();
+		// Level up characters, show info regarding new skills etc.
+		BattleResult[] result = new BattleResult[4];
 		for (int i = 4; i --> 0;) {
 			final int exp = 101 - computedBattleStatus[opponent][i].getCharacterState().getLevel() * totalExp / levelTotal;
-			gainExp();
+			result[i]= gainExp(computedBattleStatus[opponent][i], exp);
 		}
+		return result;
 	}
 	
-	private void gainExp(final CharacterState characterState, final int exp) {
-		final Character character = characterState.getCharacter();
+	private BattleResult gainExp(final IComputedBattleStatus status, final int exp) {
+		CharacterState characterState  = status.getCharacterState();
+		IComputedStatus oldStatus = status.getSnapshot();
+		final Character character = status.getCharacterState().getCharacter();
 		final List<String> sentences = new ArrayList<>();
 		final int oldLevel = characterState.getLevel();
-		final int newLevel = character.getExperienceGroup().getLevelForExperience(characterState.getExp() + exp);
+		final int newExp = characterState.getExp() + exp;
+		final int newLevel = character.getExperienceGroup().getLevelForExperience(newExp);
 		sentences.add(String.format("%s gained %d XP.", characterState.getNickname(), exp));
 		if (newLevel > oldLevel) {
+			character.getUnmodifiableSkills().entrySet().stream()
+				.filter(entry -> entry.getValue() > oldLevel && entry.getValue() <= newLevel)
+				.sorted(ComparatorUtil.byMapper(Entry::getValue))
+				.map(Entry::getKey)
+				.map(skill -> String.format("%s learned %s!", characterState.getNickname(), skill.getName()))
+				.forEachOrdered(sentence -> sentences.add(sentence));
 			sentences.add(String.format("%s grew to level %d!", characterState.getNickname(), newLevel));
+			sentences.add(String.format("HP went up by %d.", status.getComputedMaxHp() - oldStatus.getComputedMaxHp()));
+			sentences.add(String.format("MP went up by %d.", status.getComputedMaxMp() - oldStatus.getComputedMaxMp()));
+			sentences.add(String.format("Attack went up by %d.", status.getComputedPhysicalAttack() - oldStatus.getComputedPhysicalAttack()));
+			sentences.add(String.format("Defense went up by %d.", status.getComputedPhysicalDefense() - oldStatus.getComputedPhysicalDefense()));
+			sentences.add(String.format("Special attack went up by %d.", status.getComputedMagicalAttack() - oldStatus.getComputedMagicalAttack()));
+			sentences.add(String.format("Special defense went up by %d.", status.getComputedMagicalDefense() - oldStatus.getComputedMagicalDefense()));
+			sentences.add(String.format("Speed went up by %d.", status.getComputedSpeed() - oldStatus.getComputedSpeed()));
 		}
-		new BattleResult(character.getName(), sentences.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+		// Modify level +exp
+		databaseManager.modify(characterState, ModifiableCharacterState.class, modifiable -> {
+			modifiable.setLevel(newLevel);
+			modifiable.setExp(newExp);
+		});
+		return new BattleResult(character.getName(), sentences.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 	}
 
 	private IItemRemovable getItemRemovable(final Player[] players) {
@@ -206,13 +232,13 @@ public class BattleProcessing implements IBattleProcessing {
 		if (actionLosing != null)
 			actionLosing.setCausesEnd(-1);
 	}
-
-	private int getPlayerIndex(final String[] players, final IBattleCommandHandler battleCommandHandler) {
-		final String user = battleCommandHandler.getUser();
-		if (players[0].equals(user))
-			return 0;
-		return 1;
-	}
+//
+//	private int getPlayerIndex(final String[] players, final IBattleCommandHandler battleCommandHandler) {
+//		final String user = battleCommandHandler.getUser();
+//		if (players[0].equals(user))
+//			return 0;
+//		return 1;
+//	}
 
 	private void makeCommandHandler(final IBattleContext battleContext, final int player,
 			final IBattleCommandHandler[] out, final int offset, final BattleCommand... battleCommands) {

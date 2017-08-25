@@ -92,6 +92,11 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 	public void setMpAbsolute(final int absoluteMp) {
 		battleStatus.setMp(absoluteMp * Constants.MAX_RELATIVE_MP / getComputedBattleMaxMp());
 	}
+	
+	@Override
+	public IComputedBattleStatus getSnapshot() {
+		return new ComputedBattleStatusSnapshot();
+	}
 
 	private int computed(final int base, final int stage, final int max, @Nullable final IntToIntFunction condition) {
 		final int pre = base * stageMultiplierNumerator[stage] / stageMultiplierDenominator[stage];
@@ -168,5 +173,120 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 		final int currentMp = getComputedBattleMpAbsolute();
 		final int newMp = currentMp + amountAbsolute;
 		setMpAbsolute(newMp);
+	}
+	
+	protected class ComputedBattleStatusSnapshot extends ComputedStatusSnapshot implements IComputedBattleStatus {
+
+		private int battleSpeed;
+		private int battlePhysicalDefense;
+		private int battlePhysicalAttack;
+		private int battleMaxMp;
+		private int battleMaxHp;
+		private int battleMagicalDefense;
+		private int battleMagicalAttack;
+		private int battleEvasion;
+		private int battleAccuracy;
+		private int battleHpAbsolute;
+		private int battleMpAbsolute;
+
+		public ComputedBattleStatusSnapshot() {
+			super();
+			battleSpeed = getComputedBattleSpeed();
+			battlePhysicalAttack = getComputedBattlePhysicalAttack();
+			battlePhysicalDefense = getComputedBattlePhysicalDefense();
+			battleMaxMp = getComputedBattleMaxMp();
+			battleMaxHp = getComputedBattleMaxHp();
+			battleMagicalAttack = getComputedBattleMagicalAttack();
+			battleMagicalDefense = getComputedBattleMagicalDefense();
+			battleEvasion = getComputedBattleEvasion();
+			battleAccuracy = getComputedBattleAccuracy();
+			battleHpAbsolute = getComputedBattleHpAbsolute();
+			battleMpAbsolute = getComputedBattleMpAbsolute();
+		}
+		
+		@Override
+		public BattleStatus getBattleStatus() {
+			return battleStatus;
+		}
+
+		@Override
+		public int getComputedBattleAccuracy() {
+			return battleAccuracy;
+		}
+
+		@Override
+		public int getComputedBattleEvasion() {
+			return battleEvasion;
+		}
+
+		@Override
+		public int getComputedBattleHpAbsolute() {
+			return battleHpAbsolute;
+		}
+
+		@Override
+		public int getComputedBattleMagicalAttack() {
+			return battleMagicalAttack;
+		}
+
+		@Override
+		public int getComputedBattleMagicalDefense() {
+			return battleMagicalDefense;
+		}
+
+		@Override
+		public int getComputedBattleMaxHp() {
+			return battleMaxHp;
+		}
+
+		@Override
+		public int getComputedBattleMaxMp() {
+			return battleMaxMp;
+		}
+
+		@Override
+		public int getComputedBattleMpAbsolute() {
+			return battleMpAbsolute;
+		}
+
+		@Override
+		public int getComputedBattlePhysicalAttack() {
+			return battlePhysicalAttack;
+		}
+
+		@Override
+		public int getComputedBattlePhysicalDefense() {
+			return battlePhysicalDefense;
+		}
+
+		@Override
+		public int getComputedBattleSpeed() {
+			return battleSpeed;
+		}
+
+		@Override
+		public void modifyHp(int amountAbsolute) {
+			ComputedBattleStatus.this.modifyHp(amountAbsolute);
+		}
+
+		@Override
+		public void modifyMp(int amountAbsolute) {
+			ComputedBattleStatus.this.modifyMp(amountAbsolute);			
+		}
+
+		@Override
+		public void setHpAbsolute(int amountAbsolute) {
+			ComputedBattleStatus.this.setHpAbsolute(amountAbsolute);
+		}
+
+		@Override
+		public void setMpAbsolute(int amountAbsolute) {
+			ComputedBattleStatus.this.setMpAbsolute(amountAbsolute);
+		}
+
+		@Override
+		public IComputedBattleStatus getSnapshot() {
+			return this;
+		}
 	}
 }

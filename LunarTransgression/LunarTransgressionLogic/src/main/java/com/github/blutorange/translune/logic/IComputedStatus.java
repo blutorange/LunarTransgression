@@ -13,4 +13,5 @@ public interface IComputedStatus {
 	int getComputedPhysicalDefense();
 	int getComputedSpeed();
 	CharacterState getCharacterState();
+	IComputedStatus getSnapshot();
 }

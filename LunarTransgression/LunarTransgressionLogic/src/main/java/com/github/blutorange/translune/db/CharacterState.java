@@ -36,7 +36,7 @@ public class CharacterState extends AbstractStoredEntity {
 
 	@Min(0)
 	@Max(Constants.MAX_EXP)
-	@Column(name = "exp", nullable = false, unique = false)
+	@Column(name = "exp", nullable = false, unique = false, updatable = true, insertable = true)
 	private int exp;
 
 	@NotNull
@@ -47,41 +47,41 @@ public class CharacterState extends AbstractStoredEntity {
 
 	@Min(0)
 	@Max(Constants.MAX_IV)
-	@Column(name = "ivhp", nullable = false, unique = false)
+	@Column(name = "ivhp", nullable = false, unique = false, updatable = false, insertable = true)
 	private int ivHp;
 
 	@Min(0)
 	@Max(Constants.MAX_IV)
-	@Column(name = "ivmagicalattack", nullable = false, unique = false)
+	@Column(name = "ivmagicalattack", nullable = false, unique = false, updatable = false, insertable = true)
 	private int ivMagicalAttack;
 
 	@Min(0)
 	@Max(Constants.MAX_IV)
-	@Column(name = "ivmagicaldefense", nullable = false, unique = false)
+	@Column(name = "ivmagicaldefense", nullable = false, unique = false, updatable = false, insertable = true)
 	private int ivMagicalDefense;
 
 	@Min(0)
 	@Max(Constants.MAX_IV)
-	@Column(name = "ivmp", nullable = false, unique = false)
+	@Column(name = "ivmp", nullable = false, unique = false, updatable = false, insertable = true)
 	private int ivMp;
 
 	@Min(0)
 	@Max(Constants.MAX_IV)
-	@Column(name = "ivphysicalattack", nullable = false, unique = false)
+	@Column(name = "ivphysicalattack", nullable = false, unique = false, updatable = false, insertable = true)
 	private int ivPhysicalAttack;
 
 	@Min(0)
 	@Max(Constants.MAX_IV)
-	@Column(name = "ivphysicaldefense", nullable = false, unique = false)
+	@Column(name = "ivphysicaldefense", nullable = false, unique = false, updatable = false, insertable = true)
 	private int ivPhysicalDefense;
 	@Min(0)
 	@Max(Constants.MAX_IV)
-	@Column(name = "ivspeed", nullable = false, unique = false)
+	@Column(name = "ivspeed", nullable = false, unique = false, updatable = false, insertable = true)
 	private int ivSpeed;
 
 	@Min(Constants.MIN_LEVEL)
 	@Max(Constants.MAX_LEVEL)
-	@Column(name = "level", nullable = false, unique = false)
+	@Column(name = "level", nullable = false, unique = false, updatable = true, insertable = true)
 	private int level;
 
 	// TODO [LOW] Make nature an entity, so that they are not fixed at compile time.
@@ -92,12 +92,12 @@ public class CharacterState extends AbstractStoredEntity {
 
 	@NotEmpty
 	@Size(min = 1, max = 255)
-	@Column(name = "nickname", nullable = false, length = 255)
+	@Column(name = "nickname", nullable = false, length = 255, updatable = true, insertable = true)
 	private String nickname = StringUtils.EMPTY;
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Player.class)
-	@JoinColumn(name = "player", nullable = false, unique = false, foreignKey = @ForeignKey(name = "fk_charstate_player"))
+	@JoinColumn(name = "player", nullable = false, unique = false, updatable = false, insertable = true, foreignKey = @ForeignKey(name = "fk_charstate_player"))
 	private Player player;
 
 	@Deprecated

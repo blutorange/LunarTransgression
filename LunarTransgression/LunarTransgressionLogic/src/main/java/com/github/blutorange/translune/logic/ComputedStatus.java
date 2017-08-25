@@ -15,6 +15,8 @@ class ComputedStatus implements IComputedStatus {
 	private int physicalAttack;
 	private int physicalDefense;
 	private int speed;
+	private int cachedLevel = 0;
+	
 	protected final CharacterState characterState;
 
 	public ComputedStatus(final CharacterState characterState) {
@@ -24,50 +26,61 @@ class ComputedStatus implements IComputedStatus {
 
 	@Override
 	public int getComputedAccuracy() {
+		_update();
 		return accuracy;
 	}
 
 	@Override
 	public int getComputedEvasion() {
+		_update();
 		return evasion;
 	}
 
 	@Override
 	public int getComputedMaxHp() {
+		_update();
 		return hp;
 	}
 
 	@Override
 	public int getComputedMagicalAttack() {
+		_update();
 		return magicalAttack;
 	}
 
 	@Override
 	public int getComputedMagicalDefense() {
+		_update();
 		return magicalDefense;
 	}
 
 	@Override
 	public int getComputedMaxMp() {
+		_update();
 		return mp;
 	}
 
 	@Override
 	public int getComputedPhysicalAttack() {
+		_update();
 		return physicalAttack;
 	}
 
 	@Override
 	public int getComputedPhysicalDefense() {
+		_update();
 		return physicalDefense;
 	}
 
 	@Override
 	public int getComputedSpeed() {
+		_update();
 		return speed;
 	}
 
 	private void _update() {
+		if (characterState.getLevel() == cachedLevel)
+			return;
 		hp = computedHp();
 		mp = computedMp();
 		physicalAttack = computedPhysicalAttack();
@@ -77,6 +90,7 @@ class ComputedStatus implements IComputedStatus {
 		speed = computedSpeed();
 		accuracy = computedAccuracy();
 		evasion = computedEvasion();
+		cachedLevel = characterState.getLevel();
 	}
 
 	private int computed(final int base, final int level, final int iv, final int max, final IntToIntFunction nature) {
@@ -147,5 +161,90 @@ class ComputedStatus implements IComputedStatus {
 	@Override
 	public CharacterState getCharacterState() {
 		return characterState;
+	}
+
+	@Override
+	public IComputedStatus getSnapshot() {
+		return new ComputedStatusSnapshot();
+	}
+	
+	protected class ComputedStatusSnapshot implements IComputedStatus {
+		private int accuracy;
+		private int evasion;
+		private int maxHp;
+		private int magicalAttack;
+		private int magicalDefense;
+		private int maxMp;
+		private int physicalAttack;
+		private int physicalDefense;
+		private int speed;
+		
+		public ComputedStatusSnapshot() {
+			accuracy = getComputedAccuracy();
+			evasion = getComputedEvasion();
+			maxHp = getComputedMaxHp();
+			maxMp = getComputedMaxMp();
+			magicalAttack = getComputedMagicalAttack();
+			magicalDefense = getComputedMagicalDefense();
+			maxMp = getComputedMaxMp();
+			physicalAttack = getComputedPhysicalAttack();
+			physicalDefense = getComputedPhysicalDefense();
+			speed = getComputedSpeed();
+		}
+
+		@Override
+		public int getComputedAccuracy() {
+			return accuracy;
+		}
+
+		@Override
+		public int getComputedEvasion() {
+			return evasion;
+		}
+
+		@Override
+		public int getComputedMaxHp() {
+			return maxHp;
+		}
+
+		@Override
+		public int getComputedMagicalAttack() {
+			return magicalAttack;
+		}
+
+		@Override
+		public int getComputedMagicalDefense() {
+			return magicalDefense;
+		}
+
+		@Override
+		public int getComputedMaxMp() {
+			return maxMp;
+		}
+
+		@Override
+		public int getComputedPhysicalAttack() {
+			return physicalAttack;
+		}
+
+		@Override
+		public int getComputedPhysicalDefense() {
+			return physicalDefense;
+		}
+
+		@Override
+		public int getComputedSpeed() {
+			return speed;
+		}
+
+		@Override
+		public CharacterState getCharacterState() {
+			return characterState;
+		}
+
+		@Override
+		public IComputedStatus getSnapshot() {
+			return this;
+		}
 	}
 }

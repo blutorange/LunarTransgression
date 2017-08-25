@@ -256,7 +256,7 @@ public class BattleRunner implements IBattleRunner {
 
 	private void processBattleEnd(final int winner) {
 		battleDone = true;
-		final BattleResult[][] battleResults = battleProcessing.distributeExperience(players, characterStates, battleStatus);
+		final BattleResult[][] battleResults = battleProcessing.distributeExperience(players, characterStates, battleStatus, round);
 		battleStore.addLoot(players[winner], characterStates.get(winner), items.get(winner));
 		endBattle();
 		if (winner == 0)

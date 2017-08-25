@@ -46,8 +46,8 @@ public class Character extends AbstractStoredEntity {
 	private String cry;
 
 	@NotEmpty
-	@Size(min=1,max=2048)
-	@Column(name = "description", nullable = false, unique = false, updatable = false, length=2048)
+	@Size(min = 1, max = 2048)
+	@Column(name = "description", nullable = false, unique = false, updatable = false, length = 2048)
 	private String description;
 
 	@NotNull
@@ -67,12 +67,16 @@ public class Character extends AbstractStoredEntity {
 	private EExperienceGroup experienceGroup;
 
 	@NotEmpty
-	@Column(name = "gifback", nullable = false, unique = false, updatable = false)
-	private String gifBack;
+	@Column(name = "imgback", nullable = false, unique = false, updatable = false)
+	private String imgBack;
 
 	@NotEmpty
-	@Column(name = "giffront", nullable = false, unique = false, updatable = false)
-	private String gifFront;
+	@Column(name = "imgfront", nullable = false, unique = false, updatable = false)
+	private String imgFront;
+
+	@NotEmpty
+	@Column(name = "imgicon", nullable = false, unique = false, updatable = false)
+	private String imgIcon;
 
 	@Min(0)
 	@Max(Constants.MAX_MAGICAL_ATTACK)
@@ -112,8 +116,10 @@ public class Character extends AbstractStoredEntity {
 
 	@NotNull
 	@ElementCollection
-	@CollectionTable(name="charskill", uniqueConstraints=@UniqueConstraint(name="uk_charskill", columnNames={"level", "skill", "\"character\""}), foreignKey=@ForeignKey(name="fk_charskill_char"),  joinColumns=@JoinColumn(name="\"character\"", nullable=false, unique = false, updatable = false, insertable = true))
-	@MapKeyJoinColumn(name="skill", foreignKey=@ForeignKey(name="fk_charskill_skill"))
+	@CollectionTable(name = "charskill", uniqueConstraints = @UniqueConstraint(name = "uk_charskill", columnNames = {
+			"level", "skill",
+			"\"character\"" }), foreignKey = @ForeignKey(name = "fk_charskill_char"), joinColumns = @JoinColumn(name = "\"character\"", nullable = false, unique = false, updatable = false, insertable = true))
+	@MapKeyJoinColumn(name = "skill", foreignKey = @ForeignKey(name = "fk_charskill_skill"))
 	@Column(name = "level", updatable = false, insertable = true, unique = false, nullable = false)
 	private Map<Skill, Integer> skills;
 
@@ -121,6 +127,11 @@ public class Character extends AbstractStoredEntity {
 	@Max(Constants.MAX_SPEED)
 	@Column(name = "speed", nullable = false, unique = false, updatable = false)
 	private int speed;
+
+	@Override
+	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
+		associated(skills.keySet(), consumer);
+	}
 
 	/**
 	 * @return the accuracy
@@ -141,6 +152,13 @@ public class Character extends AbstractStoredEntity {
 	 */
 	public String getDescription() {
 		return description;
+	}
+
+	/**
+	 * @return the elements
+	 */
+	Set<EElement> getElements() {
+		return elements;
 	}
 
 	@Override
@@ -165,15 +183,19 @@ public class Character extends AbstractStoredEntity {
 	/**
 	 * @return the gifBack
 	 */
-	public String getGifBack() {
-		return gifBack;
+	public String getImgBack() {
+		return imgBack;
 	}
 
 	/**
 	 * @return the gif
 	 */
-	public String getGifFront() {
-		return gifFront;
+	public String getImgFront() {
+		return imgFront;
+	}
+
+	public String getImgIcon() {
+		return imgIcon;
 	}
 
 	/**
@@ -230,6 +252,10 @@ public class Character extends AbstractStoredEntity {
 		return name;
 	}
 
+	Map<Skill, Integer> getSkills() {
+		return skills;
+	}
+
 	/**
 	 * @return the speed
 	 */
@@ -243,29 +269,6 @@ public class Character extends AbstractStoredEntity {
 	}
 
 	public Map<Skill, Integer> getUnmodifiableSkills() {
-		return skills;
-	}
-
-	@Override
-	public String toString() {
-		return String.format("Character(%s,%s,hp=%d,mp=%s,patt=%d,pdef=%d,matt=%d,mdef=%s,speed=%s,acc=%d,ev=%d)", name,
-				elements, maxHp, maxMp, physicalAttack, physicalDefense, magicalAttack, magicalDefense, speed,
-				accuracy);
-	}
-
-	@Override
-	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
-		associated(skills.keySet(), consumer);
-	}
-
-	/**
-	 * @return the elements
-	 */
-	Set<EElement> getElements() {
-		return elements;
-	}
-
-	Map<Skill, Integer> getSkills() {
 		return skills;
 	}
 
@@ -318,19 +321,23 @@ public class Character extends AbstractStoredEntity {
 	}
 
 	/**
-	 * @param gifBack
+	 * @param imgBack
 	 *            the gifBack to set
 	 */
-	void setImgBack(final String gifBack) {
-		this.gifBack = gifBack;
+	void setImgBack(final String imgBack) {
+		this.imgBack = imgBack;
 	}
 
 	/**
 	 * @param gif
 	 *            the gif to set
 	 */
-	void setImgFront(final String gifFront) {
-		this.gifFront = gifFront;
+	void setImgFront(final String imgFront) {
+		this.imgFront = imgFront;
+	}
+
+	void setImgIcon(String imgIcon) {
+		this.imgIcon = imgIcon;
 	}
 
 	/**
@@ -399,5 +406,12 @@ public class Character extends AbstractStoredEntity {
 	 */
 	void setSpeed(final int speed) {
 		this.speed = speed;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Character(%s,%s,hp=%d,mp=%s,patt=%d,pdef=%d,matt=%d,mdef=%s,speed=%s,acc=%d,ev=%d)", name,
+				elements, maxHp, maxMp, physicalAttack, physicalDefense, magicalAttack, magicalDefense, speed,
+				accuracy);
 	}
 }

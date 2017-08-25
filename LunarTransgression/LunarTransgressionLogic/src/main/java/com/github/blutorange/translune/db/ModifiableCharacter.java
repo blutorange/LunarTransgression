@@ -39,11 +39,15 @@ public class ModifiableCharacter extends ModifiableEntity<Character> {
 		entity.setExperienceGroup(experienceGroup);
 	}
 
-	public void setGifFront(final String gifFront) {
+	public void setImgIcon(String imgIcon) {
+		entity.setImgIcon(imgIcon);
+	}
+	
+	public void setImgFront(final String gifFront) {
 		entity.setImgFront(gifFront);
 	}
 
-	public void setGifBack(final String gifBack) {
+	public void setImgBack(final String gifBack) {
 		entity.setImgBack(gifBack);
 	}
 

@@ -43,6 +43,9 @@ public class EffectorStatusCondition implements IGlobalBattleEffector {
 						String.format(condition.getCannotMoveMessage(), cs.getNickname()));
 				context.getBattleActions(0).add(action);
 				context.getBattleActions(1).add(action);
+				if (EStatusCondition.CONFUSE.equals(condition)) {
+					// TODO [MID] implement hurt itself
+				}
 				return false;
 			}
 		}

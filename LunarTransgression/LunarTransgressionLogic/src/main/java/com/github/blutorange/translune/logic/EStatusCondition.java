@@ -204,7 +204,6 @@ public enum EStatusCondition {
 			return "%s's burn prevents it from moving.";
 		}
 	},
-	// TODO [MID] implement hurt itself
 	CONFUSE(f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1,1), f(1,1)) {
 		@Override
 		public boolean canMove() {
