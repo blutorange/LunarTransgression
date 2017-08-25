@@ -119,8 +119,8 @@ public class SkillCsvModel {
 	 * @param isPhysical
 	 *            the isPhysical to set
 	 */
-	public void setPhysical(final boolean isPhysical) {
-		builder.setPhysical(isPhysical);
+	public void setIsPhysical(final boolean isPhysical) {
+		builder.setIsPhysical(isPhysical);
 	}
 
 	/**

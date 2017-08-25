@@ -28,6 +28,8 @@ public class CustomProperties {
 
 	private final int battleRoundTimeoutMillis;
 
+	private volatile boolean online;
+
 	@Inject
 	public CustomProperties() {
 		try (InputStream is = CustomProperties.class.getClassLoader().getResourceAsStream("custom.properties")) {
@@ -89,5 +91,13 @@ public class CustomProperties {
 
 	public int getBattleStepTimeoutMillis() {
 		return battleRoundTimeoutMillis;
+	}
+
+	public void setOnline(final boolean online) {
+		this.online = online;
+	}
+
+	public boolean isOnline() {
+		return online;
 	}
 }

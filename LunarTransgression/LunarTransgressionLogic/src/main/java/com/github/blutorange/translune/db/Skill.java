@@ -32,8 +32,8 @@ public class Skill extends AbstractStoredEntity implements ITargettable {
 	private int accuracy;
 
 	@NotNull
-	@Size(min = 1, max = 512)
-	@Column(name = "description", nullable = false, unique = true, length = 63, updatable = false)
+	@Size(min = 1, max = 2048)
+	@Column(name = "description", nullable = false, unique = false, length = 2048, updatable = false)
 	private String description = StringUtils.EMPTY;
 
 	@NotNull
@@ -62,8 +62,8 @@ public class Skill extends AbstractStoredEntity implements ITargettable {
 
 	@Id
 	@NotNull
-	@Size(min = 1, max = 63)
-	@Column(name = "name", nullable = false, unique = true, length = 63, updatable = false)
+	@Size(min = 1, max = 32)
+	@Column(name = "name", nullable = false, unique = true, length = 32, updatable = false)
 	private String name = StringUtils.EMPTY;
 
 	@Min(0)
@@ -179,7 +179,7 @@ public class Skill extends AbstractStoredEntity implements ITargettable {
 		this.accuracy = accuracy;
 	}
 
-	void setDescription(String description) {
+	void setDescription(final String description) {
 		this.description = description;
 	}
 

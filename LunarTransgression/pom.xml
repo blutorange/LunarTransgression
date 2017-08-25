@@ -61,6 +61,7 @@
 		<build-helper-maven-plugin-version>3.0.0</build-helper-maven-plugin-version>
 		<cargo-maven2-plugin-version>1.6.4</cargo-maven2-plugin-version>
 		<commons-dbcp-version>1.4</commons-dbcp-version>
+		<commons-io-version>2.4</commons-io-version>
 		<commons-lang3-version>3.6</commons-lang3-version>
 		<commons-text-version>1.1</commons-text-version>
 		<sfm-version>2.14.1</sfm-version>
@@ -130,6 +131,11 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-text</artifactId>
 				<version>${commons-text-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons-io-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.simpleflatmapper</groupId>

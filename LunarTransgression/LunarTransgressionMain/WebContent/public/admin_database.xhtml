@@ -9,6 +9,7 @@
 	
 	<p:commandButton value="Empty database and create schema"
 		update="messages" actionListener="#{adminBean.createSchema}">
+		
 		<p:confirm header="Confirmation" message="This will delete all data in the database. Proceed?" icon="ui-icon-alert" />		
 	</p:commandButton>
 	

@@ -46,7 +46,8 @@ public class Character extends AbstractStoredEntity {
 	private String cry;
 
 	@NotEmpty
-	@Column(name = "description", nullable = false, unique = false, updatable = false)
+	@Size(min=1,max=2048)
+	@Column(name = "description", nullable = false, unique = false, updatable = false, length=2048)
 	private String description;
 
 	@NotNull

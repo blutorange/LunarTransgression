@@ -25,6 +25,7 @@ public class SkillBuilder implements Builder<Skill> {
 
 	}
 
+	@Override
 	public Skill build() {
 		if (element == null)
 			throw new IllegalStateException("element is null");
@@ -38,7 +39,7 @@ public class SkillBuilder implements Builder<Skill> {
 			throw new IllegalStateException("power is not set or negative");
 		if (mp < 0)
 			throw new IllegalStateException("mp is not set or negative");
-		Skill skill = new Skill();
+		final Skill skill = new Skill();
 		skill.setAccuracy(accuracy);
 		skill.setDescription(description);
 		skill.setEffect(effect);
@@ -53,63 +54,63 @@ public class SkillBuilder implements Builder<Skill> {
 		return skill;
 	}
 
-	public SkillBuilder setAccuracy(int accuracy) {
+	public SkillBuilder setAccuracy(final int accuracy) {
 		this.accuracy = accuracy;
 		return this;
 	}
 
-	public SkillBuilder setDescription(String description) {
+	public SkillBuilder setDescription(final String description) {
 		this.description = description;
 		return this;
 	}
 
-	public SkillBuilder setEffect(ESkillEffect effect) {
+	public SkillBuilder setEffect(final ESkillEffect effect) {
 		this.effect = effect;
 		return this;
 	}
 
-	public SkillBuilder setElement(EElement element) {
+	public SkillBuilder setElement(final EElement element) {
 		this.element = element;
 		return this;
 	}
 
-	public SkillBuilder setHighCritical(boolean highCritical) {
+	public SkillBuilder setHighCritical(final boolean highCritical) {
 		this.highCritical = highCritical;
 		return this;
 	}
 
-	public SkillBuilder setMp(int mp) {
+	public SkillBuilder setMp(final int mp) {
 		this.mp = mp;
 		return this;
 	}
-	
+
 	public String getId() {
 		return name;
 	}
 
-	public SkillBuilder setName(String name) {
-		if (name != null)
-			throw new IllegalStateException("name cannot be changed");
+	public SkillBuilder setName(final String name) {
+		if (this.name != null)
+			throw new IllegalStateException("player name cannot be changed: " + this.name);
 		this.name = name;
 		return this;
 	}
 
-	public SkillBuilder setPhysical(boolean isPhysical) {
+	public SkillBuilder setIsPhysical(final boolean isPhysical) {
 		this.isPhysical = isPhysical;
 		return this;
 	}
 
-	public SkillBuilder setPower(int power) {
+	public SkillBuilder setPower(final int power) {
 		this.power = power;
 		return this;
 	}
 
-	public SkillBuilder setPriority(int priority) {
+	public SkillBuilder setPriority(final int priority) {
 		this.priority = priority;
 		return this;
 	}
 
-	public SkillBuilder setTarget(EActionTarget target) {
+	public SkillBuilder setTarget(final EActionTarget target) {
 		this.target = target;
 		return this;
 	}

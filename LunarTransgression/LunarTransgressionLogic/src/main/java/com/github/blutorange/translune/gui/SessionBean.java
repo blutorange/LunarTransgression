@@ -119,37 +119,37 @@ public class SessionBean extends AbstractBean implements Serializable {
 				.redirect(getContextPath() + "/public/index.xhtml"));
 	}
 
-	public String getContextPath() {
-		return FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath();
-	}
-
 	public void register(final ActionEvent actionEvent) {
 		if (StringUtils.isAllBlank(this.username) || StringUtils.isAllBlank(password)) {
-			addMessage(FacesMessage.SEVERITY_WARN, "username or password missing");
+			addMessage(FacesMessage.SEVERITY_WARN, "Username or password missing");
 			return;
 		}
 		if (!password.equals(passwordRepeat)) {
-			addMessage(FacesMessage.SEVERITY_WARN, "password repeat not matching password");
+			addMessage(FacesMessage.SEVERITY_WARN, "Password repeat not matching password");
 			return;
 		}
 		final String nickname = this.username.trim();
 		final String password = this.password;
-		if (Constants.CUSTOM_KEY_SADMIN_PASS.equals(nickname) || databaseManager.find(Player.class, nickname) != null) {
-			addMessage(FacesMessage.SEVERITY_WARN, "nickname exists already");
+		if (Constants.USERNAME_SADMIN.equals(nickname) || databaseManager.find(Player.class, nickname) != null) {
+			addMessage(FacesMessage.SEVERITY_WARN, "Nickname exists already");
 			return;
 		}
 		try {
 			createPlayer(nickname, password);
 		}
-		catch (final CannotPerformOperationException e) {
+		catch (final Exception e) {
+			logger.error("failed to create player", e);
 			addMessage(FacesMessage.SEVERITY_ERROR, "Failed to create player: " + e.getMessage());
 			return;
 		}
-		addMessage(FacesMessage.SEVERITY_INFO, "registration complete");
+		addMessage(FacesMessage.SEVERITY_INFO, "Registration complete");
+		redirect("");
 	}
 
 	private void createPlayer(final String nickname, final String password) throws CannotPerformOperationException {
+		logger.debug("creating player");
 		final Character[] characters = databaseManager.findRandom(Character.class, 4);
+		logger.debug("found random characters: " + characters.length);
 		if (characters.length != 4) {
 			addMessage(FacesMessage.SEVERITY_ERROR, "Failed to generate characters");
 			return;
@@ -203,7 +203,7 @@ public class SessionBean extends AbstractBean implements Serializable {
 			}
 			this.password = "";
 			this.username = "";
-			FacesContext.getCurrentInstance().getExternalContext().redirect(getContextPath() + redirect);
+			redirect(redirect);
 		});
 	}
 }

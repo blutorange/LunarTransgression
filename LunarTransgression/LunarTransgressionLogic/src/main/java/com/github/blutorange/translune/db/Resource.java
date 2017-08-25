@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -20,12 +21,16 @@ public class Resource extends AbstractEntity {
 	@Column(name = "data", updatable = false, insertable = true, nullable = false, unique = false)
 	private byte[] data;
 
+	@NotEmpty
+	@Column(name = "filename", updatable = false, insertable = true, nullable = false, unique = false, length = 64)
+	private String filename;
+
 	@NotNull
-	@Column(name = "mime", updatable = false, insertable = true, nullable = false, unique = false)
+	@Column(name = "mime", updatable = false, insertable = true, nullable = false, unique = false, length = 64)
 	private String mime;
 
 	@Id
-	@Column(name = "name", updatable = false, insertable = true, nullable = false, unique = false)
+	@Column(name = "name", updatable = false, insertable = true, nullable = false, unique = false, length = 32)
 	private String name;
 
 	/**
@@ -33,6 +38,13 @@ public class Resource extends AbstractEntity {
 	 */
 	public byte[] getData() {
 		return data;
+	}
+
+	/**
+	 * @return the filename
+	 */
+	public String getFilename() {
+		return filename;
 	}
 
 	/**
@@ -49,12 +61,21 @@ public class Resource extends AbstractEntity {
 		return name;
 	}
 
+	@Override
+	public Serializable getPrimaryKey() {
+		return name;
+	}
+
 	/**
 	 * @param blob
 	 *            the blob to set
 	 */
 	public void setData(final byte[] data) {
 		this.data = data;
+	}
+
+	public void setFilename(final String filename) {
+		this.filename = filename;
 	}
 
 	/**
@@ -75,11 +96,6 @@ public class Resource extends AbstractEntity {
 
 	@Override
 	public String toString() {
-		return String.format("Resource(%s,%s,%dbytes)", name, mime, data.length);
-	}
-
-	@Override
-	public Serializable getPrimaryKey() {
-		return name;
+		return String.format("Resource(%s,%s,%dbytes,%s)", name, mime, Integer.valueOf(data.length), filename);
 	}
 }

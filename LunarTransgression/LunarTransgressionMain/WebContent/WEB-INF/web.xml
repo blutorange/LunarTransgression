@@ -70,8 +70,6 @@
 		<location>/public/error/404.xhtml</location>
 	</error-page>
 
-
-
 	<mime-mapping>
 		<extension>ttf</extension>
 		<mime-type>application/font-sfnt</mime-type>

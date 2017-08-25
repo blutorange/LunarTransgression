@@ -1,7 +1,5 @@
 package com.github.blutorange.translune.db;
 
-import java.util.Collection;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
@@ -74,6 +72,7 @@ public interface ILunarDatabaseManager {
 
 		@Override
 		public void shutdown() {
+			// not started
 		}
 
 		@Override
@@ -100,7 +99,7 @@ public interface ILunarDatabaseManager {
 		}
 
 		@Override
-		public <T extends AbstractStoredEntity> void persist(Collection<@NonNull T> entity) {
+		public void checkConnection() throws Exception {
 			throw new RuntimeException("mock - injection probably failed");
 		}
 	}
@@ -129,8 +128,6 @@ public interface ILunarDatabaseManager {
 
 	<@NonNull T extends AbstractStoredEntity> void persist(T entity);
 
-	<@NonNull T extends AbstractStoredEntity> void persist(Collection<T> entity);
-
 	<@NonNull T extends AbstractStoredEntity> void delete(T entity);
 
 	void shutdown();
@@ -142,5 +139,5 @@ public interface ILunarDatabaseManager {
 	@Nullable
 	<@Nullable T> T withEm(boolean transactional, ThrowingFunction<EntityManager, T, Exception> runnable);
 
-	void flush();
+	void checkConnection() throws Exception;
 }

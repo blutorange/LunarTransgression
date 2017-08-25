@@ -3,6 +3,7 @@ package com.github.blutorange.translune.db;
 import java.util.Random;
 
 import org.apache.commons.lang3.builder.Builder;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.logic.ENature;
@@ -20,15 +21,20 @@ public class CharacterStateBuilder implements Builder<CharacterState> {
 	private int ivSpeed;
 	private int level = Constants.MIN_LEVEL;
 	private ENature nature;
+	@Nullable
 	private String nickname;
 
 	public CharacterStateBuilder() {
 	}
 
+	@Override
 	public CharacterState build() {
+		String nickname = this.nickname;
 		if (character == null)
 			throw new IllegalStateException("no character set");
-		if (nickname.isEmpty())
+		if (nature == null)
+			throw new IllegalStateException("no nature set");
+		if (nickname == null || nickname.isEmpty())
 			nickname = character.getName();
 		return new CharacterState(character, nickname, nature, exp, level, ivHp, ivMp, ivPhysicalAttack,
 				ivPhysicalDefense, ivMagicalAttack, ivMagicalDefense, ivSpeed);

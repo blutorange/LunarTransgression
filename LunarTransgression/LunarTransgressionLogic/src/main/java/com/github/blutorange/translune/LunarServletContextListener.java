@@ -25,8 +25,7 @@ import com.github.blutorange.translune.util.Constants;
 public class LunarServletContextListener implements ServletContextListener {
 	private final static Logger LOG = LoggerFactory.getLogger(LunarServletContextListener.class);
 
-	@Override
-	public void contextInitialized(final ServletContextEvent sce) {
+	public void initialize() {
 		final Scheduler defaultScheduler = ComponentFactory.getLogicComponent().defaultScheduler();
 		try {
 			defaultScheduler.start();
@@ -36,6 +35,11 @@ public class LunarServletContextListener implements ServletContextListener {
 			LOG.error("failed to start quartz", e);
 			throw new RuntimeException("failed to start scheduler", e);
 		}
+	}
+
+	@Override
+	public void contextInitialized(final ServletContextEvent sce) {
+		initialize();
 	}
 
 	private void addJobSaveDb(final Scheduler scheduler) throws SchedulerException {
@@ -48,8 +52,7 @@ public class LunarServletContextListener implements ServletContextListener {
 		scheduler.scheduleJob(jobDetail, jobTrigger);
 	}
 
-	@Override
-	public void contextDestroyed(final ServletContextEvent sce) {
+	public void destroy() {
 		final Scheduler defaultScheduler = ComponentFactory.getLogicComponent().defaultScheduler();
 		final ILunarDatabaseManager ldm = ComponentFactory.getDatabaseComponent().iLunarDatabaseManager();
 		try {
@@ -66,5 +69,10 @@ public class LunarServletContextListener implements ServletContextListener {
 			LOG.error("failed to shutdown quartz", e);
 			throw new RuntimeException("failed to shutdown scheduler", e);
 		}
+	}
+
+	@Override
+	public void contextDestroyed(final ServletContextEvent sce) {
+		destroy();
 	}
 }

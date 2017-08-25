@@ -55,7 +55,8 @@ public class Player extends AbstractStoredEntity {
 	private Set<CharacterState> releasedCharacterStates;
 
 	@NotNull
-	@Column(name = "description", nullable = false, length = 1023, unique = false)
+	@Size(min=1,max=2048)
+	@Column(name = "description", nullable = false, length = 2048, unique = false)
 	private String description = StringUtils.EMPTY;
 
 	@NotNull
@@ -156,6 +157,8 @@ public class Player extends AbstractStoredEntity {
 	 *            the nickname to set
 	 */
 	void setNickname(final String nickname) {
+		if (this.nickname != null)
+			throw new IllegalStateException("player nickname cannot be changed: " + this.nickname);
 		this.nickname = nickname;
 	}
 

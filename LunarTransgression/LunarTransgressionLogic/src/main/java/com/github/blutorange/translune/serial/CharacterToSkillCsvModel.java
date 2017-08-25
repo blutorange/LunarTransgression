@@ -1,23 +1,19 @@
 package com.github.blutorange.translune.serial;
 
-import java.util.Set;
-
-import com.github.blutorange.translune.db.Skill;
-
 public class CharacterToSkillCsvModel {
 	private String characterId;
 	private String skillId;
 	private int level;
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CharacterToSkillCsvModel other = (CharacterToSkillCsvModel) obj;
+		final CharacterToSkillCsvModel other = (CharacterToSkillCsvModel) obj;
 		if (characterId == null) {
 			if (other.characterId != null)
 				return false;
@@ -55,15 +51,20 @@ public class CharacterToSkillCsvModel {
 		return result;
 	}
 
-	public void setCharacterId(String characterId) {
+	public void setCharacterId(final String characterId) {
 		this.characterId = characterId;
 	}
 
-	public void setLevel(int level) {
+	public void setLevel(final int level) {
 		this.level = level;
 	}
 
-	public void setSkillId(String skillId) {
+	public void setSkillId(final String skillId) {
 		this.skillId = skillId;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("CharacterToSkillCsvModel(%s,%s,%s)", level, characterId, skillId);
 	}
 }

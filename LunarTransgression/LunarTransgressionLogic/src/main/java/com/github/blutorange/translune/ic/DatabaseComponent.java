@@ -5,6 +5,7 @@ import javax.persistence.EntityManagerFactory;
 
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.LunarDatabaseManager;
+import com.github.blutorange.translune.serial.IImportProcessing;
 import com.github.blutorange.translune.serial.ImportProcessing;
 
 import dagger.Component;
@@ -16,4 +17,5 @@ public interface DatabaseComponent {
 	ILunarDatabaseManager iLunarDatabaseManager();
 	EntityManagerFactory entityManagerFactory();
 	ImportProcessing importProcessing();
+	IImportProcessing iImportProcessing();
 }

@@ -46,10 +46,6 @@
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>all-themes</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.tika</groupId>
-			<artifactId>tika-core</artifactId>
-		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>org.postgresql</groupId> -->
 		<!-- <artifactId>postgresql</artifactId> -->
@@ -173,7 +169,7 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<configuration>
 					<path>/translune</path>
-					<port>8082</port>
+					<port>8086</port>
 					<warSourceDirectory>WebContent</warSourceDirectory>
 				</configuration>
 			</plugin>

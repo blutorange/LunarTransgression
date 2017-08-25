@@ -1,5 +1,6 @@
 package com.github.blutorange.translune.gui;
 
+import java.io.IOException;
 import java.util.function.Supplier;
 
 import javax.faces.application.FacesMessage;
@@ -21,6 +22,19 @@ public abstract class AbstractBean {
 
 	public AbstractBean() {
 		ComponentFactory.getBeanComponent().inject(this);
+	}
+
+	protected void redirect(final String relativeUrl) {
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect(getContextPath() + relativeUrl);
+		}
+		catch (final IOException e) {
+			logger.error("could not redirect user to " + relativeUrl, e);
+		}
+	}
+
+	public String getContextPath() {
+		return FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath();
 	}
 
 	protected void addMessage(final Severity severity, final String summary, @Nullable final String details) {

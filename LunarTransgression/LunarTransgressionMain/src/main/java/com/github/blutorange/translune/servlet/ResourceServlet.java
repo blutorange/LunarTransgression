@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.text.StringEscapeUtils;
-import org.apache.tika.mime.MimeTypeException;
-import org.apache.tika.mime.MimeTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,18 +36,10 @@ public class ResourceServlet extends HttpServlet {
 			resp.sendError(404, "Resource not found.");
 			return;
 		}
-		String name = resource.getName();
-		try {
-			final String extension = MimeTypes.getDefaultMimeTypes().forName(resource.getMime()).getExtension();
-			name += extension;
-		}
-		catch (final MimeTypeException e) {
-			LOG.error("failed to determine extension from mime type", e);
-		}
 		resp.setCharacterEncoding("US-ASCII");
 		resp.setContentType(resource.getMime());
 		resp.setContentLength(resource.getData().length);
-		resp.setHeader("content-disposition", "attachment; filename=\"" + StringEscapeUtils.escapeJava(name) +"\"");
+		resp.setHeader("content-disposition", "attachment; filename=\"" + StringEscapeUtils.escapeJava(resource.getFilename()) +"\"");
 		resp.setStatus(200);
 		resp.getOutputStream().write(resource.getData());
 	}

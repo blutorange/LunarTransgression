@@ -10,6 +10,7 @@ import com.github.blutorange.translune.db.EntityStore;
 import com.github.blutorange.translune.db.IEntityStore;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.LunarDatabaseManager;
+import com.github.blutorange.translune.serial.IImportProcessing;
 
 import dagger.Module;
 import dagger.Provides;
@@ -27,6 +28,11 @@ public class DatabaseModule {
 
 	@Provides @Singleton static IEntityStore provideEntityStore(final EntityManagerFactory emf) {
 		return new EntityStore(emf);
+	}
+
+	@Provides @Singleton
+	static IImportProcessing provideImporProcessing() {
+		return ComponentFactory.getDatabaseComponent().importProcessing();
 	}
 
 	@Provides @Singleton

@@ -9,6 +9,7 @@ import com.github.blutorange.translune.db.LunarDatabaseManager;
 import com.github.blutorange.translune.gui.AbstractBean;
 import com.github.blutorange.translune.gui.ManageBean;
 import com.github.blutorange.translune.gui.PlayerBean;
+import com.github.blutorange.translune.gui.StatusBean;
 import com.github.blutorange.translune.handler.HandlerAuthorize;
 import com.github.blutorange.translune.handler.HandlerInvite;
 import com.github.blutorange.translune.handler.HandlerInviteAccept;
@@ -19,6 +20,7 @@ import com.github.blutorange.translune.handler.HandlerPrepareBattle;
 import com.github.blutorange.translune.handler.HandlerStepBattle;
 import com.github.blutorange.translune.logic.BattleRunner;
 import com.github.blutorange.translune.logic.BattleStore;
+import com.github.blutorange.translune.serial.ImportProcessing;
 import com.github.blutorange.translune.socket.LunarDecoder;
 import com.github.blutorange.translune.socket.LunarEncoder;
 import com.github.blutorange.translune.socket.LunarEndpoint;
@@ -118,7 +120,15 @@ public class LoggingModule {
 	@Provides @Singleton @Classed(ManageBean.class) static Logger provideLogger24() {
 		return provideLogger(ManageBean.class);
 	}
-	
+
+	@Provides @Singleton @Classed(ImportProcessing.class) static Logger provideLogger25() {
+		return provideLogger(ImportProcessing.class);
+	}
+
+	@Provides @Singleton @Classed(StatusBean.class) static Logger provideLogger26() {
+		return provideLogger(StatusBean.class);
+	}
+
 	private static Logger provideLogger(final Class<?> clazz) {
 		return LoggerFactory.getLogger(clazz);
 	}

@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
@@ -32,7 +33,8 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 
 	@NotNull
 	@Id
-	@Column(name = "name", unique = true, nullable = false, length = 63, updatable = false)
+	@Size(min=1,max=32)
+	@Column(name = "name", unique = true, nullable = false, length = 32, updatable = false)
 	private String name = StringUtils.EMPTY;
 
 	@Min(0)
@@ -103,6 +105,7 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 		return priority;
 	}
 
+	@Override
 	public EActionTarget getTarget() {
 		return target;
 	}
@@ -139,7 +142,7 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 		this.priority = priority;
 	}
 
-	void setTarget(EActionTarget target) {
+	void setTarget(final EActionTarget target) {
 		this.target = target;
 	}
 

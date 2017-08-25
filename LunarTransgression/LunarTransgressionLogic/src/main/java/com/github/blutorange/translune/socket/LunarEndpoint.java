@@ -66,6 +66,8 @@ public class LunarEndpoint {
 
 	@OnOpen
 	public void open(final Session session) {
+		if (!customProperties.isOnline())
+			return;
 		logger.debug("opening lunar session " + session.getId());
 		if (session.getOpenSessions().size() > 1) {
 			logger.info("more than one session open to same endpoint, closing: " + session.getId());

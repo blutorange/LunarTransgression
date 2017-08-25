@@ -1,23 +1,31 @@
 package com.github.blutorange.translune;
 
+import java.io.IOException;
+import java.util.zip.ZipFile;
+
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.Item;
 import com.github.blutorange.translune.db.ModifiableItem;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.logic.EExperienceGroup;
-import com.jsoniter.JsonIterator;
 
 public class Sandbox {
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws Exception {
 		// testing...
-//		final ServletContextListener scl = new LunarServletContextListener();
-//		scl.contextInitialized(null);
+		final LunarServletContextListener scl = new LunarServletContextListener();
+		scl.initialize();
 		try {
-			schema();
+			ldm();
 		}
 		finally {
-//			scl.contextDestroyed(null);
+			scl.destroy();
+		}
+	}
+
+	static void importing() throws IOException {
+		try (ZipFile zipFile = new ZipFile("/tmp/test.zip")) {
+			ComponentFactory.getDatabaseComponent().iImportProcessing().importDataSet(zipFile);
 		}
 	}
 
@@ -33,6 +41,8 @@ public class Sandbox {
 
 	static void ldm() {
 		final ILunarDatabaseManager ldm = ComponentFactory.getDatabaseComponent().iLunarDatabaseManager();
+		System.out.println(ldm.find(Player.class, "blutorange"));
+		if (true) return;
 
 //		final Player player = new Player("player2", "123", "im a me", new HashSet<>(), new HashSet<>());
 //		final Item item = new Item("item2", player, EItemEffect.HEAL, 20);

@@ -60,8 +60,9 @@ public final class Constants {
 
 	public static final String QUARTZ_KEY_LDM = "ldm";
 
-	public static final String FILE_PREFIX_CHARACTER_CRY = "ccry_";
-	
+	public static final String FILE_PREFIX_CHARACTER_CRY = "cry_";
+	public static final String FILE_PREFIX_CHARACTER_IMG = "img_";
+
 	public static final String IMPORT_DIR_CHARACTER_CRY = "character-cry";
 	public static final String IMPORT_DIR_CHARACTER_IMG = "character-img";
 	public static final String IMPORT_FILE_CHARACTER = "character.csv";

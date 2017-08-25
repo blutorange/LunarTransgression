@@ -6,6 +6,15 @@
 	xmlns:o="http://omnifaces.org/ui"
 	xmlns:of="http://omnifaces.org/functions"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
+        <h:panelGrid columns="2" cellpadding="5">
+            <h:outputLabel for="online" value="Accept new connections" />
+			<p:inputSwitch id="online" value="#{statusBean.online}" immediate="true">
+				<p:ajax event="change" listener="#{statusBean.onOnlineChange}"></p:ajax>
+			</p:inputSwitch>
 
-	<h:outputText value="SOON to be done"/>
+            <h:outputText value="Database connection" />
+			<p:commandButton id="database_recheck"
+				actionListener="#{statusBean.databaseCheck}" value="Check"
+				update="messages"></p:commandButton>
+</h:panelGrid>
 </html>

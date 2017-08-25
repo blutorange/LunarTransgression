@@ -15,7 +15,7 @@ public class CharacterBuilder implements Builder<Character> {
 	private int accuracy;
 	private String cry;
 	private String description = StringUtils.EMPTY;
-	private Set<EElement> elements = new HashSet<>();
+	private final Set<EElement> elements = new HashSet<>();
 	private int evasion;
 	private EExperienceGroup experienceGroup;
 	private String imgBack;
@@ -27,20 +27,20 @@ public class CharacterBuilder implements Builder<Character> {
 	private String name;
 	private int physicalAttack = -1;
 	private int physicalDefense =  -1;
-	private Map<Skill, Integer> skills = new HashMap<>();
+	private final Map<Skill, Integer> skills = new HashMap<>();
 	private int speed;
 
-	public CharacterBuilder addElement(EElement element) {
+	public CharacterBuilder addElement(final EElement element) {
 		this.elements.add(element);
 		return this;
 	}
 
-	public CharacterBuilder addElements(Set<EElement> elements) {
+	public CharacterBuilder addElements(final Set<EElement> elements) {
 		this.elements.addAll(elements);
 		return this;
 	}
 
-	public CharacterBuilder addSkill(int level, Skill skill) {
+	public CharacterBuilder addSkill(final int level, final Skill skill) {
 		this.skills.put(skill, Integer.valueOf(level));
 		return this;
 	}
@@ -76,8 +76,8 @@ public class CharacterBuilder implements Builder<Character> {
 		if (this.physicalDefense < 0)
 			throw new IllegalStateException("physical defense not set or negative");
 		if (this.speed < 0)
-			throw new IllegalStateException("speed not set or negative");		
-		Character c = new Character();
+			throw new IllegalStateException("speed not set or negative");
+		final Character c = new Character();
 		c.setAccuracy(accuracy);
 		c.setCry(cry);
 		c.setDescription(description);
@@ -102,79 +102,84 @@ public class CharacterBuilder implements Builder<Character> {
 		return name;
 	}
 
-	public CharacterBuilder setAccuracy(int accuracy) {
+	public CharacterBuilder setAccuracy(final int accuracy) {
 		this.accuracy = accuracy;
 		return this;
 	}
 
-	public CharacterBuilder setCry(String cry) {
+	public CharacterBuilder setCry(final String cry) {
 		this.cry = cry;
 		return this;
 	}
 
-	public CharacterBuilder setDescription(String description) {
+	public CharacterBuilder setDescription(final String description) {
 		this.description = description;
 		return this;
 	}
 
-	public CharacterBuilder setEvasion(int evasion) {
+	public CharacterBuilder setEvasion(final int evasion) {
 		this.evasion = evasion;
 		return this;
 	}
 
-	public CharacterBuilder setExperienceGroup(EExperienceGroup experienceGroup) {
+	public CharacterBuilder setExperienceGroup(final EExperienceGroup experienceGroup) {
 		this.experienceGroup = experienceGroup;
 		return this;
 	}
 
-	public CharacterBuilder setImgBack(String imgBack) {
+	public CharacterBuilder setImgBack(final String imgBack) {
 		this.imgBack = imgBack;
 		return this;
 	}
 
-	public CharacterBuilder setImgFront(String imgFront) {
+	public CharacterBuilder setImgFront(final String imgFront) {
 		this.imgFront = imgFront;
 		return this;
 	}
 
-	public CharacterBuilder setMagicalAttack(int magicalAttack) {
+	public CharacterBuilder setMagicalAttack(final int magicalAttack) {
 		this.magicalAttack = magicalAttack;
 		return this;
 	}
 
-	public CharacterBuilder setMagicalDefense(int magicalDefense) {
+	public CharacterBuilder setMagicalDefense(final int magicalDefense) {
 		this.magicalDefense = magicalDefense;
 		return this;
 	}
 
-	public CharacterBuilder setMaxHp(int maxHp) {
+	public CharacterBuilder setMaxHp(final int maxHp) {
 		this.maxHp = maxHp;
 		return this;
 	}
 
-	public CharacterBuilder setMaxMp(int maxMp) {
+	public CharacterBuilder setMaxMp(final int maxMp) {
 		this.maxMp = maxMp;
 		return this;
 	}
 
-	public CharacterBuilder setName(String name) {
-		if (name != null)
-			throw new IllegalStateException("name cannot be changed");
+	public CharacterBuilder setName(final String name) {
+		if (this.name != null)
+			throw new IllegalStateException("character name cannot be changed: " + this.name);
 		this.name = name;
 		return this;
 	}
 
-	public CharacterBuilder setPhysicalAttack(int physicalAttack) {
+	@Override
+	public String toString() {
+		return String.format("CharacterBuilder(%s)", name);
+	}
+
+	public CharacterBuilder setPhysicalAttack(final int physicalAttack) {
 		this.physicalAttack = physicalAttack;
 		return this;
 	}
 
-	public CharacterBuilder setPhysicalDefense(int physicalDefense) {
+	public CharacterBuilder setPhysicalDefense(final int physicalDefense) {
 		this.physicalDefense = physicalDefense;
 		return this;
 	}
 
-	public CharacterBuilder setSpeed(int speed) {
+	public CharacterBuilder setSpeed(final int speed) {
 		this.speed = speed;
 		return this;
 	}

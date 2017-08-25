@@ -102,6 +102,9 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 		synchronized (entityStore) {
 			saveChangesToDatabase();
 		}
+		if (amount < 1) {
+			return (T[])Array.newInstance(clazz, 0);
+		}
 		return withEm(em -> {
 			final CriteriaBuilder cb = em.getCriteriaBuilder();
 			final Long longCount = count(em, cb, clazz);
@@ -109,7 +112,7 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 			if (count < 1)
 				return (T[])Array.newInstance(clazz, 0);
 			final T[] result = (T[])Array.newInstance(clazz, amount);
-			for (int i = amount; i --> 0; ++i) {
+			for (int i = amount; i --> 0;) {
 				final CriteriaQuery<T> cq = cb.createQuery(clazz);
 				cq.select(cq.from(clazz));
 				final TypedQuery<T> tq = em.createQuery(cq);
@@ -132,6 +135,18 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 		return (T[])findRandom(entityMeta.getJavaClass(), amount);
 	}
 
+	@Override
+	public void checkConnection() throws Exception {
+		EntityManager em = null;
+		try {
+			em = entityManagerFactory.createEntityManager();
+			em.find(Player.class, "");
+		}
+		finally {
+			if (em != null)
+				em.close();
+		}
+	}
 
 	@Override
 	public <@NonNull T extends AbstractStoredEntity> void persist(final T entity) {
@@ -151,6 +166,7 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 
 	@SuppressWarnings("resource")
 	protected void saveChangesToDatabase() {
+		logger.debug("flushing entity changes to database");
 		if (!changeList.isEmpty()) {
 			withEm(true, em -> {
 				final Session session = em.unwrap(Session.class);

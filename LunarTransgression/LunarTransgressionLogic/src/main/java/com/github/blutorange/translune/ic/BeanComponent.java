@@ -7,6 +7,7 @@ import com.github.blutorange.translune.gui.AdminBean;
 import com.github.blutorange.translune.gui.ManageBean;
 import com.github.blutorange.translune.gui.PlayerBean;
 import com.github.blutorange.translune.gui.SessionBean;
+import com.github.blutorange.translune.gui.StatusBean;
 
 import dagger.Component;
 
@@ -17,5 +18,6 @@ public interface BeanComponent {
 	void inject(AdminBean sessionBean);
 	void inject(PlayerBean abstractBean);
 	void inject(ManageBean abstractBean);
+	void inject(StatusBean abstractBean);
 	void inject(AbstractBean abstractBean);
 }
