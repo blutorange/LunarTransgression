@@ -15,12 +15,6 @@ public class BattleResult {
 	private final String character;
 
 	/**
-	 * How many level the character gained.
-	 */
-	@JsonProperty(required = true)
-	private final int levels;
-
-	/**
 	 * Sentences to display, eg. "XX received 10 EXP", "XX grew to level 11!",
 	 * "XX learned Sand Attack!"
 	 */
@@ -31,12 +25,26 @@ public class BattleResult {
 	public BattleResult() {
 		character = StringUtils.EMPTY;
 		sentences = ArrayUtils.EMPTY_STRING_ARRAY;
-		levels = 0;
 	}
 
-	public BattleResult(final String character, final int levels, final String... sentences) {
+	public BattleResult(final String character, final String... sentences) {
 		this.character = character;
-		this.levels = levels;
 		this.sentences = sentences;
 	}
+
+	/**
+	 * @return the character
+	 */
+	public String getCharacter() {
+		return character;
+	}
+
+	
+
+	/**
+	 * @return the sentences
+	 */
+	public String[] getSentences() {
+		return sentences;
+	}	
 }

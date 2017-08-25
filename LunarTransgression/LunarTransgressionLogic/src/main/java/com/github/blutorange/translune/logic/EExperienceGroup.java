@@ -23,7 +23,7 @@ public enum EExperienceGroup {
 	private int[] cumulated;
 	private IntToIntFunction expCurve;
 
-	private EExperienceGroup(IntToIntFunction expCurve) {
+	private EExperienceGroup(final IntToIntFunction expCurve) {
 		this.expCurve = expCurve;
 		cumulated = new int[100];
 		for (int level = 101; level --> 1 ;) {
@@ -31,7 +31,7 @@ public enum EExperienceGroup {
 		}
 	}
 	
-	public int getExperienceForLevel(int level) {
+	public int getExperienceForLevel(final int level) {
 		if (level <= 1)
 			return 0;
 		if (level >= 100)
@@ -39,7 +39,7 @@ public enum EExperienceGroup {
 		return cumulated[level-1];
 	}
 	
-	public int getLevelForExperience(int experience) {
+	public int getLevelForExperience(final int experience) {
 		if (experience < 0)
 			return 1;
 		if (experience >= cumulated[99])
@@ -48,7 +48,7 @@ public enum EExperienceGroup {
 		int left = 1;
 		int right = 100;
 		while (right - left > 1) {
-			int mid = (right+left)/2;
+			final int mid = (right+left)/2;
 			if (experience >= cumulated[mid-1])
 				left = mid;
 			else
@@ -57,6 +57,9 @@ public enum EExperienceGroup {
 		if (experience >= cumulated[right-1])
 			return right;
 		return left;
-
+	}
+	
+	public int getMaxExperience() {
+		return cumulated[99];
 	}
 }

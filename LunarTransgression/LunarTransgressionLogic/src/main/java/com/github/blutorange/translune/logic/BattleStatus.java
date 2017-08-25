@@ -1,5 +1,6 @@
 package com.github.blutorange.translune.logic;
 
+import org.apache.commons.lang3.math.Fraction;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.common.MathUtil;
@@ -204,5 +205,13 @@ public class BattleStatus {
 
 	private int clampStage(final int stage) {
 		return MathUtil.clamp(stage, Constants.MIN_STAGE, Constants.MAX_STAGE);
+	}
+
+	public Fraction getHpFraction() {
+		return Fraction.getFraction(hp, Constants.MAX_RELATIVE_HP);
+	}
+	
+	public Fraction getHMFraction() {
+		return Fraction.getFraction(mp, Constants.MAX_RELATIVE_MP);
 	}
 }

@@ -34,5 +34,5 @@ public interface IBattleProcessing {
 	IComputedBattleStatus getComputedStatus(String characterState, BattleStatus status);
 
 	BattleResult[][] distributeExperience(String[] players, List<String[]> characterStates,
-			BattleStatus[][] battleStatus);
+			BattleStatus[][] battleStatus, int turn);
 }

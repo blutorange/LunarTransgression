@@ -8,10 +8,13 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.math.Fraction;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.common.CollectionUtil;
+import com.github.blutorange.translune.db.Character;
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.ModifiablePlayer;
@@ -19,10 +22,11 @@ import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 import com.github.blutorange.translune.socket.BattleResult;
-
 @Singleton
 public class BattleProcessing implements IBattleProcessing {
 	private static final BattleAction[] EMPTY_BATTLE_ACTION = new BattleAction[0];
+
+	private static final Fraction TWO = Fraction.getFraction(2, 1);
 
 	@Inject
 	ILunarDatabaseManager databaseManager;
@@ -70,11 +74,55 @@ public class BattleProcessing implements IBattleProcessing {
 
 	@Override
 	public BattleResult[][] distributeExperience(final String[] players, final List<String[]> characterStates,
-			final BattleStatus[][] battleStatus) {
+			final BattleStatus[][] battleStatus, final int turn) {
 		final IComputedBattleStatus[][] computedBattleStatus = computedBattleStatus(characterStates, battleStatus);
 		final Player[] playerEntities = databaseManager.findAll(Player.class, players);
 		// TODO [HIGH] compute experience, return exp gain and level up messages
+		distributeExperience(playerEntities, computedBattleStatus, 0, turn);
+		distributeExperience(playerEntities, computedBattleStatus, 1, turn);
 		throw new NotImplementedException("implement me");
+	}
+
+	public void distributeExperience(final Player[] players, final IComputedBattleStatus[][] computedBattleStatus,
+			final int player, final int turn) {
+		final int opponent = 1-player;
+		// Get total experience by summing the experience for each opponent
+		int totalExp = 0;
+		int knockoutCount  = 0;
+		final Fraction partTurns = turn > 10 ? Fraction.ONE : TWO.subtract(Fraction.getFraction(turn, 10));
+		for (int i = 4; i --> 0;) {
+			final IComputedBattleStatus cbs = computedBattleStatus[opponent][i];
+			final int level = cbs.getCharacterState().getLevel();
+			final Fraction partLevel = Fraction.getFraction(level, 1).pow(3);
+			final Fraction partHp = Fraction.ONE.subtract(cbs.getBattleStatus().getHpFraction()).pow(2)
+					.add(Fraction.ONE_HALF).multiplyBy(TWO).reduce();
+			if (cbs.getBattleStatus().getHp() <= 0)
+				++knockoutCount;
+			final int experience = partLevel.multiplyBy(partHp).multiplyBy(partTurns).intValue();
+			totalExp += experience;
+		}
+		final Fraction winningFactor = knockoutCount >= 2 ? Fraction.getFraction(5,4) : Fraction.getFraction(3,4);
+		totalExp = totalExp*winningFactor.getNumerator()/winningFactor.getDenominator();
+		// Distribute experience the player's characters.
+		int levelTotal = 0;
+		for (int i = 4; i --> 0;)
+			levelTotal += 101-computedBattleStatus[opponent][i].getCharacterState().getLevel();
+		for (int i = 4; i --> 0;) {
+			final int exp = 101 - computedBattleStatus[opponent][i].getCharacterState().getLevel() * totalExp / levelTotal;
+			gainExp();
+		}
+	}
+	
+	private void gainExp(final CharacterState characterState, final int exp) {
+		final Character character = characterState.getCharacter();
+		final List<String> sentences = new ArrayList<>();
+		final int oldLevel = characterState.getLevel();
+		final int newLevel = character.getExperienceGroup().getLevelForExperience(characterState.getExp() + exp);
+		sentences.add(String.format("%s gained %d XP.", characterState.getNickname(), exp));
+		if (newLevel > oldLevel) {
+			sentences.add(String.format("%s grew to level %d!", characterState.getNickname(), newLevel));
+		}
+		new BattleResult(character.getName(), sentences.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 	}
 
 	private IItemRemovable getItemRemovable(final Player[] players) {
