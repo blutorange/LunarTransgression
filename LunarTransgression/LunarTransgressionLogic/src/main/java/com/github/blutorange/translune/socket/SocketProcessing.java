@@ -6,26 +6,45 @@ import java.util.Queue;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.Session;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 
+import com.github.blutorange.translune.db.ILunarDatabaseManager;
+import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.logic.EGameState;
+import com.github.blutorange.translune.logic.IInvitationStore;
+import com.github.blutorange.translune.logic.ISessionStore;
+import com.github.blutorange.translune.message.MessageInviteRejected;
+import com.github.blutorange.translune.message.MessageInviteRetracted;
 import com.github.blutorange.translune.util.Constants;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.output.JsonStream;
 
+@Singleton
 public class SocketProcessing implements ISocketProcessing {
+	@Inject @Classed(SocketProcessing.class)
+	Logger logger;
 
-	private final Logger logger;
+	@Inject
+	ILunarDatabaseManager databaseManager;
 
-	public SocketProcessing(@Classed(SocketProcessing.class) final Logger logger) {
-		this.logger = logger;
+	@Inject
+	ISessionStore sessionStore;
+
+	@Inject
+	IInvitationStore invitationStore;
+
+	@Inject
+	public SocketProcessing() {
 	}
 
 	@Override
@@ -41,6 +60,14 @@ public class SocketProcessing implements ISocketProcessing {
 			throw new RuntimeException("initSession not called, sever time is null");
 		final LunarMessage msg = new LunarMessage(time.getAndIncrement(), message.getMessageType(), status, payload);
 		return session.getAsyncRemote().sendObject(msg);
+	}
+
+	@SuppressWarnings("resource")
+	@Override
+	public void dispatchMessage(final String nickname, final ELunarStatusCode status, final ILunarPayload message) {
+		final Session session = sessionStore.retrieve(nickname);
+		if (session != null)
+			dispatchMessage(session, status, message);
 	}
 
 	@Override
@@ -139,4 +166,21 @@ public class SocketProcessing implements ISocketProcessing {
 			throw new RuntimeException("initSession was not called, message queue is null");
 		return (Queue<LunarMessage>) o;
 	}
+
+	@Override
+	public void finalizeSession(@NonNull final Session session) {
+		final String nickname = getNickname(session);
+		for (final String from : invitationStore.removeAllTo(nickname))
+			dispatchMessage(nickname, ELunarStatusCode.OK, new MessageInviteRejected(from));
+		for (final String to : invitationStore.removeAllFrom(nickname))
+			dispatchMessage(nickname, ELunarStatusCode.OK, new MessageInviteRetracted(to));
+		if (!nickname.isEmpty())
+			sessionStore.remove(nickname);
+		else
+			sessionStore.remove(session);
+		databaseManager.detach(Player.class, nickname);
+		session.getUserProperties().clear();
+	}
+
+
 }

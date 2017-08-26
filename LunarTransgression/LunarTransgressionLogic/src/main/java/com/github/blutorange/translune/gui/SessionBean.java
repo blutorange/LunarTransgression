@@ -41,7 +41,7 @@ public class SessionBean extends AbstractBean implements Serializable {
 
 	@Transient
 	@Inject
-	ILunarDatabaseManager databaseManager = ELunarDatabaseManagerMock.INSTANCE;
+	public ILunarDatabaseManager databaseManager = ELunarDatabaseManagerMock.INSTANCE;
 
 	@Transient
 	@Inject
@@ -51,7 +51,7 @@ public class SessionBean extends AbstractBean implements Serializable {
 
 	@PostConstruct
 	void init() {
-		ComponentFactory.getBeanComponent().inject(this);
+		ComponentFactory.getLunarComponent().inject(this);
 	}
 
 	/**
@@ -119,6 +119,9 @@ public class SessionBean extends AbstractBean implements Serializable {
 				.redirect(getContextPath() + "/public/index.xhtml"));
 	}
 
+	/**
+	 * @param actionEvent
+	 */
 	public void register(final ActionEvent actionEvent) {
 		if (StringUtils.isAllBlank(this.username) || StringUtils.isAllBlank(password)) {
 			addMessage(FacesMessage.SEVERITY_WARN, "Username or password missing");
@@ -161,17 +164,12 @@ public class SessionBean extends AbstractBean implements Serializable {
 		final CharacterState cs4 = characterStateBuilder.randomIvs().randomNature().setCharacter(characters[3]).build();
 		final Player player = new PlayerBuilder(nickname).setPassword(password).addCharacterStates(cs1,cs2,cs3,cs4).build();
 
-		databaseManager.persist(player);
-		databaseManager.persist(cs1);
-		databaseManager.persist(cs2);
-		databaseManager.persist(cs3);
-		databaseManager.persist(cs4);
-		databaseManager.persist(characters[0]);
-		databaseManager.persist(characters[1]);
-		databaseManager.persist(characters[2]);
-		databaseManager.persist(characters[3]);
+		databaseManager.persist(player, cs1, cs2, cs3, cs4);
 	}
 
+	/**
+	 * @param actionEvent
+	 */
 	public void login(final ActionEvent actionEvent) {
 		if (StringUtils.isAllBlank(username) || StringUtils.isEmpty(password)) {
 			addMessage(FacesMessage.SEVERITY_WARN, "username or password missing");
@@ -183,7 +181,7 @@ public class SessionBean extends AbstractBean implements Serializable {
 			final String redirect;
 			if (Constants.USERNAME_SADMIN.equals(username)) {
 				final String hash = customProperties.getSadminPass();
-				if (hash == null || !PasswordStorage.verifyPassword(password, hash)) {
+				if (!PasswordStorage.verifyPassword(password, hash)) {
 					addMessage(FacesMessage.SEVERITY_ERROR, "username or password wrong");
 					return;
 				}

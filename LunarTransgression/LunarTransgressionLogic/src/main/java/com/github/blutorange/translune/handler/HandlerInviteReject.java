@@ -14,6 +14,7 @@ import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.message.MessageInvite;
 import com.github.blutorange.translune.message.MessageInviteReject;
 import com.github.blutorange.translune.message.MessageInviteRejectResponse;
+import com.github.blutorange.translune.message.MessageInviteRejected;
 import com.github.blutorange.translune.message.MessageInviteResponse;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.ILunarMessageHandler;
@@ -65,18 +66,14 @@ public class HandlerInviteReject implements ILunarMessageHandler {
 
 		final MessageInvite invitation = invitationStore.remove(inviteReject.getNickname(), user);
 		if (invitation == null) {
-			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageInviteRejectResponse(
-					message, "Invitation does not exist anymore, possibly because it was retracted."));
+			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageInviteRejectResponse(message,
+					"Invitation does not exist anymore, possibly because it was retracted."));
 			return;
 		}
 
 		socketProcessing.setGameState(otherSession, EGameState.IN_MENU);
 
-		informOtherUser(otherSession, invitation);
-	}
-
-	private void informOtherUser(final Session session, final MessageInvite invitation) {
 		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
-				new MessageInviteReject(invitation.getNickname()));
+				new MessageInviteRejected(invitation.getNickname()));
 	}
 }

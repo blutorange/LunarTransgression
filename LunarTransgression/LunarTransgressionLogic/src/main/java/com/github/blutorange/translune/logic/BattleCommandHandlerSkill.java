@@ -32,6 +32,7 @@ public class BattleCommandHandlerSkill extends ABattleCommandHandler {
 
 	@Override
 	public void preProcess() {
+		// not needed
 	}
 
 	@Override
@@ -42,5 +43,6 @@ public class BattleCommandHandlerSkill extends ABattleCommandHandler {
 
 	@Override
 	public void postProcess() {
+		// not needed
 	}
 }

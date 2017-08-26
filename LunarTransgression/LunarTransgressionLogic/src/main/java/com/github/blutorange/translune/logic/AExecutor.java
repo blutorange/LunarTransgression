@@ -1,17 +1,18 @@
 package com.github.blutorange.translune.logic;
 
-import com.github.blutorange.translune.db.CharacterState;
-import com.github.blutorange.translune.socket.BattleAction;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import com.github.blutorange.translune.ic.ComponentFactory;
 
 public abstract class AExecutor {
+	@Inject
+	protected IBattleProcessing battleProcessing;
+
+	@Inject @Named("basic")
+	protected IRandomSupplier random;
 
 	public AExecutor() {
-	}
-
-	protected void handleError(final IBattleContext context, final CharacterState user, final String... messages) {
-		final BattleAction action = new BattleAction(user.getId(), user.getId(), messages);
-		final int player = context.getCharacterIndex(user)[0];
-		context.getBattleActions(player).add(action);
-		context.getBattleActionsOpponent(player).add(action);
+		ComponentFactory.getLunarComponent().inject(this);
 	}
 }

@@ -1,15 +1,22 @@
 package com.github.blutorange.translune.serial;
 
 import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.github.blutorange.translune.db.EStatusValue;
 import com.github.blutorange.translune.db.Skill;
 import com.github.blutorange.translune.db.SkillBuilder;
 import com.github.blutorange.translune.logic.EActionTarget;
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.ESkillEffect;
+import com.github.blutorange.translune.logic.EStatusCondition;
+import com.jsoniter.JsonIterator;
 
 public class SkillCsvModel {
-	private SkillBuilder builder;
+	private final SkillBuilder builder;
 
 	public SkillCsvModel() {
 		this.builder = new SkillBuilder();
@@ -36,6 +43,13 @@ public class SkillCsvModel {
 		return true;
 	}
 
+	public String getKey() {
+		final String id = builder.getId();
+		if (id == null)
+			throw new IllegalStateException("name must be set");
+		return id;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -51,20 +65,24 @@ public class SkillCsvModel {
 		return result;
 	}
 
-	public String getKey() {
-		String id = builder.getId();
-		if (id == null)
-			throw new IllegalStateException("name must be set");
-		return id;
-	}
-	
-	
 	/**
 	 * @param accuracy
 	 *            the accuracy to set
 	 */
 	public void setAccuracy(final int accuracy) {
 		builder.setAccuracy(accuracy);
+	}
+
+	public void setAttackPower(final int power) {
+		builder.setAttackPower(power);
+	}
+
+	public void setCondition(final EStatusCondition condition) {
+		builder.setCondition(condition);
+	}
+
+	public void setConditionChance(final int conditionChance) {
+		builder.setConditionChance(conditionChance);
 	}
 
 	/**
@@ -91,12 +109,32 @@ public class SkillCsvModel {
 		builder.setElement(EElement.valueOf(element.toUpperCase(Locale.ROOT)));
 	}
 
+	public void setFlavor(final String flavor) {
+		builder.setFlavor(flavor);
+	}
+
+	public void setFlinchChance(final int flinchChance) {
+		builder.setFlinchChance(flinchChance);
+	}
+
+	public void setHealPower(final int healPower) {
+		builder.setHealPower(healPower);
+	}
+
 	/**
 	 * @param highCritical
 	 *            the highCritical to set
 	 */
 	public void setHighCritical(final boolean highCritical) {
 		builder.setHighCritical(highCritical);
+	}
+
+	/**
+	 * @param isPhysical
+	 *            the isPhysical to set
+	 */
+	public void setIsPhysical(final boolean isPhysical) {
+		builder.setIsPhysical(isPhysical);
 	}
 
 	/**
@@ -115,28 +153,21 @@ public class SkillCsvModel {
 		builder.setName(name);
 	}
 
-	/**
-	 * @param isPhysical
-	 *            the isPhysical to set
-	 */
-	public void setIsPhysical(final boolean isPhysical) {
-		builder.setIsPhysical(isPhysical);
-	}
-
-	/**
-	 * @param power
-	 *            the power to set
-	 */
-	public void setPower(final int power) {
-		builder.setPower(power);
-	}
-
-	/**
-	 * @param priority
-	 *            the priority to set
-	 */
 	public void setPriority(final int priority) {
 		builder.setPriority(priority);
+	}
+
+	public void setStageChance(final int stageChance) {
+		builder.setStageChance(stageChance);
+	}
+
+	public void setStageChanges(@Nullable final String stageChanges) {
+		if (stageChanges == null || stageChanges.isEmpty())
+			return;
+		final Map<EStatusValue, Integer> map = JsonIterator.deserialize(stageChanges).asMap().entrySet().stream()
+				.collect(Collectors.toMap(e -> EStatusValue.valueOf(e.getKey().toUpperCase(Locale.ROOT)),
+						e -> Integer.valueOf(e.getValue().toString())));
+		builder.addStageChanges(map);
 	}
 
 	/**

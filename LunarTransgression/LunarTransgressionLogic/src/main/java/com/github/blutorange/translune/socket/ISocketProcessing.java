@@ -49,4 +49,8 @@ public interface ISocketProcessing {
 	AtomicInteger getClientTime(final Session session);
 
 	Queue<LunarMessage> getClientMessageQueue(final Session session);
+
+	void finalizeSession(Session session);
+
+	void dispatchMessage(String nickname, ELunarStatusCode status, ILunarPayload message);
 }

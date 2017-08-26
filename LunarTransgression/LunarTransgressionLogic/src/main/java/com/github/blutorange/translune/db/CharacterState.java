@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.common.IAccessible;
 import com.github.blutorange.translune.logic.ENature;
@@ -39,6 +40,7 @@ public class CharacterState extends AbstractStoredEntity {
 	@Column(name = "exp", nullable = false, unique = false, updatable = true, insertable = true)
 	private int exp;
 
+	@NonNull
 	@NotNull
 	@Size(min = 36, max = 36)
 	@Id
@@ -100,26 +102,7 @@ public class CharacterState extends AbstractStoredEntity {
 	@JoinColumn(name = "player", nullable = false, unique = false, updatable = false, insertable = true, foreignKey = @ForeignKey(name = "fk_charstate_player"))
 	private Player player;
 
-	@Deprecated
-	public CharacterState() {
-	}
-
-	public CharacterState(final Character character, final String nickname, final ENature nature, final int exp,
-			final int level, final int ivHp, final int ivMp, final int ivPhysicalAttack, final int ivPhysicalDefense,
-			final int ivMagicalAttack, final int ivMagicalDefense, final int ivSpeed) {
-		this.character = character;
-		this.exp = exp;
-		this.ivHp = ivHp;
-		this.ivMagicalAttack = ivMagicalAttack;
-		this.ivMagicalDefense = ivMagicalDefense;
-		this.ivMp = ivMp;
-		this.ivPhysicalAttack = ivPhysicalAttack;
-		this.ivPhysicalDefense = ivPhysicalDefense;
-		this.ivPhysicalDefense = ivPhysicalDefense;
-		this.ivSpeed = ivSpeed;
-		this.level = level;
-		this.nature = nature;
-		this.nickname = nickname;
+	CharacterState() {
 	}
 
 	/**
@@ -327,7 +310,7 @@ public class CharacterState extends AbstractStoredEntity {
 	 * @param id
 	 *            the id to set
 	 */
-	void setId(final String id) {
+	void setId(@NonNull final String id) {
 		this.id = id;
 	}
 

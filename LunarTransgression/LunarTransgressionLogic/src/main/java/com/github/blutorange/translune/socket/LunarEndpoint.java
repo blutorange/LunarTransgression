@@ -1,5 +1,6 @@
 package com.github.blutorange.translune.socket;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,25 +21,22 @@ import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.ic.ComponentFactory;
-import com.github.blutorange.translune.logic.IInitIdStore;
-import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.message.MessageUnknown;
 import com.github.blutorange.translune.util.CustomProperties;
 
 /**
  * <p>
- * Messages are processed in order of sending. To accomplish this,
- * each message contains an integer time code. This time code starts
- * a zero (0) for the first message and must increase monotonously
- * for every next message. Messages sent by the server and by the
- * client have got a separate time code counter and do not share the
- * same time code counter. Additionally, response messages for the client
- * contain the time code of the original message so that client can
+ * Messages are processed in order of sending. To accomplish this, each message
+ * contains an integer time code. This time code starts a zero (0) for the first
+ * message and must increase monotonously for every next message. Messages sent
+ * by the server and by the client have got a separate time code counter and do
+ * not share the same time code counter. Additionally, response messages for the
+ * client contain the time code of the original message so that client can
  * associate the response with the corresponding request.
  * </p>
- * A message itself it sent as a JSON object - this makes it easy to
- * handle and efficiency-wise, communications usually occur only at
- * larger intervals.
+ * A message itself it sent as a JSON object - this makes it easy to handle and
+ * efficiency-wise, communications usually occur only at larger intervals.
+ *
  * @author madgaksha
  */
 @ServerEndpoint(value = "/ws/translune", encoders = LunarEncoder.class, decoders = LunarDecoder.class)
@@ -48,26 +46,25 @@ public class LunarEndpoint {
 	Logger logger;
 
 	@Inject
-	IInitIdStore initIdStore;
-
-	@Inject
-	ISessionStore sessionStore;
-
-	@Inject
 	ISocketProcessing socketProcessing;
 
 	@Inject
 	CustomProperties customProperties;
 
+
 	@PostConstruct
 	private void init() {
-		ComponentFactory.getSocketComponent().inject(this);
+		ComponentFactory.getLunarComponent().inject(this);
 	}
 
 	@OnOpen
-	public void open(final Session session) {
-		if (!customProperties.isOnline())
+	public void open(final Session session) throws IOException {
+		if (!customProperties.isOnline()) {
+			logger.debug("current not accepting connections, closing session");
+			session.close(
+					new CloseReason(CloseCodes.GOING_AWAY, "maintenance mode / currently not accepting connections"));
 			return;
+		}
 		logger.debug("opening lunar session " + session.getId());
 		if (session.getOpenSessions().size() > 1) {
 			logger.info("more than one session open to same endpoint, closing: " + session.getId());
@@ -89,13 +86,14 @@ public class LunarEndpoint {
 			logger.debug("retrieving lunar message " + session.getId());
 			logger.debug(message.toString());
 		}
-		// For the same session, only one message handler is called at the same time.
-		//     In all cases, the implementation must not invoke an
-		//     endpoint instance with more than one thread per peer at a time.
-		//   - Java™ API for WebSocket, Chapter 5.1
+		// For the same session, only one message handler is called at the same
+		// time.
+		// In all cases, the implementation must not invoke an
+		// endpoint instance with more than one thread per peer at a time.
+		// - Java™ API for WebSocket, Chapter 5.1
 		// However, for battles we need to synchronize on the session of
 		// the opposing user.
-		synchronized(session) {
+		synchronized (session) {
 			final AtomicInteger clientTime = socketProcessing.getClientTime(session);
 			final Queue<LunarMessage> messageQueue = socketProcessing.getClientMessageQueue(session);
 			// Remove very old messages.
@@ -120,18 +118,12 @@ public class LunarEndpoint {
 
 	@OnClose
 	public void close(final Session session, final CloseReason closeReason) {
-		//TODO [HIGH] Remove open invitations and inform the other user
 		if (logger.isDebugEnabled()) {
 			logger.debug("closing lunar session " + session.getId());
 			logger.debug(
 					String.format("CloseReason: %d %s", closeReason.getCloseCode(), closeReason.getReasonPhrase()));
 		}
-		final String nickname = socketProcessing.getNickname(session);
-		if (!nickname.isEmpty())
-			sessionStore.remove(nickname);
-		else
-			sessionStore.remove(session);
-		session.getUserProperties().clear();
+		socketProcessing.finalizeSession(session);
 	}
 
 	@OnError

@@ -1,7 +1,5 @@
 package com.github.blutorange.translune.logic;
 
-import java.util.Arrays;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.translune.db.CharacterState;
@@ -13,7 +11,8 @@ public class ItemExecutorHeal extends AItemExecutor {
 	@Override
 	public void execute(final Item item, final IBattleContext context, final BattleCommand battleCommand,
 			final int player, final int character) {
-		final IComputedBattleStatus[] targets = context.getTargetsAlive(item, context, battleCommand, player, character);
+		final IComputedBattleStatus[] targets = battleProcessing.getTargetsAlive(item, context, battleCommand, player,
+				character);
 		final IComputedBattleStatus user = context.getComputedBattleStatus(player, character);
 
 		if (targets.length == 0) {
@@ -40,14 +39,15 @@ public class ItemExecutorHeal extends AItemExecutor {
 		}
 
 		@SuppressWarnings("null")
-		final BattleAction action = new BattleAction(context.getCharacterState(player, character).getId(),
-				Arrays.stream(targets).map(t -> t.getCharacterState().getNickname()).toArray(String[]::new), messages);
+		final BattleAction action = new BattleAction.Builder().character(context.getCharacterState(player, character))
+				.targets(targets).addSentences(messages).build();
 		context.getBattleActions(player).add(action);
 		context.getBattleActionsOpponent(player).add(action);
 	}
 
 	private void handleError(final IBattleContext context, final CharacterState user, final Item item,
 			final String error) {
-		super.handleError(context, user, String.format("%s uses %s!", user.getNickname(), item.getName()), error);
+		battleProcessing.handleError(context, user, String.format("%s uses %s!", user.getNickname(), item.getName()),
+				error);
 	}
 }

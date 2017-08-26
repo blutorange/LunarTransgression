@@ -21,6 +21,9 @@ public interface IEntityStore {
 
 	@Nullable
 	<T extends AbstractStoredEntity> T remove(Class<T> clazz, Object primaryKey);
+
 	@Nullable
-	public <T extends AbstractStoredEntity> T remove(final EEntityMeta entityMeta, final Object primaryKey);
+	<T extends AbstractStoredEntity> T remove(final EEntityMeta entityMeta, final Object primaryKey);
+
+	<T extends AbstractStoredEntity> void store(@SuppressWarnings("unchecked") T... entities);
 }

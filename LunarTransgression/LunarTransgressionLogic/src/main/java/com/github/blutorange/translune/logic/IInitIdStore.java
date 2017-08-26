@@ -6,4 +6,5 @@ public interface IInitIdStore {
 
 	boolean assertAndClear(String nickname, String initId);
 
+	void clear(String nickname);
 }

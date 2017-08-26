@@ -64,14 +64,24 @@ public class PlayerBuilder implements Builder<Player> {
 
 	public PlayerBuilder generateRandomPassword(final int byteCount) throws CannotPerformOperationException {
 		final byte[] bytes = new byte[byteCount];
-		ComponentFactory.getLogicComponent().randomSecure().nextBytes(bytes);
+		ComponentFactory.getLunarComponent().randomSecure().get().nextBytes(bytes);
 		return setPassword(Base64.getEncoder().encodeToString(bytes));
 	}
 
+	@Override
 	public Player build() {
+		final String nickname = this.nickname;
+		final String passwordHash = this.passwordHash;
 		if (passwordHash == null)
 			throw new IllegalStateException("No password was set.");
-		final Player player = new Player(nickname, passwordHash, description, characterStates, items);
+		if (nickname == null)
+			throw new IllegalStateException("No nickname was set.");
+		final Player player = new Player();
+		player.setCharacterStates(characterStates);
+		player.setDescription(description);
+		player.setItems(items);
+		player.setNickname(nickname);
+		player.setPasswordHash(passwordHash);
 		for (final CharacterState cs : characterStates)
 			cs.setPlayer(player);
 		return player;

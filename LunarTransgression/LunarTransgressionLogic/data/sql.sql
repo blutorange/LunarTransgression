@@ -31,17 +31,22 @@ select replace(upper(m.identifier),'-','_') as effect
 .output output/character.csv
 select 
         upper(substr(names.name,1,1)) || substr(names.name,2) as name,
-        (p.species_id || '.gif') as gifFront,
-        (p.species_id || 'b.gif') as gifBack,
+        (substr('000'||p.species_id,-3,3) || '.gif') as imgFront,
+        (substr('000'||p.species_id,-3,3) || 'b.gif') as imgBack,
+        p.species_id || '.png' as imgIcon,
         (p.species_id || '.ogg') as cry,
         upper(replace(case gr.identifier
             when 'slow-then-very-fast' then 'erratic'
             when 'fast-then-very-slow' then 'fluctuating'
+            when 'medium' then 'medium-fast'
             else gr.identifier end,'-','_')) as experienceGroup,
-        hp.base_stat as hp,
+        hp.base_stat as maxHp,
+        hp.base_stat as maxMp,
         upper(elements.list) as elements,
-        attack.base_stat as attack,
-        defense.base_stat as defense,
+        100 as accuracy,
+        100 as evasion,
+        attack.base_stat as physicalAttack,
+        defense.base_stat as physicalDefense,
         sattack.base_stat as magicalAttack,
         sdefense.base_stat as magicalDefense,
         speed.base_stat as speed,
@@ -90,22 +95,40 @@ select
 ;
 
 
---move_targets
 -- Skill
 .output output/skill.csv
 select
         replace(upper(substr(m.identifier,1,1)) || substr(m.identifier,2),'-',' ') as name,
         100/m.pp as mp,
-        ifnull(m.power,0) as power,
+        ifnull(m.power,0) as attackPower,
+        ifnull(mm.healing,0) as healPower,
+        (select replace(group_concat(upper(
+                    case s.identifier
+                    when 'special-attack' then 'magical-attack'
+                    when 'special-defense' then 'magical-defense'
+                    else s.identifier end), ','), '-', '_')
+                || ':'
+                || group_concat(mmsc1.change,',')
+            from moves as m1
+            left outer join move_meta_stat_changes as mmsc1 on mmsc1.move_id = m1.id
+            join stats as s on mmsc1.stat_id = s.id
+            where m1.id = m.id
+            group by mmsc1.change) as stageChanges,
         ifnull(m.accuracy,100) as accuracy,
         ifnull(m.priority,0) as priority,
+        case when m.accuracy is null then 'true' else 'false' end as alwaysHits,
         upper(t.identifier) as element,
-        case mdc.identifier when 'special' then 'false' else 'true' end as isPhysical,
-        case mdc.identifier
-            when 'physical' then 'DAMAGE_PHYSICAL'
-            when 'special' then 'DAMANGE_MAGICAL'
-            else replace(upper(m.identifier),'-','_') end as effect,
         replace(upper(mt.identifier),'-','_') as target,
+        case mm.crit_rate when 0 then 'false' else 'true' end as highCritical,
+        case mdc.identifier when 'special' then 'false' else 'true' end as isPhysical,
+        upper(replace(replace(mmc.identifier,'+','_'),'-','_')) as effect,
+        upper(replace(m.identifier,'-','_')) as flavor,
+	    case when mma.identifier in ('paralysis', 'sleep', 'freeze', 'burn', 'poison', 'confusion')
+            then upper(mma.identifier)
+            else null end as condition,
+    	ifnull(mm.ailment_chance,0) as conditionChance,
+        ifnull(mm.flinch_chance,0) as flinchChance,
+    	ifnull(mm.stat_chance,0) as stageChance,
         replace(mep.short_effect,char(10),' ') as description
     from moves as m
     join move_damage_classes as mdc on m.damage_class_id=mdc.id
@@ -113,8 +136,11 @@ select
     join move_effect_prose as mep on mep.move_effect_id=m.effect_id
     join languages as mepl on mep.local_language_id=mepl.id
     join move_targets as mt on m.target_id=mt.id
+    join move_meta as mm on mm.move_id=m.id
+    join move_meta_ailments as mma on mm.meta_ailment_id = mma.id
+    join move_meta_categories as mmc on mm.meta_category_id = mmc.id
     where mepl.iso639 = 'en'
-    order by m.damage_class_id,m.identifier
+    order by mmc.identifier,m.identifier
 ;
 
 -- Character to Skill

@@ -1,640 +1,618 @@
-name,mp,power,accuracy,priority,element,isPhysical,effect,target,description
-"Acid armor",5,0,100,0,POISON,true,ACID_ARMOR,USER,"Raises the user's Defense by two stages."
-Acupressure,3,0,100,0,NORMAL,true,ACUPRESSURE,USER_OR_ALLY,"Raises one of a friendly Pokémon's stats at random by two stages."
-"After you",6,0,100,0,NORMAL,true,AFTER_YOU,SELECTED_POKEMON,"Makes the target act next this turn."
-Agility,3,0,100,0,PSYCHIC,true,AGILITY,USER,"Raises the user's Speed by two stages."
-"Ally switch",6,0,100,1,PSYCHIC,true,ALLY_SWITCH,USER,"User switches places with the friendly Pokémon opposite it."
-Amnesia,5,0,100,0,PSYCHIC,true,AMNESIA,USER,"Raises the user's Special Defense by two stages."
-"Aqua ring",5,0,100,0,WATER,true,AQUA_RING,USER,"Restores 1/16 of the user's max HP each turn."
-Aromatherapy,20,0,100,0,GRASS,true,AROMATHERAPY,USER_AND_ALLIES,"Cures the entire party of major status effects."
-"Aromatic mist",5,0,100,0,FAIRY,true,AROMATIC_MIST,ALLY,"Raises a selected ally's Special Defense by one stage."
-Assist,5,0,100,0,NORMAL,true,ASSIST,USER,"Randomly selects and uses one of the trainer's other Pokémon's moves."
-Attract,6,0,100,0,NORMAL,true,ATTRACT,SELECTED_POKEMON,"Target falls in love if it has the opposite gender, and has a 50% chance to refuse attacking the user."
-Autotomize,6,0,100,0,STEEL,true,AUTOTOMIZE,USER,"Raises the user's Speed by two stages and halves the user's weight."
-"Baby doll eyes",3,0,100,1,FAIRY,true,BABY_DOLL_EYES,SELECTED_POKEMON,"Lowers the target's Attack by one stage."
-Barrier,5,0,100,0,PSYCHIC,true,BARRIER,USER,"Raises the user's Defense by two stages."
-"Baton pass",2,0,100,0,NORMAL,true,BATON_PASS,USER,"Allows the trainer to switch out the user and pass effects along to its replacement."
-"Belly drum",10,0,100,0,NORMAL,true,BELLY_DRUM,USER,"User pays half its max HP to max out its Attack."
-Bestow,6,0,100,0,NORMAL,true,BESTOW,SELECTED_POKEMON,"Gives the user's held item to the target."
-Block,20,0,100,0,NORMAL,true,BLOCK,SELECTED_POKEMON,"Prevents the target from leaving battle."
-"Bulk up",5,0,100,0,FIGHTING,true,BULK_UP,USER,"Raises the user's Attack and Defense by one stage."
-"Calm mind",5,0,100,0,PSYCHIC,true,CALM_MIND,USER,"Raises the user's Special Attack and Special Defense by one stage."
-Camouflage,5,0,100,0,NORMAL,true,CAMOUFLAGE,USER,"User's type changes to match the terrain."
-Captivate,5,0,100,0,NORMAL,true,CAPTIVATE,ALL_OPPONENTS,"Lowers the target's Special Attack by two stages if it's the opposite gender."
-Celebrate,2,0,100,0,NORMAL,true,CELEBRATE,USER,Unknown.
-Charge,5,0,100,0,ELECTRIC,true,CHARGE,USER,"Raises the user's Special Defense by one stage.  User's Electric moves have doubled power next turn."
-Charm,5,0,100,0,FAIRY,true,CHARM,SELECTED_POKEMON,"Lowers the target's Attack by two stages."
-Coil,5,0,100,0,POISON,true,COIL,USER,"Raises the user's Attack, Defense, and accuracy by one stage each."
-Confide,5,0,100,0,NORMAL,true,CONFIDE,SELECTED_POKEMON,"Lowers the target's Special Attack by one stage."
-"Confuse ray",10,0,100,0,GHOST,true,CONFUSE_RAY,SELECTED_POKEMON,"Confuses the target."
-Conversion,3,0,100,0,NORMAL,true,CONVERSION,USER,"User's type changes to the type of one of its moves at random."
-"Conversion 2",3,0,100,0,NORMAL,true,CONVERSION_2,SELECTED_POKEMON,"Changes the user's type to a random type either resistant or immune to the last move used against it."
-Copycat,5,0,100,0,NORMAL,true,COPYCAT,USER,"Uses the target's last used move."
-"Cosmic power",5,0,100,0,PSYCHIC,true,COSMIC_POWER,USER,"Raises the user's Defense and Special Defense by one stage."
-"Cotton guard",10,0,100,0,GRASS,true,COTTON_GUARD,USER,"Raises the user's Defense by three stages."
-"Cotton spore",2,0,100,0,GRASS,true,COTTON_SPORE,ALL_OPPONENTS,"Lowers the target's Speed by two stages."
-"Crafty shield",10,0,100,3,FAIRY,true,CRAFTY_SHIELD,USERS_FIELD,"Protects all friendly Pokémon from non-damaging moves."
-Curse,10,0,100,0,GHOST,true,CURSE,SPECIFIC_MOVE,"Ghosts pay half their max HP to hurt the target every turn.  Others decrease Speed but raise Attack and Defense."
-"Dark void",10,0,80,0,DARK,true,DARK_VOID,ALL_OPPONENTS,"Puts the target to sleep."
-"Defend order",10,0,100,0,BUG,true,DEFEND_ORDER,USER,"Raises the user's Defense and Special Defense by one stage."
-"Defense curl",2,0,100,0,NORMAL,true,DEFENSE_CURL,USER,"Raises user's Defense by one stage."
-Defog,6,0,100,0,FLYING,true,DEFOG,SELECTED_POKEMON,"Lowers the target's evasion by one stage.  Removes field effects from the enemy field."
-"Destiny bond",20,0,100,0,GHOST,true,DESTINY_BOND,USER,"If the user faints this turn, the target automatically will, too."
-Detect,20,0,100,4,FIGHTING,true,DETECT,USER,"Prevents any moves from hitting the user this turn."
-Disable,5,0,100,0,NORMAL,true,DISABLE,SELECTED_POKEMON,"Disables the target's last used move for 1-8 turns."
-"Double team",6,0,100,0,NORMAL,true,DOUBLE_TEAM,USER,"Raises the user's evasion by one stage."
-"Dragon dance",5,0,100,0,DRAGON,true,DRAGON_DANCE,USER,"Raises the user's Attack and Speed by one stage."
-"Eerie impulse",6,0,100,0,ELECTRIC,true,EERIE_IMPULSE,SELECTED_POKEMON,"Lowers the target's Special Attack by two stages."
-"Electric terrain",10,0,100,0,ELECTRIC,true,ELECTRIC_TERRAIN,ENTIRE_FIELD,"For five turns, prevents all Pokémon on the ground from sleeping and strengthens their []{type:electric} moves to 1.5× their power."
-Electrify,5,0,100,0,ELECTRIC,true,ELECTRIFY,SELECTED_POKEMON,"Changes the target's move's type to []{type:electric} if it hasn't moved yet this turn."
-Embargo,6,0,100,0,DARK,true,EMBARGO,SELECTED_POKEMON,"Target cannot use held items."
-Encore,20,0,100,0,NORMAL,true,ENCORE,SELECTED_POKEMON,"Forces the target to repeat its last used move every turn for 2 to 6 turns."
-Endure,10,0,100,4,NORMAL,true,ENDURE,USER,"Prevents the user's HP from lowering below 1 this turn."
-Entrainment,6,0,100,0,NORMAL,true,ENTRAINMENT,SELECTED_POKEMON,"Copies the user's ability onto the target."
-"Fairy lock",10,0,100,0,FAIRY,true,FAIRY_LOCK,ENTIRE_FIELD,"Prevents all Pokémon from fleeing or switching out during the next turn."
-"Fake tears",5,0,100,0,DARK,true,FAKE_TEARS,SELECTED_POKEMON,"Lowers the target's Special Defense by two stages."
-"Feather dance",6,0,100,0,FLYING,true,FEATHER_DANCE,SELECTED_POKEMON,"Lowers the target's Attack by two stages."
-Flash,5,0,100,0,NORMAL,true,FLASH,SELECTED_POKEMON,"Lowers the target's accuracy by one stage."
-Flatter,6,0,100,0,DARK,true,FLATTER,SELECTED_POKEMON,"Raises the target's Special Attack by one stage and confuses the target."
-"Flower shield",10,0,100,0,FAIRY,true,FLOWER_SHIELD,ALL_POKEMON,"Raises the Defense of all []{type:grass} Pokémon in battle."
-"Focus energy",3,0,100,0,NORMAL,true,FOCUS_ENERGY,USER,"Increases the user's chance to score a critical hit."
-"Follow me",5,0,100,2,NORMAL,true,FOLLOW_ME,USER,"Redirects the target's single-target effects to the user for this turn."
-Foresight,2,0,100,0,NORMAL,true,FORESIGHT,SELECTED_POKEMON,"Forces the target to have no Evade, and allows it to be hit by Normal and Fighting moves even if it's a Ghost."
-"Forests curse",5,0,100,0,GRASS,true,FORESTS_CURSE,SELECTED_POKEMON,"Adds []{type:grass} to the target's types."
-"Gastro acid",10,0,100,0,POISON,true,GASTRO_ACID,SELECTED_POKEMON,"Nullifies target's ability until it leaves battle."
-Geomancy,10,0,100,0,FAIRY,true,GEOMANCY,USER,"Takes one turn to charge, then raises the user's Special Attack, Special Defense, and Speed by two stages."
-Glare,3,0,100,0,NORMAL,true,GLARE,SELECTED_POKEMON,"Paralyzes the target."
-"Grass whistle",6,0,55,0,GRASS,true,GRASS_WHISTLE,SELECTED_POKEMON,"Puts the target to sleep."
-"Grassy terrain",10,0,100,0,GRASS,true,GRASSY_TERRAIN,ENTIRE_FIELD,"For five turns, heals all Pokémon on the ground for 1/16 max HP each turn and strengthens their []{type:grass} moves to 1.5× their power."
-Gravity,20,0,100,0,PSYCHIC,true,GRAVITY,ENTIRE_FIELD,"Disables moves and immunities that involve flying or levitating for five turns."
-Growl,2,0,100,0,NORMAL,true,GROWL,ALL_OPPONENTS,"Lowers the target's Attack by one stage."
-Growth,5,0,100,0,NORMAL,true,GROWTH,USER,"Raises the user's Attack and Special Attack by one stage."
-Grudge,20,0,100,0,GHOST,true,GRUDGE,USER,"If the user faints this turn, the PP of the move that fainted it drops to 0."
-"Guard split",10,0,100,0,PSYCHIC,true,GUARD_SPLIT,SELECTED_POKEMON,"Averages Defense and Special Defense with the target."
-"Guard swap",10,0,100,0,PSYCHIC,true,GUARD_SWAP,SELECTED_POKEMON,"User swaps Defense and Special Defense changes with the target."
-Hail,10,0,100,0,ICE,true,HAIL,ENTIRE_FIELD,"Changes the weather to a hailstorm for five turns."
-"Happy hour",3,0,100,0,NORMAL,true,HAPPY_HOUR,USERS_FIELD,"Doubles prize money."
-Harden,3,0,100,0,NORMAL,true,HARDEN,USER,"Raises the user's Defense by one stage."
-Haze,3,0,100,0,ICE,true,HAZE,ENTIRE_FIELD,"Resets all Pokémon's stats, accuracy, and evasion."
-"Heal bell",20,0,100,0,NORMAL,true,HEAL_BELL,USER_AND_ALLIES,"Cures the entire party of major status effects."
-"Heal block",6,0,100,0,PSYCHIC,true,HEAL_BLOCK,ALL_OPPONENTS,"Prevents target from restoring its HP for five turns."
-"Heal order",10,0,100,0,BUG,true,HEAL_ORDER,USER,"Heals the user by half its max HP."
-"Heal pulse",10,0,100,0,PSYCHIC,true,HEAL_PULSE,SELECTED_POKEMON,"Heals the target for half its max HP."
-"Healing wish",10,0,100,0,PSYCHIC,true,HEALING_WISH,USER,"User faints.  Its replacement has its HP fully restored and any major status effect removed."
-"Heart swap",10,0,100,0,PSYCHIC,true,HEART_SWAP,SELECTED_POKEMON,"User and target swap stat changes."
-"Helping hand",5,0,100,5,NORMAL,true,HELPING_HAND,ALLY,"Ally's next move inflicts half more damage."
-"Hold hands",2,0,100,0,NORMAL,true,HOLD_HANDS,ALLY,Unknown.
-"Hone claws",6,0,100,0,DARK,true,HONE_CLAWS,USER,"Raises the user's Attack and accuracy by one stage."
-Howl,2,0,100,0,NORMAL,true,HOWL,USER,"Raises the user's Attack by one stage."
-Hypnosis,5,0,60,0,PSYCHIC,true,HYPNOSIS,SELECTED_POKEMON,"Puts the target to sleep."
-Imprison,10,0,100,0,PSYCHIC,true,IMPRISON,USER,"Prevents the target from using any moves that the user also knows."
-Ingrain,5,0,100,0,GRASS,true,INGRAIN,USER,"Prevents the user from leaving battle.  User regains 1/16 of its max HP every turn."
-"Ion deluge",4,0,100,1,ELECTRIC,true,ION_DELUGE,ENTIRE_FIELD,"Changes all []{type:normal} moves to []{type:electric} moves for the rest of the turn."
-"Iron defense",6,0,100,0,STEEL,true,IRON_DEFENSE,USER,"Raises the user's Defense by two stages."
-Kinesis,6,0,80,0,PSYCHIC,true,KINESIS,SELECTED_POKEMON,"Lowers the target's accuracy by one stage."
-"Kings shield",10,0,100,4,STEEL,true,KINGS_SHIELD,USER,"Blocks damaging attacks and lowers attacking Pokémon's Attack by two stages on contact.  Switches Aegislash to Shield Forme."
-"Leech seed",10,0,90,0,GRASS,true,LEECH_SEED,SELECTED_POKEMON,"Seeds the target, stealing HP from it every turn."
-Leer,3,0,100,0,NORMAL,true,LEER,ALL_OPPONENTS,"Lowers the target's Defense by one stage."
-"Light screen",3,0,100,0,PSYCHIC,true,LIGHT_SCREEN,USERS_FIELD,"Reduces damage from special attacks by 50% for five turns."
-"Lock on",20,0,100,0,NORMAL,true,LOCK_ON,SELECTED_POKEMON,"Ensures that the user's next move will hit the target."
-"Lovely kiss",10,0,75,0,NORMAL,true,LOVELY_KISS,SELECTED_POKEMON,"Puts the target to sleep."
-"Lucky chant",3,0,100,0,NORMAL,true,LUCKY_CHANT,USERS_FIELD,"Prevents the target from scoring critical hits for five turns."
-"Lunar dance",10,0,100,0,PSYCHIC,true,LUNAR_DANCE,USER,"User faints, and its replacement is fully healed."
-"Magic coat",6,0,100,4,PSYCHIC,true,MAGIC_COAT,USER,"Reflects back the first effect move used on the user this turn."
-"Magic room",10,0,100,0,PSYCHIC,true,MAGIC_ROOM,ENTIRE_FIELD,"Negates held items for five turns."
-"Magnet rise",10,0,100,0,ELECTRIC,true,MAGNET_RISE,USER,"User is immune to Ground moves and effects for five turns."
-"Magnetic flux",5,0,100,0,ELECTRIC,true,MAGNETIC_FLUX,USER_AND_ALLIES,"Raises the Defense and Special Defense of all friendly Pokémon with []{ability:plus} or []{ability:minus} by one stage."
-"Mat block",10,0,100,0,FIGHTING,true,MAT_BLOCK,USERS_FIELD,"Protects all friendly Pokémon from damaging moves.  Only works on the first turn after the user is sent out."
-"Me first",5,0,100,0,NORMAL,true,ME_FIRST,SELECTED_POKEMON_ME_FIRST,"Uses the target's move against it before it attacks, with power increased by half."
-"Mean look",20,0,100,0,NORMAL,true,MEAN_LOOK,SELECTED_POKEMON,"Prevents the target from leaving battle."
-Meditate,2,0,100,0,PSYCHIC,true,MEDITATE,USER,"Raises the user's Attack by one stage."
-Memento,10,0,100,0,DARK,true,MEMENTO,SELECTED_POKEMON,"Lowers the target's Attack and Special Attack by two stages.  User faints."
-"Metal sound",2,0,85,0,STEEL,true,METAL_SOUND,SELECTED_POKEMON,"Lowers the target's Special Defense by two stages."
-Metronome,10,0,100,0,NORMAL,true,METRONOME,USER,"Randomly selects and uses any move in the game."
-"Milk drink",10,0,100,0,NORMAL,true,MILK_DRINK,USER,"Heals the user by half its max HP."
-Mimic,10,0,100,0,NORMAL,true,MIMIC,SELECTED_POKEMON,"Copies the target's last used move."
-"Mind reader",20,0,100,0,NORMAL,true,MIND_READER,SELECTED_POKEMON,"Ensures that the user's next move will hit the target."
-Minimize,10,0,100,0,NORMAL,true,MINIMIZE,USER,"Raises the user's evasion by two stages."
-"Miracle eye",2,0,100,0,PSYCHIC,true,MIRACLE_EYE,SELECTED_POKEMON,"Forces the target to have no evasion, and allows it to be hit by Psychic moves even if it's Dark."
-"Mirror move",5,0,100,0,FLYING,true,MIRROR_MOVE,SELECTED_POKEMON,"Uses the target's last used move."
-Mist,3,0,100,0,ICE,true,MIST,USERS_FIELD,"Protects the user's stats from being changed by enemy moves."
-"Misty terrain",10,0,100,0,FAIRY,true,MISTY_TERRAIN,ENTIRE_FIELD,"For five turns, protects all Pokémon on the ground from major status ailments and confusion, and halves the power of incoming []{type:dragon} moves."
-Moonlight,20,0,100,0,FAIRY,true,MOONLIGHT,USER,"Heals the user by half its max HP.  Affected by weather."
-"Morning sun",20,0,100,0,NORMAL,true,MORNING_SUN,USER,"Heals the user by half its max HP.  Affected by weather."
-"Mud sport",6,0,100,0,GROUND,true,MUD_SPORT,ENTIRE_FIELD,"Halves all Electric-type damage."
-"Nasty plot",5,0,100,0,DARK,true,NASTY_PLOT,USER,"Raises the user's Special Attack by two stages."
-"Nature power",5,0,100,0,NORMAL,true,NATURE_POWER,SELECTED_POKEMON,"Uses a move which depends upon the terrain."
-Nightmare,6,0,100,0,GHOST,true,NIGHTMARE,SELECTED_POKEMON,"Target loses 1/4 its max HP every turn as long as it's asleep."
-"Noble roar",3,0,100,0,NORMAL,true,NOBLE_ROAR,SELECTED_POKEMON,"Lowers the target's Attack and Special Attack by one stage."
-"Odor sleuth",2,0,100,0,NORMAL,true,ODOR_SLEUTH,SELECTED_POKEMON,"Forces the target to have no Evade, and allows it to be hit by Normal and Fighting moves even if it's a Ghost."
-"Pain split",5,0,100,0,NORMAL,true,PAIN_SPLIT,SELECTED_POKEMON,"Sets the user's and targets's HP to the average of their current HP."
-"Parting shot",5,0,100,0,DARK,true,PARTING_SHOT,SELECTED_POKEMON,"Lowers all targets' Attack and Special Attack by one stage.  Makes the user switch out."
-"Perish song",20,0,100,0,NORMAL,true,PERISH_SONG,ALL_POKEMON,"User and target both faint after three turns."
-"Play nice",5,0,100,0,NORMAL,true,PLAY_NICE,SELECTED_POKEMON,"Lowers the target's Attack by one stage."
-"Poison gas",2,0,90,0,POISON,true,POISON_GAS,ALL_OPPONENTS,"Poisons the target."
-"Poison powder",2,0,75,0,POISON,true,POISON_POWDER,SELECTED_POKEMON,"Poisons the target."
-Powder,5,0,100,1,BUG,true,POWDER,SELECTED_POKEMON,"Explodes if the target uses a []{type:fire} move this turn, damaging it for 1/4 its max HP and preventing the move."
-"Power split",10,0,100,0,PSYCHIC,true,POWER_SPLIT,SELECTED_POKEMON,"Averages Attack and Special Attack with the target."
-"Power swap",10,0,100,0,PSYCHIC,true,POWER_SWAP,SELECTED_POKEMON,"User swaps Attack and Special Attack changes with the target."
-"Power trick",10,0,100,0,PSYCHIC,true,POWER_TRICK,USER,"User swaps Attack and Defense."
-Protect,10,0,100,4,NORMAL,true,PROTECT,USER,"Prevents any moves from hitting the user this turn."
-"Psych up",10,0,100,0,NORMAL,true,PSYCH_UP,SELECTED_POKEMON,"Discards the user's stat changes and copies the target's."
-"Psycho shift",10,0,100,0,PSYCHIC,true,PSYCHO_SHIFT,SELECTED_POKEMON,"Transfers the user's major status effect to the target."
-Quash,6,0,100,0,DARK,true,QUASH,SELECTED_POKEMON,"Makes the target act last this turn."
-"Quick guard",6,0,100,3,FIGHTING,true,QUICK_GUARD,USERS_FIELD,"Prevents any priority moves from hitting friendly Pokémon this turn."
-"Quiver dance",5,0,100,0,BUG,true,QUIVER_DANCE,USER,"Raises the user's Special Attack, Special Defense, and Speed by one stage each."
-"Rage powder",5,0,100,2,BUG,true,RAGE_POWDER,USER,"Redirects the target's single-target effects to the user for this turn."
-"Rain dance",20,0,100,0,WATER,true,RAIN_DANCE,ENTIRE_FIELD,"Changes the weather to rain for five turns."
-Recover,10,0,100,0,NORMAL,true,RECOVER,USER,"Heals the user by half its max HP."
-Recycle,10,0,100,0,NORMAL,true,RECYCLE,USER,"User recovers the item it last used up."
-Reflect,5,0,100,0,PSYCHIC,true,REFLECT,USERS_FIELD,"Reduces damage from physical attacks by half."
-"Reflect type",6,0,100,0,NORMAL,true,REFLECT_TYPE,SELECTED_POKEMON,"User becomes the target's type."
-Refresh,5,0,100,0,NORMAL,true,REFRESH,USER,"Cleanses the user of a burn, paralysis, or poison."
-Rest,10,0,100,0,PSYCHIC,true,REST,USER,"User sleeps for two turns, completely healing itself."
-Roar,5,0,100,-6,NORMAL,true,ROAR,SELECTED_POKEMON,"Immediately ends wild battles.  Forces trainers to switch Pokémon."
-"Rock polish",5,0,100,0,ROCK,true,ROCK_POLISH,USER,"Raises the user's Speed by two stages."
-"Role play",10,0,100,0,PSYCHIC,true,ROLE_PLAY,SELECTED_POKEMON,"Copies the target's ability."
-Roost,10,0,100,0,FLYING,true,ROOST,USER,"Heals the user by half its max HP."
-Rototiller,10,0,100,0,GROUND,true,ROTOTILLER,ALL_POKEMON,"Raises the Attack and Special Attack of all []{type:grass} Pokémon in battle."
-Safeguard,4,0,100,0,NORMAL,true,SAFEGUARD,USERS_FIELD,"Protects the user's field from major status ailments and confusion for five turns."
-"Sand attack",6,0,100,0,GROUND,true,SAND_ATTACK,SELECTED_POKEMON,"Lowers the target's accuracy by one stage."
-Sandstorm,10,0,100,0,ROCK,true,SANDSTORM,ENTIRE_FIELD,"Changes the weather to a sandstorm for five turns."
-"Scary face",10,0,100,0,NORMAL,true,SCARY_FACE,SELECTED_POKEMON,"Lowers the target's Speed by two stages."
-Screech,2,0,85,0,NORMAL,true,SCREECH,SELECTED_POKEMON,"Lowers the target's Defense by two stages."
-"Shadow down",,0,100,0,SHADOW,true,SHADOW_DOWN,OPPONENTS_FIELD,"Lowers the target's Defense by two stages."
-"Shadow hold",,0,100,0,SHADOW,true,SHADOW_HOLD,OPPONENTS_FIELD,"Prevents the target from leaving battle."
-"Shadow mist",,0,100,0,SHADOW,true,SHADOW_MIST,OPPONENTS_FIELD,"Lowers the target's evasion by two stages."
-"Shadow panic",,0,90,0,SHADOW,true,SHADOW_PANIC,OPPONENTS_FIELD,"Confuses the target."
-"Shadow shed",,0,100,0,SHADOW,true,SHADOW_SHED,ENTIRE_FIELD,"Removes [Light Screen]{move:light-screen}, [Reflect]{move:reflect}, and [Safeguard]{move:safeguard}."
-"Shadow sky",,0,100,0,SHADOW,true,SHADOW_SKY,ENTIRE_FIELD,"Changes the weather to Shadow Sky for five turns."
-Sharpen,3,0,100,0,NORMAL,true,SHARPEN,USER,"Raises the user's Attack by one stage."
-"Shell smash",6,0,100,0,NORMAL,true,SHELL_SMASH,USER,"Raises user's Attack, Special Attack, and Speed by two stages.  Lower user's Defense and Special Defense by one stage."
-"Shift gear",10,0,100,0,STEEL,true,SHIFT_GEAR,USER,"Raises the user's Attack by one stage and its Speed by two stages."
-"Simple beam",6,0,100,0,NORMAL,true,SIMPLE_BEAM,SELECTED_POKEMON,"Changes the target's ability to Simple."
-Sing,6,0,55,0,NORMAL,true,SING,SELECTED_POKEMON,"Puts the target to sleep."
-Sketch,100,0,100,0,NORMAL,true,SKETCH,SELECTED_POKEMON,"Permanently becomes the target's last used move."
-"Skill swap",10,0,100,0,PSYCHIC,true,SKILL_SWAP,SELECTED_POKEMON,"User and target swap abilities."
-"Slack off",10,0,100,0,NORMAL,true,SLACK_OFF,USER,"Heals the user by half its max HP."
-"Sleep powder",6,0,75,0,GRASS,true,SLEEP_POWDER,SELECTED_POKEMON,"Puts the target to sleep."
-"Sleep talk",10,0,100,0,NORMAL,true,SLEEP_TALK,USER,"Randomly uses one of the user's other three moves.  Only works if the user is sleeping."
-Smokescreen,5,0,100,0,NORMAL,true,SMOKESCREEN,SELECTED_POKEMON,"Lowers the target's accuracy by one stage."
-Snatch,10,0,100,4,DARK,true,SNATCH,USER,"Steals the target's move, if it's self-targeted."
-Soak,5,0,100,0,WATER,true,SOAK,SELECTED_POKEMON,"Changes the target's type to Water."
-"Soft boiled",10,0,100,0,NORMAL,true,SOFT_BOILED,USER,"Heals the user by half its max HP."
-"Spider web",10,0,100,0,BUG,true,SPIDER_WEB,SELECTED_POKEMON,"Prevents the target from leaving battle."
-Spikes,5,0,100,0,GROUND,true,SPIKES,OPPONENTS_FIELD,"Scatters Spikes, hurting opposing Pokémon that switch in."
-"Spiky shield",10,0,100,4,GRASS,true,SPIKY_SHIELD,USER,"Blocks damaging attacks and damages attacking Pokémon for 1/8 their max HP."
-Spite,10,0,100,0,GHOST,true,SPITE,SELECTED_POKEMON,"Lowers the PP of the target's last used move by 4."
-Splash,2,0,100,0,NORMAL,true,SPLASH,USER,"Does nothing."
-Spore,6,0,100,0,GRASS,true,SPORE,SELECTED_POKEMON,"Puts the target to sleep."
-"Stealth rock",5,0,100,0,ROCK,true,STEALTH_ROCK,OPPONENTS_FIELD,"Causes damage when opposing Pokémon switch in."
-"Sticky web",5,0,100,0,BUG,true,STICKY_WEB,OPPONENTS_FIELD,"Covers the opposing field, lowering opponents' Speed by one stage upon switching in."
-Stockpile,5,0,100,0,NORMAL,true,STOCKPILE,USER,"Stores energy up to three times for use with Spit Up and Swallow."
-"String shot",2,0,95,0,BUG,true,STRING_SHOT,ALL_OPPONENTS,"Lowers the target's Speed by one stage."
-"Stun spore",3,0,75,0,GRASS,true,STUN_SPORE,SELECTED_POKEMON,"Paralyzes the target."
-Substitute,10,0,100,0,NORMAL,true,SUBSTITUTE,USER,"Transfers 1/4 of the user's max HP into a doll, protecting the user from further damage or status changes until it breaks."
-"Sunny day",20,0,100,0,FIRE,true,SUNNY_DAY,ENTIRE_FIELD,"Changes the weather to sunny for five turns."
-Supersonic,5,0,55,0,NORMAL,true,SUPERSONIC,SELECTED_POKEMON,"Confuses the target."
-Swagger,6,0,90,0,NORMAL,true,SWAGGER,SELECTED_POKEMON,"Raises the target's Attack by two stages and confuses the target."
-Swallow,10,0,100,0,NORMAL,true,SWALLOW,USER,"Recovers 1/4 HP after one Stockpile, 1/2 HP after two Stockpiles, or full HP after three Stockpiles."
-"Sweet kiss",10,0,75,0,FAIRY,true,SWEET_KISS,SELECTED_POKEMON,"Confuses the target."
-"Sweet scent",5,0,100,0,NORMAL,true,SWEET_SCENT,ALL_OPPONENTS,"Lowers the target's evasion by one stage."
-Switcheroo,10,0,100,0,DARK,true,SWITCHEROO,SELECTED_POKEMON,"User and target swap items."
-"Swords dance",5,0,100,0,NORMAL,true,SWORDS_DANCE,USER,"Raises the user's Attack by two stages."
-Synthesis,20,0,100,0,GRASS,true,SYNTHESIS,USER,"Heals the user by half its max HP.  Affected by weather."
-"Tail glow",5,0,100,0,BUG,true,TAIL_GLOW,USER,"Raises the user's Special Attack by three stages."
-"Tail whip",3,0,100,0,NORMAL,true,TAIL_WHIP,ALL_OPPONENTS,"Lowers the target's Defense by one stage."
-Tailwind,6,0,100,0,FLYING,true,TAILWIND,USERS_FIELD,"For three turns, friendly Pokémon have doubled Speed."
-Taunt,5,0,100,0,DARK,true,TAUNT,SELECTED_POKEMON,"For the next few turns, the target can only use damaging moves."
-"Teeter dance",5,0,100,0,NORMAL,true,TEETER_DANCE,ALL_OTHER_POKEMON,"Confuses the target."
-Telekinesis,6,0,100,0,PSYCHIC,true,TELEKINESIS,SELECTED_POKEMON,"Moves have 100% accuracy against the target for three turns."
-Teleport,5,0,100,0,PSYCHIC,true,TELEPORT,USER,"Immediately ends wild battles.  No effect otherwise."
-"Thunder wave",5,0,100,0,ELECTRIC,true,THUNDER_WAVE,SELECTED_POKEMON,"Paralyzes the target."
-Tickle,5,0,100,0,NORMAL,true,TICKLE,SELECTED_POKEMON,"Lowers the target's Attack and Defense by one stage."
-"Topsy turvy",5,0,100,0,DARK,true,TOPSY_TURVY,SELECTED_POKEMON,"Inverts the target's stat modifiers."
-Torment,6,0,100,0,DARK,true,TORMENT,SELECTED_POKEMON,"Prevents the target from using the same move twice in a row."
-Toxic,10,0,90,0,POISON,true,TOXIC,SELECTED_POKEMON,"Badly poisons the target, inflicting more damage every turn."
-"Toxic spikes",5,0,100,0,POISON,true,TOXIC_SPIKES,OPPONENTS_FIELD,"Scatters poisoned spikes, poisoning opposing Pokémon that switch in."
-Transform,10,0,100,0,NORMAL,true,TRANSFORM,SELECTED_POKEMON,"User becomes a copy of the target until it leaves battle."
-Trick,10,0,100,0,PSYCHIC,true,TRICK,SELECTED_POKEMON,"User and target swap items."
-"Trick or treat",5,0,100,0,GHOST,true,TRICK_OR_TREAT,SELECTED_POKEMON,"Adds []{type:ghost} to the target's types."
-"Trick room",20,0,100,-7,PSYCHIC,true,TRICK_ROOM,ENTIRE_FIELD,"For five turns, slower Pokémon will act before faster Pokémon."
-"Venom drench",5,0,100,0,POISON,true,VENOM_DRENCH,ALL_OPPONENTS,"Lowers the target's Attack, Special Attack, and Speed by one stage if it is poisoned."
-"Water sport",6,0,100,0,WATER,true,WATER_SPORT,ENTIRE_FIELD,"Halves all Fire-type damage."
-Whirlwind,5,0,100,-6,NORMAL,true,WHIRLWIND,SELECTED_POKEMON,"Immediately ends wild battles.  Forces trainers to switch Pokémon."
-"Wide guard",10,0,100,3,ROCK,true,WIDE_GUARD,USERS_FIELD,"Prevents any multi-target moves from hitting friendly Pokémon this turn."
-"Will o wisp",6,0,85,0,FIRE,true,WILL_O_WISP,SELECTED_POKEMON,"Burns the target."
-Wish,10,0,100,0,NORMAL,true,WISH,USER,"User will recover half its max HP at the end of the next turn."
-Withdraw,2,0,100,0,WATER,true,WITHDRAW,USER,"Raises the user's Defense by one stage."
-"Wonder room",10,0,100,0,PSYCHIC,true,WONDER_ROOM,ENTIRE_FIELD,"All Pokémon's Defense and Special Defense are swapped for 5 turns."
-"Work up",3,0,100,0,NORMAL,true,WORK_UP,USER,"Raises the user's Attack and Special Attack by one stage each."
-"Worry seed",10,0,100,0,GRASS,true,WORRY_SEED,SELECTED_POKEMON,"Changes the target's ability to Insomnia."
-Yawn,10,0,100,0,NORMAL,true,YAWN,SELECTED_POKEMON,"Target sleeps at the end of the next turn."
-Acrobatics,6,55,100,0,FLYING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has double power if the user has no held item."
-"Aerial ace",5,60,100,0,FLYING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Never misses."
-"Aqua jet",5,40,100,1,WATER,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Aqua tail",10,90,90,0,WATER,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Arm thrust",5,15,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-Assurance,10,60,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power is doubled if the target has already received damage this turn."
-Astonish,6,30,100,0,GHOST,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Attack order",6,90,100,0,BUG,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-Avalanche,10,60,100,-4,ICE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts double damage if the user takes damage before attacking this turn."
-Barrage,5,15,85,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-"Beat up",10,0,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits once for every conscious Pokémon the trainer has."
-Bide,10,0,100,1,NORMAL,true,DAMAGE_PHYSICAL,USER,"User waits for two turns, then hits back for twice the damage it took."
-Bind,5,15,85,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Prevents the target from fleeing and inflicts damage for 2-5 turns."
-Bite,4,60,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Blaze kick",10,85,90,0,FIRE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit and a $effect_chance% chance to [burn]{mechanic:burn} the target."
-"Body slam",6,85,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
-"Bolt strike",20,130,85,0,ELECTRIC,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
-"Bone club",5,65,85,0,GROUND,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Bone rush",10,25,90,0,GROUND,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-Bonemerang,10,50,90,0,GROUND,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits twice in one turn."
-Bounce,20,85,85,0,FLYING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User bounces high into the air, dodging all attacks, and hits next turn."
-"Brave bird",6,120,100,0,FLYING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User receives 1/3 the damage inflicted in recoil."
-"Brick break",6,75,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Destroys Reflect and Light Screen."
-"Bug bite",5,60,100,0,BUG,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"If target has a berry, inflicts double damage and uses the berry."
-Bulldoze,5,60,100,0,GROUND,true,DAMAGE_PHYSICAL,ALL_OTHER_POKEMON,"Has a $effect_chance% chance to lower the target's Speed by one stage."
-"Bullet punch",3,40,100,1,STEEL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Bullet seed",3,25,100,0,GRASS,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-"Chip away",5,70,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Ignores the target's stat modifiers."
-"Circle throw",10,60,90,-6,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Ends wild battles.  Forces trainers to switch Pokémon."
-Clamp,6,35,85,0,WATER,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Prevents the target from fleeing and inflicts damage for 2-5 turns."
-"Close combat",20,120,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Lowers the user's Defense and Special Defense by one stage after inflicting damage."
-"Comet punch",6,18,85,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-Constrict,2,10,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Speed by one stage."
-Counter,5,0,100,-5,FIGHTING,true,DAMAGE_PHYSICAL,SPECIFIC_MOVE,"Inflicts twice the damage the user received from the last physical hit it took."
-Covet,4,60,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Takes the target's item."
-Crabhammer,10,100,90,0,WATER,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-"Cross chop",20,100,80,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-"Cross poison",5,70,100,0,POISON,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit and a $effect_chance% chance to poison the target."
-Crunch,6,80,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Defense by one stage."
-"Crush claw",10,75,95,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Defense by one stage."
-"Crush grip",20,0,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power increases against targets with more HP remaining, up to a maximum of 121 power."
-Cut,3,50,95,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Diamond storm",20,100,95,0,ROCK,true,DAMAGE_PHYSICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to raise the user's Defense by one stage."
-Dig,10,80,100,0,GROUND,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User digs underground, dodging all attacks, and hits next turn."
-Dive,10,80,100,0,WATER,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User dives underwater, dodging all attacks, and hits next turn."
-"Dizzy punch",10,70,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to confuse the target."
-"Double edge",6,120,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User receives 1/3 the damage inflicted in recoil."
-"Double hit",10,35,90,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits twice in one turn."
-"Double kick",3,30,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits twice in one turn."
-"Double slap",10,15,85,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-"Dragon ascent",20,120,100,0,FLYING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Lowers the user's Defense and Special Defense by one stage after inflicting damage."
-"Dragon claw",6,80,100,0,DRAGON,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Dragon rush",10,100,75,0,DRAGON,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Dragon tail",10,60,90,-6,DRAGON,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Ends wild battles.  Forces trainers to switch Pokémon."
-"Drain punch",10,75,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Drains half the damage inflicted to heal the user."
-"Drill peck",5,80,100,0,FLYING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Drill run",10,80,95,0,GROUND,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-"Dual chop",6,40,90,0,DRAGON,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits twice in one turn."
-"Dynamic punch",20,100,50,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to confuse the target."
-Earthquake,10,100,100,0,GROUND,true,DAMAGE_PHYSICAL,ALL_OTHER_POKEMON,"Inflicts regular damage and can hit Dig users."
-"Egg bomb",10,100,75,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-Endeavor,20,0,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Lowers the target's HP to equal the user's."
-Explosion,20,250,100,0,NORMAL,true,DAMAGE_PHYSICAL,ALL_OTHER_POKEMON,"User faints."
-"Extreme speed",20,80,100,2,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-Facade,5,70,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power doubles if user is burned, paralyzed, or poisoned."
-"Fake out",10,40,100,3,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Can only be used as the first move after the user enters battle.  Causes the target to flinch."
-"False swipe",2,40,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Cannot lower the target's HP below 1."
-Feint,10,30,100,2,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits through Protect and Detect."
-"Feint attack",5,60,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Never misses."
-"Fell stinger",4,30,100,0,BUG,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Raises the user's Attack by two stages if it KOs the target."
-"Fire fang",6,65,95,0,FIRE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target and a $effect_chance% chance to make the target flinch."
-"Fire punch",6,75,100,0,FIRE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-Fissure,20,0,30,0,GROUND,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Causes a one-hit KO."
-Flail,6,0,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts more damage when the user has less HP remaining, with a maximum of 200 power."
-"Flame charge",5,50,100,0,FIRE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage.  Raises the user's Speed by one stage."
-"Flame wheel",4,60,100,0,FIRE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target.  Lets frozen Pokémon thaw themselves."
-"Flare blitz",6,120,100,0,FIRE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User takes 1/3 the damage inflicted in recoil.  Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-Fling,10,0,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Throws held item at the target; power depends on the item."
-Fly,6,90,95,0,FLYING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User flies high into the air, dodging all attacks, and hits next turn."
-"Flying press",10,80,95,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Deals both []{type:fighting} and []{type:flying}-type damage."
-"Focus punch",5,150,100,-3,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"If the user takes damage before attacking, the attack is canceled."
-"Force palm",10,60,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
-"Foul play",6,95,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Calculates damage with the target's attacking stat."
-"Freeze shock",20,140,90,0,ICE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Requires a turn to charge before attacking.  Has a $effect_chance% chance to paralyze the target."
-Frustration,5,0,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power increases as happiness decreases, up to a maximum of 102."
-"Fury attack",5,15,85,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-"Fury cutter",5,40,95,0,BUG,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power doubles every turn this move is used in succession after the first, maxing out after five turns."
-"Fury swipes",6,18,80,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-"Fusion bolt",20,100,100,0,ELECTRIC,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"With [Fusion Flare]{move:fusion-flare}, inflicts double damage."
-"Gear grind",6,50,85,0,STEEL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits twice in one turn."
-"Giga impact",20,150,90,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User foregoes its next turn to recharge."
-Guillotine,20,0,30,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Causes a one-hit KO."
-"Gunk shot",20,120,80,0,POISON,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [poison]{mechanic:poison} the target."
-"Gyro ball",20,0,100,0,STEEL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power raises when the user has lower Speed, up to a maximum of 150."
-"Hammer arm",10,100,90,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Lowers user's Speed by one stage."
-"Head charge",6,120,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User receives 1/4 the damage it inflicts in recoil."
-"Head smash",20,150,80,0,ROCK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User receives 1/2 the damage inflicted in recoil."
-Headbutt,6,70,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Heart stamp",4,60,100,0,PSYCHIC,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Heat crash",10,0,100,0,FIRE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power is higher when the user weighs more than the target, up to a maximum of 120."
-"Heavy slam",10,0,100,0,STEEL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power is higher when the user weighs more than the target, up to a maximum of 120."
-"High jump kick",10,130,90,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"If the user misses, it takes half the damage it would have inflicted in recoil."
-"Hold back",2,40,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Cannot lower the target's HP below 1."
-"Horn attack",4,65,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Horn drill",20,0,30,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Causes a one-hit KO."
-"Horn leech",10,75,100,0,GRASS,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Drains half the damage inflicted to heal the user."
-"Hyper fang",6,80,90,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Hyperspace fury",20,100,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Blocks damaging attacks and lowers attacking Pokémon's Attack by two stages on contact.  Switches Aegislash to Shield Forme."
-"Ice ball",5,30,90,0,ICE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power doubles every turn this move is used in succession after the first, resetting after five turns."
-"Ice fang",6,65,95,0,ICE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to freeze the target and a $effect_chance% chance to make the target flinch."
-"Ice punch",6,75,100,0,ICE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [freeze]{mechanic:freeze} the target."
-"Ice shard",3,40,100,1,ICE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Icicle crash",10,85,90,0,ICE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Icicle spear",3,25,100,0,ICE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-"Iron head",6,80,100,0,STEEL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Iron tail",6,100,75,0,STEEL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Defense by one stage."
-"Jump kick",10,100,95,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"If the user misses, it takes half the damage it would have inflicted in recoil."
-"Karate chop",4,50,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-"Knock off",5,65,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Target drops its held item."
-"Lands wrath",10,90,100,0,GROUND,true,DAMAGE_PHYSICAL,ALL_OPPONENTS,"Inflicts regular damage with no additional effect."
-"Last resort",20,140,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Can only be used after all of the user's other moves have been used."
-"Leaf blade",6,90,100,0,GRASS,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-"Leech life",6,20,100,0,BUG,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Drains half the damage inflicted to heal the user."
-Lick,3,30,100,0,GHOST,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
-"Low kick",5,0,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts more damage to heavier targets, with a maximum of 120 power."
-"Low sweep",5,65,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Lowers the target's Speed by one stage."
-"Mach punch",3,40,100,1,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Magnet bomb",5,60,100,0,STEEL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Never misses."
-Magnitude,3,0,100,0,GROUND,true,DAMAGE_PHYSICAL,ALL_OTHER_POKEMON,"Power varies randomly from 10 to 150."
-"Mega kick",20,120,75,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Mega punch",5,80,85,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-Megahorn,10,120,85,0,BUG,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Metal burst",10,0,100,0,STEEL,true,DAMAGE_PHYSICAL,SPECIFIC_MOVE,"Strikes back at the last Pokémon to hit the user this turn with 1.5× the damage."
-"Metal claw",2,50,95,0,STEEL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to raise the user's Attack by one stage."
-"Meteor mash",10,90,90,0,STEEL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to raise the user's Attack by one stage."
-"Natural gift",6,0,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power and type depend on the held berry."
-"Needle arm",6,60,100,0,GRASS,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Night slash",6,70,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-Nuzzle,5,20,100,0,ELECTRIC,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
-Outrage,10,120,100,0,DRAGON,true,DAMAGE_PHYSICAL,RANDOM_OPPONENT,"Hits every turn for 2-3 turns, then confuses the user."
-"Pay day",5,40,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Scatters money on the ground worth five times the user's level."
-Payback,10,50,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power is doubled if the target has already moved this turn."
-Peck,2,35,100,0,FLYING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Petal blizzard",6,90,100,0,GRASS,true,DAMAGE_PHYSICAL,ALL_OTHER_POKEMON,"Inflicts regular damage with no additional effect."
-"Phantom force",10,90,100,0,GHOST,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User vanishes, dodging all attacks, and hits next turn.  Hits through Protect and Detect."
-"Pin missile",5,25,95,0,BUG,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-"Play rough",10,90,90,0,FAIRY,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Attack by one stage."
-Pluck,5,60,100,0,FLYING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"If target has a berry, inflicts double damage and uses the berry."
-"Poison fang",6,50,100,0,POISON,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to badly poison the target."
-"Poison jab",5,80,100,0,POISON,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [poison]{mechanic:poison} the target."
-"Poison sting",2,15,100,0,POISON,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [poison]{mechanic:poison} the target."
-"Poison tail",4,50,100,0,POISON,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit and a $effect_chance% chance to poison the target."
-Pound,2,40,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Power up punch",5,40,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to raise the user's Attack by one stage."
-"Power whip",10,120,85,0,GRASS,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Precipice blades",10,120,85,0,GROUND,true,DAMAGE_PHYSICAL,ALL_OPPONENTS,"Inflicts regular damage with no additional effect."
-Present,6,0,90,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Randomly inflicts damage with power from 40 to 120 or heals the target for 1/4 its max HP."
-"Psycho cut",5,70,100,0,PSYCHIC,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-Punishment,20,0,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power increases against targets with more raised stats, up to a maximum of 200."
-Pursuit,5,40,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has double power against, and can hit, Pokémon attempting to switch out."
-"Quick attack",3,40,100,1,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-Rage,5,20,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"If the user is hit after using this move, its Attack rises by one stage."
-"Rapid spin",2,20,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Frees the user from binding moves, removes Leech Seed, and blows away Spikes."
-"Razor leaf",4,55,95,0,GRASS,true,DAMAGE_PHYSICAL,ALL_OPPONENTS,"Has an increased chance for a critical hit."
-"Razor shell",10,75,95,0,WATER,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Defense by one stage."
-Retaliate,20,70,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has double power if a friendly Pokémon fainted last turn."
-Return,5,0,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power increases with happiness, up to a maximum of 102."
-Revenge,10,60,100,-4,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts double damage if the user takes damage before attacking this turn."
-Reversal,6,0,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts more damage when the user has less HP remaining, with a maximum of 200 power."
-"Rock blast",10,25,90,0,ROCK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-"Rock climb",5,90,85,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to confuse the target."
-"Rock slide",10,75,90,0,ROCK,true,DAMAGE_PHYSICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to make the target flinch."
-"Rock smash",6,40,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Defense by one stage."
-"Rock throw",6,50,90,0,ROCK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Rock tomb",6,60,95,0,ROCK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Speed by one stage."
-"Rock wrecker",20,150,90,0,ROCK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User foregoes its next turn to recharge."
-"Rolling kick",6,60,85,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-Rollout,5,30,90,0,ROCK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Power doubles every turn this move is used in succession after the first, resetting after five turns."
-"Sacred fire",20,100,95,0,FIRE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target.  Lets frozen Pokémon thaw themselves."
-"Sacred sword",6,90,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Ignores the target's stat modifiers."
-"Sand tomb",6,35,85,0,GROUND,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Prevents the target from fleeing and inflicts damage for 2-5 turns."
-Scratch,2,40,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Secret power",5,70,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to inflict a status effect which depends upon the terrain."
-"Seed bomb",6,80,100,0,GRASS,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Seismic toss",5,0,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts damage equal to the user's level."
-"Self destruct",20,200,100,0,NORMAL,true,DAMAGE_PHYSICAL,ALL_OTHER_POKEMON,"User faints."
-"Shadow blast",,80,100,0,SHADOW,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-"Shadow blitz",,40,100,0,SHADOW,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Shadow break",,75,100,0,SHADOW,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Shadow claw",6,70,100,0,GHOST,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-"Shadow end",,120,60,0,SHADOW,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User receives 1/2 its HP in recoil."
-"Shadow force",20,120,100,0,GHOST,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User vanishes, dodging all attacks, and hits next turn.  Hits through Protect and Detect."
-"Shadow punch",5,60,100,0,GHOST,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Never misses."
-"Shadow rush",,55,100,0,SHADOW,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit in Hyper Mode."
-"Shadow sneak",3,40,100,1,GHOST,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Skull bash",10,130,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Raises the user's Defense by one stage.  User charges for one turn before attacking."
-"Sky attack",20,140,90,0,FLYING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User charges for one turn before attacking.  Has a $effect_chance% chance to make the target flinch."
-"Sky drop",10,60,100,0,FLYING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Carries the target high into the air, dodging all attacks against either, and drops it next turn."
-"Sky uppercut",6,85,90,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage and can hit Bounce and Fly users."
-Slam,5,80,75,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-Slash,5,70,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-"Smack down",6,50,100,0,ROCK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Removes any immunity to Ground damage."
-"Smelling salts",10,70,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"If the target is paralyzed, inflicts double damage and cures the paralysis."
-Spark,5,65,100,0,ELECTRIC,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
-"Spike cannon",6,20,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-Steamroller,5,65,100,0,BUG,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Steel wing",4,70,90,0,STEEL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to raise the user's Defense by one stage."
-Stomp,5,65,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Stone edge",20,100,80,0,ROCK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-"Storm throw",10,60,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Always scores a critical hit."
-Strength,6,80,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-Struggle,,50,100,0,NORMAL,true,DAMAGE_PHYSICAL,RANDOM_OPPONENT,"User takes 1/4 its max HP in recoil."
-Submission,5,80,80,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User receives 1/4 the damage it inflicts in recoil."
-"Sucker punch",20,80,100,1,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Only works if the target is about to use a damaging move."
-"Super fang",10,0,90,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts damage equal to half the target's HP."
-Superpower,20,120,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Lowers the user's Attack and Defense by one stage after inflicting damage."
-Tackle,2,50,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Tail slap",10,25,85,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-"Take down",5,90,85,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User receives 1/4 the damage it inflicts in recoil."
-Thief,4,60,100,0,DARK,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Takes the target's item."
-"Thousand arrows",10,90,100,0,GROUND,true,DAMAGE_PHYSICAL,ALL_OPPONENTS,Unknown.
-"Thousand waves",10,90,100,0,GROUND,true,DAMAGE_PHYSICAL,ALL_OPPONENTS,Unknown.
-Thrash,10,120,100,0,NORMAL,true,DAMAGE_PHYSICAL,RANDOM_OPPONENT,"Hits every turn for 2-3 turns, then confuses the user."
-"Thunder fang",6,65,95,0,ELECTRIC,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to paralyze the target and a $effect_chance% chance to make the target flinch."
-"Thunder punch",6,75,100,0,ELECTRIC,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
-"Triple kick",10,10,90,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits three times, increasing power by 100% with each successful hit."
-Twineedle,5,25,100,0,BUG,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits twice in the same turn.  Has a $effect_chance% chance to poison the target."
-"U turn",5,70,100,0,BUG,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User must switch out after attacking."
-"V create",20,180,95,0,FIRE,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Lowers the user's Defense, Special Defense, and Speed by one stage each."
-"Vice grip",3,55,100,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Vine whip",4,45,100,0,GRASS,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Vital throw",10,70,100,-1,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Never misses."
-"Volt tackle",6,120,100,0,ELECTRIC,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User takes 1/3 the damage inflicted in recoil.  Has a $effect_chance% chance to paralyze the target."
-"Wake up slap",10,70,100,0,FIGHTING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"If the target is asleep, has double power and wakes it up."
-"Water shuriken",5,15,100,1,WATER,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Hits 2-5 times in one turn."
-Waterfall,6,80,100,0,WATER,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Wild charge",6,90,100,0,ELECTRIC,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User receives 1/4 the damage it inflicts in recoil."
-"Wing attack",2,60,100,0,FLYING,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Wood hammer",6,120,100,0,GRASS,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"User receives 1/3 the damage inflicted in recoil."
-Wrap,5,15,90,0,NORMAL,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Prevents the target from fleeing and inflicts damage for 2-5 turns."
-"X scissor",6,80,100,0,BUG,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Zen headbutt",6,80,90,0,PSYCHIC,true,DAMAGE_PHYSICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-Absorb,4,20,100,0,GRASS,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Drains half the damage inflicted to heal the user."
-Acid,3,40,100,0,POISON,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to lower the target's Special Defense by one stage."
-"Acid spray",5,40,100,0,POISON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Lowers the target's Special Defense by two stages."
-Aeroblast,20,100,95,0,FLYING,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-"Air cutter",4,60,95,0,FLYING,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Has an increased chance for a critical hit."
-"Air slash",6,75,95,0,FLYING,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Ancient power",20,60,100,0,ROCK,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to raise all of the user's stats by one stage."
-"Aura sphere",5,80,100,0,FIGHTING,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Never misses."
-"Aurora beam",5,65,100,0,ICE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Attack by one stage."
-Belch,10,120,90,0,POISON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Can only be used after the user has eaten a berry."
-"Blast burn",20,150,90,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"User foregoes its next turn to recharge."
-Blizzard,20,110,70,0,ICE,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to freeze the target."
-"Blue flare",20,130,85,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-Boomburst,10,140,100,0,NORMAL,false,DAMANGE_MAGICAL,ALL_OTHER_POKEMON,"Inflicts regular damage with no additional effect."
-Brine,10,65,100,0,WATER,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has double power against Pokémon that have less than half their max HP remaining."
-Bubble,3,40,100,0,WATER,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to lower the target's Speed by one stage."
-"Bubble beam",5,65,100,0,WATER,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Speed by one stage."
-"Bug buzz",10,90,100,0,BUG,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Special Defense by one stage."
-"Charge beam",10,50,90,0,ELECTRIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to raise the user's Special Attack by one stage."
-Chatter,5,65,100,0,FLYING,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a higher chance to confuse the target when the recorded sound is louder."
-"Clear smog",6,50,100,0,POISON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Removes all of the target's stat modifiers."
-Confusion,4,50,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to confuse the target."
-"Dark pulse",6,80,100,0,DARK,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Dazzling gleam",10,80,100,0,FAIRY,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Inflicts regular damage with no additional effect."
-"Disarming voice",6,40,100,0,FAIRY,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Never misses."
-Discharge,6,80,100,0,ELECTRIC,false,DAMANGE_MAGICAL,ALL_OTHER_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
-"Doom desire",20,140,100,0,STEEL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Hits the target two turns later."
-"Draco meteor",20,130,90,0,DRAGON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Lowers the user's Special Attack by two stages after inflicting damage."
-"Dragon breath",5,60,100,0,DRAGON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
-"Dragon pulse",10,85,100,0,DRAGON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Dragon rage",10,0,100,0,DRAGON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts 40 points of damage."
-"Draining kiss",10,50,100,0,FAIRY,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Drains 75% of the damage inflicted to heal the user."
-"Dream eater",6,100,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Only works on sleeping Pokémon.  Drains half the damage inflicted to heal the user."
-"Earth power",10,90,100,0,GROUND,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Special Defense by one stage."
-"Echoed voice",6,40,100,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Power increases by 100% for each consecutive use by any friendly Pokémon, to a maximum of 200."
-"Electro ball",10,0,100,0,ELECTRIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Power is higher when the user has greater Speed than the target, up to a maximum of 150."
-Electroweb,6,55,95,0,ELECTRIC,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Lowers the target's Speed by one stage."
-Ember,4,40,100,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-"Energy ball",10,90,100,0,GRASS,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Special Defense by one stage."
-Eruption,20,150,100,0,FIRE,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Inflicts more damage when the user has more HP remaining, with a maximum of 150 power."
-Extrasensory,5,80,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch."
-"Fairy wind",3,40,100,0,FAIRY,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Fiery dance",10,80,100,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to raise the user's Special Attack by one stage."
-"Final gambit",20,0,100,0,FIGHTING,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts damage equal to the user's remaining HP.  User faints."
-"Fire blast",20,110,85,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-"Fire pledge",10,80,100,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"With [Water Pledge]{move:water-pledge}, doubles the effect chance of friendly Pokémon's moves for four turns."
-"Fire spin",6,35,85,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Prevents the target from fleeing and inflicts damage for 2-5 turns."
-"Flame burst",6,70,100,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Deals splash damage to Pokémon next to the target."
-Flamethrower,6,90,100,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-"Flash cannon",10,80,100,0,STEEL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Special Defense by one stage."
-"Focus blast",20,120,70,0,FIGHTING,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Special Defense by one stage."
-"Freeze dry",5,70,100,0,ICE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Super-effective against []{type:water}."
-"Frenzy plant",20,150,90,0,GRASS,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"User foregoes its next turn to recharge."
-"Frost breath",10,60,90,0,ICE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Always scores a critical hit."
-"Fusion flare",20,100,100,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"With [Fusion Bolt]{move:fusion-bolt}, inflicts double damage."
-"Future sight",10,120,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Hits the target two turns later."
-"Giga drain",10,75,100,0,GRASS,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Drains half the damage inflicted to heal the user."
-Glaciate,10,65,95,0,ICE,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Lowers the target's Speed by one stage."
-"Grass knot",5,0,100,0,GRASS,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts more damage to heavier targets, with a maximum of 120 power."
-"Grass pledge",10,80,100,0,GRASS,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"With [Fire Pledge]{move:fire-pledge}, damages opposing Pokémon for 1/8 their max HP every turn for four turns."
-Gust,2,40,100,0,FLYING,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts regular damage and can hit Pokémon in the air."
-"Heat wave",10,95,90,0,FIRE,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-Hex,10,65,100,0,GHOST,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has double power if the target has a major status ailment."
-"Hidden power",6,60,100,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Power and type depend upon user's IVs.  Power can range from 30 to 70."
-Hurricane,10,110,70,0,FLYING,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to confuse the target."
-"Hydro cannon",20,150,90,0,WATER,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"User foregoes its next turn to recharge."
-"Hydro pump",20,110,80,0,WATER,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Hyper beam",20,150,90,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"User foregoes its next turn to recharge."
-"Hyper voice",10,90,100,0,NORMAL,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Inflicts regular damage with no additional effect."
-"Hyperspace hole",20,80,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,Unknown.
-"Ice beam",10,90,100,0,ICE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [freeze]{mechanic:freeze} the target."
-"Ice burn",20,140,90,0,ICE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Requires a turn to charge before attacking.  Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-"Icy wind",6,55,95,0,ICE,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to lower the target's Speed by one stage."
-Incinerate,6,60,100,0,FIRE,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Destroys the target's held berry."
-Inferno,20,100,50,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-Infestation,5,20,100,0,BUG,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Prevents the target from fleeing and inflicts damage for 2-5 turns."
-Judgment,10,100,100,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"If the user is holding a appropriate plate or drive, the damage inflicted will match it."
-"Lava plume",6,80,100,0,FIRE,false,DAMANGE_MAGICAL,ALL_OTHER_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-"Leaf storm",20,130,90,0,GRASS,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Lowers the user's Special Attack by two stages after inflicting damage."
-"Leaf tornado",10,65,90,0,GRASS,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's accuracy by one stage."
-"Light of ruin",20,140,90,0,FAIRY,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"User receives 1/2 the damage inflicted in recoil."
-"Luster purge",20,70,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Special Defense by one stage."
-"Magical leaf",5,60,100,0,GRASS,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Never misses."
-"Magma storm",20,100,75,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Prevents the target from fleeing and inflicts damage for 2-5 turns."
-"Mega drain",6,40,100,0,GRASS,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Drains half the damage inflicted to heal the user."
-"Mirror coat",5,0,100,-5,PSYCHIC,false,DAMANGE_MAGICAL,SPECIFIC_MOVE,"Inflicts twice the damage the user received from the last special hit it took."
-"Mirror shot",10,65,85,0,STEEL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's accuracy by one stage."
-"Mist ball",20,70,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Special Attack by one stage."
-Moonblast,6,95,100,0,FAIRY,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Special Attack by one stage."
-"Mud bomb",10,65,85,0,GROUND,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's accuracy by one stage."
-"Mud shot",6,55,95,0,GROUND,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Speed by one stage."
-"Mud slap",10,20,100,0,GROUND,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's accuracy by one stage."
-"Muddy water",10,90,85,0,WATER,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to lower the target's accuracy by one stage."
-"Mystical fire",10,65,100,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Special Attack by one stage."
-"Night daze",10,85,95,0,DARK,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's accuracy by one stage."
-"Night shade",6,0,100,0,GHOST,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts damage equal to the user's level."
-"Oblivion wing",10,80,100,0,FLYING,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Drains 75% of the damage inflicted to heal the user."
-Octazooka,10,65,85,0,WATER,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's accuracy by one stage."
-"Ominous wind",20,60,100,0,GHOST,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to raise all of the user's stats by one stage."
-"Origin pulse",10,110,85,0,WATER,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Inflicts regular damage with no additional effect."
-Overheat,20,130,90,0,FIRE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Lowers the user's Special Attack by two stages after inflicting damage."
-"Parabolic charge",5,50,100,0,ELECTRIC,false,DAMANGE_MAGICAL,ALL_OTHER_POKEMON,"Heals the user for half the total damage dealt to all targets."
-"Petal dance",10,120,100,0,GRASS,false,DAMANGE_MAGICAL,RANDOM_OPPONENT,"Hits every turn for 2-3 turns, then confuses the user."
-"Powder snow",4,40,100,0,ICE,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to [freeze]{mechanic:freeze} the target."
-"Power gem",5,80,100,0,ROCK,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-Psybeam,5,65,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to confuse the target."
-Psychic,10,90,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Special Defense by one stage."
-"Psycho boost",20,140,90,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Lowers the user's Special Attack by two stages after inflicting damage."
-Psyshock,10,80,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts damage based on the target's Defense, not Special Defense."
-Psystrike,10,100,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts damage based on the target's Defense, not Special Defense."
-Psywave,6,0,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts damage between 50% and 150% of the user's level."
-"Razor wind",10,80,100,0,NORMAL,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Requires a turn to charge before attacking."
-"Relic song",10,75,100,0,NORMAL,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to put the target to sleep."
-"Roar of time",20,150,90,0,DRAGON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"User foregoes its next turn to recharge."
-Round,6,60,100,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has double power if it's used more than once per turn."
-Scald,6,80,100,0,WATER,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-"Searing shot",20,100,100,0,FIRE,false,DAMANGE_MAGICAL,ALL_OTHER_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-"Secret sword",10,85,100,0,FIGHTING,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts damage based on the target's Defense, not Special Defense."
-"Seed flare",20,120,85,0,GRASS,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Special Defense by two stages."
-"Shadow ball",6,80,100,0,GHOST,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to lower the target's Special Defense by one stage."
-"Shadow bolt",,75,100,0,SHADOW,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
-"Shadow chill",,75,100,0,SHADOW,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [freeze]{mechanic:freeze} the target."
-"Shadow fire",,75,100,0,SHADOW,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-"Shadow half",,0,100,0,SHADOW,false,DAMANGE_MAGICAL,ENTIRE_FIELD,"Halves HP of all Pokémon on the field.  Must recharge"
-"Shadow rave",,70,100,0,SHADOW,false,DAMANGE_MAGICAL,OPPONENTS_FIELD,"Inflicts regular damage with no additional effect."
-"Shadow storm",,95,100,0,SHADOW,false,DAMANGE_MAGICAL,OPPONENTS_FIELD,"Inflicts regular damage with no additional effect."
-"Shadow wave",,50,100,0,SHADOW,false,DAMANGE_MAGICAL,OPPONENTS_FIELD,"Inflicts regular damage with no additional effect."
-"Sheer cold",20,0,30,0,ICE,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Causes a one-hit KO."
-"Shock wave",5,60,100,0,ELECTRIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Never misses."
-"Signal beam",6,75,100,0,BUG,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to confuse the target."
-"Silver wind",20,60,100,0,BUG,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to raise all of the user's stats by one stage."
-Sludge,5,65,100,0,POISON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [poison]{mechanic:poison} the target."
-"Sludge bomb",10,90,100,0,POISON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [poison]{mechanic:poison} the target."
-"Sludge wave",10,95,100,0,POISON,false,DAMANGE_MAGICAL,ALL_OTHER_POKEMON,"Has a $effect_chance% chance to [poison]{mechanic:poison} the target."
-Smog,5,30,70,0,POISON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [poison]{mechanic:poison} the target."
-Snarl,6,55,95,0,DARK,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to lower the target's Special Attack by one stage."
-Snore,6,50,100,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to make the target flinch.  Only works if the user is sleeping."
-"Solar beam",10,120,100,0,GRASS,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Requires a turn to charge before attacking."
-"Sonic boom",5,0,90,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts 20 points of damage."
-"Spacial rend",20,100,95,0,DRAGON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has an increased chance for a critical hit."
-"Spit up",10,0,100,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Power is 100 times the amount of energy Stockpiled."
-"Steam eruption",20,110,95,0,WATER,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn} the target."
-"Stored power",10,20,100,0,PSYCHIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Power is higher the more the user's stats have been raised, to a maximum of 31×."
-"Struggle bug",5,50,100,0,BUG,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to lower the target's Special Attack by one stage."
-Surf,6,90,100,0,WATER,false,DAMANGE_MAGICAL,ALL_OTHER_POKEMON,"Inflicts regular damage and can hit Dive users."
-Swift,5,60,100,0,NORMAL,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Never misses."
-Synchronoise,10,120,100,0,PSYCHIC,false,DAMANGE_MAGICAL,ALL_OTHER_POKEMON,"Hits any Pokémon that shares a type with the user."
-"Techno blast",20,120,100,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"If the user is holding a appropriate plate or drive, the damage inflicted will match it."
-Thunder,10,110,70,0,ELECTRIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to paralyze the target."
-"Thunder shock",3,40,100,0,ELECTRIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
-Thunderbolt,6,90,100,0,ELECTRIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
-"Tri attack",10,80,100,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [burn]{mechanic:burn}, [freeze]{mechanic:freeze}, or [paralyze]{mechanic:paralysis} the target."
-"Trump card",20,0,100,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Power increases when this move has less PP, up to a maximum of 200."
-Twister,5,40,100,0,DRAGON,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Has a $effect_chance% chance to make the target flinch."
-Uproar,10,90,100,0,NORMAL,false,DAMANGE_MAGICAL,RANDOM_OPPONENT,"Forced to use this move for several turns.  Pokémon cannot fall asleep in that time."
-"Vacuum wave",3,40,100,1,FIGHTING,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-Venoshock,10,65,100,0,POISON,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts double damage if the target is Poisoned."
-"Volt switch",5,70,100,0,ELECTRIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"User must switch out after attacking."
-"Water gun",4,40,100,0,WATER,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Inflicts regular damage with no additional effect."
-"Water pledge",10,80,100,0,WATER,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"With [Grass Pledge]{move:grass-pledge}, halves opposing Pokémon's Speed for four turns."
-"Water pulse",5,60,100,0,WATER,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to confuse the target."
-"Water spout",20,150,100,0,WATER,false,DAMANGE_MAGICAL,ALL_OPPONENTS,"Inflicts more damage when the user has more HP remaining, with a maximum of 150 power."
-"Weather ball",10,50,100,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"If there be weather, this move has doubled power and the weather's type."
-Whirlpool,6,35,85,0,WATER,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Prevents the target from leaving battle and inflicts 1/16 its max HP in damage for 2-5 turns."
-"Wring out",20,0,100,0,NORMAL,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Power increases against targets with more HP remaining, up to a maximum of 121 power."
-"Zap cannon",20,120,50,0,ELECTRIC,false,DAMANGE_MAGICAL,SELECTED_POKEMON,"Has a $effect_chance% chance to [paralyze]{mechanic:paralysis} the target."
+name,mp,attackPower,healPower,stageChanges,accuracy,priority,alwaysHits,element,target,highCritical,isPhysical,effect,flavor,condition,conditionChance,flinchChance,stageChance,description
+Attract,6,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,AILMENT,ATTRACT,,0,0,0,"Target falls in love if it has the opposite gender, and has a 50% chance to refuse attacking the user."
+Confuse ray,10,0,0,,100,0,false,GHOST,SELECTED_POKEMON,false,true,AILMENT,CONFUSE_RAY,CONFUSION,0,0,0,Confuses the target.
+Dark void,10,0,0,,80,0,false,DARK,ALL_OPPONENTS,false,true,AILMENT,DARK_VOID,SLEEP,0,0,0,Puts the target to sleep.
+Embargo,6,0,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,AILMENT,EMBARGO,,0,0,0,Target cannot use held items.
+Foresight,2,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,AILMENT,FORESIGHT,,0,0,0,"Forces the target to have no Evade, and allows it to be hit by Normal and Fighting moves even if it's a Ghost."
+Glare,3,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,AILMENT,GLARE,PARALYSIS,0,0,0,Paralyzes the target.
+Grass whistle,6,0,0,,55,0,false,GRASS,SELECTED_POKEMON,false,true,AILMENT,GRASS_WHISTLE,SLEEP,0,0,0,Puts the target to sleep.
+Heal block,6,0,0,,100,0,false,PSYCHIC,ALL_OPPONENTS,false,true,AILMENT,HEAL_BLOCK,,0,0,0,Prevents target from restoring its HP for five turns.
+Hypnosis,5,0,0,,60,0,false,PSYCHIC,SELECTED_POKEMON,false,true,AILMENT,HYPNOSIS,SLEEP,0,0,0,Puts the target to sleep.
+Ingrain,5,0,0,,100,0,true,GRASS,USER,false,true,AILMENT,INGRAIN,,0,0,0,Prevents the user from leaving battle. User regains 1/16 of its max HP every turn.
+Leech seed,10,0,0,,90,0,false,GRASS,SELECTED_POKEMON,false,true,AILMENT,LEECH_SEED,,0,0,0,"Seeds the target, stealing HP from it every turn."
+Lovely kiss,10,0,0,,75,0,false,NORMAL,SELECTED_POKEMON,false,true,AILMENT,LOVELY_KISS,SLEEP,0,0,0,Puts the target to sleep.
+Miracle eye,2,0,0,,100,0,true,PSYCHIC,SELECTED_POKEMON,false,true,AILMENT,MIRACLE_EYE,,0,0,0,"Forces the target to have no evasion, and allows it to be hit by Psychic moves even if it's Dark."
+Nightmare,6,0,0,,100,0,false,GHOST,SELECTED_POKEMON,false,true,AILMENT,NIGHTMARE,,0,0,0,Target loses 1/4 its max HP every turn as long as it's asleep.
+Odor sleuth,2,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,AILMENT,ODOR_SLEUTH,,0,0,0,"Forces the target to have no Evade, and allows it to be hit by Normal and Fighting moves even if it's a Ghost."
+Perish song,20,0,0,,100,0,true,NORMAL,ALL_POKEMON,false,true,AILMENT,PERISH_SONG,,0,0,0,User and target both faint after three turns.
+Poison gas,2,0,0,,90,0,false,POISON,ALL_OPPONENTS,false,true,AILMENT,POISON_GAS,POISON,0,0,0,Poisons the target.
+Poison powder,2,0,0,,75,0,false,POISON,SELECTED_POKEMON,false,true,AILMENT,POISON_POWDER,POISON,0,0,0,Poisons the target.
+Sing,6,0,0,,55,0,false,NORMAL,SELECTED_POKEMON,false,true,AILMENT,SING,SLEEP,0,0,0,Puts the target to sleep.
+Sleep powder,6,0,0,,75,0,false,GRASS,SELECTED_POKEMON,false,true,AILMENT,SLEEP_POWDER,SLEEP,0,0,0,Puts the target to sleep.
+Spore,6,0,0,,100,0,false,GRASS,SELECTED_POKEMON,false,true,AILMENT,SPORE,SLEEP,0,0,0,Puts the target to sleep.
+Stun spore,3,0,0,,75,0,false,GRASS,SELECTED_POKEMON,false,true,AILMENT,STUN_SPORE,PARALYSIS,0,0,0,Paralyzes the target.
+Supersonic,5,0,0,,55,0,false,NORMAL,SELECTED_POKEMON,false,true,AILMENT,SUPERSONIC,CONFUSION,0,0,0,Confuses the target.
+Sweet kiss,10,0,0,,75,0,false,FAIRY,SELECTED_POKEMON,false,true,AILMENT,SWEET_KISS,CONFUSION,0,0,0,Confuses the target.
+Teeter dance,5,0,0,,100,0,false,NORMAL,ALL_OTHER_POKEMON,false,true,AILMENT,TEETER_DANCE,CONFUSION,0,0,0,Confuses the target.
+Telekinesis,6,0,0,,100,0,true,PSYCHIC,SELECTED_POKEMON,false,true,AILMENT,TELEKINESIS,,0,0,0,Moves have 100% accuracy against the target for three turns.
+Thunder wave,5,0,0,,100,0,false,ELECTRIC,SELECTED_POKEMON,false,true,AILMENT,THUNDER_WAVE,PARALYSIS,0,0,0,Paralyzes the target.
+Torment,6,0,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,AILMENT,TORMENT,,0,0,0,Prevents the target from using the same move twice in a row.
+Toxic,10,0,0,,90,0,false,POISON,SELECTED_POKEMON,false,true,AILMENT,TOXIC,POISON,0,0,0,"Badly poisons the target, inflicting more damage every turn."
+Will o wisp,6,0,0,,85,0,false,FIRE,SELECTED_POKEMON,false,true,AILMENT,WILL_O_WISP,BURN,0,0,0,Burns the target.
+Yawn,10,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,AILMENT,YAWN,,0,0,0,Target sleeps at the end of the next turn.
+Acrobatics,6,55,0,,100,0,false,FLYING,SELECTED_POKEMON,false,true,DAMAGE,ACROBATICS,,0,0,0,Has double power if the user has no held item.
+Aerial ace,5,60,0,,100,0,true,FLYING,SELECTED_POKEMON,false,true,DAMAGE,AERIAL_ACE,,0,0,0,Never misses.
+Aeroblast,20,100,0,,95,0,false,FLYING,SELECTED_POKEMON,true,false,DAMAGE,AEROBLAST,,0,0,0,Has an increased chance for a critical hit.
+Air cutter,4,60,0,,95,0,false,FLYING,ALL_OPPONENTS,true,false,DAMAGE,AIR_CUTTER,,0,0,0,Has an increased chance for a critical hit.
+Air slash,6,75,0,,95,0,false,FLYING,SELECTED_POKEMON,false,false,DAMAGE,AIR_SLASH,,0,30,0,Has a 0% chance to make the target flinch.
+Aqua jet,5,40,0,,100,1,false,WATER,SELECTED_POKEMON,false,true,DAMAGE,AQUA_JET,,0,0,0,Inflicts regular damage with no additional effect.
+Aqua tail,10,90,0,,90,0,false,WATER,SELECTED_POKEMON,false,true,DAMAGE,AQUA_TAIL,,0,0,0,Inflicts regular damage with no additional effect.
+Arm thrust,5,15,0,,100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,ARM_THRUST,,0,0,0,Hits 2-5 times in one turn.
+Assurance,10,60,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,DAMAGE,ASSURANCE,,0,0,0,Power is doubled if the target has already received damage this turn.
+Astonish,6,30,0,,100,0,false,GHOST,SELECTED_POKEMON,false,true,DAMAGE,ASTONISH,,0,30,0,Has a 0% chance to make the target flinch.
+Attack order,6,90,0,,100,0,false,BUG,SELECTED_POKEMON,true,true,DAMAGE,ATTACK_ORDER,,0,0,0,Has an increased chance for a critical hit.
+Aura sphere,5,80,0,,100,0,true,FIGHTING,SELECTED_POKEMON,false,false,DAMAGE,AURA_SPHERE,,0,0,0,Never misses.
+Avalanche,10,60,0,,100,-4,false,ICE,SELECTED_POKEMON,false,true,DAMAGE,AVALANCHE,,0,0,0,Inflicts double damage if the user takes damage before attacking this turn.
+Barrage,5,15,0,,85,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,BARRAGE,,0,0,0,Hits 2-5 times in one turn.
+Beat up,10,0,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,DAMAGE,BEAT_UP,,0,0,0,Hits once for every conscious Pokémon the trainer has.
+Belch,10,120,0,,90,0,false,POISON,SELECTED_POKEMON,false,false,DAMAGE,BELCH,,0,0,0,Can only be used after the user has eaten a berry.
+Bide,10,0,0,,100,1,true,NORMAL,USER,false,true,DAMAGE,BIDE,,0,0,0,"User waits for two turns, then hits back for twice the damage it took."
+Bite,4,60,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,DAMAGE,BITE,,0,30,0,Has a 0% chance to make the target flinch.
+Blast burn,20,150,0,,90,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE,BLAST_BURN,,0,0,0,User foregoes its next turn to recharge.
+Bone club,5,65,0,,85,0,false,GROUND,SELECTED_POKEMON,false,true,DAMAGE,BONE_CLUB,,0,10,0,Has a 0% chance to make the target flinch.
+Bone rush,10,25,0,,90,0,false,GROUND,SELECTED_POKEMON,false,true,DAMAGE,BONE_RUSH,,0,0,0,Hits 2-5 times in one turn.
+Bonemerang,10,50,0,,90,0,false,GROUND,SELECTED_POKEMON,false,true,DAMAGE,BONEMERANG,,0,0,0,Hits twice in one turn.
+Boomburst,10,140,0,,100,0,false,NORMAL,ALL_OTHER_POKEMON,false,false,DAMAGE,BOOMBURST,,0,0,0,Inflicts regular damage with no additional effect.
+Brave bird,6,120,0,,100,0,false,FLYING,SELECTED_POKEMON,false,true,DAMAGE,BRAVE_BIRD,,0,0,0,User receives 1/3 the damage inflicted in recoil.
+Brick break,6,75,0,,100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,BRICK_BREAK,,0,0,0,Destroys Reflect and Light Screen.
+Brine,10,65,0,,100,0,false,WATER,SELECTED_POKEMON,false,false,DAMAGE,BRINE,,0,0,0,Has double power against Pokémon that have less than half their max HP remaining.
+Bug bite,5,60,0,,100,0,false,BUG,SELECTED_POKEMON,false,true,DAMAGE,BUG_BITE,,0,0,0,"If target has a berry, inflicts double damage and uses the berry."
+Bullet punch,3,40,0,,100,1,false,STEEL,SELECTED_POKEMON,false,true,DAMAGE,BULLET_PUNCH,,0,0,0,Inflicts regular damage with no additional effect.
+Bullet seed,3,25,0,,100,0,false,GRASS,SELECTED_POKEMON,false,true,DAMAGE,BULLET_SEED,,0,0,0,Hits 2-5 times in one turn.
+Chip away,5,70,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,CHIP_AWAY,,0,0,0,Ignores the target's stat modifiers.
+Circle throw,10,60,0,,90,-6,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,CIRCLE_THROW,,0,0,0,Ends wild battles. Forces trainers to switch Pokémon.
+Clear smog,6,50,0,,100,0,true,POISON,SELECTED_POKEMON,false,false,DAMAGE,CLEAR_SMOG,,0,0,0,Removes all of the target's stat modifiers.
+Comet punch,6,18,0,,85,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,COMET_PUNCH,,0,0,0,Hits 2-5 times in one turn.
+Counter,5,0,0,,100,-5,false,FIGHTING,SPECIFIC_MOVE,false,true,DAMAGE,COUNTER,,0,0,0,Inflicts twice the damage the user received from the last physical hit it took.
+Covet,4,60,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,COVET,,0,0,0,Takes the target's item.
+Crabhammer,10,100,0,,90,0,false,WATER,SELECTED_POKEMON,true,true,DAMAGE,CRABHAMMER,,0,0,0,Has an increased chance for a critical hit.
+Cross chop,20,100,0,,80,0,false,FIGHTING,SELECTED_POKEMON,true,true,DAMAGE,CROSS_CHOP,,0,0,0,Has an increased chance for a critical hit.
+Crush grip,20,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,CRUSH_GRIP,,0,0,0,"Power increases against targets with more HP remaining, up to a maximum of 121 power."
+Cut,3,50,0,,95,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,CUT,,0,0,0,Inflicts regular damage with no additional effect.
+Dark pulse,6,80,0,,100,0,false,DARK,SELECTED_POKEMON,false,false,DAMAGE,DARK_PULSE,,0,20,0,Has a 0% chance to make the target flinch.
+Dazzling gleam,10,80,0,,100,0,false,FAIRY,ALL_OPPONENTS,false,false,DAMAGE,DAZZLING_GLEAM,,0,0,0,Inflicts regular damage with no additional effect.
+Dig,10,80,0,,100,0,false,GROUND,SELECTED_POKEMON,false,true,DAMAGE,DIG,,0,0,0,"User digs underground, dodging all attacks, and hits next turn."
+Disarming voice,6,40,0,,100,0,true,FAIRY,ALL_OPPONENTS,false,false,DAMAGE,DISARMING_VOICE,,0,0,0,Never misses.
+Dive,10,80,0,,100,0,false,WATER,SELECTED_POKEMON,false,true,DAMAGE,DIVE,,0,0,0,"User dives underwater, dodging all attacks, and hits next turn."
+Double edge,6,120,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,DOUBLE_EDGE,,0,0,0,User receives 1/3 the damage inflicted in recoil.
+Double hit,10,35,0,,90,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,DOUBLE_HIT,,0,0,0,Hits twice in one turn.
+Double kick,3,30,0,,100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,DOUBLE_KICK,,0,0,0,Hits twice in one turn.
+Double slap,10,15,0,,85,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,DOUBLE_SLAP,,0,0,0,Hits 2-5 times in one turn.
+Dragon claw,6,80,0,,100,0,false,DRAGON,SELECTED_POKEMON,false,true,DAMAGE,DRAGON_CLAW,,0,0,0,Inflicts regular damage with no additional effect.
+Dragon pulse,10,85,0,,100,0,false,DRAGON,SELECTED_POKEMON,false,false,DAMAGE,DRAGON_PULSE,,0,0,0,Inflicts regular damage with no additional effect.
+Dragon rage,10,0,0,,100,0,false,DRAGON,SELECTED_POKEMON,false,false,DAMAGE,DRAGON_RAGE,,0,0,0,Inflicts 40 points of damage.
+Dragon rush,10,100,0,,75,0,false,DRAGON,SELECTED_POKEMON,false,true,DAMAGE,DRAGON_RUSH,,0,20,0,Has a 0% chance to make the target flinch.
+Dragon tail,10,60,0,,90,-6,false,DRAGON,SELECTED_POKEMON,false,true,DAMAGE,DRAGON_TAIL,,0,0,0,Ends wild battles. Forces trainers to switch Pokémon.
+Drill peck,5,80,0,,100,0,false,FLYING,SELECTED_POKEMON,false,true,DAMAGE,DRILL_PECK,,0,0,0,Inflicts regular damage with no additional effect.
+Drill run,10,80,0,,95,0,false,GROUND,SELECTED_POKEMON,true,true,DAMAGE,DRILL_RUN,,0,0,0,Has an increased chance for a critical hit.
+Dual chop,6,40,0,,90,0,false,DRAGON,SELECTED_POKEMON,false,true,DAMAGE,DUAL_CHOP,,0,0,0,Hits twice in one turn.
+Earthquake,10,100,0,,100,0,false,GROUND,ALL_OTHER_POKEMON,false,true,DAMAGE,EARTHQUAKE,,0,0,0,Inflicts regular damage and can hit Dig users.
+Echoed voice,6,40,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,false,DAMAGE,ECHOED_VOICE,,0,0,0,"Power increases by 100% for each consecutive use by any friendly Pokémon, to a maximum of 200."
+Egg bomb,10,100,0,,75,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,EGG_BOMB,,0,0,0,Inflicts regular damage with no additional effect.
+Electro ball,10,0,0,,100,0,false,ELECTRIC,SELECTED_POKEMON,false,false,DAMAGE,ELECTRO_BALL,,0,0,0,"Power is higher when the user has greater Speed than the target, up to a maximum of 150."
+Endeavor,20,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,ENDEAVOR,,0,0,0,Lowers the target's HP to equal the user's.
+Eruption,20,150,0,,100,0,false,FIRE,ALL_OPPONENTS,false,false,DAMAGE,ERUPTION,,0,0,0,"Inflicts more damage when the user has more HP remaining, with a maximum of 150 power."
+Explosion,20,250,0,,100,0,false,NORMAL,ALL_OTHER_POKEMON,false,true,DAMAGE,EXPLOSION,,0,0,0,User faints.
+Extrasensory,5,80,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE,EXTRASENSORY,,0,10,0,Has a 0% chance to make the target flinch.
+Extreme speed,20,80,0,,100,2,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,EXTREME_SPEED,,0,0,0,Inflicts regular damage with no additional effect.
+Facade,5,70,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,FACADE,,0,0,0,"Power doubles if user is burned, paralyzed, or poisoned."
+Fairy wind,3,40,0,,100,0,false,FAIRY,SELECTED_POKEMON,false,false,DAMAGE,FAIRY_WIND,,0,0,0,Inflicts regular damage with no additional effect.
+Fake out,10,40,0,,100,3,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,FAKE_OUT,,0,100,0,Can only be used as the first move after the user enters battle. Causes the target to flinch.
+False swipe,2,40,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,FALSE_SWIPE,,0,0,0,Cannot lower the target's HP below 1.
+Feint,10,30,0,,100,2,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,FEINT,,0,0,0,Hits through Protect and Detect.
+Feint attack,5,60,0,,100,0,true,DARK,SELECTED_POKEMON,false,true,DAMAGE,FEINT_ATTACK,,0,0,0,Never misses.
+Fell stinger,4,30,0,,100,0,false,BUG,SELECTED_POKEMON,false,true,DAMAGE,FELL_STINGER,,0,0,0,Raises the user's Attack by two stages if it KOs the target.
+Final gambit,20,0,0,,100,0,false,FIGHTING,SELECTED_POKEMON,false,false,DAMAGE,FINAL_GAMBIT,,0,0,0,Inflicts damage equal to the user's remaining HP. User faints.
+Fire pledge,10,80,0,,100,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE,FIRE_PLEDGE,,0,0,0,"With Water Pledge, doubles the effect chance of friendly Pokémon's moves for four turns."
+Flail,6,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,FLAIL,,0,0,0,"Inflicts more damage when the user has less HP remaining, with a maximum of 200 power."
+Flame burst,6,70,0,,100,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE,FLAME_BURST,,0,0,0,Deals splash damage to Pokémon next to the target.
+Fling,10,0,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,DAMAGE,FLING,,0,0,0,Throws held item at the target; power depends on the item.
+Fly,6,90,0,,95,0,false,FLYING,SELECTED_POKEMON,false,true,DAMAGE,FLY,,0,0,0,"User flies high into the air, dodging all attacks, and hits next turn."
+Flying press,10,80,0,,95,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,FLYING_PRESS,,0,0,0,Deals both type fighting and type flying-type damage.
+Focus punch,5,150,0,,100,-3,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,FOCUS_PUNCH,,0,0,0,"If the user takes damage before attacking, the attack is canceled."
+Foul play,6,95,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,DAMAGE,FOUL_PLAY,,0,0,0,Calculates damage with the target's attacking stat.
+Frenzy plant,20,150,0,,90,0,false,GRASS,SELECTED_POKEMON,false,false,DAMAGE,FRENZY_PLANT,,0,0,0,User foregoes its next turn to recharge.
+Frost breath,10,60,0,,90,0,false,ICE,SELECTED_POKEMON,true,false,DAMAGE,FROST_BREATH,,100,0,0,Always scores a critical hit.
+Frustration,5,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,FRUSTRATION,,0,0,0,"Power increases as happiness decreases, up to a maximum of 102."
+Fury attack,5,15,0,,85,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,FURY_ATTACK,,0,0,0,Hits 2-5 times in one turn.
+Fury cutter,5,40,0,,95,0,false,BUG,SELECTED_POKEMON,false,true,DAMAGE,FURY_CUTTER,,0,0,0,"Power doubles every turn this move is used in succession after the first, maxing out after five turns."
+Fury swipes,6,18,0,,80,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,FURY_SWIPES,,0,0,0,Hits 2-5 times in one turn.
+Fusion bolt,20,100,0,,100,0,false,ELECTRIC,SELECTED_POKEMON,false,true,DAMAGE,FUSION_BOLT,,0,0,0,"With Fusion Flare, inflicts double damage."
+Fusion flare,20,100,0,,100,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE,FUSION_FLARE,,0,0,0,"With Fusion Bolt, inflicts double damage."
+Gear grind,6,50,0,,85,0,false,STEEL,SELECTED_POKEMON,false,true,DAMAGE,GEAR_GRIND,,0,0,0,Hits twice in one turn.
+Giga impact,20,150,0,,90,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,GIGA_IMPACT,,0,0,0,User foregoes its next turn to recharge.
+Grass knot,5,0,0,,100,0,false,GRASS,SELECTED_POKEMON,false,false,DAMAGE,GRASS_KNOT,,0,0,0,"Inflicts more damage to heavier targets, with a maximum of 120 power."
+Grass pledge,10,80,0,,100,0,false,GRASS,SELECTED_POKEMON,false,false,DAMAGE,GRASS_PLEDGE,,0,0,0,"With Fire Pledge, damages opposing Pokémon for 1/8 their max HP every turn for four turns."
+Gust,2,40,0,,100,0,false,FLYING,SELECTED_POKEMON,false,false,DAMAGE,GUST,,0,0,0,Inflicts regular damage and can hit Pokémon in the air.
+Gyro ball,20,0,0,,100,0,false,STEEL,SELECTED_POKEMON,false,true,DAMAGE,GYRO_BALL,,0,0,0,"Power raises when the user has lower Speed, up to a maximum of 150."
+Head charge,6,120,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,HEAD_CHARGE,,0,0,0,User receives 1/4 the damage it inflicts in recoil.
+Head smash,20,150,0,,80,0,false,ROCK,SELECTED_POKEMON,false,true,DAMAGE,HEAD_SMASH,,0,0,0,User receives 1/2 the damage inflicted in recoil.
+Headbutt,6,70,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,HEADBUTT,,0,30,0,Has a 0% chance to make the target flinch.
+Heart stamp,4,60,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,false,true,DAMAGE,HEART_STAMP,,0,30,0,Has a 0% chance to make the target flinch.
+Heat crash,10,0,0,,100,0,false,FIRE,SELECTED_POKEMON,false,true,DAMAGE,HEAT_CRASH,,0,0,0,"Power is higher when the user weighs more than the target, up to a maximum of 120."
+Heavy slam,10,0,0,,100,0,false,STEEL,SELECTED_POKEMON,false,true,DAMAGE,HEAVY_SLAM,,0,0,0,"Power is higher when the user weighs more than the target, up to a maximum of 120."
+Hex,10,65,0,,100,0,false,GHOST,SELECTED_POKEMON,false,false,DAMAGE,HEX,,0,0,0,Has double power if the target has a major status ailment.
+Hidden power,6,60,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,false,DAMAGE,HIDDEN_POWER,,0,0,0,Power and type depend upon user's IVs. Power can range from 30 to 70.
+High jump kick,10,130,0,,90,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,HIGH_JUMP_KICK,,0,0,0,"If the user misses, it takes half the damage it would have inflicted in recoil."
+Hold back,2,40,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,HOLD_BACK,,0,0,0,Cannot lower the target's HP below 1.
+Horn attack,4,65,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,HORN_ATTACK,,0,0,0,Inflicts regular damage with no additional effect.
+Hydro cannon,20,150,0,,90,0,false,WATER,SELECTED_POKEMON,false,false,DAMAGE,HYDRO_CANNON,,0,0,0,User foregoes its next turn to recharge.
+Hydro pump,20,110,0,,80,0,false,WATER,SELECTED_POKEMON,false,false,DAMAGE,HYDRO_PUMP,,0,0,0,Inflicts regular damage with no additional effect.
+Hyper beam,20,150,0,,90,0,false,NORMAL,SELECTED_POKEMON,false,false,DAMAGE,HYPER_BEAM,,0,0,0,User foregoes its next turn to recharge.
+Hyper fang,6,80,0,,90,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,HYPER_FANG,,0,10,0,Has a 0% chance to make the target flinch.
+Hyper voice,10,90,0,,100,0,false,NORMAL,ALL_OPPONENTS,false,false,DAMAGE,HYPER_VOICE,,0,0,0,Inflicts regular damage with no additional effect.
+Hyperspace hole,20,80,0,,100,0,true,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE,HYPERSPACE_HOLE,,0,0,0,Unknown.
+Ice ball,5,30,0,,90,0,false,ICE,SELECTED_POKEMON,false,true,DAMAGE,ICE_BALL,,0,0,0,"Power doubles every turn this move is used in succession after the first, resetting after five turns."
+Ice shard,3,40,0,,100,1,false,ICE,SELECTED_POKEMON,false,true,DAMAGE,ICE_SHARD,,0,0,0,Inflicts regular damage with no additional effect.
+Icicle crash,10,85,0,,90,0,false,ICE,SELECTED_POKEMON,false,true,DAMAGE,ICICLE_CRASH,,0,30,0,Has a 0% chance to make the target flinch.
+Icicle spear,3,25,0,,100,0,false,ICE,SELECTED_POKEMON,false,true,DAMAGE,ICICLE_SPEAR,,0,0,0,Hits 2-5 times in one turn.
+Incinerate,6,60,0,,100,0,false,FIRE,ALL_OPPONENTS,false,false,DAMAGE,INCINERATE,,0,0,0,Destroys the target's held berry.
+Iron head,6,80,0,,100,0,false,STEEL,SELECTED_POKEMON,false,true,DAMAGE,IRON_HEAD,,0,30,0,Has a 0% chance to make the target flinch.
+Judgment,10,100,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,false,DAMAGE,JUDGMENT,,0,0,0,"If the user is holding a appropriate plate or drive, the damage inflicted will match it."
+Jump kick,10,100,0,,95,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,JUMP_KICK,,0,0,0,"If the user misses, it takes half the damage it would have inflicted in recoil."
+Karate chop,4,50,0,,100,0,false,FIGHTING,SELECTED_POKEMON,true,true,DAMAGE,KARATE_CHOP,,0,0,0,Has an increased chance for a critical hit.
+Knock off,5,65,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,DAMAGE,KNOCK_OFF,,0,0,0,Target drops its held item.
+Lands wrath,10,90,0,,100,0,false,GROUND,ALL_OPPONENTS,false,true,DAMAGE,LANDS_WRATH,,0,0,0,Inflicts regular damage with no additional effect.
+Last resort,20,140,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,LAST_RESORT,,0,0,0,Can only be used after all of the user's other moves have been used.
+Leaf blade,6,90,0,,100,0,false,GRASS,SELECTED_POKEMON,true,true,DAMAGE,LEAF_BLADE,,0,0,0,Has an increased chance for a critical hit.
+Light of ruin,20,140,0,,90,0,false,FAIRY,SELECTED_POKEMON,false,false,DAMAGE,LIGHT_OF_RUIN,,0,0,0,User receives 1/2 the damage inflicted in recoil.
+Low kick,5,0,0,,100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,LOW_KICK,,0,0,0,"Inflicts more damage to heavier targets, with a maximum of 120 power."
+Mach punch,3,40,0,,100,1,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,MACH_PUNCH,,0,0,0,Inflicts regular damage with no additional effect.
+Magical leaf,5,60,0,,100,0,true,GRASS,SELECTED_POKEMON,false,false,DAMAGE,MAGICAL_LEAF,,0,0,0,Never misses.
+Magnet bomb,5,60,0,,100,0,true,STEEL,SELECTED_POKEMON,false,true,DAMAGE,MAGNET_BOMB,,0,0,0,Never misses.
+Magnitude,3,0,0,,100,0,false,GROUND,ALL_OTHER_POKEMON,false,true,DAMAGE,MAGNITUDE,,0,0,0,Power varies randomly from 10 to 150.
+Me first,5,0,0,,100,0,true,NORMAL,SELECTED_POKEMON_ME_FIRST,false,true,DAMAGE,ME_FIRST,,0,0,0,"Uses the target's move against it before it attacks, with power increased by half."
+Mega kick,20,120,0,,75,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,MEGA_KICK,,0,0,0,Inflicts regular damage with no additional effect.
+Mega punch,5,80,0,,85,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,MEGA_PUNCH,,0,0,0,Inflicts regular damage with no additional effect.
+Megahorn,10,120,0,,85,0,false,BUG,SELECTED_POKEMON,false,true,DAMAGE,MEGAHORN,,0,0,0,Inflicts regular damage with no additional effect.
+Metal burst,10,0,0,,100,0,false,STEEL,SPECIFIC_MOVE,false,true,DAMAGE,METAL_BURST,,0,0,0,Strikes back at the last Pokémon to hit the user this turn with 1.5× the damage.
+Mirror coat,5,0,0,,100,-5,false,PSYCHIC,SPECIFIC_MOVE,false,false,DAMAGE,MIRROR_COAT,,0,0,0,Inflicts twice the damage the user received from the last special hit it took.
+Natural gift,6,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,NATURAL_GIFT,,0,0,0,Power and type depend on the held berry.
+Needle arm,6,60,0,,100,0,false,GRASS,SELECTED_POKEMON,false,true,DAMAGE,NEEDLE_ARM,,0,30,0,Has a 0% chance to make the target flinch.
+Night shade,6,0,0,,100,0,false,GHOST,SELECTED_POKEMON,false,false,DAMAGE,NIGHT_SHADE,,0,0,0,Inflicts damage equal to the user's level.
+Night slash,6,70,0,,100,0,false,DARK,SELECTED_POKEMON,true,true,DAMAGE,NIGHT_SLASH,,0,0,0,Has an increased chance for a critical hit.
+Outrage,10,120,0,,100,0,false,DRAGON,RANDOM_OPPONENT,false,true,DAMAGE,OUTRAGE,,0,0,0,"Hits every turn for 2-3 turns, then confuses the user."
+Pay day,5,40,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,PAY_DAY,,0,0,0,Scatters money on the ground worth five times the user's level.
+Payback,10,50,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,DAMAGE,PAYBACK,,0,0,0,Power is doubled if the target has already moved this turn.
+Peck,2,35,0,,100,0,false,FLYING,SELECTED_POKEMON,false,true,DAMAGE,PECK,,0,0,0,Inflicts regular damage with no additional effect.
+Petal blizzard,6,90,0,,100,0,false,GRASS,ALL_OTHER_POKEMON,false,true,DAMAGE,PETAL_BLIZZARD,,0,0,0,Inflicts regular damage with no additional effect.
+Petal dance,10,120,0,,100,0,false,GRASS,RANDOM_OPPONENT,false,false,DAMAGE,PETAL_DANCE,,0,0,0,"Hits every turn for 2-3 turns, then confuses the user."
+Phantom force,10,90,0,,100,0,false,GHOST,SELECTED_POKEMON,false,true,DAMAGE,PHANTOM_FORCE,,0,0,0,"User vanishes, dodging all attacks, and hits next turn. Hits through Protect and Detect."
+Pin missile,5,25,0,,95,0,false,BUG,SELECTED_POKEMON,false,true,DAMAGE,PIN_MISSILE,,0,0,0,Hits 2-5 times in one turn.
+Pluck,5,60,0,,100,0,false,FLYING,SELECTED_POKEMON,false,true,DAMAGE,PLUCK,,0,0,0,"If target has a berry, inflicts double damage and uses the berry."
+Pound,2,40,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,POUND,,0,0,0,Inflicts regular damage with no additional effect.
+Power gem,5,80,0,,100,0,false,ROCK,SELECTED_POKEMON,false,false,DAMAGE,POWER_GEM,,0,0,0,Inflicts regular damage with no additional effect.
+Power whip,10,120,0,,85,0,false,GRASS,SELECTED_POKEMON,false,true,DAMAGE,POWER_WHIP,,0,0,0,Inflicts regular damage with no additional effect.
+Present,6,0,0,,90,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,PRESENT,,0,0,0,Randomly inflicts damage with power from 40 to 120 or heals the target for 1/4 its max HP.
+Psycho cut,5,70,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,true,true,DAMAGE,PSYCHO_CUT,,0,0,0,Has an increased chance for a critical hit.
+Psyshock,10,80,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE,PSYSHOCK,,0,0,0,"Inflicts damage based on the target's Defense, not Special Defense."
+Psystrike,10,100,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE,PSYSTRIKE,,0,0,0,"Inflicts damage based on the target's Defense, not Special Defense."
+Psywave,6,0,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE,PSYWAVE,,0,0,0,Inflicts damage between 50% and 150% of the user's level.
+Punishment,20,0,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,DAMAGE,PUNISHMENT,,0,0,0,"Power increases against targets with more raised stats, up to a maximum of 200."
+Pursuit,5,40,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,DAMAGE,PURSUIT,,0,0,0,"Has double power against, and can hit, Pokémon attempting to switch out."
+Quick attack,3,40,0,,100,1,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,QUICK_ATTACK,,0,0,0,Inflicts regular damage with no additional effect.
+Rage,5,20,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,RAGE,,0,0,0,"If the user is hit after using this move, its Attack rises by one stage."
+Rapid spin,2,20,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,RAPID_SPIN,,0,0,0,"Frees the user from binding moves, removes Leech Seed, and blows away Spikes."
+Razor leaf,4,55,0,,95,0,false,GRASS,ALL_OPPONENTS,true,true,DAMAGE,RAZOR_LEAF,,0,0,0,Has an increased chance for a critical hit.
+Razor wind,10,80,0,,100,0,false,NORMAL,ALL_OPPONENTS,true,false,DAMAGE,RAZOR_WIND,,0,0,0,Requires a turn to charge before attacking.
+Retaliate,20,70,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,RETALIATE,,0,0,0,Has double power if a friendly Pokémon fainted last turn.
+Return,5,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,RETURN,,0,0,0,"Power increases with happiness, up to a maximum of 102."
+Revenge,10,60,0,,100,-4,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,REVENGE,,0,0,0,Inflicts double damage if the user takes damage before attacking this turn.
+Reversal,6,0,0,,100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,REVERSAL,,0,0,0,"Inflicts more damage when the user has less HP remaining, with a maximum of 200 power."
+Roar of time,20,150,0,,90,0,false,DRAGON,SELECTED_POKEMON,false,false,DAMAGE,ROAR_OF_TIME,,0,0,0,User foregoes its next turn to recharge.
+Rock blast,10,25,0,,90,0,false,ROCK,SELECTED_POKEMON,false,true,DAMAGE,ROCK_BLAST,,0,0,0,Hits 2-5 times in one turn.
+Rock slide,10,75,0,,90,0,false,ROCK,ALL_OPPONENTS,false,true,DAMAGE,ROCK_SLIDE,,0,30,0,Has a 0% chance to make the target flinch.
+Rock throw,6,50,0,,90,0,false,ROCK,SELECTED_POKEMON,false,true,DAMAGE,ROCK_THROW,,0,0,0,Inflicts regular damage with no additional effect.
+Rock wrecker,20,150,0,,90,0,false,ROCK,SELECTED_POKEMON,false,true,DAMAGE,ROCK_WRECKER,,0,0,0,User foregoes its next turn to recharge.
+Rolling kick,6,60,0,,85,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,ROLLING_KICK,,0,30,0,Has a 0% chance to make the target flinch.
+Rollout,5,30,0,,90,0,false,ROCK,SELECTED_POKEMON,false,true,DAMAGE,ROLLOUT,,0,0,0,"Power doubles every turn this move is used in succession after the first, resetting after five turns."
+Round,6,60,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,false,DAMAGE,ROUND,,0,0,0,Has double power if it's used more than once per turn.
+Sacred sword,6,90,0,,100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,SACRED_SWORD,,0,0,0,Ignores the target's stat modifiers.
+Scratch,2,40,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,SCRATCH,,0,0,0,Inflicts regular damage with no additional effect.
+Secret power,5,70,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,SECRET_POWER,,30,0,0,Has a 0% chance to inflict a status effect which depends upon the terrain.
+Secret sword,10,85,0,,100,0,false,FIGHTING,SELECTED_POKEMON,false,false,DAMAGE,SECRET_SWORD,,0,0,0,"Inflicts damage based on the target's Defense, not Special Defense."
+Seed bomb,6,80,0,,100,0,false,GRASS,SELECTED_POKEMON,false,true,DAMAGE,SEED_BOMB,,0,0,0,Inflicts regular damage with no additional effect.
+Seismic toss,5,0,0,,100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,SEISMIC_TOSS,,0,0,0,Inflicts damage equal to the user's level.
+Self destruct,20,200,0,,100,0,false,NORMAL,ALL_OTHER_POKEMON,false,true,DAMAGE,SELF_DESTRUCT,,0,0,0,User faints.
+Shadow claw,6,70,0,,100,0,false,GHOST,SELECTED_POKEMON,true,true,DAMAGE,SHADOW_CLAW,,0,0,0,Has an increased chance for a critical hit.
+Shadow force,20,120,0,,100,0,false,GHOST,SELECTED_POKEMON,false,true,DAMAGE,SHADOW_FORCE,,0,0,0,"User vanishes, dodging all attacks, and hits next turn. Hits through Protect and Detect."
+Shadow punch,5,60,0,,100,0,true,GHOST,SELECTED_POKEMON,false,true,DAMAGE,SHADOW_PUNCH,,0,0,0,Never misses.
+Shadow sneak,3,40,0,,100,1,false,GHOST,SELECTED_POKEMON,false,true,DAMAGE,SHADOW_SNEAK,,0,0,0,Inflicts regular damage with no additional effect.
+Shock wave,5,60,0,,100,0,true,ELECTRIC,SELECTED_POKEMON,false,false,DAMAGE,SHOCK_WAVE,,0,0,0,Never misses.
+Skull bash,10,130,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,SKULL_BASH,,100,0,0,Raises the user's Defense by one stage. User charges for one turn before attacking.
+Sky attack,20,140,0,,90,0,false,FLYING,SELECTED_POKEMON,true,true,DAMAGE,SKY_ATTACK,,0,30,0,User charges for one turn before attacking. Has a 0% chance to make the target flinch.
+Sky drop,10,60,0,,100,0,false,FLYING,SELECTED_POKEMON,false,true,DAMAGE,SKY_DROP,,0,0,0,"Carries the target high into the air, dodging all attacks against either, and drops it next turn."
+Sky uppercut,6,85,0,,90,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,SKY_UPPERCUT,,0,0,0,Inflicts regular damage and can hit Bounce and Fly users.
+Slam,5,80,0,,75,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,SLAM,,0,0,0,Inflicts regular damage with no additional effect.
+Slash,5,70,0,,100,0,false,NORMAL,SELECTED_POKEMON,true,true,DAMAGE,SLASH,,0,0,0,Has an increased chance for a critical hit.
+Smack down,6,50,0,,100,0,false,ROCK,SELECTED_POKEMON,false,true,DAMAGE,SMACK_DOWN,,100,0,0,Removes any immunity to Ground damage.
+Smelling salts,10,70,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,SMELLING_SALTS,,0,0,0,"If the target is paralyzed, inflicts double damage and cures the paralysis."
+Snore,6,50,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,false,DAMAGE,SNORE,,0,30,0,Has a 0% chance to make the target flinch. Only works if the user is sleeping.
+Solar beam,10,120,0,,100,0,false,GRASS,SELECTED_POKEMON,false,false,DAMAGE,SOLAR_BEAM,,0,0,0,Requires a turn to charge before attacking.
+Sonic boom,5,0,0,,90,0,false,NORMAL,SELECTED_POKEMON,false,false,DAMAGE,SONIC_BOOM,,0,0,0,Inflicts 20 points of damage.
+Spacial rend,20,100,0,,95,0,false,DRAGON,SELECTED_POKEMON,true,false,DAMAGE,SPACIAL_REND,,0,0,0,Has an increased chance for a critical hit.
+Spike cannon,6,20,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,SPIKE_CANNON,,0,0,0,Hits 2-5 times in one turn.
+Spit up,10,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,false,DAMAGE,SPIT_UP,,0,0,0,Power is 100 times the amount of energy Stockpiled.
+Steamroller,5,65,0,,100,0,false,BUG,SELECTED_POKEMON,false,true,DAMAGE,STEAMROLLER,,0,30,0,Has a 0% chance to make the target flinch.
+Stomp,5,65,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,STOMP,,0,30,0,Has a 0% chance to make the target flinch.
+Stone edge,20,100,0,,80,0,false,ROCK,SELECTED_POKEMON,true,true,DAMAGE,STONE_EDGE,,0,0,0,Has an increased chance for a critical hit.
+Stored power,10,20,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE,STORED_POWER,,0,0,0,"Power is higher the more the user's stats have been raised, to a maximum of 31×."
+Storm throw,10,60,0,,100,0,false,FIGHTING,SELECTED_POKEMON,true,true,DAMAGE,STORM_THROW,,0,0,0,Always scores a critical hit.
+Strength,6,80,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,STRENGTH,,0,0,0,Inflicts regular damage with no additional effect.
+Struggle,,50,-25,,100,0,true,NORMAL,RANDOM_OPPONENT,false,true,DAMAGE,STRUGGLE,,0,0,0,User takes 1/4 its max HP in recoil.
+Submission,5,80,0,,80,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,SUBMISSION,,0,0,0,User receives 1/4 the damage it inflicts in recoil.
+Sucker punch,20,80,0,,100,1,false,DARK,SELECTED_POKEMON,false,true,DAMAGE,SUCKER_PUNCH,,0,0,0,Only works if the target is about to use a damaging move.
+Super fang,10,0,0,,90,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,SUPER_FANG,,0,0,0,Inflicts damage equal to half the target's HP.
+Surf,6,90,0,,100,0,false,WATER,ALL_OTHER_POKEMON,false,false,DAMAGE,SURF,,0,0,0,Inflicts regular damage and can hit Dive users.
+Swift,5,60,0,,100,0,true,NORMAL,ALL_OPPONENTS,false,false,DAMAGE,SWIFT,,0,0,0,Never misses.
+Synchronoise,10,120,0,,100,0,false,PSYCHIC,ALL_OTHER_POKEMON,false,false,DAMAGE,SYNCHRONOISE,,0,0,0,Hits any Pokémon that shares a type with the user.
+Tackle,2,50,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,TACKLE,,0,0,0,Inflicts regular damage with no additional effect.
+Tail slap,10,25,0,,85,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,TAIL_SLAP,,0,0,0,Hits 2-5 times in one turn.
+Take down,5,90,0,,85,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,TAKE_DOWN,,0,0,0,User receives 1/4 the damage it inflicts in recoil.
+Techno blast,20,120,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,false,DAMAGE,TECHNO_BLAST,,0,0,0,"If the user is holding a appropriate plate or drive, the damage inflicted will match it."
+Thief,4,60,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,DAMAGE,THIEF,,0,0,0,Takes the target's item.
+Thousand arrows,10,90,0,,100,0,false,GROUND,ALL_OPPONENTS,false,true,DAMAGE,THOUSAND_ARROWS,,100,0,0,Unknown.
+Thousand waves,10,90,0,,100,0,false,GROUND,ALL_OPPONENTS,false,true,DAMAGE,THOUSAND_WAVES,,0,0,0,Unknown.
+Thrash,10,120,0,,100,0,false,NORMAL,RANDOM_OPPONENT,false,true,DAMAGE,THRASH,,0,0,0,"Hits every turn for 2-3 turns, then confuses the user."
+Triple kick,10,10,0,,90,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,TRIPLE_KICK,,0,0,0,"Hits three times, increasing power by 100% with each successful hit."
+Trump card,20,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,false,DAMAGE,TRUMP_CARD,,0,0,0,"Power increases when this move has less PP, up to a maximum of 200."
+Twister,5,40,0,,100,0,false,DRAGON,ALL_OPPONENTS,false,false,DAMAGE,TWISTER,,0,20,0,Has a 0% chance to make the target flinch.
+U turn,5,70,0,,100,0,false,BUG,SELECTED_POKEMON,false,true,DAMAGE,U_TURN,,0,0,0,User must switch out after attacking.
+Uproar,10,90,0,,100,0,false,NORMAL,RANDOM_OPPONENT,false,false,DAMAGE,UPROAR,,0,0,0,Forced to use this move for several turns. Pokémon cannot fall asleep in that time.
+Vacuum wave,3,40,0,,100,1,false,FIGHTING,SELECTED_POKEMON,false,false,DAMAGE,VACUUM_WAVE,,0,0,0,Inflicts regular damage with no additional effect.
+Venoshock,10,65,0,,100,0,false,POISON,SELECTED_POKEMON,false,false,DAMAGE,VENOSHOCK,,0,0,0,Inflicts double damage if the target is Poisoned.
+Vice grip,3,55,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE,VICE_GRIP,,0,0,0,Inflicts regular damage with no additional effect.
+Vine whip,4,45,0,,100,0,false,GRASS,SELECTED_POKEMON,false,true,DAMAGE,VINE_WHIP,,0,0,0,Inflicts regular damage with no additional effect.
+Vital throw,10,70,0,,100,-1,true,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,VITAL_THROW,,0,0,0,Never misses.
+Volt switch,5,70,0,,100,0,false,ELECTRIC,SELECTED_POKEMON,false,false,DAMAGE,VOLT_SWITCH,,0,0,0,User must switch out after attacking.
+Wake up slap,10,70,0,,100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE,WAKE_UP_SLAP,,0,0,0,"If the target is asleep, has double power and wakes it up."
+Water gun,4,40,0,,100,0,false,WATER,SELECTED_POKEMON,false,false,DAMAGE,WATER_GUN,,0,0,0,Inflicts regular damage with no additional effect.
+Water pledge,10,80,0,,100,0,false,WATER,SELECTED_POKEMON,false,false,DAMAGE,WATER_PLEDGE,,0,0,0,"With Grass Pledge, halves opposing Pokémon's Speed for four turns."
+Water shuriken,5,15,0,,100,1,false,WATER,SELECTED_POKEMON,false,true,DAMAGE,WATER_SHURIKEN,,0,0,0,Hits 2-5 times in one turn.
+Water spout,20,150,0,,100,0,false,WATER,ALL_OPPONENTS,false,false,DAMAGE,WATER_SPOUT,,0,0,0,"Inflicts more damage when the user has more HP remaining, with a maximum of 150 power."
+Waterfall,6,80,0,,100,0,false,WATER,SELECTED_POKEMON,false,true,DAMAGE,WATERFALL,,0,20,0,Has a 0% chance to make the target flinch.
+Weather ball,10,50,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,false,DAMAGE,WEATHER_BALL,,0,0,0,"If there be weather, this move has doubled power and the weather's type."
+Wild charge,6,90,0,,100,0,false,ELECTRIC,SELECTED_POKEMON,false,true,DAMAGE,WILD_CHARGE,,0,0,0,User receives 1/4 the damage it inflicts in recoil.
+Wing attack,2,60,0,,100,0,false,FLYING,SELECTED_POKEMON,false,true,DAMAGE,WING_ATTACK,,0,0,0,Inflicts regular damage with no additional effect.
+Wood hammer,6,120,0,,100,0,false,GRASS,SELECTED_POKEMON,false,true,DAMAGE,WOOD_HAMMER,,0,0,0,User receives 1/3 the damage inflicted in recoil.
+Wring out,20,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,false,DAMAGE,WRING_OUT,,0,0,0,"Power increases against targets with more HP remaining, up to a maximum of 121 power."
+X scissor,6,80,0,,100,0,false,BUG,SELECTED_POKEMON,false,true,DAMAGE,X_SCISSOR,,0,0,0,Inflicts regular damage with no additional effect.
+Zen headbutt,6,80,0,,90,0,false,PSYCHIC,SELECTED_POKEMON,false,true,DAMAGE,ZEN_HEADBUTT,,0,20,0,Has a 0% chance to make the target flinch.
+Bind,5,15,0,,85,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,BIND,,100,0,0,Prevents the target from fleeing and inflicts damage for 2-5 turns.
+Blaze kick,10,85,0,,90,0,false,FIRE,SELECTED_POKEMON,true,true,DAMAGE_AILMENT,BLAZE_KICK,BURN,10,0,0,Has an increased chance for a critical hit and a 0% chance to burn the target.
+Blizzard,20,110,0,,70,0,false,ICE,ALL_OPPONENTS,false,false,DAMAGE_AILMENT,BLIZZARD,FREEZE,10,0,0,Has a 0% chance to freeze the target.
+Blue flare,20,130,0,,85,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,BLUE_FLARE,BURN,20,0,0,Has a 0% chance to burn the target.
+Body slam,6,85,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,BODY_SLAM,PARALYSIS,30,0,0,Has a 0% chance to paralyze the target.
+Bolt strike,20,130,0,,85,0,false,ELECTRIC,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,BOLT_STRIKE,PARALYSIS,20,0,0,Has a 0% chance to paralyze the target.
+Bounce,20,85,0,,85,0,false,FLYING,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,BOUNCE,PARALYSIS,30,0,0,"User bounces high into the air, dodging all attacks, and hits next turn."
+Chatter,5,65,0,,100,0,false,FLYING,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,CHATTER,CONFUSION,100,0,0,Has a higher chance to confuse the target when the recorded sound is louder.
+Clamp,6,35,0,,85,0,false,WATER,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,CLAMP,,100,0,0,Prevents the target from fleeing and inflicts damage for 2-5 turns.
+Confusion,4,50,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,CONFUSION,CONFUSION,10,0,0,Has a 0% chance to confuse the target.
+Cross poison,5,70,0,,100,0,false,POISON,SELECTED_POKEMON,true,true,DAMAGE_AILMENT,CROSS_POISON,POISON,10,0,0,Has an increased chance for a critical hit and a 0% chance to poison the target.
+Discharge,6,80,0,,100,0,false,ELECTRIC,ALL_OTHER_POKEMON,false,false,DAMAGE_AILMENT,DISCHARGE,PARALYSIS,30,0,0,Has a 0% chance to paralyze the target.
+Dizzy punch,10,70,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,DIZZY_PUNCH,CONFUSION,20,0,0,Has a 0% chance to confuse the target.
+Dragon breath,5,60,0,,100,0,false,DRAGON,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,DRAGON_BREATH,PARALYSIS,30,0,0,Has a 0% chance to paralyze the target.
+Dynamic punch,20,100,0,,50,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,DYNAMIC_PUNCH,CONFUSION,100,0,0,Has a 0% chance to confuse the target.
+Ember,4,40,0,,100,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,EMBER,BURN,10,0,0,Has a 0% chance to burn the target.
+Fire blast,20,110,0,,85,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,FIRE_BLAST,BURN,10,0,0,Has a 0% chance to burn the target.
+Fire fang,6,65,0,,95,0,false,FIRE,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,FIRE_FANG,BURN,10,10,0,Has a 0% chance to burn the target and a 0% chance to make the target flinch.
+Fire punch,6,75,0,,100,0,false,FIRE,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,FIRE_PUNCH,BURN,10,0,0,Has a 0% chance to burn the target.
+Fire spin,6,35,0,,85,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,FIRE_SPIN,,100,0,0,Prevents the target from fleeing and inflicts damage for 2-5 turns.
+Flame wheel,4,60,0,,100,0,false,FIRE,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,FLAME_WHEEL,BURN,10,0,0,Has a 0% chance to burn the target. Lets frozen Pokémon thaw themselves.
+Flamethrower,6,90,0,,100,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,FLAMETHROWER,BURN,10,0,0,Has a 0% chance to burn the target.
+Flare blitz,6,120,0,,100,0,false,FIRE,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,FLARE_BLITZ,BURN,10,0,0,User takes 1/3 the damage inflicted in recoil. Has a 0% chance to burn the target.
+Force palm,10,60,0,,100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,FORCE_PALM,PARALYSIS,30,0,0,Has a 0% chance to paralyze the target.
+Freeze dry,5,70,0,,100,0,false,ICE,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,FREEZE_DRY,FREEZE,10,0,0,Super-effective against type water.
+Freeze shock,20,140,0,,90,0,false,ICE,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,FREEZE_SHOCK,PARALYSIS,30,0,0,Requires a turn to charge before attacking. Has a 0% chance to paralyze the target.
+Gunk shot,20,120,0,,80,0,false,POISON,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,GUNK_SHOT,POISON,30,0,0,Has a 0% chance to poison the target.
+Heat wave,10,95,0,,90,0,false,FIRE,ALL_OPPONENTS,false,false,DAMAGE_AILMENT,HEAT_WAVE,BURN,10,0,0,Has a 0% chance to burn the target.
+Hurricane,10,110,0,,70,0,false,FLYING,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,HURRICANE,CONFUSION,30,0,0,Has a 0% chance to confuse the target.
+Ice beam,10,90,0,,100,0,false,ICE,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,ICE_BEAM,FREEZE,10,0,0,Has a 0% chance to freeze the target.
+Ice burn,20,140,0,,90,0,false,ICE,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,ICE_BURN,BURN,30,0,0,Requires a turn to charge before attacking. Has a 0% chance to burn the target.
+Ice fang,6,65,0,,95,0,false,ICE,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,ICE_FANG,FREEZE,10,10,0,Has a 0% chance to freeze the target and a 0% chance to make the target flinch.
+Ice punch,6,75,0,,100,0,false,ICE,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,ICE_PUNCH,FREEZE,10,0,0,Has a 0% chance to freeze the target.
+Inferno,20,100,0,,50,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,INFERNO,BURN,100,0,0,Has a 0% chance to burn the target.
+Infestation,5,20,0,,100,0,false,BUG,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,INFESTATION,,100,0,0,Prevents the target from fleeing and inflicts damage for 2-5 turns.
+Lava plume,6,80,0,,100,0,false,FIRE,ALL_OTHER_POKEMON,false,false,DAMAGE_AILMENT,LAVA_PLUME,BURN,30,0,0,Has a 0% chance to burn the target.
+Lick,3,30,0,,100,0,false,GHOST,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,LICK,PARALYSIS,30,0,0,Has a 0% chance to paralyze the target.
+Magma storm,20,100,0,,75,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,MAGMA_STORM,,100,0,0,Prevents the target from fleeing and inflicts damage for 2-5 turns.
+Nuzzle,5,20,0,,100,0,false,ELECTRIC,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,NUZZLE,PARALYSIS,100,0,0,Has a 0% chance to paralyze the target.
+Poison fang,6,50,0,,100,0,false,POISON,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,POISON_FANG,POISON,50,0,0,Has a 0% chance to badly poison the target.
+Poison jab,5,80,0,,100,0,false,POISON,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,POISON_JAB,POISON,30,0,0,Has a 0% chance to poison the target.
+Poison sting,2,15,0,,100,0,false,POISON,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,POISON_STING,POISON,30,0,0,Has a 0% chance to poison the target.
+Poison tail,4,50,0,,100,0,false,POISON,SELECTED_POKEMON,true,true,DAMAGE_AILMENT,POISON_TAIL,POISON,10,0,0,Has an increased chance for a critical hit and a 0% chance to poison the target.
+Powder snow,4,40,0,,100,0,false,ICE,ALL_OPPONENTS,false,false,DAMAGE_AILMENT,POWDER_SNOW,FREEZE,10,0,0,Has a 0% chance to freeze the target.
+Psybeam,5,65,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,PSYBEAM,CONFUSION,10,0,0,Has a 0% chance to confuse the target.
+Relic song,10,75,0,,100,0,false,NORMAL,ALL_OPPONENTS,false,false,DAMAGE_AILMENT,RELIC_SONG,SLEEP,10,0,0,Has a 0% chance to put the target to sleep.
+Rock climb,5,90,0,,85,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,ROCK_CLIMB,CONFUSION,20,0,0,Has a 0% chance to confuse the target.
+Sacred fire,20,100,0,,95,0,false,FIRE,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,SACRED_FIRE,BURN,50,0,0,Has a 0% chance to burn the target. Lets frozen Pokémon thaw themselves.
+Sand tomb,6,35,0,,85,0,false,GROUND,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,SAND_TOMB,,100,0,0,Prevents the target from fleeing and inflicts damage for 2-5 turns.
+Scald,6,80,0,,100,0,false,WATER,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,SCALD,BURN,30,0,0,Has a 0% chance to burn the target.
+Searing shot,20,100,0,,100,0,false,FIRE,ALL_OTHER_POKEMON,false,false,DAMAGE_AILMENT,SEARING_SHOT,BURN,30,0,0,Has a 0% chance to burn the target.
+Signal beam,6,75,0,,100,0,false,BUG,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,SIGNAL_BEAM,CONFUSION,10,0,0,Has a 0% chance to confuse the target.
+Sludge,5,65,0,,100,0,false,POISON,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,SLUDGE,POISON,30,0,0,Has a 0% chance to poison the target.
+Sludge bomb,10,90,0,,100,0,false,POISON,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,SLUDGE_BOMB,POISON,30,0,0,Has a 0% chance to poison the target.
+Sludge wave,10,95,0,,100,0,false,POISON,ALL_OTHER_POKEMON,false,false,DAMAGE_AILMENT,SLUDGE_WAVE,POISON,10,0,0,Has a 0% chance to poison the target.
+Smog,5,30,0,,70,0,false,POISON,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,SMOG,POISON,40,0,0,Has a 0% chance to poison the target.
+Spark,5,65,0,,100,0,false,ELECTRIC,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,SPARK,PARALYSIS,30,0,0,Has a 0% chance to paralyze the target.
+Steam eruption,20,110,0,,95,0,false,WATER,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,STEAM_ERUPTION,BURN,30,0,0,Has a 0% chance to burn the target.
+Thunder,10,110,0,,70,0,false,ELECTRIC,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,THUNDER,PARALYSIS,30,0,0,Has a 0% chance to paralyze the target.
+Thunder fang,6,65,0,,95,0,false,ELECTRIC,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,THUNDER_FANG,PARALYSIS,10,10,0,Has a 0% chance to paralyze the target and a 0% chance to make the target flinch.
+Thunder punch,6,75,0,,100,0,false,ELECTRIC,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,THUNDER_PUNCH,PARALYSIS,10,0,0,Has a 0% chance to paralyze the target.
+Thunder shock,3,40,0,,100,0,false,ELECTRIC,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,THUNDER_SHOCK,PARALYSIS,10,0,0,Has a 0% chance to paralyze the target.
+Thunderbolt,6,90,0,,100,0,false,ELECTRIC,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,THUNDERBOLT,PARALYSIS,10,0,0,Has a 0% chance to paralyze the target.
+Tri attack,10,80,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,TRI_ATTACK,,20,0,0,"Has a 0% chance to burn, freeze, or paralyze the target."
+Twineedle,5,25,0,,100,0,false,BUG,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,TWINEEDLE,POISON,20,0,0,Hits twice in the same turn. Has a 0% chance to poison the target.
+Volt tackle,6,120,0,,100,0,false,ELECTRIC,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,VOLT_TACKLE,PARALYSIS,10,0,0,User takes 1/3 the damage inflicted in recoil. Has a 0% chance to paralyze the target.
+Water pulse,5,60,0,,100,0,false,WATER,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,WATER_PULSE,CONFUSION,20,0,0,Has a 0% chance to confuse the target.
+Whirlpool,6,35,0,,85,0,false,WATER,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,WHIRLPOOL,,100,0,0,Prevents the target from leaving battle and inflicts 1/16 its max HP in damage for 2-5 turns.
+Wrap,5,15,0,,90,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE_AILMENT,WRAP,,100,0,0,Prevents the target from fleeing and inflicts damage for 2-5 turns.
+Zap cannon,20,120,0,,50,0,false,ELECTRIC,SELECTED_POKEMON,false,false,DAMAGE_AILMENT,ZAP_CANNON,PARALYSIS,100,0,0,Has a 0% chance to paralyze the target.
+Absorb,4,20,0,,100,0,false,GRASS,SELECTED_POKEMON,false,false,DAMAGE_HEAL,ABSORB,,0,0,0,Drains half the damage inflicted to heal the user.
+Drain punch,10,75,0,,100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE_HEAL,DRAIN_PUNCH,,0,0,0,Drains half the damage inflicted to heal the user.
+Draining kiss,10,50,0,,100,0,false,FAIRY,SELECTED_POKEMON,false,false,DAMAGE_HEAL,DRAINING_KISS,,0,0,0,Drains 75% of the damage inflicted to heal the user.
+Dream eater,6,100,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE_HEAL,DREAM_EATER,,0,0,0,Only works on sleeping Pokémon. Drains half the damage inflicted to heal the user.
+Giga drain,10,75,0,,100,0,false,GRASS,SELECTED_POKEMON,false,false,DAMAGE_HEAL,GIGA_DRAIN,,0,0,0,Drains half the damage inflicted to heal the user.
+Horn leech,10,75,0,,100,0,false,GRASS,SELECTED_POKEMON,false,true,DAMAGE_HEAL,HORN_LEECH,,0,0,0,Drains half the damage inflicted to heal the user.
+Leech life,6,20,0,,100,0,false,BUG,SELECTED_POKEMON,false,true,DAMAGE_HEAL,LEECH_LIFE,,0,0,0,Drains half the damage inflicted to heal the user.
+Mega drain,6,40,0,,100,0,false,GRASS,SELECTED_POKEMON,false,false,DAMAGE_HEAL,MEGA_DRAIN,,0,0,0,Drains half the damage inflicted to heal the user.
+Oblivion wing,10,80,0,,100,0,false,FLYING,SELECTED_POKEMON,false,false,DAMAGE_HEAL,OBLIVION_WING,,0,0,0,Drains 75% of the damage inflicted to heal the user.
+Parabolic charge,5,50,0,,100,0,false,ELECTRIC,ALL_OTHER_POKEMON,false,false,DAMAGE_HEAL,PARABOLIC_CHARGE,,0,0,0,Heals the user for half the total damage dealt to all targets.
+Acid,3,40,0,"{""MAGICAL_DEFENSE"":""-1""}",100,0,false,POISON,ALL_OPPONENTS,false,false,DAMAGE_LOWER,ACID,,0,0,10,Has a 10% chance to lower the target's Special Defense by one stage.
+Acid spray,5,40,0,"{""MAGICAL_DEFENSE"":""-2""}",100,0,false,POISON,SELECTED_POKEMON,false,false,DAMAGE_LOWER,ACID_SPRAY,,0,0,100,Lowers the target's Special Defense by two stages.
+Aurora beam,5,65,0,"{""ATTACK"":""-1""}",100,0,false,ICE,SELECTED_POKEMON,false,false,DAMAGE_LOWER,AURORA_BEAM,,0,0,10,Has a 10% chance to lower the target's Attack by one stage.
+Bubble,3,40,0,"{""SPEED"":""-1""}",100,0,false,WATER,ALL_OPPONENTS,false,false,DAMAGE_LOWER,BUBBLE,,0,0,10,Has a 10% chance to lower the target's Speed by one stage.
+Bubble beam,5,65,0,"{""SPEED"":""-1""}",100,0,false,WATER,SELECTED_POKEMON,false,false,DAMAGE_LOWER,BUBBLE_BEAM,,0,0,10,Has a 10% chance to lower the target's Speed by one stage.
+Bug buzz,10,90,0,"{""MAGICAL_DEFENSE"":""-1""}",100,0,false,BUG,SELECTED_POKEMON,false,false,DAMAGE_LOWER,BUG_BUZZ,,0,0,10,Has a 10% chance to lower the target's Special Defense by one stage.
+Bulldoze,5,60,0,"{""SPEED"":""-1""}",100,0,false,GROUND,ALL_OTHER_POKEMON,false,true,DAMAGE_LOWER,BULLDOZE,,0,0,100,Has a 100% chance to lower the target's Speed by one stage.
+Constrict,2,10,0,"{""SPEED"":""-1""}",100,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE_LOWER,CONSTRICT,,0,0,10,Has a 10% chance to lower the target's Speed by one stage.
+Crunch,6,80,0,"{""DEFENSE"":""-1""}",100,0,false,DARK,SELECTED_POKEMON,false,true,DAMAGE_LOWER,CRUNCH,,0,0,20,Has a 20% chance to lower the target's Defense by one stage.
+Crush claw,10,75,0,"{""DEFENSE"":""-1""}",95,0,false,NORMAL,SELECTED_POKEMON,false,true,DAMAGE_LOWER,CRUSH_CLAW,,0,0,50,Has a 50% chance to lower the target's Defense by one stage.
+Earth power,10,90,0,"{""MAGICAL_DEFENSE"":""-1""}",100,0,false,GROUND,SELECTED_POKEMON,false,false,DAMAGE_LOWER,EARTH_POWER,,0,0,10,Has a 10% chance to lower the target's Special Defense by one stage.
+Electroweb,6,55,0,"{""SPEED"":""-1""}",95,0,false,ELECTRIC,ALL_OPPONENTS,false,false,DAMAGE_LOWER,ELECTROWEB,,0,0,100,Lowers the target's Speed by one stage.
+Energy ball,10,90,0,"{""MAGICAL_DEFENSE"":""-1""}",100,0,false,GRASS,SELECTED_POKEMON,false,false,DAMAGE_LOWER,ENERGY_BALL,,0,0,10,Has a 10% chance to lower the target's Special Defense by one stage.
+Flash cannon,10,80,0,"{""MAGICAL_DEFENSE"":""-1""}",100,0,false,STEEL,SELECTED_POKEMON,false,false,DAMAGE_LOWER,FLASH_CANNON,,0,0,10,Has a 10% chance to lower the target's Special Defense by one stage.
+Focus blast,20,120,0,"{""MAGICAL_DEFENSE"":""-1""}",70,0,false,FIGHTING,SELECTED_POKEMON,false,false,DAMAGE_LOWER,FOCUS_BLAST,,0,0,10,Has a 10% chance to lower the target's Special Defense by one stage.
+Glaciate,10,65,0,"{""SPEED"":""-1""}",95,0,false,ICE,ALL_OPPONENTS,false,false,DAMAGE_LOWER,GLACIATE,,0,0,100,Lowers the target's Speed by one stage.
+Icy wind,6,55,0,"{""SPEED"":""-1""}",95,0,false,ICE,ALL_OPPONENTS,false,false,DAMAGE_LOWER,ICY_WIND,,0,0,100,Has a 100% chance to lower the target's Speed by one stage.
+Iron tail,6,100,0,"{""DEFENSE"":""-1""}",75,0,false,STEEL,SELECTED_POKEMON,false,true,DAMAGE_LOWER,IRON_TAIL,,0,0,30,Has a 30% chance to lower the target's Defense by one stage.
+Leaf tornado,10,65,0,"{""ACCURACY"":""-1""}",90,0,false,GRASS,SELECTED_POKEMON,false,false,DAMAGE_LOWER,LEAF_TORNADO,,0,0,50,Has a 50% chance to lower the target's accuracy by one stage.
+Low sweep,5,65,0,"{""SPEED"":""-1""}",100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE_LOWER,LOW_SWEEP,,0,0,100,Lowers the target's Speed by one stage.
+Luster purge,20,70,0,"{""MAGICAL_DEFENSE"":""-1""}",100,0,false,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE_LOWER,LUSTER_PURGE,,0,0,50,Has a 50% chance to lower the target's Special Defense by one stage.
+Mirror shot,10,65,0,"{""ACCURACY"":""-1""}",85,0,false,STEEL,SELECTED_POKEMON,false,false,DAMAGE_LOWER,MIRROR_SHOT,,0,0,30,Has a 30% chance to lower the target's accuracy by one stage.
+Mist ball,20,70,0,"{""MAGICAL_ATTACK"":""-1""}",100,0,false,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE_LOWER,MIST_BALL,,0,0,50,Has a 50% chance to lower the target's Special Attack by one stage.
+Moonblast,6,95,0,"{""MAGICAL_ATTACK"":""-1""}",100,0,false,FAIRY,SELECTED_POKEMON,false,false,DAMAGE_LOWER,MOONBLAST,,0,0,30,Has a 30% chance to lower the target's Special Attack by one stage.
+Mud bomb,10,65,0,"{""ACCURACY"":""-1""}",85,0,false,GROUND,SELECTED_POKEMON,false,false,DAMAGE_LOWER,MUD_BOMB,,0,0,30,Has a 30% chance to lower the target's accuracy by one stage.
+Mud shot,6,55,0,"{""SPEED"":""-1""}",95,0,false,GROUND,SELECTED_POKEMON,false,false,DAMAGE_LOWER,MUD_SHOT,,0,0,100,Has a 100% chance to lower the target's Speed by one stage.
+Mud slap,10,20,0,"{""ACCURACY"":""-1""}",100,0,false,GROUND,SELECTED_POKEMON,false,false,DAMAGE_LOWER,MUD_SLAP,,0,0,100,Has a 100% chance to lower the target's accuracy by one stage.
+Muddy water,10,90,0,"{""ACCURACY"":""-1""}",85,0,false,WATER,ALL_OPPONENTS,false,false,DAMAGE_LOWER,MUDDY_WATER,,0,0,30,Has a 30% chance to lower the target's accuracy by one stage.
+Mystical fire,10,65,0,"{""MAGICAL_ATTACK"":""-1""}",100,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE_LOWER,MYSTICAL_FIRE,,0,0,100,Has a 100% chance to lower the target's Special Attack by one stage.
+Night daze,10,85,0,"{""ACCURACY"":""-1""}",95,0,false,DARK,SELECTED_POKEMON,false,false,DAMAGE_LOWER,NIGHT_DAZE,,0,0,40,Has a 40% chance to lower the target's accuracy by one stage.
+Octazooka,10,65,0,"{""ACCURACY"":""-1""}",85,0,false,WATER,SELECTED_POKEMON,false,false,DAMAGE_LOWER,OCTAZOOKA,,0,0,50,Has a 50% chance to lower the target's accuracy by one stage.
+Play rough,10,90,0,"{""ATTACK"":""-1""}",90,0,false,FAIRY,SELECTED_POKEMON,false,true,DAMAGE_LOWER,PLAY_ROUGH,,0,0,10,Has a 10% chance to lower the target's Attack by one stage.
+Psychic,10,90,0,"{""MAGICAL_DEFENSE"":""-1""}",100,0,false,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE_LOWER,PSYCHIC,,0,0,10,Has a 10% chance to lower the target's Special Defense by one stage.
+Razor shell,10,75,0,"{""DEFENSE"":""-1""}",95,0,false,WATER,SELECTED_POKEMON,false,true,DAMAGE_LOWER,RAZOR_SHELL,,0,0,50,Has a 50% chance to lower the target's Defense by one stage.
+Rock smash,6,40,0,"{""DEFENSE"":""-1""}",100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE_LOWER,ROCK_SMASH,,0,0,50,Has a 50% chance to lower the target's Defense by one stage.
+Rock tomb,6,60,0,"{""SPEED"":""-1""}",95,0,false,ROCK,SELECTED_POKEMON,false,true,DAMAGE_LOWER,ROCK_TOMB,,0,0,100,Has a 100% chance to lower the target's Speed by one stage.
+Seed flare,20,120,0,"{""MAGICAL_DEFENSE"":""-2""}",85,0,false,GRASS,SELECTED_POKEMON,false,false,DAMAGE_LOWER,SEED_FLARE,,0,0,40,Has a 40% chance to lower the target's Special Defense by two stages.
+Shadow ball,6,80,0,"{""MAGICAL_DEFENSE"":""-1""}",100,0,false,GHOST,SELECTED_POKEMON,false,false,DAMAGE_LOWER,SHADOW_BALL,,0,0,20,Has a 20% chance to lower the target's Special Defense by one stage.
+Snarl,6,55,0,"{""MAGICAL_ATTACK"":""-1""}",95,0,false,DARK,ALL_OPPONENTS,false,false,DAMAGE_LOWER,SNARL,,0,0,100,Has a 100% chance to lower the target's Special Attack by one stage.
+Struggle bug,5,50,0,"{""MAGICAL_ATTACK"":""-1""}",100,0,false,BUG,ALL_OPPONENTS,false,false,DAMAGE_LOWER,STRUGGLE_BUG,,0,0,100,Has a 100% chance to lower the target's Special Attack by one stage.
+Ancient power,20,60,0,"{""HP"":""1"",""ATTACK"":""1"",""DEFENSE"":""1"",""MAGICAL_ATTACK"":""1"",""MAGICAL_DEFENSE"":""1"",""SPEED"":""1""}",100,0,false,ROCK,SELECTED_POKEMON,false,false,DAMAGE_RAISE,ANCIENT_POWER,,0,0,10,Has a 10% chance to raise all of the user's stats by one stage.
+Charge beam,10,50,0,"{""MAGICAL_ATTACK"":""1""}",90,0,false,ELECTRIC,SELECTED_POKEMON,false,false,DAMAGE_RAISE,CHARGE_BEAM,,0,0,70,Has a 70% chance to raise the user's Special Attack by one stage.
+Close combat,20,120,0,"{""DEFENSE"":""-1"",""MAGICAL_DEFENSE"":""-1""}",100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE_RAISE,CLOSE_COMBAT,,0,0,100,Lowers the user's Defense and Special Defense by one stage after inflicting damage.
+Diamond storm,20,100,0,"{""DEFENSE"":""1""}",95,0,false,ROCK,ALL_OPPONENTS,false,true,DAMAGE_RAISE,DIAMOND_STORM,,0,0,50,Has a 50% chance to raise the user's Defense by one stage.
+Draco meteor,20,130,0,"{""MAGICAL_ATTACK"":""-2""}",90,0,false,DRAGON,SELECTED_POKEMON,false,false,DAMAGE_RAISE,DRACO_METEOR,,0,0,100,Lowers the user's Special Attack by two stages after inflicting damage.
+Fiery dance,10,80,0,"{""MAGICAL_ATTACK"":""1""}",100,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE_RAISE,FIERY_DANCE,,0,0,50,Has a 50% chance to raise the user's Special Attack by one stage.
+Flame charge,5,50,0,"{""SPEED"":""1""}",100,0,false,FIRE,SELECTED_POKEMON,false,true,DAMAGE_RAISE,FLAME_CHARGE,,0,0,100,Inflicts regular damage. Raises the user's Speed by one stage.
+Hammer arm,10,100,0,"{""SPEED"":""-1""}",90,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE_RAISE,HAMMER_ARM,,0,0,100,Lowers user's Speed by one stage.
+Leaf storm,20,130,0,"{""MAGICAL_ATTACK"":""-2""}",90,0,false,GRASS,SELECTED_POKEMON,false,false,DAMAGE_RAISE,LEAF_STORM,,0,0,100,Lowers the user's Special Attack by two stages after inflicting damage.
+Metal claw,2,50,0,"{""ATTACK"":""1""}",95,0,false,STEEL,SELECTED_POKEMON,false,true,DAMAGE_RAISE,METAL_CLAW,,0,0,10,Has a 10% chance to raise the user's Attack by one stage.
+Meteor mash,10,90,0,"{""ATTACK"":""1""}",90,0,false,STEEL,SELECTED_POKEMON,false,true,DAMAGE_RAISE,METEOR_MASH,,0,0,20,Has a 20% chance to raise the user's Attack by one stage.
+Ominous wind,20,60,0,"{""HP"":""1"",""ATTACK"":""1"",""DEFENSE"":""1"",""MAGICAL_ATTACK"":""1"",""MAGICAL_DEFENSE"":""1"",""SPEED"":""1""}",100,0,false,GHOST,SELECTED_POKEMON,false,false,DAMAGE_RAISE,OMINOUS_WIND,,10,0,10,Has a 10% chance to raise all of the user's stats by one stage.
+Overheat,20,130,0,"{""MAGICAL_ATTACK"":""-2""}",90,0,false,FIRE,SELECTED_POKEMON,false,false,DAMAGE_RAISE,OVERHEAT,,0,0,100,Lowers the user's Special Attack by two stages after inflicting damage.
+Power up punch,5,40,0,"{""ATTACK"":""1""}",100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE_RAISE,POWER_UP_PUNCH,,0,0,100,Has a 100% chance to raise the user's Attack by one stage.
+Psycho boost,20,140,0,"{""MAGICAL_ATTACK"":""-2""}",90,0,false,PSYCHIC,SELECTED_POKEMON,false,false,DAMAGE_RAISE,PSYCHO_BOOST,,0,0,100,Lowers the user's Special Attack by two stages after inflicting damage.
+Silver wind,20,60,0,"{""HP"":""1"",""ATTACK"":""1"",""DEFENSE"":""1"",""MAGICAL_ATTACK"":""1"",""MAGICAL_DEFENSE"":""1"",""SPEED"":""1""}",100,0,false,BUG,SELECTED_POKEMON,false,false,DAMAGE_RAISE,SILVER_WIND,,0,0,10,Has a 10% chance to raise all of the user's stats by one stage.
+Steel wing,4,70,0,"{""DEFENSE"":""1""}",90,0,false,STEEL,SELECTED_POKEMON,false,true,DAMAGE_RAISE,STEEL_WING,,0,0,10,Has a 10% chance to raise the user's Defense by one stage.
+Superpower,20,120,0,"{""ATTACK"":""-1"",""DEFENSE"":""-1""}",100,0,false,FIGHTING,SELECTED_POKEMON,false,true,DAMAGE_RAISE,SUPERPOWER,,0,0,100,Lowers the user's Attack and Defense by one stage after inflicting damage.
+V create,20,180,0,"{""DEFENSE"":""-1"",""MAGICAL_DEFENSE"":""-1"",""SPEED"":""-1""}",95,0,false,FIRE,SELECTED_POKEMON,false,true,DAMAGE_RAISE,V_CREATE,,0,0,100,"Lowers the user's Defense, Special Defense, and Speed by one stage each."
+Crafty shield,10,0,0,,100,3,true,FAIRY,USERS_FIELD,false,true,FIELD_EFFECT,CRAFTY_SHIELD,,0,0,0,Protects all friendly Pokémon from non-damaging moves.
+Light screen,3,0,0,,100,0,true,PSYCHIC,USERS_FIELD,false,true,FIELD_EFFECT,LIGHT_SCREEN,,0,0,0,Reduces damage from special attacks by 50% for five turns.
+Lucky chant,3,0,0,,100,0,true,NORMAL,USERS_FIELD,false,true,FIELD_EFFECT,LUCKY_CHANT,,0,0,0,Prevents the target from scoring critical hits for five turns.
+Mat block,10,0,0,,100,0,true,FIGHTING,USERS_FIELD,false,true,FIELD_EFFECT,MAT_BLOCK,,0,0,0,Protects all friendly Pokémon from damaging moves. Only works on the first turn after the user is sent out.
+Mist,3,0,0,,100,0,true,ICE,USERS_FIELD,false,true,FIELD_EFFECT,MIST,,0,0,0,Protects the user's stats from being changed by enemy moves.
+Quick guard,6,0,0,,100,3,true,FIGHTING,USERS_FIELD,false,true,FIELD_EFFECT,QUICK_GUARD,,0,0,0,Prevents any priority moves from hitting friendly Pokémon this turn.
+Reflect,5,0,0,,100,0,true,PSYCHIC,USERS_FIELD,false,true,FIELD_EFFECT,REFLECT,,0,0,0,Reduces damage from physical attacks by half.
+Safeguard,4,0,0,,100,0,true,NORMAL,USERS_FIELD,false,true,FIELD_EFFECT,SAFEGUARD,,0,0,0,Protects the user's field from major status ailments and confusion for five turns.
+Spikes,5,0,0,,100,0,true,GROUND,OPPONENTS_FIELD,false,true,FIELD_EFFECT,SPIKES,,0,0,0,"Scatters Spikes, hurting opposing Pokémon that switch in."
+Stealth rock,5,0,0,,100,0,true,ROCK,OPPONENTS_FIELD,false,true,FIELD_EFFECT,STEALTH_ROCK,,0,0,0,Causes damage when opposing Pokémon switch in.
+Sticky web,5,0,0,,100,0,true,BUG,OPPONENTS_FIELD,false,true,FIELD_EFFECT,STICKY_WEB,,0,0,0,"Covers the opposing field, lowering opponents' Speed by one stage upon switching in."
+Tailwind,6,0,0,,100,0,true,FLYING,USERS_FIELD,false,true,FIELD_EFFECT,TAILWIND,,0,0,0,"For three turns, friendly Pokémon have doubled Speed."
+Toxic spikes,5,0,0,,100,0,true,POISON,OPPONENTS_FIELD,false,true,FIELD_EFFECT,TOXIC_SPIKES,,0,0,0,"Scatters poisoned spikes, poisoning opposing Pokémon that switch in."
+Wide guard,10,0,0,,100,3,true,ROCK,USERS_FIELD,false,true,FIELD_EFFECT,WIDE_GUARD,,0,0,0,Prevents any multi-target moves from hitting friendly Pokémon this turn.
+Roar,5,0,0,,100,-6,true,NORMAL,SELECTED_POKEMON,false,true,FORCE_SWITCH,ROAR,,0,0,0,Immediately ends wild battles. Forces trainers to switch Pokémon.
+Whirlwind,5,0,0,,100,-6,true,NORMAL,SELECTED_POKEMON,false,true,FORCE_SWITCH,WHIRLWIND,,0,0,0,Immediately ends wild battles. Forces trainers to switch Pokémon.
+Heal order,10,0,50,,100,0,true,BUG,USER,false,true,HEAL,HEAL_ORDER,,0,0,0,Heals the user by half its max HP.
+Heal pulse,10,0,50,,100,0,true,PSYCHIC,SELECTED_POKEMON,false,true,HEAL,HEAL_PULSE,,0,0,0,Heals the target for half its max HP.
+Milk drink,10,0,50,,100,0,true,NORMAL,USER,false,true,HEAL,MILK_DRINK,,0,0,0,Heals the user by half its max HP.
+Moonlight,20,0,50,,100,0,true,FAIRY,USER,false,true,HEAL,MOONLIGHT,,0,0,0,Heals the user by half its max HP. Affected by weather.
+Morning sun,20,0,50,,100,0,true,NORMAL,USER,false,true,HEAL,MORNING_SUN,,0,0,0,Heals the user by half its max HP. Affected by weather.
+Recover,10,0,50,,100,0,true,NORMAL,USER,false,true,HEAL,RECOVER,,0,0,0,Heals the user by half its max HP.
+Roost,10,0,50,,100,0,true,FLYING,USER,false,true,HEAL,ROOST,,0,0,0,Heals the user by half its max HP.
+Slack off,10,0,50,,100,0,true,NORMAL,USER,false,true,HEAL,SLACK_OFF,,0,0,0,Heals the user by half its max HP.
+Soft boiled,10,0,50,,100,0,true,NORMAL,USER,false,true,HEAL,SOFT_BOILED,,0,0,0,Heals the user by half its max HP.
+Swallow,10,0,25,,100,0,true,NORMAL,USER,false,true,HEAL,SWALLOW,,0,0,0,"Recovers 1/4 HP after one Stockpile, 1/2 HP after two Stockpiles, or full HP after three Stockpiles."
+Synthesis,20,0,50,,100,0,true,GRASS,USER,false,true,HEAL,SYNTHESIS,,0,0,0,Heals the user by half its max HP. Affected by weather.
+Acid armor,5,0,0,"{""DEFENSE"":""2""}",100,0,true,POISON,USER,false,true,NET_GOOD_STATS,ACID_ARMOR,,0,0,0,Raises the user's Defense by two stages.
+Agility,3,0,0,"{""SPEED"":""2""}",100,0,true,PSYCHIC,USER,false,true,NET_GOOD_STATS,AGILITY,,0,0,0,Raises the user's Speed by two stages.
+Amnesia,5,0,0,"{""MAGICAL_DEFENSE"":""2""}",100,0,true,PSYCHIC,USER,false,true,NET_GOOD_STATS,AMNESIA,,0,0,0,Raises the user's Special Defense by two stages.
+Aromatic mist,5,0,0,"{""MAGICAL_DEFENSE"":""1""}",100,0,true,FAIRY,ALLY,false,true,NET_GOOD_STATS,AROMATIC_MIST,,0,0,0,Raises a selected ally's Special Defense by one stage.
+Autotomize,6,0,0,"{""SPEED"":""2""}",100,0,true,STEEL,USER,false,true,NET_GOOD_STATS,AUTOTOMIZE,,0,0,0,Raises the user's Speed by two stages and halves the user's weight.
+Baby doll eyes,3,0,0,"{""ATTACK"":""-1""}",100,1,false,FAIRY,SELECTED_POKEMON,false,true,NET_GOOD_STATS,BABY_DOLL_EYES,,0,0,0,Lowers the target's Attack by one stage.
+Barrier,5,0,0,"{""DEFENSE"":""2""}",100,0,true,PSYCHIC,USER,false,true,NET_GOOD_STATS,BARRIER,,0,0,0,Raises the user's Defense by two stages.
+Bulk up,5,0,0,"{""ATTACK"":""1"",""DEFENSE"":""1""}",100,0,true,FIGHTING,USER,false,true,NET_GOOD_STATS,BULK_UP,,0,0,0,Raises the user's Attack and Defense by one stage.
+Calm mind,5,0,0,"{""MAGICAL_ATTACK"":""1"",""MAGICAL_DEFENSE"":""1""}",100,0,true,PSYCHIC,USER,false,true,NET_GOOD_STATS,CALM_MIND,,0,0,0,Raises the user's Special Attack and Special Defense by one stage.
+Captivate,5,0,0,"{""MAGICAL_ATTACK"":""-2""}",100,0,false,NORMAL,ALL_OPPONENTS,false,true,NET_GOOD_STATS,CAPTIVATE,,0,0,0,Lowers the target's Special Attack by two stages if it's the opposite gender.
+Charge,5,0,0,"{""MAGICAL_DEFENSE"":""1""}",100,0,true,ELECTRIC,USER,false,true,NET_GOOD_STATS,CHARGE,,0,0,0,Raises the user's Special Defense by one stage. User's Electric moves have doubled power next turn.
+Charm,5,0,0,"{""ATTACK"":""-2""}",100,0,false,FAIRY,SELECTED_POKEMON,false,true,NET_GOOD_STATS,CHARM,,0,0,0,Lowers the target's Attack by two stages.
+Coil,5,0,0,"{""ATTACK"":""1"",""DEFENSE"":""1"",""ACCURACY"":""1""}",100,0,true,POISON,USER,false,true,NET_GOOD_STATS,COIL,,0,0,0,"Raises the user's Attack, Defense, and accuracy by one stage each."
+Confide,5,0,0,"{""MAGICAL_ATTACK"":""-1""}",100,0,true,NORMAL,SELECTED_POKEMON,false,true,NET_GOOD_STATS,CONFIDE,,0,0,100,Lowers the target's Special Attack by one stage.
+Cosmic power,5,0,0,"{""DEFENSE"":""1"",""MAGICAL_DEFENSE"":""1""}",100,0,true,PSYCHIC,USER,false,true,NET_GOOD_STATS,COSMIC_POWER,,0,0,0,Raises the user's Defense and Special Defense by one stage.
+Cotton guard,10,0,0,"{""DEFENSE"":""3""}",100,0,true,GRASS,USER,false,true,NET_GOOD_STATS,COTTON_GUARD,,0,0,0,Raises the user's Defense by three stages.
+Cotton spore,2,0,0,"{""SPEED"":""-2""}",100,0,false,GRASS,ALL_OPPONENTS,false,true,NET_GOOD_STATS,COTTON_SPORE,,0,0,0,Lowers the target's Speed by two stages.
+Defend order,10,0,0,"{""DEFENSE"":""1"",""MAGICAL_DEFENSE"":""1""}",100,0,true,BUG,USER,false,true,NET_GOOD_STATS,DEFEND_ORDER,,0,0,0,Raises the user's Defense and Special Defense by one stage.
+Defense curl,2,0,0,"{""DEFENSE"":""1""}",100,0,true,NORMAL,USER,false,true,NET_GOOD_STATS,DEFENSE_CURL,,0,0,0,Raises user's Defense by one stage.
+Double team,6,0,0,"{""EVASION"":""1""}",100,0,true,NORMAL,USER,false,true,NET_GOOD_STATS,DOUBLE_TEAM,,0,0,0,Raises the user's evasion by one stage.
+Dragon dance,5,0,0,"{""ATTACK"":""1"",""SPEED"":""1""}",100,0,true,DRAGON,USER,false,true,NET_GOOD_STATS,DRAGON_DANCE,,0,0,0,Raises the user's Attack and Speed by one stage.
+Eerie impulse,6,0,0,"{""MAGICAL_ATTACK"":""-2""}",100,0,false,ELECTRIC,SELECTED_POKEMON,false,true,NET_GOOD_STATS,EERIE_IMPULSE,,0,0,0,Lowers the target's Special Attack by two stages.
+Fake tears,5,0,0,"{""MAGICAL_DEFENSE"":""-2""}",100,0,false,DARK,SELECTED_POKEMON,false,true,NET_GOOD_STATS,FAKE_TEARS,,0,0,0,Lowers the target's Special Defense by two stages.
+Feather dance,6,0,0,"{""ATTACK"":""-2""}",100,0,false,FLYING,SELECTED_POKEMON,false,true,NET_GOOD_STATS,FEATHER_DANCE,,0,0,0,Lowers the target's Attack by two stages.
+Flash,5,0,0,"{""ACCURACY"":""-1""}",100,0,false,NORMAL,SELECTED_POKEMON,false,true,NET_GOOD_STATS,FLASH,,0,0,0,Lowers the target's accuracy by one stage.
+Geomancy,10,0,0,"{""MAGICAL_ATTACK"":""2"",""MAGICAL_DEFENSE"":""2"",""SPEED"":""2""}",100,0,true,FAIRY,USER,false,true,NET_GOOD_STATS,GEOMANCY,,0,0,0,"Takes one turn to charge, then raises the user's Special Attack, Special Defense, and Speed by two stages."
+Growl,2,0,0,"{""ATTACK"":""-1""}",100,0,false,NORMAL,ALL_OPPONENTS,false,true,NET_GOOD_STATS,GROWL,,0,0,0,Lowers the target's Attack by one stage.
+Growth,5,0,0,"{""ATTACK"":""1"",""MAGICAL_ATTACK"":""1""}",100,0,true,NORMAL,USER,false,true,NET_GOOD_STATS,GROWTH,,0,0,0,Raises the user's Attack and Special Attack by one stage.
+Harden,3,0,0,"{""DEFENSE"":""1""}",100,0,true,NORMAL,USER,false,true,NET_GOOD_STATS,HARDEN,,0,0,0,Raises the user's Defense by one stage.
+Hone claws,6,0,0,"{""ATTACK"":""1"",""ACCURACY"":""1""}",100,0,true,DARK,USER,false,true,NET_GOOD_STATS,HONE_CLAWS,,0,0,0,Raises the user's Attack and accuracy by one stage.
+Howl,2,0,0,"{""ATTACK"":""1""}",100,0,true,NORMAL,USER,false,true,NET_GOOD_STATS,HOWL,,0,0,0,Raises the user's Attack by one stage.
+Iron defense,6,0,0,"{""DEFENSE"":""2""}",100,0,true,STEEL,USER,false,true,NET_GOOD_STATS,IRON_DEFENSE,,0,0,0,Raises the user's Defense by two stages.
+Kinesis,6,0,0,"{""ACCURACY"":""-1""}",80,0,false,PSYCHIC,SELECTED_POKEMON,false,true,NET_GOOD_STATS,KINESIS,,0,0,0,Lowers the target's accuracy by one stage.
+Leer,3,0,0,"{""DEFENSE"":""-1""}",100,0,false,NORMAL,ALL_OPPONENTS,false,true,NET_GOOD_STATS,LEER,,0,0,100,Lowers the target's Defense by one stage.
+Magnetic flux,5,0,0,"{""DEFENSE"":""1"",""MAGICAL_DEFENSE"":""1""}",100,0,true,ELECTRIC,USER_AND_ALLIES,false,true,NET_GOOD_STATS,MAGNETIC_FLUX,,0,0,0,Raises the Defense and Special Defense of all friendly Pokémon with ability plus or ability minus by one stage.
+Meditate,2,0,0,"{""ATTACK"":""1""}",100,0,true,PSYCHIC,USER,false,true,NET_GOOD_STATS,MEDITATE,,0,0,0,Raises the user's Attack by one stage.
+Metal sound,2,0,0,"{""MAGICAL_DEFENSE"":""-2""}",85,0,false,STEEL,SELECTED_POKEMON,false,true,NET_GOOD_STATS,METAL_SOUND,,0,0,0,Lowers the target's Special Defense by two stages.
+Minimize,10,0,0,"{""EVASION"":""2""}",100,0,true,NORMAL,USER,false,true,NET_GOOD_STATS,MINIMIZE,,0,0,0,Raises the user's evasion by two stages.
+Nasty plot,5,0,0,"{""MAGICAL_ATTACK"":""2""}",100,0,true,DARK,USER,false,true,NET_GOOD_STATS,NASTY_PLOT,,0,0,0,Raises the user's Special Attack by two stages.
+Noble roar,3,0,0,"{""ATTACK"":""-1"",""MAGICAL_ATTACK"":""-1""}",100,0,false,NORMAL,SELECTED_POKEMON,false,true,NET_GOOD_STATS,NOBLE_ROAR,,0,0,100,Lowers the target's Attack and Special Attack by one stage.
+Parting shot,5,0,0,"{""ATTACK"":""-1"",""MAGICAL_ATTACK"":""-1""}",100,0,false,DARK,SELECTED_POKEMON,false,true,NET_GOOD_STATS,PARTING_SHOT,,0,0,100,Lowers all targets' Attack and Special Attack by one stage. Makes the user switch out.
+Play nice,5,0,0,"{""ATTACK"":""-1""}",100,0,true,NORMAL,SELECTED_POKEMON,false,true,NET_GOOD_STATS,PLAY_NICE,,0,0,100,Lowers the target's Attack by one stage.
+Quiver dance,5,0,0,"{""MAGICAL_ATTACK"":""1"",""MAGICAL_DEFENSE"":""1"",""SPEED"":""1""}",100,0,true,BUG,USER,false,true,NET_GOOD_STATS,QUIVER_DANCE,,0,0,0,"Raises the user's Special Attack, Special Defense, and Speed by one stage each."
+Rock polish,5,0,0,"{""SPEED"":""2""}",100,0,true,ROCK,USER,false,true,NET_GOOD_STATS,ROCK_POLISH,,0,0,0,Raises the user's Speed by two stages.
+Rototiller,10,0,0,"{""ATTACK"":""1"",""MAGICAL_ATTACK"":""1""}",100,0,true,GROUND,ALL_POKEMON,false,true,NET_GOOD_STATS,ROTOTILLER,,0,0,100,Raises the Attack and Special Attack of all type grass Pokémon in battle.
+Sand attack,6,0,0,"{""ACCURACY"":""-1""}",100,0,false,GROUND,SELECTED_POKEMON,false,true,NET_GOOD_STATS,SAND_ATTACK,,0,0,0,Lowers the target's accuracy by one stage.
+Scary face,10,0,0,"{""SPEED"":""-2""}",100,0,false,NORMAL,SELECTED_POKEMON,false,true,NET_GOOD_STATS,SCARY_FACE,,0,0,0,Lowers the target's Speed by two stages.
+Screech,2,0,0,"{""DEFENSE"":""-2""}",85,0,false,NORMAL,SELECTED_POKEMON,false,true,NET_GOOD_STATS,SCREECH,,0,0,0,Lowers the target's Defense by two stages.
+Sharpen,3,0,0,"{""ATTACK"":""1""}",100,0,true,NORMAL,USER,false,true,NET_GOOD_STATS,SHARPEN,,0,0,0,Raises the user's Attack by one stage.
+Shift gear,10,0,0,"{""ATTACK"":""1""}",100,0,true,STEEL,USER,false,true,NET_GOOD_STATS,SHIFT_GEAR,,0,0,0,Raises the user's Attack by one stage and its Speed by two stages.
+Smokescreen,5,0,0,"{""ACCURACY"":""-1""}",100,0,false,NORMAL,SELECTED_POKEMON,false,true,NET_GOOD_STATS,SMOKESCREEN,,0,0,0,Lowers the target's accuracy by one stage.
+String shot,2,0,0,"{""SPEED"":""-2""}",95,0,false,BUG,ALL_OPPONENTS,false,true,NET_GOOD_STATS,STRING_SHOT,,0,0,0,Lowers the target's Speed by one stage.
+Sweet scent,5,0,0,"{""EVASION"":""-2""}",100,0,false,NORMAL,ALL_OPPONENTS,false,true,NET_GOOD_STATS,SWEET_SCENT,,0,0,0,Lowers the target's evasion by one stage.
+Swords dance,5,0,0,"{""ATTACK"":""2""}",100,0,true,NORMAL,USER,false,true,NET_GOOD_STATS,SWORDS_DANCE,,0,0,0,Raises the user's Attack by two stages.
+Tail glow,5,0,0,"{""MAGICAL_ATTACK"":""3""}",100,0,true,BUG,USER,false,true,NET_GOOD_STATS,TAIL_GLOW,,0,0,0,Raises the user's Special Attack by three stages.
+Tail whip,3,0,0,"{""DEFENSE"":""-1""}",100,0,false,NORMAL,ALL_OPPONENTS,false,true,NET_GOOD_STATS,TAIL_WHIP,,0,0,0,Lowers the target's Defense by one stage.
+Tickle,5,0,0,"{""ATTACK"":""-1"",""DEFENSE"":""-1""}",100,0,false,NORMAL,SELECTED_POKEMON,false,true,NET_GOOD_STATS,TICKLE,,0,0,0,Lowers the target's Attack and Defense by one stage.
+Venom drench,5,0,0,"{""ATTACK"":""-1"",""MAGICAL_ATTACK"":""-1"",""SPEED"":""-1""}",100,0,false,POISON,ALL_OPPONENTS,false,true,NET_GOOD_STATS,VENOM_DRENCH,,0,0,100,"Lowers the target's Attack, Special Attack, and Speed by one stage if it is poisoned."
+Withdraw,2,0,0,"{""DEFENSE"":""1""}",100,0,true,WATER,USER,false,true,NET_GOOD_STATS,WITHDRAW,,0,0,0,Raises the user's Defense by one stage.
+Work up,3,0,0,"{""ATTACK"":""1"",""MAGICAL_ATTACK"":""1""}",100,0,true,NORMAL,USER,false,true,NET_GOOD_STATS,WORK_UP,,0,0,0,Raises the user's Attack and Special Attack by one stage each.
+Fissure,20,0,0,,30,0,false,GROUND,SELECTED_POKEMON,false,true,OHKO,FISSURE,,0,0,0,Causes a one-hit KO.
+Guillotine,20,0,0,,30,0,false,NORMAL,SELECTED_POKEMON,false,true,OHKO,GUILLOTINE,,0,0,0,Causes a one-hit KO.
+Horn drill,20,0,0,,30,0,false,NORMAL,SELECTED_POKEMON,false,true,OHKO,HORN_DRILL,,0,0,0,Causes a one-hit KO.
+Sheer cold,20,0,0,,30,0,false,ICE,SELECTED_POKEMON,false,false,OHKO,SHEER_COLD,,0,0,0,Causes a one-hit KO.
+Flatter,6,0,0,"{""MAGICAL_ATTACK"":""1""}",100,0,false,DARK,SELECTED_POKEMON,false,true,SWAGGER,FLATTER,CONFUSION,0,0,0,Raises the target's Special Attack by one stage and confuses the target.
+Swagger,6,0,0,"{""ATTACK"":""2""}",90,0,false,NORMAL,SELECTED_POKEMON,false,true,SWAGGER,SWAGGER,CONFUSION,0,0,0,Raises the target's Attack by two stages and confuses the target.
+Acupressure,3,0,0,,100,0,true,NORMAL,USER_OR_ALLY,false,true,UNIQUE,ACUPRESSURE,,0,0,0,Raises one of a friendly Pokémon's stats at random by two stages.
+After you,6,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,AFTER_YOU,,0,0,0,Makes the target act next this turn.
+Ally switch,6,0,0,,100,1,true,PSYCHIC,USER,false,true,UNIQUE,ALLY_SWITCH,,0,0,0,User switches places with the friendly Pokémon opposite it.
+Aqua ring,5,0,0,,100,0,true,WATER,USER,false,true,UNIQUE,AQUA_RING,,0,0,0,Restores 1/16 of the user's max HP each turn.
+Aromatherapy,20,0,0,,100,0,true,GRASS,USER_AND_ALLIES,false,true,UNIQUE,AROMATHERAPY,,0,0,0,Cures the entire party of major status effects.
+Assist,5,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,ASSIST,,0,0,0,Randomly selects and uses one of the trainer's other Pokémon's moves.
+Baton pass,2,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,BATON_PASS,,0,0,0,Allows the trainer to switch out the user and pass effects along to its replacement.
+Belly drum,10,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,BELLY_DRUM,,0,0,0,User pays half its max HP to max out its Attack.
+Bestow,6,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,BESTOW,,0,0,0,Gives the user's held item to the target.
+Block,20,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,BLOCK,,0,0,0,Prevents the target from leaving battle.
+Camouflage,5,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,CAMOUFLAGE,,0,0,0,User's type changes to match the terrain.
+Celebrate,2,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,CELEBRATE,,0,0,0,Unknown.
+Conversion,3,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,CONVERSION,,0,0,0,User's type changes to the type of one of its moves at random.
+Conversion 2,3,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,CONVERSION_2,,0,0,0,Changes the user's type to a random type either resistant or immune to the last move used against it.
+Copycat,5,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,COPYCAT,,0,0,0,Uses the target's last used move.
+Curse,10,0,0,,100,0,true,GHOST,SPECIFIC_MOVE,false,true,UNIQUE,CURSE,,0,0,0,Ghosts pay half their max HP to hurt the target every turn. Others decrease Speed but raise Attack and Defense.
+Defog,6,0,0,,100,0,true,FLYING,SELECTED_POKEMON,false,true,UNIQUE,DEFOG,,0,0,0,Lowers the target's evasion by one stage. Removes field effects from the enemy field.
+Destiny bond,20,0,0,,100,0,true,GHOST,USER,false,true,UNIQUE,DESTINY_BOND,,0,0,0,"If the user faints this turn, the target automatically will, too."
+Detect,20,0,0,,100,4,true,FIGHTING,USER,false,true,UNIQUE,DETECT,,0,0,0,Prevents any moves from hitting the user this turn.
+Disable,5,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,DISABLE,,0,0,0,Disables the target's last used move for 1-8 turns.
+Doom desire,20,140,0,,100,0,false,STEEL,SELECTED_POKEMON,false,false,UNIQUE,DOOM_DESIRE,,0,0,0,Hits the target two turns later.
+Electrify,5,0,0,,100,0,true,ELECTRIC,SELECTED_POKEMON,false,true,UNIQUE,ELECTRIFY,,0,0,0,Changes the target's move's type to type electric if it hasn't moved yet this turn.
+Encore,20,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,ENCORE,,0,0,0,Forces the target to repeat its last used move every turn for 2 to 6 turns.
+Endure,10,0,0,,100,4,true,NORMAL,USER,false,true,UNIQUE,ENDURE,,0,0,0,Prevents the user's HP from lowering below 1 this turn.
+Entrainment,6,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,ENTRAINMENT,,0,0,0,Copies the user's ability onto the target.
+Flower shield,10,0,0,"{""DEFENSE"":""1""}",100,0,true,FAIRY,ALL_POKEMON,false,true,UNIQUE,FLOWER_SHIELD,,0,0,100,Raises the Defense of all type grass Pokémon in battle.
+Focus energy,3,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,FOCUS_ENERGY,,0,0,0,Increases the user's chance to score a critical hit.
+Follow me,5,0,0,,100,2,true,NORMAL,USER,false,true,UNIQUE,FOLLOW_ME,,0,0,0,Redirects the target's single-target effects to the user for this turn.
+Forests curse,5,0,0,,100,0,false,GRASS,SELECTED_POKEMON,false,true,UNIQUE,FORESTS_CURSE,,0,0,0,Adds type grass to the target's types.
+Future sight,10,120,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,false,false,UNIQUE,FUTURE_SIGHT,,0,0,0,Hits the target two turns later.
+Gastro acid,10,0,0,,100,0,false,POISON,SELECTED_POKEMON,false,true,UNIQUE,GASTRO_ACID,,0,0,0,Nullifies target's ability until it leaves battle.
+Grudge,20,0,0,,100,0,true,GHOST,USER,false,true,UNIQUE,GRUDGE,,0,0,0,"If the user faints this turn, the PP of the move that fainted it drops to 0."
+Guard split,10,0,0,,100,0,true,PSYCHIC,SELECTED_POKEMON,false,true,UNIQUE,GUARD_SPLIT,,0,0,0,Averages Defense and Special Defense with the target.
+Guard swap,10,0,0,,100,0,true,PSYCHIC,SELECTED_POKEMON,false,true,UNIQUE,GUARD_SWAP,,0,0,0,User swaps Defense and Special Defense changes with the target.
+Happy hour,3,0,0,,100,0,true,NORMAL,USERS_FIELD,false,true,UNIQUE,HAPPY_HOUR,,0,0,0,Doubles prize money.
+Heal bell,20,0,0,,100,0,true,NORMAL,USER_AND_ALLIES,false,true,UNIQUE,HEAL_BELL,,0,0,0,Cures the entire party of major status effects.
+Healing wish,10,0,0,,100,0,true,PSYCHIC,USER,false,true,UNIQUE,HEALING_WISH,,0,0,0,User faints. Its replacement has its HP fully restored and any major status effect removed.
+Heart swap,10,0,0,,100,0,true,PSYCHIC,SELECTED_POKEMON,false,true,UNIQUE,HEART_SWAP,,0,0,0,User and target swap stat changes.
+Helping hand,5,0,0,,100,5,true,NORMAL,ALLY,false,true,UNIQUE,HELPING_HAND,,0,0,0,Ally's next move inflicts half more damage.
+Hold hands,2,0,0,,100,0,true,NORMAL,ALLY,false,true,UNIQUE,HOLD_HANDS,,0,0,0,Unknown.
+Imprison,10,0,0,,100,0,true,PSYCHIC,USER,false,true,UNIQUE,IMPRISON,,0,0,0,Prevents the target from using any moves that the user also knows.
+Kings shield,10,0,0,,100,4,true,STEEL,USER,false,true,UNIQUE,KINGS_SHIELD,,0,0,0,Blocks damaging attacks and lowers attacking Pokémon's Attack by two stages on contact. Switches Aegislash to Shield Forme.
+Lock on,20,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,LOCK_ON,,0,0,0,Ensures that the user's next move will hit the target.
+Lunar dance,10,0,0,,100,0,true,PSYCHIC,USER,false,true,UNIQUE,LUNAR_DANCE,,0,0,0,"User faints, and its replacement is fully healed."
+Magic coat,6,0,0,,100,4,true,PSYCHIC,USER,false,true,UNIQUE,MAGIC_COAT,,0,0,0,Reflects back the first effect move used on the user this turn.
+Magnet rise,10,0,0,,100,0,true,ELECTRIC,USER,false,true,UNIQUE,MAGNET_RISE,,0,0,0,User is immune to Ground moves and effects for five turns.
+Mean look,20,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,MEAN_LOOK,,0,0,0,Prevents the target from leaving battle.
+Memento,10,0,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,UNIQUE,MEMENTO,,0,0,0,Lowers the target's Attack and Special Attack by two stages. User faints.
+Metronome,10,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,METRONOME,,0,0,0,Randomly selects and uses any move in the game.
+Mimic,10,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,MIMIC,,0,0,0,Copies the target's last used move.
+Mind reader,20,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,MIND_READER,,0,0,0,Ensures that the user's next move will hit the target.
+Mirror move,5,0,0,,100,0,true,FLYING,SELECTED_POKEMON,false,true,UNIQUE,MIRROR_MOVE,,0,0,0,Uses the target's last used move.
+Nature power,5,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,NATURE_POWER,,0,0,0,Uses a move which depends upon the terrain.
+Pain split,5,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,PAIN_SPLIT,,0,0,0,Sets the user's and targets's HP to the average of their current HP.
+Powder,5,0,0,,100,1,false,BUG,SELECTED_POKEMON,false,true,UNIQUE,POWDER,,0,0,0,"Explodes if the target uses a type fire move this turn, damaging it for 1/4 its max HP and preventing the move."
+Power split,10,0,0,,100,0,true,PSYCHIC,SELECTED_POKEMON,false,true,UNIQUE,POWER_SPLIT,,0,0,0,Averages Attack and Special Attack with the target.
+Power swap,10,0,0,,100,0,true,PSYCHIC,SELECTED_POKEMON,false,true,UNIQUE,POWER_SWAP,,0,0,0,User swaps Attack and Special Attack changes with the target.
+Power trick,10,0,0,,100,0,true,PSYCHIC,USER,false,true,UNIQUE,POWER_TRICK,,0,0,0,User swaps Attack and Defense.
+Protect,10,0,0,,100,4,true,NORMAL,USER,false,true,UNIQUE,PROTECT,,0,0,0,Prevents any moves from hitting the user this turn.
+Psych up,10,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,PSYCH_UP,,0,0,0,Discards the user's stat changes and copies the target's.
+Psycho shift,10,0,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,false,true,UNIQUE,PSYCHO_SHIFT,,0,0,0,Transfers the user's major status effect to the target.
+Quash,6,0,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,UNIQUE,QUASH,,0,0,0,Makes the target act last this turn.
+Rage powder,5,0,0,,100,2,true,BUG,USER,false,true,UNIQUE,RAGE_POWDER,,0,0,0,Redirects the target's single-target effects to the user for this turn.
+Recycle,10,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,RECYCLE,,0,0,0,User recovers the item it last used up.
+Reflect type,6,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,REFLECT_TYPE,,0,0,0,User becomes the target's type.
+Refresh,5,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,REFRESH,,0,0,0,"Cleanses the user of a burn, paralysis, or poison."
+Rest,10,0,0,,100,0,true,PSYCHIC,USER,false,true,UNIQUE,REST,,0,0,0,"User sleeps for two turns, completely healing itself."
+Role play,10,0,0,,100,0,true,PSYCHIC,SELECTED_POKEMON,false,true,UNIQUE,ROLE_PLAY,,0,0,0,Copies the target's ability.
+Shell smash,6,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,SHELL_SMASH,,0,0,0,"Raises user's Attack, Special Attack, and Speed by two stages. Lower user's Defense and Special Defense by one stage."
+Simple beam,6,0,0,,100,0,false,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,SIMPLE_BEAM,,0,0,0,Changes the target's ability to Simple.
+Sketch,100,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,SKETCH,,0,0,0,Permanently becomes the target's last used move.
+Skill swap,10,0,0,,100,0,true,PSYCHIC,SELECTED_POKEMON,false,true,UNIQUE,SKILL_SWAP,,0,0,0,User and target swap abilities.
+Sleep talk,10,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,SLEEP_TALK,,0,0,0,Randomly uses one of the user's other three moves. Only works if the user is sleeping.
+Snatch,10,0,0,,100,4,true,DARK,USER,false,true,UNIQUE,SNATCH,,0,0,0,"Steals the target's move, if it's self-targeted."
+Soak,5,0,0,,100,0,false,WATER,SELECTED_POKEMON,false,true,UNIQUE,SOAK,,0,0,0,Changes the target's type to Water.
+Spider web,10,0,0,,100,0,true,BUG,SELECTED_POKEMON,false,true,UNIQUE,SPIDER_WEB,,0,0,0,Prevents the target from leaving battle.
+Spiky shield,10,0,0,,100,4,true,GRASS,USER,false,true,UNIQUE,SPIKY_SHIELD,,0,0,0,Blocks damaging attacks and damages attacking Pokémon for 1/8 their max HP.
+Spite,10,0,0,,100,0,false,GHOST,SELECTED_POKEMON,false,true,UNIQUE,SPITE,,0,0,0,Lowers the PP of the target's last used move by 4.
+Splash,2,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,SPLASH,,0,0,0,Does nothing.
+Stockpile,5,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,STOCKPILE,,0,0,0,Stores energy up to three times for use with Spit Up and Swallow.
+Substitute,10,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,SUBSTITUTE,,0,0,0,"Transfers 1/4 of the user's max HP into a doll, protecting the user from further damage or status changes until it breaks."
+Switcheroo,10,0,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,UNIQUE,SWITCHEROO,,0,0,0,User and target swap items.
+Taunt,5,0,0,,100,0,false,DARK,SELECTED_POKEMON,false,true,UNIQUE,TAUNT,,0,0,0,"For the next few turns, the target can only use damaging moves."
+Teleport,5,0,0,,100,0,true,PSYCHIC,USER,false,true,UNIQUE,TELEPORT,,0,0,0,Immediately ends wild battles. No effect otherwise.
+Topsy turvy,5,0,0,,100,0,true,DARK,SELECTED_POKEMON,false,true,UNIQUE,TOPSY_TURVY,,0,0,0,Inverts the target's stat modifiers.
+Transform,10,0,0,,100,0,true,NORMAL,SELECTED_POKEMON,false,true,UNIQUE,TRANSFORM,,0,0,0,User becomes a copy of the target until it leaves battle.
+Trick,10,0,0,,100,0,false,PSYCHIC,SELECTED_POKEMON,false,true,UNIQUE,TRICK,,0,0,0,User and target swap items.
+Trick or treat,5,0,0,,100,0,false,GHOST,SELECTED_POKEMON,false,true,UNIQUE,TRICK_OR_TREAT,,0,0,0,Adds type ghost to the target's types.
+Wish,10,0,0,,100,0,true,NORMAL,USER,false,true,UNIQUE,WISH,,0,0,0,User will recover half its max HP at the end of the next turn.
+Worry seed,10,0,0,,100,0,false,GRASS,SELECTED_POKEMON,false,true,UNIQUE,WORRY_SEED,,0,0,0,Changes the target's ability to Insomnia.
+Electric terrain,10,0,0,,100,0,true,ELECTRIC,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,ELECTRIC_TERRAIN,,0,0,0,"For five turns, prevents all Pokémon on the ground from sleeping and strengthens their type electric moves to 1.5× their power."
+Fairy lock,10,0,0,,100,0,true,FAIRY,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,FAIRY_LOCK,,0,0,0,Prevents all Pokémon from fleeing or switching out during the next turn.
+Grassy terrain,10,0,0,,100,0,true,GRASS,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,GRASSY_TERRAIN,,0,0,0,"For five turns, heals all Pokémon on the ground for 1/16 max HP each turn and strengthens their type grass moves to 1.5× their power."
+Gravity,20,0,0,,100,0,true,PSYCHIC,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,GRAVITY,,0,0,0,Disables moves and immunities that involve flying or levitating for five turns.
+Hail,10,0,0,,100,0,true,ICE,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,HAIL,,0,0,0,Changes the weather to a hailstorm for five turns.
+Haze,3,0,0,,100,0,true,ICE,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,HAZE,,0,0,0,"Resets all Pokémon's stats, accuracy, and evasion."
+Ion deluge,4,0,0,,100,1,true,ELECTRIC,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,ION_DELUGE,,0,0,0,Changes all type normal moves to type electric moves for the rest of the turn.
+Magic room,10,0,0,,100,0,true,PSYCHIC,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,MAGIC_ROOM,,0,0,0,Negates held items for five turns.
+Misty terrain,10,0,0,,100,0,true,FAIRY,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,MISTY_TERRAIN,,0,0,0,"For five turns, protects all Pokémon on the ground from major status ailments and confusion, and halves the power of incoming type dragon moves."
+Mud sport,6,0,0,,100,0,true,GROUND,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,MUD_SPORT,,0,0,0,Halves all Electric-type damage.
+Rain dance,20,0,0,,100,0,true,WATER,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,RAIN_DANCE,,0,0,0,Changes the weather to rain for five turns.
+Sandstorm,10,0,0,,100,0,true,ROCK,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,SANDSTORM,,0,0,0,Changes the weather to a sandstorm for five turns.
+Sunny day,20,0,0,,100,0,true,FIRE,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,SUNNY_DAY,,0,0,0,Changes the weather to sunny for five turns.
+Trick room,20,0,0,,100,-7,true,PSYCHIC,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,TRICK_ROOM,,0,0,0,"For five turns, slower Pokémon will act before faster Pokémon."
+Water sport,6,0,0,,100,0,true,WATER,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,WATER_SPORT,,0,0,0,Halves all Fire-type damage.
+Wonder room,10,0,0,,100,0,true,PSYCHIC,ENTIRE_FIELD,false,true,WHOLE_FIELD_EFFECT,WONDER_ROOM,,0,0,0,All Pokémon's Defense and Special Defense are swapped for 5 turns.

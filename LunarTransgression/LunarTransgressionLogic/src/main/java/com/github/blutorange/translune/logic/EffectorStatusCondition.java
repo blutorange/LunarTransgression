@@ -25,8 +25,8 @@ public class EffectorStatusCondition implements IGlobalBattleEffector {
 	public boolean beforeTurn(final IBattleContext context) {
 		if (condition.disappears(turn)) {
 			final CharacterState cs = context.getCharacterState(player, character);
-			final BattleAction action = new BattleAction(id, new String[0],
-					String.format(condition.getDisappearsMessage(), cs.getNickname()));
+			final BattleAction action = new BattleAction.Builder().character(cs).targets(cs)
+					.addSentences(String.format(condition.getDisappearsMessage(), cs.getNickname())).build();
 			context.getBattleActions(0).add(action);
 			context.getBattleActions(1).add(action);
 			return true;
@@ -39,8 +39,8 @@ public class EffectorStatusCondition implements IGlobalBattleEffector {
 		if (id.equals(characterState.getId())) {
 			if (!condition.canMove()) {
 				final CharacterState cs = context.getCharacterState(player, character);
-				final BattleAction action = new BattleAction(id, new String[0],
-						String.format(condition.getCannotMoveMessage(), cs.getNickname()));
+				final BattleAction action = new BattleAction.Builder().character(characterState).targets(characterState)
+						.addSentences(String.format(condition.getCannotMoveMessage(), cs.getNickname())).build();
 				context.getBattleActions(0).add(action);
 				context.getBattleActions(1).add(action);
 				if (EStatusCondition.CONFUSE.equals(condition)) {
@@ -67,8 +67,10 @@ public class EffectorStatusCondition implements IGlobalBattleEffector {
 		final int damage = turnEndDamage.getNumerator() * user.getComputedBattleMaxHp()
 				/ turnEndDamage.getDenominator();
 		user.modifyHp(damage);
-		final BattleAction action = new BattleAction(id, new String[0], String.format(
-				condition.getTurnEndDamageMessage(), user.getCharacterState().getNickname(), Integer.valueOf(damage)));
+		final BattleAction action = new BattleAction.Builder().character(user).targets(user)
+				.addSentences(String.format(condition.getTurnEndDamageMessage(), user.getCharacterState().getNickname(),
+						Integer.valueOf(damage)))
+				.build();
 		context.getBattleActions(0).add(action);
 		context.getBattleActions(1).add(action);
 	}
@@ -78,6 +80,7 @@ public class EffectorStatusCondition implements IGlobalBattleEffector {
 		final String id = context.getCharacterState(player, character).getId();
 		if (id == null)
 			throw new IllegalStateException("character state does not exits: " + id);
+		context.getBattleStatus(player, character).setStatusCondition(condition);
 		this.id = id;
 	}
 

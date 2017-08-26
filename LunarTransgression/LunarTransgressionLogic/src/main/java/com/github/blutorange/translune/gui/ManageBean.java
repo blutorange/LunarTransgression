@@ -6,12 +6,14 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipFile;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
+import javax.persistence.Transient;
 
 import org.apache.commons.io.IOUtils;
 import org.primefaces.component.inputswitch.InputSwitch;
@@ -32,16 +34,22 @@ public class ManageBean extends AbstractBean {
 	@Classed(ManageBean.class)
 	Logger logger;
 
+	@Transient
 	@Inject
 	IImportProcessing importProcessing;
 
+	@Transient
 	@Inject
 	ILunarDatabaseManager databaseManager;
 
 	private boolean emptyDatabase;
 
 	public ManageBean() {
-		ComponentFactory.getBeanComponent().inject(this);
+	}
+
+	@PostConstruct
+	void postConstruct() {
+		ComponentFactory.getLunarComponent().inject(this);
 	}
 
 	public void handleImportUpload(final FileUploadEvent event) {

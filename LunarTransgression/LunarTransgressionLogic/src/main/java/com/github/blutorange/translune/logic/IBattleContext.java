@@ -4,9 +4,7 @@ import java.util.List;
 
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.db.Item;
-import com.github.blutorange.translune.db.Skill;
 import com.github.blutorange.translune.socket.BattleAction;
-import com.github.blutorange.translune.socket.BattleCommand;
 
 public interface IBattleContext {
 	List<BattleAction> getBattleActions(int player);
@@ -21,6 +19,14 @@ public interface IBattleContext {
 
 	BattleStatus getBattleStatus(int[] characterIndex);
 
+	default int[] getCharacterIndex(final CharacterState character) {
+		return getCharacterIndex(character.getPrimaryKey().toString());
+	}
+
+	default int[] getCharacterIndex(final IComputedStatus character) {
+		return getCharacterIndex(character.getCharacterState().getPrimaryKey().toString());
+	}
+
 	int[] getCharacterIndex(String character);
 
 	CharacterState getCharacterState(int player, int character);
@@ -31,6 +37,11 @@ public interface IBattleContext {
 
 	CharacterState[] getCharacterStates(int player);
 
+	default CharacterState[] getCharacterStatesOpponent(final int player) {
+		final int opponent = player == 0 ? 1 : 0;
+		return getCharacterStates(opponent);
+	}
+
 	IComputedBattleStatus[][] getComputedBattleStatus();
 
 	IComputedBattleStatus[] getComputedBattleStatus(int player);
@@ -38,6 +49,10 @@ public interface IBattleContext {
 	IComputedBattleStatus getComputedBattleStatus(int player, int character);
 
 	IComputedBattleStatus getComputedBattleStatus(int[] characterIndex);
+
+	default IComputedBattleStatus[] getComputedBattleStatusOpponent(final int player) {
+		return getComputedBattleStatusOpponent(player == 0 ? 1 : 0);
+	}
 
 	List<IGlobalBattleEffector> getEffectorStack();
 
@@ -56,22 +71,4 @@ public interface IBattleContext {
 	void pushBattleEffector(IGlobalBattleEffector effector);
 
 	boolean removeItem(Item item, final int player);
-
-	IComputedBattleStatus[] getTargetsAlive(ITargettable targettable, IBattleContext context,
-			BattleCommand battleCommand, int player, int character);
-
-	IDamageResult[] computeDamage(Skill skill, IComputedBattleStatus attacker, IComputedBattleStatus[] defenders);
-
-	default CharacterState[] getCharacterStatesOpponent(final int player) {
-		final int opponent = player == 0 ? 1 : 0;
-		return getCharacterStates(opponent);
-	}
-
-	default int[] getCharacterIndex(final CharacterState target) {
-		return getCharacterIndex(target.getPrimaryKey().toString());
-	}
-
-	default IComputedBattleStatus[] getComputedBattleStatusOpponent(final int player) {
-		return getComputedBattleStatusOpponent(player == 0 ? 1 : 0);
-	}
 }

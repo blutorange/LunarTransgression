@@ -5,6 +5,7 @@ import java.util.Random;
 import org.apache.commons.lang3.builder.Builder;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.github.blutorange.common.MathUtil;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.logic.ENature;
 import com.github.blutorange.translune.util.Constants;
@@ -36,12 +37,24 @@ public class CharacterStateBuilder implements Builder<CharacterState> {
 			throw new IllegalStateException("no nature set");
 		if (nickname == null || nickname.isEmpty())
 			nickname = character.getName();
-		return new CharacterState(character, nickname, nature, exp, level, ivHp, ivMp, ivPhysicalAttack,
-				ivPhysicalDefense, ivMagicalAttack, ivMagicalDefense, ivSpeed);
+		final CharacterState characterState = new CharacterState();
+		characterState.setCharacter(character);
+		characterState.setExp(exp);
+		characterState.setIvHp(ivHp);
+		characterState.setIvMagicalAttack(ivMagicalAttack);
+		characterState.setIvMagicalDefense(ivMagicalDefense);
+		characterState.setIvMp(ivMp);
+		characterState.setIvPhysicalAttack(ivPhysicalAttack);
+		characterState.setIvPhysicalDefense(ivPhysicalDefense);
+		characterState.setIvSpeed(ivSpeed);
+		characterState.setLevel(level);
+		characterState.setNature(nature);
+		characterState.setNickname(nickname);
+		return characterState;
 	}
 
 	public CharacterStateBuilder randomIvs() {
-		final Random r = ComponentFactory.getLogicComponent().randomBasic();
+		final Random r = ComponentFactory.getLunarComponent().randomBasic().get();
 		ivHp = r.nextInt(32);
 		ivMp = r.nextInt(32);
 		ivPhysicalAttack = r.nextInt(32);
@@ -54,7 +67,7 @@ public class CharacterStateBuilder implements Builder<CharacterState> {
 
 	public CharacterStateBuilder randomNature() {
 		final ENature[] natures = ENature.values();
-		final Random r = ComponentFactory.getLogicComponent().randomBasic();
+		final Random r = ComponentFactory.getLunarComponent().randomBasic().get();
 		this.nature = natures[r.nextInt(natures.length)];
 		return this;
 	}
@@ -65,13 +78,12 @@ public class CharacterStateBuilder implements Builder<CharacterState> {
 	}
 
 	public CharacterStateBuilder setExp(final int exp) {
-		this.exp = exp < 0 ? 0 : exp > Constants.MAX_EXP ? Constants.MAX_EXP : exp;
+		this.exp = MathUtil.clamp(exp, 0, Constants.MAX_EXP);
 		return this;
 	}
 
 	public CharacterStateBuilder setLevel(final int level) {
-		this.level = level < Constants.MIN_LEVEL ? Constants.MIN_LEVEL
-				: level > Constants.MAX_LEVEL ? Constants.MAX_LEVEL : level;
+		this.level = MathUtil.clamp(level, Constants.MIN_LEVEL, Constants.MAX_LEVEL);
 		return this;
 	}
 

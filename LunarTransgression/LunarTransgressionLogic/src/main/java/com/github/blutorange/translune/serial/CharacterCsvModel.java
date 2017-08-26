@@ -1,7 +1,6 @@
 package com.github.blutorange.translune.serial;
 
 import java.util.Arrays;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.github.blutorange.common.StringUtil;
@@ -13,7 +12,7 @@ import com.github.blutorange.translune.logic.EExperienceGroup;
 
 public class CharacterCsvModel {
 
-	private CharacterBuilder builder;
+	private final CharacterBuilder builder;
 
 	public CharacterCsvModel() {
 		this.builder = new CharacterBuilder();
@@ -56,12 +55,12 @@ public class CharacterCsvModel {
 	}
 
 	public String getKey() {
-		String id = builder.getId();
+		final String id = builder.getId();
 		if (id == null)
 			throw new IllegalStateException("name must be set");
 		return id;
 	}
-	
+
 	/**
 	 * @param attack
 	 *            the attack to set
@@ -92,6 +91,10 @@ public class CharacterCsvModel {
 	 */
 	public void setDescription(final String description) {
 		builder.setDescription(description);
+	}
+
+	public void setImgIcon(final String imgIcon) {
+		builder.setImgIcon(imgIcon);
 	}
 
 	/**
@@ -174,12 +177,12 @@ public class CharacterCsvModel {
 	public void setSpeed(final int speed) {
 		builder.setSpeed(speed);
 	}
-	
+
 	public Character toEntity() {
 		return builder.build();
 	}
 
-	public void addSkill(int level, Skill skill) {
+	public void addSkill(final int level, final Skill skill) {
 		builder.addSkill(level, skill);
 	}
 }

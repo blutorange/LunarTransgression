@@ -1,5 +1,6 @@
 package com.github.blutorange.translune.db;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +14,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
@@ -37,7 +37,7 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 	@Inject	@Classed(LunarDatabaseManager.class)
 	Logger logger;
 
-	@Inject	EntityManagerFactory entityManagerFactory;
+	@Inject	IEntityManagerFactory entityManagerFactory;
 
 	@Inject IEntityStore entityStore;
 
@@ -89,7 +89,7 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 				final @Nullable T object = (T) em.find(entityMeta.getJavaClass(), primaryKey);
 				entityStore.storeIfAbsent(object);
 				if (object != null)
-					updateAsscociations(object, new HashSet<>());
+					attachAsscociations(object, new HashSet<>());
 				return object;
 			});
 			return entity;
@@ -139,7 +139,7 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 	public void checkConnection() throws Exception {
 		EntityManager em = null;
 		try {
-			em = entityManagerFactory.createEntityManager();
+			em = entityManagerFactory.get().createEntityManager();
 			em.find(Player.class, "");
 		}
 		finally {
@@ -149,24 +149,44 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 	}
 
 	@Override
-	public <@NonNull T extends AbstractStoredEntity> void persist(final T entity) {
+	public <@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager persist(final T entity) {
+		logger.debug("persisting entity " + entity.getPrimaryKey());
 		synchronized (entityStore) {
 			entityStore.store(entity);
 			changeList.add(new ChangePersist(entity));
 		}
+		return this;
+	}
+
+	@SafeVarargs
+	@Override
+	public final <@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager persist(final T... entities) {
+		synchronized (entityStore) {
+			entityStore.store(entities);
+			for (final T entity : entities) {
+				logger.debug("persisting entity " + entity.getPrimaryKey());
+				changeList.add(new ChangePersist(entity));
+			}
+		}
+		return this;
 	}
 
 	@Override
-	public <@NonNull T extends AbstractStoredEntity> void delete(final T entity) {
+	public <@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager delete(final T entity) {
 		synchronized (entityStore) {
 			entityStore.remove(entity);
 			changeList.add(new ChangeDelete(entity));
 		}
+		return this;
 	}
 
 	@SuppressWarnings("resource")
-	protected void saveChangesToDatabase() {
-		logger.debug("flushing entity changes to database");
+	private void saveChangesToDatabase() {
+		logger.info("flushing entity changes to database");
+		if (logger.isDebugEnabled()) {
+			logger.debug("flushing entity changes to database");
+			changeList.forEach(change -> logger.debug("need to process change " + change));
+		}
 		if (!changeList.isEmpty()) {
 			withEm(true, em -> {
 				final Session session = em.unwrap(Session.class);
@@ -178,7 +198,7 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 		}
 	}
 
-	private void updateAsscociations(final AbstractStoredEntity object, final Set<AbstractStoredEntity> processed) {
+	private void attachAsscociations(final AbstractStoredEntity object, final Set<AbstractStoredEntity> processed) {
 		object.forEachAssociatedObject(accesible -> {
 			final AbstractStoredEntity fetched = accesible.get();
 			AbstractStoredEntity currentlyStored = entityStore.storeIfAbsent(fetched);
@@ -189,13 +209,26 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 			}
 			if (!processed.contains(currentlyStored)) {
 				processed.add(currentlyStored);
-				updateAsscociations(fetched, processed);
+				attachAsscociations(fetched, processed);
+			}
+		});
+	}
+
+	private void detachAsscociations(final AbstractStoredEntity object, final Set<AbstractStoredEntity> processed) {
+		object.forEachAssociatedObject(accesible -> {
+			final AbstractStoredEntity fetched = accesible.get();
+			if (fetched == null)
+				return;
+			entityStore.remove(fetched);
+			if (!processed.contains(fetched)) {
+				processed.add(fetched);
+				detachAsscociations(fetched, processed);
 			}
 		});
 	}
 
 	@Nullable
-	private <T> T withEm(final ThrowingFunction<EntityManager, T, Exception> runnable) {
+	private <@Nullable T> T withEm(final ThrowingFunction<EntityManager, T, Exception> runnable) {
 		return withEm(false, runnable);
 	}
 
@@ -214,13 +247,13 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 	@Override
 	public <@NonNull T extends AbstractStoredEntity> T[] findAll(final EEntityMeta entityMeta, final Object[] primaryKeys) {
 		final Class<?> clazz = entityMeta.getJavaClass();
-		@SuppressWarnings("unchecked")
-		final T[] result = (T[]) Array.newInstance(clazz, primaryKeys.length);
+		@SuppressWarnings({ "unchecked", "null" })
+		final T@NonNull[] result = (T[]) Array.newInstance(clazz, primaryKeys.length);
 		for (int i = 0; i < primaryKeys.length; ++i) {
 			final @Nullable T object = find(entityMeta, primaryKeys[i]);
 			if (object == null) {
-				@SuppressWarnings("unchecked")
-				final T[] emptyReturn = (T[]) Array.newInstance(clazz, 0);
+				@SuppressWarnings({ "unchecked", "null" })
+				final T@NonNull[] emptyReturn = (T[]) Array.newInstance(clazz, 0);
 				return emptyReturn;
 			}
 			result[i] = object;
@@ -255,7 +288,14 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 	@Override
 	public <@Nullable T> T withEm(final boolean transactional, final ThrowingFunction<EntityManager, T, Exception> runnable) {
 		logger.debug("opening entity manager");
-		final EntityManager em = entityManagerFactory.createEntityManager();
+		final EntityManager em;
+		try {
+			em = entityManagerFactory.get().createEntityManager();
+		}
+		catch (final IOException e) {
+			logger.error("failed to get entity manager factory", e);
+			return null;
+		}
 		try {
 			if (transactional)
 				em.getTransaction().begin();
@@ -312,6 +352,25 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 		}
 	}
 
+	@Override
+	public <@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager detach(final Class<@NonNull T> clazz, final String primaryKey) {
+		synchronized (entityStore) {
+			@Nullable final T entity = entityStore.remove(clazz, primaryKey);
+			if (entity != null)
+				detachAsscociations(entity, new HashSet<>());
+		}
+		return this;
+	}
+
+	@Override
+	public <@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager detach(final T entity) {
+		synchronized (entityStore) {
+			entityStore.remove(entity);
+			detachAsscociations(entity, new HashSet<>());
+		}
+		return this;
+	}
+
 	protected static interface IChange {
 		void perform(EntityManager em, Session session);
 	}
@@ -328,6 +387,11 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 		public void perform(final EntityManager em, final Session session) {
 			session.persist(entity);
 		}
+
+		@Override
+		public String toString() {
+			return String.format("ChangePersist(%s)", entity.getPrimaryKey());
+		}
 	}
 
 	protected static class ChangeModify implements IChange {
@@ -340,6 +404,11 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 		@Override
 		public void perform(final EntityManager em, final Session session) {
 			session.update(entity);
+		}
+
+		@Override
+		public String toString() {
+			return String.format("ChangeModify(%s)", entity.getPrimaryKey());
 		}
 	}
 
@@ -356,10 +425,16 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 				session.saveOrUpdate(entity);
 			session.delete(entity);
 		}
+
+		@Override
+		public String toString() {
+			return String.format("ChangeDelete(%s)", entity.getPrimaryKey());
+		}
 	}
 
 	@Override
 	public void runPeriodically() throws JobExecutionException {
+		logger.debug("number of changes to process " + changeList.size());
 		if (changeList.isEmpty())
 			return;
 		synchronized (entityStore) {

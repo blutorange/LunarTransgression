@@ -6,12 +6,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
+import javax.persistence.Transient;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.github.blutorange.translune.db.Character;
+import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
-import com.github.blutorange.translune.db.Item;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.ComponentFactory;
 
@@ -24,13 +24,14 @@ public class AdminBean extends AbstractBean {
 	@Nullable
 	private Gamestats gamestats;
 
+	@Transient
 	@Inject
 	ILunarDatabaseManager lunarDatabaseManager;
 
 	@PostConstruct
 	public void init() {
 		adminPage = EAdminPage.SERVER_STATUS;
-		ComponentFactory.getBeanComponent().inject(this);
+		ComponentFactory.getLunarComponent().inject(this);
 	}
 
 	@Nullable
@@ -69,6 +70,6 @@ public class AdminBean extends AbstractBean {
 
 	private Gamestats createGamestats() {
 		final ILunarDatabaseManager ldm = lunarDatabaseManager;
-		return new Gamestats(ldm.count(Player.class), ldm.count(Character.class), ldm.count(Item.class));
+		return new Gamestats(ldm.count(Player.class), ldm.count(CharacterState.class));
 	}
 }

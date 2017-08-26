@@ -7,6 +7,8 @@ import javax.websocket.Session;
 
 import org.slf4j.Logger;
 
+import com.github.blutorange.translune.db.ILunarDatabaseManager;
+import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.logic.EGameState;
 import com.github.blutorange.translune.logic.IInitIdStore;
@@ -22,16 +24,23 @@ import com.github.blutorange.translune.socket.LunarMessage;
 public class HandlerAuthorize implements ILunarMessageHandler {
 	@Inject
 	protected ISessionStore sessionStore;
+
 	@Inject
 	protected IInitIdStore initIdStore;
+
 	@Classed(HandlerAuthorize.class)
 	@Inject
 	protected Logger logger;
+
+	@Inject
+	protected ILunarDatabaseManager databaseManager;
+
 	@Inject
 	protected ISocketProcessing socketProcessing;
 
 	@Inject
-	public HandlerAuthorize() {}
+	public HandlerAuthorize() {
+	}
 
 	@Override
 	public void handle(final String user, final Session session, final LunarMessage message) {
@@ -52,6 +61,10 @@ public class HandlerAuthorize implements ILunarMessageHandler {
 			socketProcessing.markAuthorized(session);
 			socketProcessing.setGameState(session, EGameState.IN_MENU);
 		});
+
+		// Prefetch data
+		databaseManager.find(Player.class, nickname);
+
 		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageAuthorizeResponse(message));
 	}
 }

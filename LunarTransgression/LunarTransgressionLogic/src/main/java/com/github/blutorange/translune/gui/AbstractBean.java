@@ -21,12 +21,14 @@ public abstract class AbstractBean {
 	Logger logger;
 
 	public AbstractBean() {
-		ComponentFactory.getBeanComponent().inject(this);
+		ComponentFactory.getLunarComponent().inject(this);
 	}
 
 	protected void redirect(final String relativeUrl) {
 		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect(getContextPath() + relativeUrl);
+			final String url = getContextPath() + relativeUrl;
+			logger.debug("redirecting to " + url);
+			FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 		}
 		catch (final IOException e) {
 			logger.error("could not redirect user to " + relativeUrl, e);

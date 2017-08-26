@@ -61,12 +61,12 @@ public interface ILunarDatabaseManager {
 		}
 
 		@Override
-		public <@NonNull T extends AbstractStoredEntity> void persist(final T entity) {
+		public <@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager persist(final T entity) {
 			throw new RuntimeException("mock - injection probably failed");
 		}
 
 		@Override
-		public <@NonNull T extends AbstractStoredEntity> void delete(final T entity) {
+		public <@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager delete(final T entity) {
 			throw new RuntimeException("mock - injection probably failed");
 		}
 
@@ -102,6 +102,22 @@ public interface ILunarDatabaseManager {
 		public void checkConnection() throws Exception {
 			throw new RuntimeException("mock - injection probably failed");
 		}
+
+		@SafeVarargs
+		@Override
+		public final <@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager persist(final T... entities) {
+			throw new RuntimeException("mock - injection probably failed");
+		}
+
+		@Override
+		public <@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager detach(final Class<@NonNull T> clazz, final String nickname) {
+			throw new RuntimeException("mock - injection probably failed");
+		}
+
+		@Override
+		public <@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager detach(final T entity) {
+			throw new RuntimeException("mock - injection probably failed");
+		}
 	}
 
 	<T extends AbstractStoredEntity, @NonNull S extends ModifiableEntity<T>, E extends Exception> void modify(
@@ -126,9 +142,11 @@ public interface ILunarDatabaseManager {
 
 	void createSchema() throws PersistenceException;
 
-	<@NonNull T extends AbstractStoredEntity> void persist(T entity);
+	<@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager persist(T entity);
 
-	<@NonNull T extends AbstractStoredEntity> void delete(T entity);
+	<@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager persist(@SuppressWarnings("unchecked") T... entities);
+
+	<@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager delete(T entity);
 
 	void shutdown();
 
@@ -140,4 +158,8 @@ public interface ILunarDatabaseManager {
 	<@Nullable T> T withEm(boolean transactional, ThrowingFunction<EntityManager, T, Exception> runnable);
 
 	void checkConnection() throws Exception;
+
+	<@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager detach(Class<T> clazz, String nickname);
+
+	<@NonNull T extends AbstractStoredEntity> ILunarDatabaseManager detach(T entity);
 }

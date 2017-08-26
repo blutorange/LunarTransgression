@@ -26,6 +26,7 @@ public class BattleCommandHandlerItem extends ABattleCommandHandler {
 
 	@Override
 	public void preProcess() {
+		// not needed
 	}
 
 	@Override
@@ -35,5 +36,6 @@ public class BattleCommandHandlerItem extends ABattleCommandHandler {
 
 	@Override
 	public void postProcess() {
+		// not needed
 	}
 }

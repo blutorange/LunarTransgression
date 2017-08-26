@@ -2,6 +2,7 @@ package com.github.blutorange.translune.db;
 
 import java.io.Serializable;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 public abstract class AbstractEntity {
@@ -40,5 +41,6 @@ public abstract class AbstractEntity {
 	@Override
 	public abstract String toString();
 
+	@NonNull
 	public abstract Serializable getPrimaryKey();
 }

@@ -6,28 +6,29 @@ import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.socket.ILunarMessageHandler.ELunarMessageHandler;
 
 public enum ELunarMessageType {
-	AUTHORIZE(ComponentFactory.getSocketComponent().ihandlerAuthorize()),
+	AUTHORIZE(ComponentFactory.getLunarComponent().ihandlerAuthorize()),
 	AUTHORIZE_RESPONSE(ELunarMessageHandler.NOOP),
 
-	INVITE(ComponentFactory.getSocketComponent().ihandlerInvite()),
+	INVITE(ComponentFactory.getLunarComponent().ihandlerInvite()),
 	INVITE_RESPONSE(ELunarMessageHandler.NOOP),
 	INVITED(ELunarMessageHandler.NOOP),
 
-	INVITE_ACCEPT(ComponentFactory.getSocketComponent().ihandlerInviteAccept()),
+	INVITE_ACCEPT(ComponentFactory.getLunarComponent().ihandlerInviteAccept()),
 	INVITE_ACCEPT_RESPONSE(ELunarMessageHandler.NOOP),
 	INVITE_ACCEPTED(ELunarMessageHandler.NOOP),
 
-	INVITE_RETRACT(ComponentFactory.getSocketComponent().ihandlerInviteRetract()),
+	INVITE_RETRACT(ComponentFactory.getLunarComponent().ihandlerInviteRetract()),
 	INVITE_RETRACT_RESPONSE(ELunarMessageHandler.NOOP),
 	INVITE_RETRACTED(ELunarMessageHandler.NOOP),
 
-	INVITE_REJECT(ComponentFactory.getSocketComponent().ihandlerInviteReject()),
+	INVITE_REJECT(ComponentFactory.getLunarComponent().ihandlerInviteReject()),
 	INVITE_REJECT_RESPONSE(ELunarMessageHandler.NOOP),
+	INVITE_REJECTED(ELunarMessageHandler.NOOP),
 
-	PREPARE_BATTLE(ComponentFactory.getSocketComponent().ihandlerPrepareBattle()),
+	PREPARE_BATTLE(ComponentFactory.getLunarComponent().ihandlerPrepareBattle()),
 	PREPARE_BATTLE_RESPONSE(ELunarMessageHandler.NOOP),
 
-	STEP_BATTLE(ComponentFactory.getSocketComponent().ihandlerStepBattle()),
+	STEP_BATTLE(ComponentFactory.getLunarComponent().ihandlerStepBattle()),
 	STEP_BATTLE_RESPONSE(ELunarMessageHandler.NOOP),
 
 	BATTLE_PREPARED(ELunarMessageHandler.NOOP),
@@ -35,7 +36,7 @@ public enum ELunarMessageType {
 	BATTLE_CANCELLED(ELunarMessageHandler.NOOP),
 	BATTLE_ENDED(ELunarMessageHandler.NOOP),
 
-	LOOT(ComponentFactory.getSocketComponent().ihandlerLoot()),
+	LOOT(ComponentFactory.getLunarComponent().ihandlerLoot()),
 	LOOT_RESPONSE(ELunarMessageHandler.NOOP),
 
 	UNKNOWN(ELunarMessageHandler.NOOP),
@@ -46,7 +47,7 @@ public enum ELunarMessageType {
 
 	private ELunarMessageType(final ILunarMessageHandler handler) {
 		this.handler = handler;
-		this.socketProcessing = ComponentFactory.getSocketComponent().socketProcessing();
+		this.socketProcessing = ComponentFactory.getLunarComponent().iSocketProcessing();
 	}
 
 	public void handle(final Session session, final LunarMessage message) {

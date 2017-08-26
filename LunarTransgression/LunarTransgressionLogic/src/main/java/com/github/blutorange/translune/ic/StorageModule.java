@@ -32,7 +32,7 @@ public class StorageModule {
 		return new InvitationStore();
 	}
 	@Provides @Singleton static IBattleStore provideBattleStore(@Classed(BattleStore.class) final Logger logger) {
-		return DaggerStorageComponent.create().battleStore();
+		return ComponentFactory.getLunarComponent().battleStore();
 	}
 	@Provides @Singleton static ExecutorService provideExecutorService(final CustomProperties customProperties) {
 		return Executors.newFixedThreadPool(customProperties.getMaxThreadCount());

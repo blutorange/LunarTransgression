@@ -30,6 +30,8 @@ public class CustomProperties {
 
 	private volatile boolean online;
 
+	private final int databaseSaveMinutes;
+
 	@Inject
 	public CustomProperties() {
 		try (InputStream is = CustomProperties.class.getClassLoader().getResourceAsStream("custom.properties")) {
@@ -58,6 +60,10 @@ public class CustomProperties {
 		int battleRoundTimeoutMillis = Integer.parseInt(get(Constants.CUSTOM_KEY_BATTLE_ROUND_TIMEOUT, "60000"));
 		if (battleRoundTimeoutMillis < 1000) battleRoundTimeoutMillis = 1000;
 		this.battleRoundTimeoutMillis = battleRoundTimeoutMillis;
+
+		int databaseSaveMinutes = Integer.parseInt(get(Constants.CUSTOM_KEY_DATABASE_SAVE_MINUTES, "10"));
+		if (databaseSaveMinutes < 1) databaseSaveMinutes = 1;
+		this.databaseSaveMinutes = databaseSaveMinutes;
 	}
 
 	@Nullable
@@ -99,5 +105,9 @@ public class CustomProperties {
 
 	public boolean isOnline() {
 		return online;
+	}
+
+	public int getDatabaseSaveMinutes() {
+		return databaseSaveMinutes;
 	}
 }

@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.blutorange.translune.LunarServletContextListener;
 import com.github.blutorange.translune.db.LunarDatabaseManager;
 import com.github.blutorange.translune.gui.AbstractBean;
 import com.github.blutorange.translune.gui.ManageBean;
@@ -21,6 +22,7 @@ import com.github.blutorange.translune.handler.HandlerStepBattle;
 import com.github.blutorange.translune.logic.BattleRunner;
 import com.github.blutorange.translune.logic.BattleStore;
 import com.github.blutorange.translune.serial.ImportProcessing;
+import com.github.blutorange.translune.servlet.BaseResourceServlet;
 import com.github.blutorange.translune.socket.LunarDecoder;
 import com.github.blutorange.translune.socket.LunarEncoder;
 import com.github.blutorange.translune.socket.LunarEndpoint;
@@ -127,6 +129,14 @@ public class LoggingModule {
 
 	@Provides @Singleton @Classed(StatusBean.class) static Logger provideLogger26() {
 		return provideLogger(StatusBean.class);
+	}
+
+	@Provides @Singleton @Classed(BaseResourceServlet.class) static Logger provideLogger27() {
+		return provideLogger(BaseResourceServlet.class);
+	}
+
+	@Provides @Singleton @Classed(LunarServletContextListener.class) static Logger provideLogger28() {
+		return provideLogger(LunarServletContextListener.class);
 	}
 
 	private static Logger provideLogger(final Class<?> clazz) {

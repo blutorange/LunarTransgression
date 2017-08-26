@@ -36,7 +36,7 @@ public class ModifiablePlayer extends ModifiableEntity<Player> {
 		entity.setItems(items);
 	}
 
-	public void setNickname(final String nickname) {
+	public void setNickname(@NonNull final String nickname) {
 		entity.setNickname(nickname);
 	}
 

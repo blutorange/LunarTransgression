@@ -1,20 +1,12 @@
 package com.github.blutorange.translune.logic;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.math.Fraction;
 
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.db.Item;
-import com.github.blutorange.translune.db.Skill;
-import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.socket.BattleAction;
-import com.github.blutorange.translune.socket.BattleCommand;
 
 class BattleContext implements IBattleContext {
 	protected static class DamageResult implements IDamageResult {
@@ -90,8 +82,7 @@ class BattleContext implements IBattleContext {
 			this.typeEffectivness = typeEffectivness;
 		}
 	}
-	private static final Fraction THREE_HALFS = Fraction.getFraction(3, 2);
-	private static final Fraction TWO = Fraction.getFraction(2, 1);
+
 	private final List<BattleAction> battleActions1;
 	private final List<BattleAction> battleActions2;
 	private final BattleStatus[][] battleStatus;
@@ -102,7 +93,6 @@ class BattleContext implements IBattleContext {
 	private final List<String[]> items;
 
 	private final String[] players;
-	private final Random random;
 
 	private final int turn;
 
@@ -120,76 +110,6 @@ class BattleContext implements IBattleContext {
 		this.battleActions2 = battleActions2;
 		this.itemRemovable = itemRemovable;
 		this.players = players;
-		random = ComponentFactory.getLogicComponent().randomBasic();
-	}
-
-	@Override
-	public IDamageResult[] computeDamage(final Skill skill, final IComputedBattleStatus attacker,
-			final IComputedBattleStatus... defenders) {
-		final int modifierNumerator = 1;
-		final int modifierDenominator = 1;
-
-		Fraction modifier = Fraction.ONE;
-		boolean isStab = false;
-
-		// if the move has more than one target,
-		if (defenders.length > 1)
-			modifier = modifier.multiplyBy(Fraction.THREE_QUARTERS);
-
-		// Same-type attack bonus. This is equal to 1.5 if the move's type
-		// matches any
-		// of the user's types, and 1 if otherwise.
-		if (attacker.getCharacterState().getCharacter().getUnmodifiableElements().contains(skill.getElement())) {
-			modifier = modifier.multiplyBy(THREE_HALFS);
-			isStab = true;
-		}
-
-		// Halved if the attacker is burned and the used move is a physical move
-		if (skill.getIsPhysical() && EStatusCondition.BURN.equals(attacker.getBattleStatus().getStatusConditions()))
-			modifier.multiplyBy(Fraction.ONE_HALF);
-
-		// Compute damage for each target
-		final IDamageResult[] results = new IDamageResult[defenders.length];
-		for (int i = 0; i < defenders.length; ++i) {
-			final IComputedBattleStatus defender = defenders[i];
-			final DamageResult result = new DamageResult();
-			result.setStab(isStab);
-
-			Fraction modifierSeparate = modifier;
-
-			// 1.5 for a critical hit
-			if (random.nextInt(100) > getCriticalHitThreshold(skill, attacker, defender)) {
-				modifierSeparate = modifierSeparate.multiplyBy(THREE_HALFS);
-				result.setCritical(true);
-			}
-
-			// Type effectiveness. This can be 0 (ineffective),
-			// 0.25, 0.5 (not very effective), 1 (normally effective),
-			// 2 or 4 (super effective) depending on both the move's
-			// and target's types.
-			final ETypeEffectiveness typeEffectiveness = computeTypeEffectiveness(skill, defender.getCharacterState());
-			modifierSeparate = modifierSeparate.multiplyBy(typeEffectiveness.getMultiplier());
-			result.setTypeEffectivness(typeEffectiveness);
-
-			// Random factor between 0.85 and 1.00
-			modifierSeparate = modifierSeparate.multiplyBy(Fraction.getFraction(random.nextInt(16) + 85, 100));
-
-			// Attack and defense
-			final int attack = skill.getIsPhysical() ? attacker.getComputedBattlePhysicalAttack()
-					: attacker.getComputedBattleMagicalAttack();
-			final int defense = skill.getIsPhysical() ? defender.getComputedBattlePhysicalDefense()
-					: defender.getComputedBattleMagicalDefense();
-
-			// Damage calculation
-			final int damage = (((2 * attacker.getCharacterState().getLevel()) / 5 + 2) * skill.getPower() * attack
-					/ defense) / 50
-					+ 2 * modifierNumerator * modifierSeparate.getNumerator()
-							/ (modifierDenominator * modifierSeparate.getDenominator());
-			result.setDamage(damage);
-
-			results[i] = result;
-		}
-		return results;
 	}
 
 	@Override
@@ -306,16 +226,6 @@ class BattleContext implements IBattleContext {
 	}
 
 	@Override
-	public IComputedBattleStatus[] getTargetsAlive(final ITargettable targettable, final IBattleContext context,
-			final BattleCommand battleCommand, final int player, final int character) {
-		final IComputedBattleStatus[] targets = targettable.getTarget().getTargets(context, battleCommand, player,
-				character);
-		return Arrays.stream(targets).filter(target -> context
-				.getComputedBattleStatus(context.getCharacterIndex(target.getCharacterState())).getComputedMaxHp() > 0)
-				.toArray(IComputedBattleStatus[]::new);
-	}
-
-	@Override
 	public int getTurn() {
 		return turn;
 	}
@@ -334,29 +244,5 @@ class BattleContext implements IBattleContext {
 		itemRemovable.removeItem(player, item);
 		ArrayUtils.remove(getItems(player), index);
 		return true;
-	}
-
-	private ETypeEffectiveness computeTypeEffectiveness(final Skill skill, final CharacterState characterState) {
-		final Set<EElement> elements = characterState.getCharacter().getUnmodifiableElements();
-		final EElement element = skill.getElement();
-		final Fraction multiplier = elements.stream().collect(Collectors.<EElement, Fraction> reducing(Fraction.ONE,
-				e -> e.typeEffectivness(element), Fraction::multiplyBy)).reduce();
-		if (multiplier.equals(Fraction.ONE))
-			return ETypeEffectiveness.NORMALLY_EFFECTIVE;
-		if (multiplier.equals(Fraction.ONE_HALF))
-			return ETypeEffectiveness.NOT_VERY_EFFECTIVE;
-		if (multiplier.equals(TWO))
-			return ETypeEffectiveness.SUPER_EFFECTIVE;
-		if (multiplier.equals(Fraction.ZERO))
-			return ETypeEffectiveness.INEFFECTIVE;
-		return ETypeEffectiveness.HYPER_EFFECTIVE;
-	}
-
-	private int getCriticalHitThreshold(final Skill skill, final IComputedBattleStatus attacker,
-			final IComputedBattleStatus defender) {
-		int threshold = 100 * attacker.getComputedBattleSpeed() / 512;
-		if (skill.getHighCritical())
-			threshold *= 8;
-		return threshold;
 	}
 }

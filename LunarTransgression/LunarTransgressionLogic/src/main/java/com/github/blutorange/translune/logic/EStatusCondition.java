@@ -1,7 +1,5 @@
 package com.github.blutorange.translune.logic;
 
-import java.util.Random;
-
 import org.apache.commons.lang3.math.Fraction;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -38,6 +36,11 @@ public enum EStatusCondition {
 		public @NonNull String getCannotMoveMessage() {
 			return "%s is poisoned and cannot move";
 		}
+
+		@Override
+		public @NonNull String getInflictMessage() {
+			return "%s was poisoned!";
+		}
 	},
 	BAD_POISON(f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1,1), f(1,1)) {
 		@Override
@@ -69,6 +72,11 @@ public enum EStatusCondition {
 		public @NonNull String getCannotMoveMessage() {
 			return "%s is poisoned badly and cannot move";
 		}
+
+		@Override
+		public @NonNull String getInflictMessage() {
+			return "%s was poisoned badly!";
+		}
 	},
 	SLEEP(f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1,1), f(1,1)) {
 		@Override
@@ -83,9 +91,9 @@ public enum EStatusCondition {
 			case 0:
 				return false;
 			case 1:
-				return random.nextInt(100) < 33;
+				return random.get().nextInt(100) < 33;
 			case 2:
-				return random.nextInt(100) < 50;
+				return random.get().nextInt(100) < 50;
 			default:
 				return true;
 			}
@@ -110,11 +118,16 @@ public enum EStatusCondition {
 		public @NonNull String getCannotMoveMessage() {
 			return "%s is fast asleep.";
 		}
+
+		@Override
+		public @NonNull String getInflictMessage() {
+			return "%s fell asleep!";
+		}
 	},
 	PARALYSIS(f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1, 2), f(1,1), f(1,1)) {
 		@Override
 		public boolean canMove() {
-			return random.nextInt(100) >= 25;
+			return random.get().nextInt(100) >= 25;
 		}
 
 		@Override
@@ -141,6 +154,11 @@ public enum EStatusCondition {
 		public @NonNull String getCannotMoveMessage() {
 			return "%s is paralyzed and cannot move.";
 		}
+
+		@Override
+		public @NonNull String getInflictMessage() {
+			return "%s is paraylzed. It may not attack!";
+		}
 	},
 	FREEZE(f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1,1), f(1,1)) {
 		@Override
@@ -150,7 +168,7 @@ public enum EStatusCondition {
 
 		@Override
 		public boolean disappears(final int turns) {
-			return random.nextInt(100) < 20;
+			return random.get().nextInt(100) < 20;
 		}
 
 		@Override
@@ -171,6 +189,11 @@ public enum EStatusCondition {
 		@Override
 		public @NonNull String getCannotMoveMessage() {
 			return "%s is frozen solid.";
+		}
+
+		@Override
+		public @NonNull String getInflictMessage() {
+			return "%s was frozen solid";
 		}
 	},
 	BURN(f(1, 2), f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1,1), f(1,1)) {
@@ -203,11 +226,16 @@ public enum EStatusCondition {
 		public @NonNull String getCannotMoveMessage() {
 			return "%s's burn prevents it from moving.";
 		}
+
+		@Override
+		public @NonNull String getInflictMessage() {
+			return "%s sustained a burn!";
+		}
 	},
 	CONFUSE(f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1,1), f(1,1)) {
 		@Override
 		public boolean canMove() {
-			return random.nextInt(100) >= 33;
+			return random.get().nextInt(100) >= 33;
 		}
 
 		// Lasts 1-4 turns
@@ -217,11 +245,11 @@ public enum EStatusCondition {
 			case 0:
 				return false;
 			case 1:
-				return random.nextInt(100) < 25;
+				return random.get().nextInt(100) < 25;
 			case 2:
-				return random.nextInt(100) < 33;
+				return random.get().nextInt(100) < 33;
 			case 3:
-				return random.nextInt(100) < 50;
+				return random.get().nextInt(100) < 50;
 			default:
 				return true;
 			}
@@ -246,9 +274,14 @@ public enum EStatusCondition {
 		public @NonNull String getCannotMoveMessage() {
 			return "%s is confused and cannot move.";
 		}
+
+		@Override
+		public @NonNull String getInflictMessage() {
+			return "%s got confused!";
+		}
 	},;
 
-	protected Random random;
+	protected IRandomSupplier random;
 	private Fraction physicalAttack;
 	private Fraction physicalDefense;
 	private Fraction magicalAttack;
@@ -264,7 +297,7 @@ public enum EStatusCondition {
 	private EStatusCondition(final Fraction physicalAttack, final Fraction physicalDefense,
 			final Fraction magicalAttack, final Fraction magicalDefense, final Fraction speed, final Fraction accuracy,
 			final Fraction evasion) {
-		random = ComponentFactory.getLogicComponent().randomBasic();
+		random = ComponentFactory.getLunarComponent().randomBasic();
 		this.physicalAttack = physicalAttack;
 		this.physicalDefense = physicalDefense;
 		this.magicalAttack = magicalAttack;
@@ -313,4 +346,6 @@ public enum EStatusCondition {
 	public abstract String getDisappearsMessage();
 
 	public abstract String getCannotMoveMessage();
+
+	public abstract String getInflictMessage();
 }

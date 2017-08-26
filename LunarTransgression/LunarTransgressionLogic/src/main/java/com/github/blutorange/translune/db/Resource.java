@@ -12,6 +12,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jdt.annotation.NonNull;
+
 @Entity
 @Table(name = "resource")
 public class Resource extends AbstractEntity {
@@ -29,9 +32,10 @@ public class Resource extends AbstractEntity {
 	@Column(name = "mime", updatable = false, insertable = true, nullable = false, unique = false, length = 64)
 	private String mime;
 
+	@NonNull
 	@Id
 	@Column(name = "name", updatable = false, insertable = true, nullable = false, unique = false, length = 32)
-	private String name;
+	private String name = StringUtils.EMPTY;
 
 	/**
 	 * @return the blob
@@ -61,6 +65,7 @@ public class Resource extends AbstractEntity {
 		return name;
 	}
 
+	@NonNull
 	@Override
 	public Serializable getPrimaryKey() {
 		return name;
@@ -90,7 +95,7 @@ public class Resource extends AbstractEntity {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(final String name) {
+	public void setName(@NonNull final String name) {
 		this.name = name;
 	}
 

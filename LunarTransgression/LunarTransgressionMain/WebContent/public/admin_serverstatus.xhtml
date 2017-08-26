@@ -2,19 +2,46 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:o="http://omnifaces.org/ui"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
 	xmlns:of="http://omnifaces.org/functions"
-    xmlns:c="http://java.sun.com/jsp/jstl/core">
-        <h:panelGrid columns="2" cellpadding="5">
-            <h:outputLabel for="online" value="Accept new connections" />
-			<p:inputSwitch id="online" value="#{statusBean.online}" immediate="true">
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+		<h:panelGrid columns="2" cellpadding="5">
+			<h:outputLabel for="online" value="Accept new connections" />
+			<p:inputSwitch id="online" value="#{statusBean.online}"
+				immediate="true">
 				<p:ajax event="change" listener="#{statusBean.onOnlineChange}"></p:ajax>
 			</p:inputSwitch>
-
-            <h:outputText value="Database connection" />
+		
+			<h:outputText value="Database connection" />
 			<p:commandButton id="database_recheck"
 				actionListener="#{statusBean.databaseCheck}" value="Check"
 				update="messages"></p:commandButton>
-</h:panelGrid>
+		</h:panelGrid>
+		<p:dataTable var="job" value="#{statusBean.quartzJobs}">
+		    <f:facet name="header">Scheduled jobs</f:facet>
+		
+			<p:column headerText="name" sortBy="#{job.name}"> 
+				<h:outputText value="#{job.name}" />
+			</p:column>
+		
+			<p:column headerText="group" sortBy="#{job.group}">
+				<h:outputText value="#{job.group}" />
+			</p:column>
+		
+			<p:column headerText="description" sortBy="#{job.description}">
+				<h:outputText value="#{job.description}" />
+			</p:column>
+			
+			<p:column headerText="priority" sortBy="#{job.priority}">
+				<h:outputText value="#{job.priority}" />
+			</p:column>
+			
+			<p:column headerText="last run" sortBy="#{job.last}">
+				<h:outputText value="#{job.last}" />
+			</p:column>
+			
+			<p:column headerText="next run" sortBy="#{job.next}">
+				<h:outputText value="#{job.next}" />
+			</p:column>
+		</p:dataTable>
 </html>

@@ -1,5 +1,7 @@
 package com.github.blutorange.translune.db;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.github.blutorange.translune.logic.ENature;
 
 public class ModifiableCharacterState extends ModifiableEntity<CharacterState> {
@@ -11,7 +13,7 @@ public class ModifiableCharacterState extends ModifiableEntity<CharacterState> {
 		entity.setExp(exp);
 	}
 
-	public void setId(final String id) {
+	public void setId(@NonNull final String id) {
 		entity.setId(id);
 	}
 
@@ -46,7 +48,7 @@ public class ModifiableCharacterState extends ModifiableEntity<CharacterState> {
 	public void setIvMp(final int ivMp) {
 		entity.setIvMp(ivMp);
 	}
-	
+
 	/**
 	 * @param ivPhysicalAttack
 	 *            the ivPhysicalAttack to set

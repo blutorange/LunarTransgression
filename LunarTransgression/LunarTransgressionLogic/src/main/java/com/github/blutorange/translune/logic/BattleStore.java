@@ -36,7 +36,7 @@ public class BattleStore implements IBattleStore {
 	@Override
 	public void startBattle(final String from, final String to) {
 		synchronized(this) {
-			final IBattleRunner battle = ComponentFactory.getLogicComponent().battleRunner();
+			final IBattleRunner battle = ComponentFactory.getLunarComponent().battleRunner();
 			battle.forPlayers(from, to);
 			executorService.submit(battle);
 			toFromMap.put(to, from);

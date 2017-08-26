@@ -7,7 +7,4 @@ public abstract class ModifiableEntity<T> {
 	void setEntity(final T entity) {
 		this.entity = entity;
 	}
-	public T getEntity() {
-		return entity;
-	}
 }

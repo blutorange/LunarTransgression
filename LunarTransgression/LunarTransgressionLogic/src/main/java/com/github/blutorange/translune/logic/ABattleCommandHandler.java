@@ -1,5 +1,7 @@
 package com.github.blutorange.translune.logic;
 
+import javax.inject.Inject;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.translune.db.CharacterState;
@@ -14,12 +16,16 @@ public abstract class ABattleCommandHandler implements IBattleCommandHandler {
 
 	private final int battleOrderSpeedDeviation;
 
+	@Inject
+	protected IBattleProcessing battleProcessing;
+
 	public ABattleCommandHandler(final IBattleContext battleContext, final int player, final int character, final BattleCommand battleCommand) {
+		ComponentFactory.getLunarComponent().inject(this);
 		this.context = battleContext;
 		this.player = player;
 		this.character = character;
 		this.battleCommand = battleCommand;
-		this.battleOrderSpeedDeviation = ComponentFactory.getLogicComponent().randomBasic().nextInt(21) + 90;
+		this.battleOrderSpeedDeviation = ComponentFactory.getLunarComponent().randomBasic().get().nextInt(21) + 90;
 	}
 
 	@Override

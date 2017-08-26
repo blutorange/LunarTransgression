@@ -3,6 +3,8 @@ package com.github.blutorange.translune.db;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.EExperienceGroup;
 
@@ -27,7 +29,7 @@ public class ModifiableCharacter extends ModifiableEntity<Character> {
 		entity.setDescription(description);
 	}
 
-	public void setElements(final Set<EElement> elements) {
+	public void setElements(final Set<@NonNull EElement> elements) {
 		entity.setElements(elements);
 	}
 
@@ -39,10 +41,10 @@ public class ModifiableCharacter extends ModifiableEntity<Character> {
 		entity.setExperienceGroup(experienceGroup);
 	}
 
-	public void setImgIcon(String imgIcon) {
+	public void setImgIcon(final String imgIcon) {
 		entity.setImgIcon(imgIcon);
 	}
-	
+
 	public void setImgFront(final String gifFront) {
 		entity.setImgFront(gifFront);
 	}
@@ -67,7 +69,7 @@ public class ModifiableCharacter extends ModifiableEntity<Character> {
 		entity.setMaxMp(maxMp);
 	}
 
-	public void setName(final String name) {
+	public void setName(@NonNull final String name) {
 		entity.setName(name);
 	}
 

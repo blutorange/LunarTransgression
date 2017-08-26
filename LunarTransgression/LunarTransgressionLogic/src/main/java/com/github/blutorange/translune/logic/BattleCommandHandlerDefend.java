@@ -11,12 +11,12 @@ public class BattleCommandHandlerDefend extends ABattleCommandHandler {
 
 	@Override
 	public int getPriority() {
-		return Constants.PRIORITY_DEFEND;
+		return Constants.BATTLE_PRIORITY_DEFEND;
 	}
 
 	@Override
 	public void preProcess() {
-		//
+		// not needed
 	}
 
 	@Override
@@ -29,6 +29,6 @@ public class BattleCommandHandlerDefend extends ABattleCommandHandler {
 
 	@Override
 	public void postProcess() {
-		//
+		// not needed
 	}
 }

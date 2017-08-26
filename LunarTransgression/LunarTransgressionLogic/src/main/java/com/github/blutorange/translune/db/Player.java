@@ -30,32 +30,13 @@ import com.github.blutorange.translune.util.Constants;
 @Entity
 @Table(name = "player")
 public class Player extends AbstractStoredEntity {
-	@Deprecated
-	public Player() {
-	}
-
-	public Player(final String nickname, final String passwordHash, final String description,
-			final Set<CharacterState> characterStates, final Set<Item> items) {
-		this.nickname = nickname;
-		this.description = description;
-		this.characterStates = characterStates;
-		this.items = items;
-		this.passwordHash = passwordHash;
-		this.releasedCharacterStates = new HashSet<>();
-	}
-
 	@NotNull
 	@Size(min = Constants.MIN_CHARACTERS, max = Constants.MAX_CHARACTERS)
 	@OneToMany(targetEntity = CharacterState.class, orphanRemoval = true, cascade = {}, fetch = FetchType.LAZY, mappedBy = "player")
 	private Set<CharacterState> characterStates = new HashSet<>();
 
 	@NotNull
-	@OneToMany(targetEntity = CharacterState.class, orphanRemoval = true, cascade = {}, fetch = FetchType.LAZY, mappedBy = "player")
-	@Size(min = 0)
-	private Set<CharacterState> releasedCharacterStates;
-
-	@NotNull
-	@Size(min=1,max=2048)
+	@Size(min = 1, max = 2048)
 	@Column(name = "description", nullable = false, length = 2048, unique = false)
 	private String description = StringUtils.EMPTY;
 
@@ -65,6 +46,7 @@ public class Player extends AbstractStoredEntity {
 	@JoinTable(name = "playeritem", joinColumns = @JoinColumn(name = "playeritem_player", nullable = false, foreignKey = @ForeignKey(name = "fk_playeritem_player")), inverseJoinColumns = @JoinColumn(name = "playeritem_item", foreignKey = @ForeignKey(name = "fk_playeritem_item")))
 	private Set<Item> items = new HashSet<>();
 
+	@NonNull
 	@Id
 	@Column(name = "nickname", nullable = false, length = 63, unique = true, updatable = false)
 	private String nickname = StringUtils.EMPTY;
@@ -74,16 +56,12 @@ public class Player extends AbstractStoredEntity {
 	@Column(name = "passwordhash", nullable = false, length = 255, unique = false)
 	private String passwordHash = StringUtils.EMPTY;
 
-	void addCharacterState(final CharacterState characterState) {
-		characterStates.add(characterState);
-		characterState.setPlayer(this);
-	}
+	@NotNull
+	@OneToMany(targetEntity = CharacterState.class, orphanRemoval = true, cascade = {}, fetch = FetchType.LAZY, mappedBy = "player")
+	@Size(min = 0)
+	private Set<CharacterState> releasedCharacterStates;
 
-	/**
-	 * @return the characters
-	 */
-	Set<CharacterState> getCharacterStates() {
-		return characterStates;
+	Player() {
 	}
 
 	/**
@@ -93,11 +71,9 @@ public class Player extends AbstractStoredEntity {
 		return description;
 	}
 
-	/**
-	 * @return the items
-	 */
-	Set<Item> getItems() {
-		return items;
+	@Override
+	public EEntityMeta getEntityMeta() {
+		return EEntityMeta.PLAYER;
 	}
 
 	/**
@@ -107,11 +83,14 @@ public class Player extends AbstractStoredEntity {
 		return nickname;
 	}
 
-	/**
-	 * @return the passwordHash
-	 */
-	String getPasswordHash() {
-		return passwordHash;
+	@NonNull
+	@Override
+	public Serializable getPrimaryKey() {
+		return nickname;
+	}
+
+	public int getReleasedCharacterStatesCount() {
+		return releasedCharacterStates.size();
 	}
 
 	/**
@@ -126,6 +105,79 @@ public class Player extends AbstractStoredEntity {
 	 */
 	public Set<Item> getUnmodifiableItems() {
 		return items;
+	}
+
+	/**
+	 * @return the releasedCharacterStates
+	 */
+	public Set<CharacterState> getUnmodifiableReleasedCharacterStates() {
+		return releasedCharacterStates;
+	}
+
+	public void removeCharacterState(final CharacterState characterState) {
+		characterStates.remove(characterState);
+		characterState.setPlayer(null);
+	}
+
+	public void removeItem(final Item item) {
+		items.remove(item);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Player(%s)", nickname);
+	}
+
+	public boolean verifyPassword(@NonNull final String password)
+			throws CannotPerformOperationException, InvalidHashException {
+		final String hash = passwordHash;
+		if (hash.isEmpty())
+			throw new InvalidHashException("password hash must not be empty");
+		return PasswordStorage.verifyPassword(password, hash);
+	}
+
+	void addCharacterState(final CharacterState characterState) {
+		characterStates.add(characterState);
+		characterState.setPlayer(this);
+	}
+
+	void addItem(final Item item) {
+		items.add(item);
+	}
+
+	@Override
+	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
+		associated(characterStates, consumer);
+		associated(items, consumer);
+		associated(releasedCharacterStates, consumer);
+	}
+
+	/**
+	 * @return the characters
+	 */
+	Set<CharacterState> getCharacterStates() {
+		return characterStates;
+	}
+
+	/**
+	 * @return the items
+	 */
+	Set<Item> getItems() {
+		return items;
+	}
+
+	/**
+	 * @return the passwordHash
+	 */
+	String getPasswordHash() {
+		return passwordHash;
+	}
+
+	/**
+	 * @return the releasedCharacterStates
+	 */
+	Set<CharacterState> getReleasedCharacterStates() {
+		return releasedCharacterStates;
 	}
 
 	/**
@@ -156,40 +208,12 @@ public class Player extends AbstractStoredEntity {
 	 * @param nickname
 	 *            the nickname to set
 	 */
-	void setNickname(final String nickname) {
-		if (this.nickname != null)
-			throw new IllegalStateException("player nickname cannot be changed: " + this.nickname);
+	void setNickname(@NonNull final String nickname) {
 		this.nickname = nickname;
 	}
 
 	void setPassword(@NonNull final String password) throws CannotPerformOperationException {
 		passwordHash = PasswordStorage.createHash(password);
-	}
-
-	/**
-	 * @return the releasedCharacterStates
-	 */
-	Set<CharacterState> getReleasedCharacterStates() {
-		return releasedCharacterStates;
-	}
-
-	/**
-	 * @param releasedCharacterStates
-	 *            the releasedCharacterStates to set
-	 */
-	void setReleasedCharacterStates(final Set<CharacterState> releasedCharacterStates) {
-		this.releasedCharacterStates = releasedCharacterStates;
-	}
-
-	/**
-	 * @return the releasedCharacterStates
-	 */
-	public Set<CharacterState> getUnmodifiableReleasedCharacterStates() {
-		return releasedCharacterStates;
-	}
-
-	public int getReleasedCharacterStatesCount() {
-		return releasedCharacterStates.size();
 	}
 
 	/**
@@ -200,46 +224,11 @@ public class Player extends AbstractStoredEntity {
 		this.passwordHash = passwordHash;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("Player(%s)", nickname);
-	}
-
-	public boolean verifyPassword(@NonNull final String password)
-			throws CannotPerformOperationException, InvalidHashException {
-		final String hash = passwordHash;
-		if (hash.isEmpty())
-			throw new InvalidHashException("password hash must not be empty");
-		return PasswordStorage.verifyPassword(password, hash);
-	}
-
-	@Override
-	public Serializable getPrimaryKey() {
-		return nickname;
-	}
-
-	@Override
-	public EEntityMeta getEntityMeta() {
-		return EEntityMeta.PLAYER;
-	}
-
-	void addItem(final Item item) {
-		items.add(item);
-	}
-
-	@Override
-	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
-		associated(characterStates, consumer);
-		associated(items, consumer);
-		associated(releasedCharacterStates, consumer);
-	}
-
-	public void removeItem(final Item item) {
-		items.remove(item);
-	}
-
-	public void removeCharacterState(final CharacterState characterState) {
-		characterStates.remove(characterState);
-		characterState.setPlayer(null);
+	/**
+	 * @param releasedCharacterStates
+	 *            the releasedCharacterStates to set
+	 */
+	void setReleasedCharacterStates(final Set<CharacterState> releasedCharacterStates) {
+		this.releasedCharacterStates = releasedCharacterStates != null ? releasedCharacterStates : new HashSet<>();
 	}
 }

@@ -7,16 +7,17 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.Builder;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.EExperienceGroup;
 
 public class CharacterBuilder implements Builder<Character> {
-	private int accuracy;
+	private int accuracy = 100;
 	private String cry;
 	private String description = StringUtils.EMPTY;
-	private final Set<EElement> elements = new HashSet<>();
-	private int evasion;
+	private final Set<@NonNull EElement> elements = new HashSet<>();
+	private int evasion = 100;
 	private EExperienceGroup experienceGroup;
 	private String imgBack;
 	private String imgFront;
@@ -29,14 +30,14 @@ public class CharacterBuilder implements Builder<Character> {
 	private int physicalAttack = -1;
 	private int physicalDefense =  -1;
 	private final Map<Skill, Integer> skills = new HashMap<>();
-	private int speed;
+	private int speed = -1;
 
-	public CharacterBuilder addElement(final EElement element) {
+	public CharacterBuilder addElement(@NonNull final EElement element) {
 		this.elements.add(element);
 		return this;
 	}
 
-	public CharacterBuilder addElements(final Set<EElement> elements) {
+	public CharacterBuilder addElements(final Set<@NonNull EElement> elements) {
 		this.elements.addAll(elements);
 		return this;
 	}
@@ -48,37 +49,38 @@ public class CharacterBuilder implements Builder<Character> {
 
 	@Override
 	public Character build() {
-		if (this.accuracy < 0)
+		 final String name = this.name;
+		if (accuracy < 0)
 			throw new IllegalStateException("accuracy not set or negative");
-		if (this.cry == null)
+		if (cry == null)
 			throw new IllegalStateException("cry not set");
-		if (this.description == null)
+		if (description == null)
 			description = StringUtils.EMPTY;
-		if (this.evasion < 0)
+		if (evasion < 0)
 			throw new IllegalStateException("evasion not set or negative");
-		if (this.experienceGroup == null)
+		if (experienceGroup == null)
 			throw new IllegalStateException("experience group not set");
-		if (this.imgIcon == null)
+		if (imgIcon == null)
 			throw new IllegalStateException("img icon not set");
-		if (this.imgBack == null)
+		if (imgBack == null)
 			throw new IllegalStateException("img back not set");
-		if (this.imgFront == null)
+		if (imgFront == null)
 			throw new IllegalStateException("img front not set");
-		if (this.magicalAttack < 0)
+		if (magicalAttack < 0)
 			throw new IllegalStateException("magical attack not set or negative");
-		if (this.magicalDefense < 0)
+		if (magicalDefense < 0)
 			throw new IllegalStateException("magical defense not set or negative");
-		if (this.maxHp < 0)
+		if (maxHp < 0)
 			throw new IllegalStateException("max hp not set or negative");
-		if (this.maxMp < 0)
+		if (maxMp < 0)
 			throw new IllegalStateException("max mp not set or negative");
-		if (this.name == null)
+		if (name == null)
 			throw new IllegalStateException("name is not set or negative");
-		if (this.physicalAttack < 0)
+		if (physicalAttack < 0)
 			throw new IllegalStateException("physical attack not set or negative");
-		if (this.physicalDefense < 0)
+		if (physicalDefense < 0)
 			throw new IllegalStateException("physical defense not set or negative");
-		if (this.speed < 0)
+		if (speed < 0)
 			throw new IllegalStateException("speed not set or negative");
 		final Character c = new Character();
 		c.setAccuracy(accuracy);
@@ -88,6 +90,7 @@ public class CharacterBuilder implements Builder<Character> {
 		c.setEvasion(evasion);
 		c.setExperienceGroup(experienceGroup);
 		c.setImgBack(imgBack);
+		c.setImgIcon(imgIcon);
 		c.setImgFront(imgFront);
 		c.setMagicalAttack(magicalAttack);
 		c.setMagicalDefense(magicalDefense);
@@ -134,7 +137,7 @@ public class CharacterBuilder implements Builder<Character> {
 		this.imgBack = imgBack;
 		return this;
 	}
-	
+
 	public CharacterBuilder setImgIcon(final String imgIcon) {
 		this.imgIcon = imgIcon;
 		return this;

@@ -8,26 +8,20 @@ import org.primefaces.model.chart.MeterGaugeChartModel;
 public class Gamestats {
 	private final MeterGaugeChartModel playerMeter;
 	private final MeterGaugeChartModel characterMeter;
-	private final MeterGaugeChartModel itemMeter;
 
 	public Gamestats() {
-		this(0L, 0L, 0L);
+		this(0L, 0L);
 	}
 
-	public Gamestats(final long playerCount, final long characterCount, final long itemCount) {
+	public Gamestats(final long playerCount, final long characterCount) {
 		long base = playerCount;
 		base = 10 * (int)(1+Math.log10(base));
 		playerMeter = createGauge("Players", "people", base, playerCount);
 		characterMeter = createGauge("Characters", "chars", base*20, characterCount);
-		itemMeter = createGauge("Items", "items", base*30, itemCount);
 	}
 
 	public MeterGaugeChartModel getPlayerMeter() {
 		return playerMeter;
-	}
-
-	public MeterGaugeChartModel getItemMeter() {
-		return itemMeter;
 	}
 
 	public MeterGaugeChartModel getCharacterMeter() {

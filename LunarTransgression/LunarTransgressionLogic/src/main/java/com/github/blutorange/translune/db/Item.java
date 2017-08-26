@@ -31,6 +31,7 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 	@Column(name = "effect", unique = false, nullable = false, updatable = false)
 	private EItemEffect effect = EItemEffect.HEAL;
 
+	@NonNull
 	@NotNull
 	@Id
 	@Size(min=1,max=32)
@@ -45,21 +46,15 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 	@Min(Constants.MIN_PRIORITY)
 	@Max(Constants.MAX_PRIORITY)
 	@Column(name = "priority", nullable = false, unique = false, updatable = false)
-	private int priority = Constants.PRIORITY_ITEM;
+	private int priority = Constants.BATTLE_PRIORITY_ITEM;
 
+	@NonNull
 	@NotNull
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "target", nullable = false, unique = false, updatable = false)
 	private EActionTarget target = EActionTarget.OPPONENTS_FIELD;
 
-	@Deprecated
-	public Item() {
-	}
-
-	public Item(final String name, final EItemEffect effect, final int power) {
-		this.name = name;
-		this.effect = effect;
-		this.power = power;
+	Item() {
 	}
 
 	@Override
@@ -93,6 +88,7 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 		return power;
 	}
 
+	@NonNull
 	@Override
 	public Serializable getPrimaryKey() {
 		return name;
@@ -122,7 +118,7 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 	 * @param name
 	 *            the name to set
 	 */
-	void setName(final String name) {
+	void setName(@NonNull final String name) {
 		this.name = name;
 	}
 
@@ -143,7 +139,7 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 	}
 
 	void setTarget(final EActionTarget target) {
-		this.target = target;
+		this.target = target != null ? target : EActionTarget.OPPONENTS_FIELD;
 	}
 
 	@Override

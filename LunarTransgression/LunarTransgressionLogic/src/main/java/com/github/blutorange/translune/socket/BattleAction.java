@@ -1,9 +1,17 @@
 package com.github.blutorange.translune.socket;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.db.CharacterState;
+import com.github.blutorange.translune.logic.IComputedStatus;
 import com.jsoniter.annotation.JsonProperty;
 
 /**
@@ -48,14 +56,10 @@ public class BattleAction {
 		user = StringUtils.EMPTY;
 	}
 
-	public BattleAction(final String user, final String[] targets, final String... sentences) {
+	private BattleAction(final String user, final String[] targets, final String... sentences) {
 		this.sentences = sentences;
 		this.user = user;
 		this.targets = targets;
-	}
-
-	public BattleAction(final String character, final String target, final String... sentences) {
-		this(character, new String[]{target}, sentences);
 	}
 
 	public int causesEnd() {
@@ -122,9 +126,67 @@ public class BattleAction {
 	}
 
 	/**
-	 * @param causesEnd the causesEnd to set
+	 * @param causesEnd
+	 *            the causesEnd to set
 	 */
 	public void setCausesEnd(final int causesEnd) {
 		this.causesEnd = causesEnd;
+	}
+
+	public static class Builder implements org.apache.commons.lang3.builder.Builder<BattleAction> {
+		List<@NonNull String> sentences = new ArrayList<>();
+		String @Nullable[] targets;
+		@Nullable
+		String character;
+
+		public Builder() {
+		}
+
+		public Builder character(final CharacterState character) {
+			this.character = character.getId();
+			return this;
+		}
+
+		public Builder character(final IComputedStatus character) {
+			this.character = character.getCharacterState().getId();
+			return this;
+		}
+
+		public Builder targets(final CharacterState... targets) {
+			final String[] newTargets = new String[targets.length];
+			for (int i = targets.length; i-->0;)
+				newTargets[i] = targets[i].getId();
+			this.targets = newTargets;
+			return this;
+		}
+
+		public Builder targets(final IComputedStatus... targets) {
+			final String[] newTargets = new String[targets.length];
+			for (int i = targets.length; i-->0;)
+				newTargets[i] = targets[i].getCharacterState().getId();
+			this.targets = newTargets;
+			return this;
+		}
+
+		public Builder addSentences(final @NonNull String... sentences) {
+			Collections.addAll(this.sentences, sentences);
+			return this;
+		}
+
+		public Builder addSentences(final Collection<@NonNull String> sentences) {
+			this.sentences.addAll(sentences);
+			return this;
+		}
+
+		@Override
+		public BattleAction build() {
+			String[] targets = this.targets;
+			final String character = this.character;
+			if (targets == null)
+				targets = new String[0];
+			if (character == null)
+				throw new IllegalStateException("character is not set");
+			return new BattleAction(character, targets, sentences.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+		}
 	}
 }

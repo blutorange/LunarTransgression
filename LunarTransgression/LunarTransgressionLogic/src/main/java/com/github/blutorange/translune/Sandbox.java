@@ -13,19 +13,23 @@ import com.github.blutorange.translune.logic.EExperienceGroup;
 public class Sandbox {
 	public static void main(final String[] args) throws Exception {
 		// testing...
-		final LunarServletContextListener scl = new LunarServletContextListener();
-		scl.initialize();
+//		final LunarServletContextListener scl = new LunarServletContextListener();
+//		scl.initialize();
 		try {
-			ldm();
+			mime();
 		}
 		finally {
-			scl.destroy();
+//			scl.destroy();
 		}
+	}
+
+	static void mime() {
+		System.out.println(ComponentFactory.getLunarComponent().mimetypesFileTypeMap().getContentType("a.png"));
 	}
 
 	static void importing() throws IOException {
 		try (ZipFile zipFile = new ZipFile("/tmp/test.zip")) {
-			ComponentFactory.getDatabaseComponent().iImportProcessing().importDataSet(zipFile);
+			ComponentFactory.getLunarComponent().iImportProcessing().importDataSet(zipFile);
 		}
 	}
 
@@ -35,12 +39,12 @@ public class Sandbox {
 	}
 
 	static void schema() {
-		final ILunarDatabaseManager ldm = ComponentFactory.getDatabaseComponent().iLunarDatabaseManager();
+		final ILunarDatabaseManager ldm = ComponentFactory.getLunarComponent().iLunarDatabaseManager();
 		ldm.createSchema();
 	}
 
 	static void ldm() {
-		final ILunarDatabaseManager ldm = ComponentFactory.getDatabaseComponent().iLunarDatabaseManager();
+		final ILunarDatabaseManager ldm = ComponentFactory.getLunarComponent().iLunarDatabaseManager();
 		System.out.println(ldm.find(Player.class, "blutorange"));
 		if (true) return;
 

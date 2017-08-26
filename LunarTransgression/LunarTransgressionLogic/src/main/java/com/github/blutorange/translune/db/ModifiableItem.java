@@ -1,5 +1,7 @@
 package com.github.blutorange.translune.db;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.github.blutorange.translune.logic.EActionTarget;
 import com.github.blutorange.translune.logic.EItemEffect;
 
@@ -8,7 +10,7 @@ public class ModifiableItem extends ModifiableEntity<Item> {
 		entity.setEffect(effect);
 	}
 
-	public void setName(final String name) {
+	public void setName(@NonNull final String name) {
 		entity.setName(name);
 	}
 

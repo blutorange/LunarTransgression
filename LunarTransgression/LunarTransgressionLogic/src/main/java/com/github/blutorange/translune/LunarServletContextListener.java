@@ -1,38 +1,46 @@
 package com.github.blutorange.translune;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
-import org.quartz.ScheduleBuilder;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
-import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
+import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.job.SaveDb;
-import com.github.blutorange.translune.util.Constants;
+import com.github.blutorange.translune.util.CustomProperties;
 
 @WebListener(value="Listener for the lunar application")
 public class LunarServletContextListener implements ServletContextListener {
-	private final static Logger LOG = LoggerFactory.getLogger(LunarServletContextListener.class);
+	@Inject @Classed(LunarServletContextListener.class)
+	private Logger logger;
+
+	@Inject @Named("default")
+	Scheduler scheduler;
+
+	@Inject
+	CustomProperties customProperties;
 
 	public void initialize() {
-		final Scheduler defaultScheduler = ComponentFactory.getLogicComponent().defaultScheduler();
+		ComponentFactory.getLunarComponent().inject(this);
 		try {
-			defaultScheduler.start();
-			addJobSaveDb(defaultScheduler);
+			scheduler.start();
+			addJobSaveDb(scheduler);
 		}
 		catch (final SchedulerException e) {
-			LOG.error("failed to start quartz", e);
+			logger.error("failed to start quartz", e);
 			throw new RuntimeException("failed to start scheduler", e);
 		}
 	}
@@ -43,30 +51,38 @@ public class LunarServletContextListener implements ServletContextListener {
 	}
 
 	private void addJobSaveDb(final Scheduler scheduler) throws SchedulerException {
-		LOG.debug("adding job saveDb");
+		logger.debug("adding job saveDb");
 		final JobDetail jobDetail = JobBuilder.newJob(SaveDb.class).withIdentity("jobSaveDb", "db").build();
-		final ScheduleBuilder<SimpleTrigger> scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-				.withIntervalInMinutes(Constants.CONFIG_DATABASE_SAVE_MINUTES).repeatForever();
+		final SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
+				.withIntervalInMinutes(customProperties.getDatabaseSaveMinutes()).repeatForever();
 		final Trigger jobTrigger = TriggerBuilder.newTrigger().withIdentity("triggerSaveDb", "db").startNow()
 				.withSchedule(scheduleBuilder).build();
 		scheduler.scheduleJob(jobDetail, jobTrigger);
 	}
 
 	public void destroy() {
-		final Scheduler defaultScheduler = ComponentFactory.getLogicComponent().defaultScheduler();
-		final ILunarDatabaseManager ldm = ComponentFactory.getDatabaseComponent().iLunarDatabaseManager();
+		final Scheduler defaultScheduler = ComponentFactory.getLunarComponent().defaultScheduler();
+		final ILunarDatabaseManager ldm = ComponentFactory.getLunarComponent().iLunarDatabaseManager();
 		try {
 			defaultScheduler.pauseAll();
 		}
 		catch (final SchedulerException e) {
-			LOG.error("failed to pause scheduler", e);
+			logger.error("failed to pause scheduler", e);
 		}
 		ldm.shutdown();
+		try {
+			final EntityManagerFactory emf = ComponentFactory.getLunarComponent().entityManagerFactory().get();
+			if (emf.isOpen())
+				emf.close();
+		}
+		catch (final Exception e) {
+			logger.error("failed to close entity manager factory", e);
+		}
 		try {
 			defaultScheduler.shutdown(true);
 		}
 		catch (final SchedulerException e) {
-			LOG.error("failed to shutdown quartz", e);
+			logger.error("failed to shutdown quartz", e);
 			throw new RuntimeException("failed to shutdown scheduler", e);
 		}
 	}

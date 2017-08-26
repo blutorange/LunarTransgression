@@ -1,7 +1,5 @@
 package com.github.blutorange.translune.logic;
 
-import java.util.Random;
-
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.socket.BattleCommand;
 import com.google.common.collect.ObjectArrays;
@@ -107,7 +105,7 @@ public enum EActionTarget {
 		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
 			final IComputedBattleStatus[] computedBattleStatus = context.getComputedBattleStatusOpponent(player);
-			return new IComputedBattleStatus[] { computedBattleStatus[random.nextInt(computedBattleStatus.length)] };
+			return new IComputedBattleStatus[] { computedBattleStatus[random.get().nextInt(computedBattleStatus.length)] };
 		}
 	},
 
@@ -202,7 +200,7 @@ public enum EActionTarget {
 		}
 	},;
 
-	private static Random random = ComponentFactory.getLogicComponent().randomBasic();
+	protected final IRandomSupplier random = ComponentFactory.getLunarComponent().randomBasic();
 
 	public abstract IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 			int player, int character);

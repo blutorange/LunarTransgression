@@ -18,6 +18,7 @@ import com.github.blutorange.translune.message.MessageInviteAcceptResponse;
 import com.github.blutorange.translune.message.MessageInviteAccepted;
 import com.github.blutorange.translune.message.MessageInviteReject;
 import com.github.blutorange.translune.message.MessageInviteRejectResponse;
+import com.github.blutorange.translune.message.MessageInviteRejected;
 import com.github.blutorange.translune.message.MessageInviteResponse;
 import com.github.blutorange.translune.message.MessageInviteRetract;
 import com.github.blutorange.translune.message.MessageInviteRetractResponse;
@@ -100,8 +101,9 @@ public class JsoniterConfig implements StaticCodegenConfig {
 			TypeLiteral.create(MessageInviteRetract.class),
 			TypeLiteral.create(MessageInviteRetractResponse.class),
 
-			TypeLiteral.create(MessageInviteRetracted.class),
 			TypeLiteral.create(MessageInvited.class),
+			TypeLiteral.create(MessageInviteRetracted.class),
+			TypeLiteral.create(MessageInviteRejected.class),
 
 			TypeLiteral.create(MessagePrepareBattle.class),
 			TypeLiteral.create(MessagePrepareBattleResponse.class),

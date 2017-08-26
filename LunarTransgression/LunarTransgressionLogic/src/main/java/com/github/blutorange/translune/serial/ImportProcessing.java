@@ -47,6 +47,9 @@ public final class ImportProcessing implements IImportProcessing {
 	Logger logger;
 
 	@Inject
+	MimetypesFileTypeMap mimetypesFileTypeMap;
+
+	@Inject
 	public ImportProcessing() {
 
 	}
@@ -59,6 +62,7 @@ public final class ImportProcessing implements IImportProcessing {
 		final Set<CharacterToSkillCsvModel> characterToSkillModels = new HashSet<>();
 		final Map<String, ZipEntry> filesCry = new HashMap<>();
 		final Map<String, ZipEntry> filesImg = new HashMap<>();
+		final Map<String, ZipEntry> filesIcon = new HashMap<>();
 		// Read data from the ZIP file.
 		while (entries.hasMoreElements()) {
 			final ZipEntry entry = entries.nextElement();
@@ -77,6 +81,10 @@ public final class ImportProcessing implements IImportProcessing {
 			else if (Constants.IMPORT_DIR_CHARACTER_IMG.equals(parent)) {
 				logger.debug("found image file " + entry.getName());
 				filesImg.put(FilenameUtils.getName(name), entry);
+			}
+			else if (Constants.IMPORT_DIR_CHARACTER_ICON.equals(parent)) {
+				logger.debug("found image file " + entry.getName());
+				filesIcon.put(FilenameUtils.getName(name), entry);
 			}
 			else {
 				switch (StringUtil.toRootLowerCase(FilenameUtils.getName(name))) {
@@ -106,11 +114,13 @@ public final class ImportProcessing implements IImportProcessing {
 					character);
 			filterCharFile(filesImg, requiredFiles, character.getImgFront(), Constants.FILE_PREFIX_CHARACTER_IMG,
 					character);
+			filterCharFile(filesIcon, requiredFiles, character.getImgIcon(), Constants.FILE_PREFIX_CHARACTER_ICON,
+					character);
 			filterCharFile(filesCry, requiredFiles, character.getCry(), Constants.FILE_PREFIX_CHARACTER_CRY, character);
 		}
 		logger.debug("writing imported files to database");
 		writeImportToDb(requiredFiles, characters, skills, zipFile);
-		return characters.size() + skills.size();
+		return characters.size() + skills.size() + requiredFiles.size();
 	}
 
 	@Override
@@ -178,7 +188,7 @@ public final class ImportProcessing implements IImportProcessing {
 	private Resource resourceFromZipFile(final ZipFile zipFile, final ZipEntry entry, final String prefix)
 			throws IOException {
 		final Resource resource = new Resource();
-		final String mime = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(entry.getName());
+		final String mime = mimetypesFileTypeMap.getContentType(entry.getName());
 		resource.setMime(mime);
 		resource.setName(prefix + FilenameUtils.getBaseName(entry.getName()));
 		resource.setData(IOUtils.toByteArray(zipFile.getInputStream(entry)));
@@ -192,13 +202,27 @@ public final class ImportProcessing implements IImportProcessing {
 			final Set<Skill> skills, final ZipFile zipFile) throws IOException {
 		final Throwable result = databaseManager.withEm(true, em -> {
 			try {
-				characters.forEach(character -> em.persist(character));
-				skills.forEach(skill -> em.persist(skill));
+				characters.forEach(character -> {
+					if (em.find(Character.class, character.getPrimaryKey()) != null)
+						em.merge(character);
+					else
+						em.persist(character);
+				});
+				skills.forEach(skill -> {
+					if (em.find(Skill.class, skill.getPrimaryKey()) != null)
+						em.merge(skill);
+					else
+						em.persist(skill);
+				});
 				em.flush();
 				em.clear();
 				for (final Pair<ZipEntry, String> pair : requiredFiles) {
-					final Resource resource = resourceFromZipFile(zipFile, pair.getLeft(), pair.getRight());
-					em.persist(resource);
+					Resource resource = resourceFromZipFile(zipFile, pair.getLeft(), pair.getRight());
+					if (em.find(Resource.class, resource.getPrimaryKey()) != null) {
+						resource = em.merge(resource);
+					}
+					else
+						em.persist(resource);
 					// Make sure we do not load all files into RAM.
 					em.flush();
 					em.detach(resource);

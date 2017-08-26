@@ -16,7 +16,7 @@ public class BattleCommandHandlerSpecial extends ABattleCommandHandler {
 
 	@Override
 	public void preProcess() {
-		throw new RuntimeException("TODO - not yet implemented");
+		// not needed
 	}
 
 	@Override
@@ -27,5 +27,6 @@ public class BattleCommandHandlerSpecial extends ABattleCommandHandler {
 
 	@Override
 	public void postProcess() {
+		// not needed
 	}
 }

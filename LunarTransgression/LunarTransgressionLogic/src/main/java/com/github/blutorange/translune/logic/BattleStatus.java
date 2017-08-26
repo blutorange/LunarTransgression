@@ -119,7 +119,7 @@ public class BattleStatus {
 	 * @return the statusConditions
 	 */
 	@Nullable
-	public EStatusCondition getStatusConditions() {
+	public EStatusCondition getStatusCondition() {
 		return statusConditions;
 	}
 
@@ -199,7 +199,7 @@ public class BattleStatus {
 	 * @param statusConditions
 	 *            the statusConditions to set
 	 */
-	public void setStatusConditions(final EStatusCondition statusConditions) {
+	public void setStatusCondition(final EStatusCondition statusConditions) {
 		this.statusConditions = statusConditions;
 	}
 

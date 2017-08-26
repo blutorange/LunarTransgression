@@ -50,11 +50,12 @@ public class Character extends AbstractStoredEntity {
 	@Column(name = "description", nullable = false, unique = false, updatable = false, length = 2048)
 	private String description;
 
+	@NonNull
 	@NotNull
 	@Column(name = "elements", nullable = false, unique = false, updatable = false)
 	@ElementCollection(targetClass = EElement.class)
 	@CollectionTable(name = "charelements", joinColumns = @JoinColumn(name = "\"character\""), foreignKey = @ForeignKey(name = "fk_charelements_char"))
-	private Set<EElement> elements = EnumSet.of(EElement.NORMAL);
+	private Set<@NonNull EElement> elements = EnumSet.noneOf(EElement.class);
 
 	@Min(0)
 	@Max(Constants.MAX_EVASION)
@@ -98,6 +99,7 @@ public class Character extends AbstractStoredEntity {
 	@Column(name = "maxmp", nullable = false, unique = false, updatable = false)
 	private int maxMp;
 
+	@NonNull
 	@Id
 	@NotNull
 	@Size(min = 1, max = 63)
@@ -127,6 +129,9 @@ public class Character extends AbstractStoredEntity {
 	@Max(Constants.MAX_SPEED)
 	@Column(name = "speed", nullable = false, unique = false, updatable = false)
 	private int speed;
+
+	Character() {
+	}
 
 	@Override
 	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
@@ -247,6 +252,7 @@ public class Character extends AbstractStoredEntity {
 		return physicalDefense;
 	}
 
+	@NonNull
 	@Override
 	public Serializable getPrimaryKey() {
 		return name;
@@ -300,7 +306,7 @@ public class Character extends AbstractStoredEntity {
 	 * @param elements
 	 *            the elements to set
 	 */
-	void setElements(final Set<EElement> elements) {
+	void setElements(final Set<@NonNull EElement> elements) {
 		this.elements = elements != null ? elements : EnumSet.noneOf(EElement.class);
 	}
 
@@ -336,7 +342,7 @@ public class Character extends AbstractStoredEntity {
 		this.imgFront = imgFront;
 	}
 
-	void setImgIcon(String imgIcon) {
+	void setImgIcon(final String imgIcon) {
 		this.imgIcon = imgIcon;
 	}
 
@@ -376,7 +382,7 @@ public class Character extends AbstractStoredEntity {
 	 * @param name
 	 *            the name to set
 	 */
-	void setName(final String name) {
+	void setName(@NonNull final String name) {
 		this.name = name;
 	}
 
@@ -408,6 +414,7 @@ public class Character extends AbstractStoredEntity {
 		this.speed = speed;
 	}
 
+	@SuppressWarnings("boxing")
 	@Override
 	public String toString() {
 		return String.format("Character(%s,%s,hp=%d,mp=%s,patt=%d,pdef=%d,matt=%d,mdef=%s,speed=%s,acc=%d,ev=%d)", name,

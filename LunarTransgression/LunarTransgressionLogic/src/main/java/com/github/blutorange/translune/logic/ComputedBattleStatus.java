@@ -112,25 +112,25 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 	}
 
 	private int computedBattleAccuracy() {
-		final EStatusCondition condition = battleStatus.getStatusConditions();
+		final EStatusCondition condition = battleStatus.getStatusCondition();
 		return computedAccEv(super.getComputedAccuracy(), battleStatus.getStageAccuracy(), Constants.MAX_ACCURACY,
 				condition != null ? condition::adjustAccuracy : null);
 	}
 
 	private int computedBattleEvasion() {
-		final EStatusCondition condition = battleStatus.getStatusConditions();
+		final EStatusCondition condition = battleStatus.getStatusCondition();
 		return computedAccEv(super.getComputedEvasion(), battleStatus.getStageEvasion(), Constants.MAX_EVASION,
 				condition != null ? condition::adjustEvasion : null);
 	}
 
 	private int computedBattleMagicalAttack() {
-		final EStatusCondition condition = battleStatus.getStatusConditions();
+		final EStatusCondition condition = battleStatus.getStatusCondition();
 		return computed(super.getComputedMagicalAttack(), battleStatus.getStageMagicalAttack(),
 				Constants.MAX_MAGICAL_ATTACK, condition != null ? condition::adjustMagicalAttack : null);
 	}
 
 	private int computedBattleMagicalDefense() {
-		final EStatusCondition condition = battleStatus.getStatusConditions();
+		final EStatusCondition condition = battleStatus.getStatusCondition();
 		return computed(super.getComputedMagicalDefense(), battleStatus.getStageMagicalDefense(),
 				Constants.MAX_MAGICAL_DEFENSE, condition != null ? condition::adjustMagicalDefense : null);
 	}
@@ -144,19 +144,19 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 	}
 
 	private int computedBattlePhysicalAttack() {
-		final EStatusCondition condition = battleStatus.getStatusConditions();
+		final EStatusCondition condition = battleStatus.getStatusCondition();
 		return computed(super.getComputedPhysicalAttack(), battleStatus.getStagePhysicalAttack(),
 				Constants.MAX_PHYSICAL_ATTACK, condition != null ? condition::adjustPhysicalAttack : null);
 	}
 
 	private int computedBattlePhysicalDefense() {
-		final EStatusCondition condition = battleStatus.getStatusConditions();
+		final EStatusCondition condition = battleStatus.getStatusCondition();
 		return computed(super.getComputedPhysicalDefense(), battleStatus.getStagePhysicalDefense(),
 				Constants.MAX_PHYSICAL_DEFENSE, condition != null ? condition::adjustPhysicalDefense : null);
 	}
 
 	private int computedBattleSpeed() {
-		final EStatusCondition condition = battleStatus.getStatusConditions();
+		final EStatusCondition condition = battleStatus.getStatusCondition();
 		return computed(super.getComputedSpeed(), battleStatus.getStageSpeed(), Constants.MAX_SPEED,
 				condition != null ? condition::adjustSpeed : null);
 	}

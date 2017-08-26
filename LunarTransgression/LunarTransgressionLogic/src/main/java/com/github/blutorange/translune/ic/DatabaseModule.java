@@ -1,12 +1,17 @@
 package com.github.blutorange.translune.ic;
 
+import java.io.IOException;
+
 import javax.inject.Singleton;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.slf4j.Logger;
 
+import com.github.blutorange.common.Suppliers;
+import com.github.blutorange.common.ThrowingSupplier;
 import com.github.blutorange.translune.db.EntityStore;
+import com.github.blutorange.translune.db.IEntityManagerFactory;
 import com.github.blutorange.translune.db.IEntityStore;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.LunarDatabaseManager;
@@ -19,26 +24,39 @@ import dagger.Provides;
 public class DatabaseModule {
 	@Provides
 	@Singleton
-	static EntityManagerFactory provideEntityManagerFactory(@Classed(DatabaseModule.class) final Logger logger) {
-		logger.info("creating entity manager factory");
-		final EntityManagerFactory emf = Persistence.createEntityManagerFactory("hibernate");
-		logger.info("entity manager factory is " + emf.getClass().getCanonicalName());
-		return emf;
+	static IEntityManagerFactory provideEntityManagerFactory(@Classed(DatabaseModule.class) final Logger logger) {
+		final ThrowingSupplier<EntityManagerFactory, IOException> supplier= Suppliers.memoize(() -> {
+			logger.info("creating entity manager factory");
+			final EntityManagerFactory emf;
+			try {
+				emf = Persistence.createEntityManagerFactory("hibernate");
+			}
+			catch (final Exception e) {
+				throw new IOException("failed to create entity manager factory", e);
+			}
+			logger.info("entity manager factory is " + emf.getClass().getCanonicalName());
+			return emf;
+		});
+		return () -> supplier.get();
 	}
 
-	@Provides @Singleton static IEntityStore provideEntityStore(final EntityManagerFactory emf) {
-		return new EntityStore(emf);
+	@Provides
+	@Singleton
+	static IEntityStore provideEntityStore() {
+		return new EntityStore();
 	}
 
-	@Provides @Singleton
+	@Provides
+	@Singleton
 	static IImportProcessing provideImporProcessing() {
-		return ComponentFactory.getDatabaseComponent().importProcessing();
+		return ComponentFactory.getLunarComponent()._importProcessing();
 	}
 
-	@Provides @Singleton
+	@Provides
+	@Singleton
 	static ILunarDatabaseManager provideLunarDatabaseManager() {
-		final LunarDatabaseManager ldm  = new LunarDatabaseManager();
-		ComponentFactory.getDatabaseComponent().inject(ldm);
+		final LunarDatabaseManager ldm = new LunarDatabaseManager();
+		ComponentFactory.getLunarComponent().inject(ldm);
 		return ldm;
 	}
 }

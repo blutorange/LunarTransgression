@@ -1,5 +1,9 @@
 package com.github.blutorange.translune.logic;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -35,16 +39,22 @@ public class InvitationStore implements IInvitationStore {
 	}
 
 	@Override
-	public void removeAllFrom(@NonNull final String from) {
+	public Set<String> removeAllFrom(@NonNull final String from) {
 		synchronized (table) {
-			table.row(from).clear();
+			final Map<String,MessageInvite> row = table.row(from);
+			final Set<String> setFrom = new HashSet<>(row.keySet());
+			row.clear();
+			return setFrom;
 		}
 	}
 
 	@Override
-	public void removeAllTo(@NonNull final String to) {
+	public Set<String> removeAllTo(@NonNull final String to) {
 		synchronized (table) {
-			table.column(to).clear();
+			final Map<String,MessageInvite> column = table.column(to);
+			final Set<String> setFrom = new HashSet<>(column.keySet());
+			column.clear();
+			return setFrom;
 		}
 	}
 

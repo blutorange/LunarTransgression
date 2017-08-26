@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.persistence.Transient;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.eclipse.jdt.annotation.Nullable;
@@ -23,6 +24,8 @@ import com.github.blutorange.translune.logic.IInitIdStore;
 @ViewScoped
 public class PlayerBean extends AbstractBean {
 
+	@SuppressWarnings("hiding")
+	@Transient
 	@Inject
 	@Classed(PlayerBean.class)
 	Logger logger;
@@ -31,12 +34,13 @@ public class PlayerBean extends AbstractBean {
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean = null;
 
+	@Transient
 	@Inject
 	IInitIdStore initIdStore;
 
 	@PostConstruct
 	public void init() {
-		ComponentFactory.getBeanComponent().inject(this);
+		ComponentFactory.getLunarComponent().inject(this);
 	}
 
 	public void startGame() {

@@ -5,25 +5,17 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.EntityManagerFactory;
-
 import org.eclipse.jdt.annotation.Nullable;
 
 public class EntityStore implements IEntityStore {
 
 	private final Map<EEntityMeta, Map<Object, AbstractStoredEntity>> typeMap;
 
-	public EntityStore(final EntityManagerFactory emf) {
+	public EntityStore() {
 		final Map<EEntityMeta, Map<Object, AbstractStoredEntity>> classMap = new EnumMap<>(EEntityMeta.class);
-		emf.getMetamodel().getEntities().forEach(entity -> {
-			final Class<?> entityClazz = entity.getJavaType();
-			if (!AbstractStoredEntity.class.isAssignableFrom(entityClazz))
-				return;
-			@SuppressWarnings("unchecked")
-			final Class<? extends AbstractStoredEntity> abstractEntityClazz = (Class<? extends AbstractStoredEntity>)entityClazz;
-			final EEntityMeta entityType = EEntityMeta.valueOf(abstractEntityClazz);
-			classMap.put(entityType, Collections.synchronizedMap(new HashMap<>()));
-		});
+		for (final EEntityMeta meta : EEntityMeta.values()) {
+			classMap.put(meta, Collections.synchronizedMap(new HashMap<>()));
+		}
 		this.typeMap = classMap;
 	}
 
@@ -37,8 +29,9 @@ public class EntityStore implements IEntityStore {
 	@Override
 	public <T extends AbstractStoredEntity> T retrieve(final EEntityMeta entityMeta, final Object primaryKey) {
 		final Map<Object, AbstractStoredEntity> map = typeMap.get(entityMeta);
-		if (map == null) return null;
-		return (T)(map.get(primaryKey));
+		if (map == null)
+			return null;
+		return (T) (map.get(primaryKey));
 	}
 
 	@Override
@@ -46,7 +39,8 @@ public class EntityStore implements IEntityStore {
 		if (entity == null)
 			return;
 		final Map<Object, AbstractStoredEntity> map = typeMap.get(entity.getEntityMeta());
-		if (map == null) return;
+		if (map == null)
+			return;
 		map.put(entity.getPrimaryKey(), entity);
 	}
 
@@ -79,9 +73,16 @@ public class EntityStore implements IEntityStore {
 	@Override
 	public <T extends AbstractStoredEntity> T remove(final EEntityMeta entityMeta, final Object primaryKey) {
 		@SuppressWarnings("unchecked")
-		final Map<Object, T> map = (Map<Object, T>)typeMap.get(entityMeta);
+		final Map<Object, T> map = (Map<Object, T>) typeMap.get(entityMeta);
 		if (map == null)
 			return null;
 		return map.remove(primaryKey);
+	}
+
+	@SafeVarargs
+	@Override
+	public final <T extends AbstractStoredEntity> void store(final T... entities) {
+		for (final T entity : entities)
+			store(entity);
 	}
 }
