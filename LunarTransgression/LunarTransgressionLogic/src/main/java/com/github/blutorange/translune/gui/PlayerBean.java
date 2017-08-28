@@ -7,7 +7,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.Transient;
 
@@ -49,14 +48,12 @@ public class PlayerBean extends AbstractBean {
 				addMessage(FacesMessage.SEVERITY_FATAL, "cannot start game, you are not a player");
 				return;
 			}
-			final String contextPath = FacesContext.getCurrentInstance().getExternalContext()
-					.getApplicationContextPath();
 			final String nickname = saveGetSessionBean().getNickname();
 			final String initId = initIdStore.store(nickname);
-			final String wsEndpoint = contextPath + "/ws/translune";
-			final String url = String.format("%s/resources/translune/game.html?initId=%s&nickname=%s&wsEndpoint=%s",
-					contextPath, URLEncoder.encode(initId, "UTF-8"), URLEncoder.encode(nickname, "UTF-8"),
-					URLEncoder.encode(wsEndpoint, "UTF-8"));
+			final String wsEndpoint = "/ws/translune";
+			final String url = String.format("%s/resources/translune/game.html?initId=%s&nickname=%s&wsEndpoint=%s&base=%s",
+					getContextPath(), URLEncoder.encode(initId, "UTF-8"), URLEncoder.encode(nickname, "UTF-8"),
+					URLEncoder.encode(wsEndpoint, "UTF-8"), getContextPath());
 			RequestContext.getCurrentInstance()
 					.execute(String.format("TransluneGame.startGame('%s')", StringEscapeUtils.escapeEcmaScript(url)));
 		});

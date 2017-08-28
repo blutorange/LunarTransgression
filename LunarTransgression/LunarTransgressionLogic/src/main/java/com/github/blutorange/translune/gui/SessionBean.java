@@ -194,7 +194,7 @@ public class SessionBean extends AbstractBean {
 				}
 				final Player player = databaseManager.find(Player.class, username);
 				if (player == null || !player.verifyPassword(password)) {
-					addMessage(FacesMessage.SEVERITY_ERROR, "username or password wrong");
+					addMessage(FacesMessage.SEVERITY_ERROR, "username or password wrong, or cannot access database");
 					return;
 				}
 				userType = EUserType.PLAYER;

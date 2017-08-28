@@ -1,55 +1,26 @@
-const Lunar = {};
-
-/**
- * @const {IObject<string, number>}
- */
-Lunar.Status = {
-	OK: 0,
-	GENERIC_ERROR: 20,
-	ACCESS_DENIED: 21,
-	TIMEOUT: 22,
-};
-
-/**
- * @const {IObject<string, string>}
- */
-Lunar.Message = {
-	authorize: 'AUTHORIZE',
-	fetchData: 'FETCH_DATA',
-	unknown: 'UNKNOWN'
-};
-
-Lunar.FetchType = {
-	none: 'NONE',
-	userPlayer: 'USER_PLAYER'
-};
-
-/**
- * @const {IObject<string, ?>}
- */
-Lunar.Constants = {
-	reponseTimeout: 10, // seconds
-	queueTimeout: 5, // seconds
-	queueInterval: 0.25 // seconds
-};
-
 class TransluneNet {
 	constructor(window) {
+		const _this = this;
 		this.window = window;
 		const query = querystring.parse(window.location.search);
 		const initId = query.initId;
 		const nickname = query.nickname;
 		const wsEndpoint = query.wsEndpoint;
+		const base = query.base;
 		if (!initId)
 			throw new TypeError("No init ID given.");
 		if (!nickname)
 			throw new TypeError("No nickname given.");
 		if (!wsEndpoint)
 			throw new TypeError("No websocket endpoint given.");
+		if (!base)
+			throw new TypeError("No base given.");
 		this.reqResp = {};
 		this.initId = initId;
 		this.nickname = nickname;
-		this.wsEndpoint = ((window.location.protocol === "https:") ? "wss://" : "ws://") + window.location.host + wsEndpoint;
+		this.base = base;
+		this.wsEndpoint = ((window.location.protocol === "https:") ? "wss://" : "ws://") + window.location.host + base +wsEndpoint
+		this._httpBase = window.location.protocol + "//" + window.location.host + base;
 		this.time = 0;
 		this.serverTime = 0;
 		this.messageHandlers = [];
@@ -59,8 +30,11 @@ class TransluneNet {
 		this.connectListener = [];
 		this.finalizeListener = [];
 		this.finalized = false;
-		const _this = this;
 		this.messageQueueJob = window.setInterval(() => _this._processMessageQueue(), Lunar.Constants.queueInterval*1000);
+	}
+	
+	get httpBase() {
+		return this._httpBase;
 	}
 	
 	/**

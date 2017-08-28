@@ -1,6 +1,5 @@
-const gameDiv = document.getElementById('game_div');
 const transluneNet = new TransluneNet(window);
-const transluneGame = new TransluneGame(window, gameDiv, transluneNet);
+const transluneGame = new TransluneGame(window, transluneNet);
 try {
 	transluneGame.start();
 }
