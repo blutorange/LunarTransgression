@@ -1,0 +1,214 @@
+%% A simple template for a lab or course report using the Hagenberg setup
+%% with the standard LaTeX 'report' class
+
+\documentclass[english,11pt]{report}		
+%\documentclass[ngerman,11pt]{report}
+
+\usepackage{hgb}
+\usepackage{hgbbib}
+\usepackage{hgbheadings}
+\usepackage{tabularx}
+
+\graphicspath{{images/}}   % where are the images?
+\bibliography{literatur}  % requires literatur.bib 
+
+\author{Andre Wachsmuth}
+\title{Programmierprojekt des Moduls Verteilte Systeme \\ Client-Server-Multiplayer-Spiel}
+\date{August 2017}
+
+%%%----------------------------------------------------------
+\begin{document}
+%%%----------------------------------------------------------
+\maketitle
+\tableofcontents
+%%%----------------------------------------------------------
+
+\chapter*{Summary}
+
+\begin{quote}
+ \verb!\documentclass[english]{hgbtermreport}! 
+\end{quote}
+at the top of this document by
+\begin{quote}
+ \verb!\documentclass[german]{hgbtermreport}!.
+\end{quote}
+Also, you may want to place the text of the individual chapters in separate files and 
+include them using \verb!\include{..}! 
+(see file \verb!_DaBa.tex!).
+
+Simply omit this chapter (which could also be called ``Abstract'') if you do not want to provide this kind of summary.
+
+
+%%%----------------------------------------------------------
+\chapter{Websocket-Kommunikation}
+%%%----------------------------------------------------------
+
+Die Kommunikation zwischen Clients und dem Server erfolgt über Websockets. Websocket
+sind ein auf \textsc{tcp} basierendes zustandbehaftetes Plain-Text-Protokol, die 
+ine bidirektionale Kommunikation für Webanwendungen ermöglicht.
+
+Session-Verwaltung und die Persistierung von Daten während der Session wird von Websockets bereitgestellt.
+Der Datenaustausch geschieht mittels Textnachrichten. Zu lösende Probleme sind somit die Authorisierung
+von Sessions und die Struktur (Protokoll) der zwischen Client und Server ausgetauschten Nachrichten.
+
+Für die Struktur der Nachrichten wird das \textsc{json}-Format verwendet. Es wird von vielen
+Software-Implementierungen unterstüzt. Die zusätzliche Ausdrucksfähigkeit und damit verbundene
+Komplexität von \textsc{xml} wird nicht benötigt. Im folgenden wird die \textsc{json}-Struktur
+beschrieben. Jede Nachricht beginnt mit der Metanachricht \textsc{lunarmessage}, die folgende Informationen
+enthält.
+
+Der Eintrag status gibt den Verarbeitungsstatus an, dieser ist \textsc{ok} bei korrekter
+Verarbeitung. Mögliche Status sind in der Tabelle zusammengestellt.
+
+Im Eintrag payload werden nachrichtenspezifische Informatione mitgesendet und der Eintrag
+type gibt an, um welchen Typ es sich handelt. Die Zeichenkette im Eintrag payload ist ein
+\textsc{json}-String.
+
+\textsc{tcp} garantiert die Reihenfolge des Nachrichtenempfangs in Reihenfolge des Versandes,
+aber nicht die logische Reihenfolge und die Verarbeitung in dieser Reihenfolge durch die
+Anwendung. Der Eintrag time dient der Ordnung der Nachrichten. Der Sender setzt bei Beginn
+der Websocket-Session einen Laufindex auf null und sendet diesen im Eintrag time bei jeder
+Nachricht mit an den Empfänger. Dabei wird der Laufindex bei jeder Nachricht um eins erhöht.
+Der Empfänger \textsc{muss} die empfangenen Nachrichten in dieser Reihenfolge bearbeiten.
+
+Jede empfangene Nachricht wird mit einer \textsc{lunarmessage} vom Typ \textsc{received} quittiert,
+die den Laufindex nicht erhöht und im payload den Laufindex der quittierten Nachricht enthält.
+Diese Nachricht dient beispielweise dazu, dass der Sender die Nachricht aus dem eventuell vorhandenen
+implementierungspezifischen Cache löschen kann.
+\footnote{Dieser Mechanismus ist derzeit noch nicht implementiert.}
+
+Sind bereits weitere Nachrichten mit höheren Laufindex beim Empfänger eingetroffen und ist ein gewisses
+Zeitlimit überschirtten, \textsc{kann} der Empfänger durch Senden einer Metanachricht mit dem
+type \textsc{repeat} die Nachricht erneut anfordern. Im Eintrag payload ist der Laufindex der
+angeforderten Nachricht enthalten. Der Nachrichtentyp \textsc{repeat} erhöht den Laufindex time nicht.
+\footnote{Dieser Mechanismus ist derzeit noch nicht implementiert.}
+
+Der Server reagiert nur auf Nachrichten beziehungsweise informiert den Client über Ereignisse,
+erwartet aber keine Antworten. Clients senden immer Nachrichten in Erwartung einer Antwort.
+Zur Reduzierung des Programmieraufwandes der Client-Software wurde daher ein
+Request-Response-Mechanismus für Nachrichten des Clients implementiert. Alle Nachrichten, deren
+type auf \textsc{response} endet, enthalten im payload-\textsc{json} den Eintrag origin, der
+den Laufindex der Nachricht enthält, auf die geantwortet wird.
+
+\begin{table}[]
+\centering
+\caption{Einträge der \textsc{json}-Struktur der Metanachricht \textsc{lunarmessage}}
+\label{table-lunarmessage}
+\begin{tabularx}{\textwidth}{l|l|X}
+Eintrag & Datentyp & Erläuterung \\ \hline
+time    & int    & Eine bei null beginnende Ganzzahl. Dient der Synchronisation der Nachrichten. \\
+type    & string & Art der Nachricht, gibt an, wie der Eintrag payload interpretiert wird  \\
+status  & int    & Verarbeitungsstatus, beispielweise 0 für \textsc{ok}                          \\
+payload & string & Typenspezifische Nachricht. Enthält einen \textsc{json}-String.       
+\end{tabularx}
+\end{table}
+
+
+\begin{table}[]
+\centering
+\caption{Mögliche Verabeitungsstatus in der Metanachricht \textsc{lunarmessage}}
+\label{table-message-status}
+\begin{tabularx}{\textwidth}{l|l|X}
+Bezeichnung            & Wert & Erläuterung \\ \hline
+\textsc{ok}            & 0    & Fehlerfreie Verarbeitung. \\
+\textsc{generic error} & 20   & Nicht näher spezifizierter Fehler in der Verarbeitung.  \\
+\textsc{access denied} & 21   & Fehlende Authorisierung. Zur Authorisierung muss die
+                                Nachricht \textsc{authorize} gesendet werden. \\
+\textsc{timeout}       & 22   & Überschreitung des Zeitlimits bei der Verarbeitung.
+\end{tabularx}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Nachrichtentypen im Eintrag payload einer \textsc{lunarmessage}}
+\label{table-message-type}
+\begin{tabularx}{\textwidth}{l|X}
+Bezeichnung & Erläuterung \\ \hline
+\textsc{authorize}                       & Au \\
+\textsc{authorize\char`_response}        & a \\
+\textsc{fetch\char`_data}                & a \\
+\textsc{fetch\char`_data\char`_response} & a \\
+\textsc{invite}                          & a \\
+\textsc{invite\char`_response}           & a \\
+\textsc{invited}                         & a \\
+\textsc{invite\char`_accept}             & a \\
+\textsc{invite\char`_accept\char`_response}  & a \\
+\textsc{invite\char`_accepted}         & a \\
+\textsc{invite\char`_retract}          & a \\
+\textsc{invite\char`_retract\char`_response} & a \\
+\textsc{invite\char`_retracted}        & a \\
+\textsc{invite\char`_reject}           & a \\
+\textsc{invite\char`_reject\char`_response}  & a \\
+\textsc{invite\char`_rejected}         & a \\
+\textsc{prepare\char`_battle}          & a \\
+\textsc{prepare\char`_battle\char`_response} & a \\
+\textsc{step\char`_battle}             & a \\
+\textsc{step\char`_battle\char`_response}    & a \\
+\textsc{battle\char`_prepared}         & a \\
+\textsc{battle\char`_stepped}          & a \\
+\textsc{battle\char`_cancelled}        & a \\
+\textsc{battle\char`_ended}            & a \\
+\textsc{loot}                    & a \\
+\textsc{loot\char`_response}           & a \\
+\textsc{unknown}                 & a
+\end{tabularx}
+\end{table}
+
+Clients werden bereits vor dem Aufbau der Websocket-Verbindung mittels einer Login-Eingabemaske
+auf der Webseite authorisiert. Dabei wird ein zeitbegrenztes Token erstellt und dem Client
+übermittelt. Initial wird beim Öffnen einer Websocket-Session diese als unauthorisiert markiert
+und bis auf \textsc{authorize} keine anderen Nachrichten akzeptiert. Das Token und der Nutzername wird in
+der \textsc{authorize}-Nachricht an den Server übermittelt, der mit \textsc{authorize response} antwortet.
+Bei erfolgreicher Authorisierung wird die Session als authorisiert markiert und der Statuscode \textsc{ok}
+übermittelt, \textsc{generic error} andernfalls.
+
+%
+\begin{center}
+\textbf{Don't just show your program code!} 
+\end{center}
+%
+By the way, all you ever need to know about image processing (and more) can be 
+found in \cite{BurgerBurge08}.%
+\footnote{This ridiculous statement should only produce a citation so the 
+bibliography is not empty.} 
+
+
+%%%----------------------------------------------------------
+\chapter{Server}
+%%%----------------------------------------------------------
+
+Description of this task follows here.
+
+
+
+%%%----------------------------------------------------------     
+\chapter{Client}
+%%%----------------------------------------------------------
+
+More chapters will follow.
+
+
+\chapter{Summary and comments}
+
+This could be a good place to describe how you experienced this course, what you liked or didn't, and to provide suggestions for improvement.
+
+
+
+%%%----------------------------------------------------------     
+\chapter{Einrichtung und Installation}
+%%%----------------------------------------------------------
+
+More chapters will follow.
+
+
+\chapter{Summary and comments}
+
+This could be a good place to describe how you experienced this course, what you liked or didn't, and to provide suggestions for improvement.
+
+
+
+%%%----------------------------------------------------------
+\MakeBibliography
+%%%----------------------------------------------------------
+
+\end{document}

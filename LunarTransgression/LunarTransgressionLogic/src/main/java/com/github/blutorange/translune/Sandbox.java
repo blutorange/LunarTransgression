@@ -16,6 +16,10 @@ import com.github.blutorange.translune.socket.LunarMessage;
 
 public class Sandbox {
 	public static void main(final String[] args) throws Exception {
+		for (ELunarMessageType type : ELunarMessageType.values())
+			System.out.println(String.format("\\textsc{%s} & a \\\\", type.name().toLowerCase().replace('_', ' ')));
+System.exit(0);	
+
 		// testing...
 		final LunarServletContextListener scl = new LunarServletContextListener();
 		scl.initialize();
