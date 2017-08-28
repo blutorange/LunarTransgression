@@ -58,7 +58,7 @@ public class PlayerBean extends AbstractBean {
 					contextPath, URLEncoder.encode(initId, "UTF-8"), URLEncoder.encode(nickname, "UTF-8"),
 					URLEncoder.encode(wsEndpoint, "UTF-8"));
 			RequestContext.getCurrentInstance()
-					.execute(String.format("Translune.startGame('%s')", StringEscapeUtils.escapeEcmaScript(url)));
+					.execute(String.format("TransluneGame.startGame('%s')", StringEscapeUtils.escapeEcmaScript(url)));
 		});
 	}
 

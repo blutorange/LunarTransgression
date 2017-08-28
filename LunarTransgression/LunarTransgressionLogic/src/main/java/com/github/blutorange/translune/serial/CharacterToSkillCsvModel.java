@@ -1,12 +1,18 @@
 package com.github.blutorange.translune.serial;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class CharacterToSkillCsvModel {
+	@Nullable
 	private String characterId;
+	@Nullable
 	private String skillId;
 	private int level;
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(@Nullable final Object obj) {
+		final String characterId = this.characterId;
+		final String skillId = this.skillId;
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -29,6 +35,7 @@ public class CharacterToSkillCsvModel {
 		return true;
 	}
 
+	@Nullable
 	public String getCharacterId() {
 		return characterId;
 	}
@@ -37,12 +44,16 @@ public class CharacterToSkillCsvModel {
 		return level;
 	}
 
+
+	@Nullable
 	public String getSkillId() {
 		return skillId;
 	}
 
 	@Override
 	public int hashCode() {
+		final String characterId = this.characterId;
+		final String skillId = this.skillId;
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((characterId == null) ? 0 : characterId.hashCode());

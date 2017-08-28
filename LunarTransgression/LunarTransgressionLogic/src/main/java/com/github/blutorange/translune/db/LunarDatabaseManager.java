@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import com.github.blutorange.common.ThrowingConsumer;
 import com.github.blutorange.common.ThrowingFunction;
 import com.github.blutorange.translune.ic.Classed;
+import com.github.blutorange.translune.logic.IRandomSupplier;
 
 @Singleton
 public class LunarDatabaseManager implements ILunarDatabaseManager {
@@ -44,7 +45,7 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 	@Inject @Named("default") Scheduler scheduler;
 
 	@Inject @Named("basic")
-	Random random;
+	IRandomSupplier random;
 
 	protected final List<IChange> changeList;
 
@@ -112,11 +113,12 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 			if (count < 1)
 				return (T[])Array.newInstance(clazz, 0);
 			final T[] result = (T[])Array.newInstance(clazz, amount);
+			final Random r = random.get();
 			for (int i = amount; i --> 0;) {
 				final CriteriaQuery<T> cq = cb.createQuery(clazz);
 				cq.select(cq.from(clazz));
 				final TypedQuery<T> tq = em.createQuery(cq);
-				tq.setFirstResult(random.nextInt(count));
+				tq.setFirstResult(r.nextInt(count));
 				tq.setMaxResults(1);
 				final List<T> resultList = tq.getResultList();
 				if (resultList.isEmpty())

@@ -8,8 +8,10 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import com.github.blutorange.common.IAccessible;
+import com.jsoniter.annotation.JsonIgnore;
 
 public abstract class AbstractStoredEntity extends AbstractEntity {
+	@JsonIgnore
 	public abstract EEntityMeta getEntityMeta();
 
 	abstract void forEachAssociatedObject(Consumer<IAccessible<AbstractStoredEntity>> consumer);

@@ -1,7 +1,5 @@
 package com.github.blutorange.translune.logic;
 
-import com.github.blutorange.translune.db.CharacterState;
-
 public class EffectorTurnTimed implements IGlobalBattleEffector {
 
 	private int numberOfTurns;
@@ -52,7 +50,7 @@ public class EffectorTurnTimed implements IGlobalBattleEffector {
 	}
 
 	@Override
-	public boolean allowTurn(final IBattleContext context, final CharacterState characterState) {
+	public boolean allowTurn(final IBattleContext context, final IComputedBattleStatus characterState) {
 		return delegate.allowTurn(context, characterState);
 	}
 }

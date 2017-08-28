@@ -1,7 +1,5 @@
 package com.github.blutorange.translune.logic;
 
-import com.github.blutorange.translune.db.CharacterState;
-
 public interface IGlobalBattleEffector {
 
 	/**
@@ -26,5 +24,5 @@ public interface IGlobalBattleEffector {
 	 */
 	void onRemove(IBattleContext context);
 
-	boolean allowTurn(IBattleContext context, CharacterState characterState);
+	boolean allowTurn(IBattleContext context, IComputedBattleStatus characterState);
 }

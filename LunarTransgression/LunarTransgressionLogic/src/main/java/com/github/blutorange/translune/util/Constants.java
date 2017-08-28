@@ -11,6 +11,7 @@ public final class Constants {
 	public static final int BATTLE_BASIC_ATTACK_FLINCH_CHANCE = 10;
 	public static final int BATTLE_PRIORITY_ITEM = 2;
 	public static final int BATTLE_STAGE_CHANGE_TURNS = 4;
+	public static final int BATTLE_BASIC_POWER_CONFUSION = 50;
 
 	public static final String CUSTOM_KEY_BATTLE_PREPARATION_TIMEOUT = "translune.battle.preparation.timeout";
 	public static final String CUSTOM_KEY_BATTLE_ROUND_TIMEOUT = "translune.battle.round.timeout";
@@ -20,15 +21,15 @@ public final class Constants {
 	public static final String CUSTOM_KEY_TIMEOUT_INITID_MILLIS = "translune.initid.timeout";
 	public static final String CUSTOM_KEY_TIMEOUT_MESSAGEQUEUE_MILLIS = "translune.messages.timeout";
 
-	public static final String FILE_PREFIX_CHARACTER_CRY = "cry_";
-	public static final String FILE_PREFIX_CHARACTER_ICON = "ico_";
-	public static final String FILE_PREFIX_CHARACTER_IMG = "img_";
+	public static final String FILE_PREFIX_CHARACTER_CRY = "cry/";
+	public static final String FILE_PREFIX_CHARACTER_ICON = "ico/";
+	public static final String FILE_PREFIX_CHARACTER_IMG = "img/";
 
 	public static final Fraction FRACTION_THREE_HALFS = Fraction.getFraction(3, 2);
 	public static final Fraction FRACTION_TWO = Fraction.getFraction(2, 1);
 
 	public static final String HEADER_ACCESS_CONTROL = "Access-Control-Allow-Origin";
-	public static final Object HEADER_ACCESS_CONTROL_ALL = "*";
+	public static final String HEADER_ACCESS_CONTROL_ALL = "*";
 	public static final String HEADER_CACHE_CONTROL = "Cache-Control";
 
 	public static final String IMPORT_DIR_CHARACTER_CRY = "character-cry";

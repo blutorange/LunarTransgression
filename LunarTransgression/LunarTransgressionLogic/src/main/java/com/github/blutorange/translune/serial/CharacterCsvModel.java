@@ -3,6 +3,8 @@ package com.github.blutorange.translune.serial;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.github.blutorange.common.StringUtil;
 import com.github.blutorange.translune.db.Character;
 import com.github.blutorange.translune.db.CharacterBuilder;
@@ -18,13 +20,17 @@ public class CharacterCsvModel {
 		this.builder = new CharacterBuilder();
 	}
 
+	public void addSkill(final int level, final Skill skill) {
+		builder.addSkill(level, skill);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(@Nullable final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -37,6 +43,13 @@ public class CharacterCsvModel {
 		if (!builder.getId().equals(other.builder.getId()))
 			return false;
 		return true;
+	}
+
+	public String getKey() {
+		final String id = builder.getId();
+		if (id == null)
+			throw new IllegalStateException("name must be set");
+		return id;
 	}
 
 	/*
@@ -54,19 +67,8 @@ public class CharacterCsvModel {
 		return result;
 	}
 
-	public String getKey() {
-		final String id = builder.getId();
-		if (id == null)
-			throw new IllegalStateException("name must be set");
-		return id;
-	}
-
-	/**
-	 * @param attack
-	 *            the attack to set
-	 */
-	public void setPhysicalAttack(final int physicalAttack) {
-		builder.setPhysicalAttack(physicalAttack);
+	public void setAccuracy(final int accuracy) {
+		builder.setAccuracy(accuracy);
 	}
 
 	/**
@@ -78,23 +80,11 @@ public class CharacterCsvModel {
 	}
 
 	/**
-	 * @param defense
-	 *            the defense to set
-	 */
-	public void setPhysicalDefense(final int physicalDefense) {
-		builder.setPhysicalDefense(physicalDefense);
-	}
-
-	/**
 	 * @param description
 	 *            the description to set
 	 */
 	public void setDescription(final String description) {
 		builder.setDescription(description);
-	}
-
-	public void setImgIcon(final String imgIcon) {
-		builder.setImgIcon(imgIcon);
 	}
 
 	/**
@@ -104,6 +94,10 @@ public class CharacterCsvModel {
 	public void setElements(final String elements) {
 		builder.addElements(Arrays.stream(elements.split(",")).map(String::trim).map(StringUtil::toRootUpperCase)
 				.map(EElement::valueOf).collect(Collectors.toSet()));
+	}
+
+	public void setEvasion(final int evasion) {
+		builder.setEvasion(evasion);
 	}
 
 	/**
@@ -128,6 +122,10 @@ public class CharacterCsvModel {
 	 */
 	public void setImgFront(final String imgFront) {
 		builder.setImgFront(imgFront);
+	}
+
+	public void setImgIcon(final String imgIcon) {
+		builder.setImgIcon(imgIcon);
 	}
 
 	/**
@@ -171,6 +169,22 @@ public class CharacterCsvModel {
 	}
 
 	/**
+	 * @param attack
+	 *            the attack to set
+	 */
+	public void setPhysicalAttack(final int physicalAttack) {
+		builder.setPhysicalAttack(physicalAttack);
+	}
+
+	/**
+	 * @param defense
+	 *            the defense to set
+	 */
+	public void setPhysicalDefense(final int physicalDefense) {
+		builder.setPhysicalDefense(physicalDefense);
+	}
+
+	/**
 	 * @param speed
 	 *            the speed to set
 	 */
@@ -180,9 +194,5 @@ public class CharacterCsvModel {
 
 	public Character toEntity() {
 		return builder.build();
-	}
-
-	public void addSkill(final int level, final Skill skill) {
-		builder.addSkill(level, skill);
 	}
 }

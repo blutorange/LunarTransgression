@@ -9,6 +9,9 @@ public enum ELunarMessageType {
 	AUTHORIZE(ComponentFactory.getLunarComponent().ihandlerAuthorize()),
 	AUTHORIZE_RESPONSE(ELunarMessageHandler.NOOP),
 
+	FETCH_DATA(ComponentFactory.getLunarComponent().ihandlerFetchData()),
+	FETCH_DATA_RESPONSE(ELunarMessageHandler.NOOP),
+
 	INVITE(ComponentFactory.getLunarComponent().ihandlerInvite()),
 	INVITE_RESPONSE(ELunarMessageHandler.NOOP),
 	INVITED(ELunarMessageHandler.NOOP),
@@ -52,8 +55,6 @@ public enum ELunarMessageType {
 
 	public void handle(final Session session, final LunarMessage message) {
 		final String user = socketProcessing.getNickname(session);
-		if (user.isEmpty())
-			return;
 		handler.handle(user, session, message);
 	}
 }

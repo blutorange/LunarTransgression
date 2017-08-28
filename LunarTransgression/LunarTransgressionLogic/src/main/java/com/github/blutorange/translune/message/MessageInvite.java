@@ -11,7 +11,6 @@ public class MessageInvite extends AMessageMessage {
 	@JsonProperty(required = true)
 	String nickname = StringUtils.EMPTY;
 
-	@JsonIgnore(ignoreDecoding=true, ignoreEncoding=false)
 	long created = System.currentTimeMillis();
 
 	@Deprecated
@@ -38,13 +37,14 @@ public class MessageInvite extends AMessageMessage {
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.INVITE;
 	}
 
 	/**
 	 * @return the created
 	 */
+	@JsonIgnore(ignoreDecoding=true, ignoreEncoding=false)
 	public long getCreated() {
 		return created;
 	}

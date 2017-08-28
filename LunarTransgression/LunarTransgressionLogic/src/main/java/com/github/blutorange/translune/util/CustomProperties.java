@@ -28,7 +28,7 @@ public class CustomProperties {
 
 	private final int battleRoundTimeoutMillis;
 
-	private volatile boolean online;
+	private volatile boolean online = true;
 
 	private final int databaseSaveMinutes;
 

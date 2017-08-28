@@ -26,6 +26,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.github.blutorange.common.IAccessible;
 import com.github.blutorange.translune.logic.ENature;
 import com.github.blutorange.translune.util.Constants;
+import com.jsoniter.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "charstate")
@@ -102,7 +103,7 @@ public class CharacterState extends AbstractStoredEntity {
 	@JoinColumn(name = "player", nullable = false, unique = false, updatable = false, insertable = true, foreignKey = @ForeignKey(name = "fk_charstate_player"))
 	private Player player;
 
-	CharacterState() {
+	public CharacterState() {
 	}
 
 	/**
@@ -113,6 +114,7 @@ public class CharacterState extends AbstractStoredEntity {
 	}
 
 	@Override
+	@JsonIgnore
 	public EEntityMeta getEntityMeta() {
 		return EEntityMeta.CHARACTER_STATE;
 	}
@@ -204,11 +206,13 @@ public class CharacterState extends AbstractStoredEntity {
 	/**
 	 * @return the player
 	 */
+	@JsonIgnore
 	public Player getPlayer() {
 		return player;
 	}
 
 	@Override
+	@JsonIgnore
 	public Serializable getPrimaryKey() {
 		return id;
 	}
@@ -286,6 +290,17 @@ public class CharacterState extends AbstractStoredEntity {
 			@Override
 			public void set(final AbstractStoredEntity replacement) {
 				setPlayer((Player) replacement);
+			}
+		});
+		consumer.accept(new IAccessible<AbstractStoredEntity>() {
+			@Override
+			public AbstractStoredEntity get() {
+				return getCharacter();
+			}
+
+			@Override
+			public void set(final AbstractStoredEntity replacement) {
+				setCharacter((Character) replacement);
 			}
 		});
 	}

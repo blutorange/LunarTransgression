@@ -55,4 +55,9 @@ public class SocketModule {
 	static ILunarMessageHandler provideMessageHandlerLoot() {
 		return ComponentFactory.getLunarComponent()._handlerLoot();
 	}
+
+	@Provides @Singleton @LunarMessageTyped(ELunarMessageType.FETCH_DATA)
+	static ILunarMessageHandler provideMessageHandlerFetchMyData() {
+		return ComponentFactory.getLunarComponent()._handlerFetchData();
+	}
 }

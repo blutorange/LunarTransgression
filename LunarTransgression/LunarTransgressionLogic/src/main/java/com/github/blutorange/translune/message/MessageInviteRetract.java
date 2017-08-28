@@ -5,6 +5,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ILunarPayload;
+import com.jsoniter.annotation.JsonProperty;
 
 public class MessageInviteRetract implements ILunarPayload {
 	private String nickname = StringUtils.EMPTY;
@@ -19,6 +20,7 @@ public class MessageInviteRetract implements ILunarPayload {
 	/**
 	 * @return the nickname
 	 */
+	@JsonProperty(required = true)
 	public String getNickname() {
 		return nickname;
 	}
@@ -31,7 +33,7 @@ public class MessageInviteRetract implements ILunarPayload {
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.INVITE_RETRACT;
 	}
 }

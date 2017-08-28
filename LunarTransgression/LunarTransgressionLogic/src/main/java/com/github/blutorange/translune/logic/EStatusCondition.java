@@ -232,7 +232,7 @@ public enum EStatusCondition {
 			return "%s sustained a burn!";
 		}
 	},
-	CONFUSE(f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1,1), f(1,1)) {
+	CONFUSION(f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1, 1), f(1,1), f(1,1)) {
 		@Override
 		public boolean canMove() {
 			return random.get().nextInt(100) >= 33;

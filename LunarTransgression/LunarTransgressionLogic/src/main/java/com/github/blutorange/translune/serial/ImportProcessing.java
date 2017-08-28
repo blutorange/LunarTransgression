@@ -110,14 +110,17 @@ public final class ImportProcessing implements IImportProcessing {
 				.collect(Collectors.toSet());
 		final List<Pair<ZipEntry, String>> requiredFiles = new ArrayList<>();
 		for (final Character character : characters) {
-			filterCharFile(filesImg, requiredFiles, character.getImgBack(), Constants.FILE_PREFIX_CHARACTER_IMG,
+			assertCharFile(filesImg, requiredFiles, character.getImgBack(), Constants.FILE_PREFIX_CHARACTER_IMG,
 					character);
-			filterCharFile(filesImg, requiredFiles, character.getImgFront(), Constants.FILE_PREFIX_CHARACTER_IMG,
+			assertCharFile(filesImg, requiredFiles, character.getImgFront(), Constants.FILE_PREFIX_CHARACTER_IMG,
 					character);
-			filterCharFile(filesIcon, requiredFiles, character.getImgIcon(), Constants.FILE_PREFIX_CHARACTER_ICON,
+			assertCharFile(filesIcon, requiredFiles, character.getImgIcon(), Constants.FILE_PREFIX_CHARACTER_ICON,
 					character);
-			filterCharFile(filesCry, requiredFiles, character.getCry(), Constants.FILE_PREFIX_CHARACTER_CRY, character);
+			assertCharFile(filesCry, requiredFiles, character.getCry(), Constants.FILE_PREFIX_CHARACTER_CRY, character);
 		}
+		addFiles(requiredFiles, filesImg, Constants.FILE_PREFIX_CHARACTER_IMG);
+		addFiles(requiredFiles, filesIcon, Constants.FILE_PREFIX_CHARACTER_ICON);
+		addFiles(requiredFiles, filesCry, Constants.FILE_PREFIX_CHARACTER_CRY);
 		logger.debug("writing imported files to database");
 		writeImportToDb(requiredFiles, characters, skills, zipFile);
 		return characters.size() + skills.size() + requiredFiles.size();
@@ -157,14 +160,22 @@ public final class ImportProcessing implements IImportProcessing {
 		}
 	}
 
-	private void filterCharFile(final Map<String, ZipEntry> availableFiles,
+	private void assertCharFile(final Map<String, ZipEntry> availableFiles,
 			final List<Pair<ZipEntry, String>> requiredFiles, final String name, final String prefix,
 			final Character character) throws IOException {
 		if (!availableFiles.containsKey(name))
 			throw new IOException(
 					String.format("Character %s specifies the resource %s, but this file was not found in the archive.",
 							character.getName(), name));
-		requiredFiles.add(new ImmutablePair<>(availableFiles.get(name), prefix));
+		final ZipEntry entry = availableFiles.get(name);
+		if (entry != null)
+			requiredFiles.add(new ImmutablePair<>(entry, prefix));
+	}
+
+	private void addFiles(final List<Pair<ZipEntry, String>> requiredFiles, final Map<String, ZipEntry> availableFiles,
+			final String prefix) {
+		for (final ZipEntry entry : availableFiles.values())
+			requiredFiles.add(new ImmutablePair<>(entry, prefix));
 	}
 
 	private Set<CharacterCsvModel> readCharacterCsv(final InputStream inputStream) throws IOException {
@@ -190,7 +201,7 @@ public final class ImportProcessing implements IImportProcessing {
 		final Resource resource = new Resource();
 		final String mime = mimetypesFileTypeMap.getContentType(entry.getName());
 		resource.setMime(mime);
-		resource.setName(prefix + FilenameUtils.getBaseName(entry.getName()));
+		resource.setName(prefix + FilenameUtils.getName(entry.getName()));
 		resource.setData(IOUtils.toByteArray(zipFile.getInputStream(entry)));
 		resource.setFilename(FilenameUtils.getName(String.valueOf(entry.getName())));
 		if (logger.isDebugEnabled())

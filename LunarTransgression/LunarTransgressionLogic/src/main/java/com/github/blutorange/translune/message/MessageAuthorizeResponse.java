@@ -11,13 +11,13 @@ public class MessageAuthorizeResponse extends AMessageResponse {
 	public MessageAuthorizeResponse(final int origin) {
 		super(origin);
 	}
-	
+
 	public MessageAuthorizeResponse(final LunarMessage requestMessage) {
-		this(requestMessage.getId());
+		this(requestMessage.getTime());
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.AUTHORIZE_RESPONSE;
 	}
 }

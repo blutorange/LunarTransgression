@@ -9,22 +9,22 @@ import com.jsoniter.annotation.JsonIgnore;
 import com.jsoniter.annotation.JsonProperty;
 
 public class MessageAuthorize implements ILunarPayload {
-	@JsonProperty(required = true)
 	String nickname = StringUtils.EMPTY;
 
-	@JsonProperty(required = true)
-	@JsonIgnore(ignoreDecoding = false, ignoreEncoding = true)
 	String initId = StringUtils.EMPTY;
 
 	/**
 	 * @return the nickname
 	 */
+	@JsonProperty(required = true)
 	public String getNickname() {
 		return nickname;
 	}
 	/**
 	 * @return the initId
 	 */
+	@JsonProperty(required = true)
+	@JsonIgnore(ignoreDecoding = false, ignoreEncoding = true)
 	public String getInitId() {
 		return initId;
 	}
@@ -41,7 +41,7 @@ public class MessageAuthorize implements ILunarPayload {
 		this.initId = initId != null ? initId : StringUtils.EMPTY;
 	}
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.AUTHORIZE;
 	}
 }

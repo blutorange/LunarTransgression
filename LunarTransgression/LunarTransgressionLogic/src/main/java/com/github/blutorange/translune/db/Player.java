@@ -26,6 +26,8 @@ import com.github.blutorange.common.IAccessible;
 import com.github.blutorange.common.PasswordStorage;
 import com.github.blutorange.common.PasswordStorage.InvalidHashException;
 import com.github.blutorange.translune.util.Constants;
+import com.jsoniter.annotation.JsonIgnore;
+import com.jsoniter.annotation.JsonProperty;
 
 @Entity
 @Table(name = "player")
@@ -59,9 +61,10 @@ public class Player extends AbstractStoredEntity {
 	@NotNull
 	@OneToMany(targetEntity = CharacterState.class, orphanRemoval = true, cascade = {}, fetch = FetchType.LAZY, mappedBy = "player")
 	@Size(min = 0)
+	@JsonIgnore
 	private Set<CharacterState> releasedCharacterStates;
 
-	Player() {
+	public Player() {
 	}
 
 	/**
@@ -71,6 +74,7 @@ public class Player extends AbstractStoredEntity {
 		return description;
 	}
 
+	@JsonIgnore
 	@Override
 	public EEntityMeta getEntityMeta() {
 		return EEntityMeta.PLAYER;
@@ -85,10 +89,12 @@ public class Player extends AbstractStoredEntity {
 
 	@NonNull
 	@Override
+	@JsonIgnore
 	public Serializable getPrimaryKey() {
 		return nickname;
 	}
 
+	@JsonIgnore
 	public int getReleasedCharacterStatesCount() {
 		return releasedCharacterStates.size();
 	}
@@ -96,6 +102,7 @@ public class Player extends AbstractStoredEntity {
 	/**
 	 * @return the characters
 	 */
+	@JsonProperty(from = "characterStates", to = "characterStates")
 	public Set<CharacterState> getUnmodifiableCharacterStates() {
 		return characterStates;
 	}
@@ -103,6 +110,7 @@ public class Player extends AbstractStoredEntity {
 	/**
 	 * @return the items
 	 */
+	@JsonProperty(value = "items", to = "items", from = "items")
 	public Set<Item> getUnmodifiableItems() {
 		return items;
 	}
@@ -110,6 +118,7 @@ public class Player extends AbstractStoredEntity {
 	/**
 	 * @return the releasedCharacterStates
 	 */
+	@JsonIgnore
 	public Set<CharacterState> getUnmodifiableReleasedCharacterStates() {
 		return releasedCharacterStates;
 	}
@@ -169,6 +178,7 @@ public class Player extends AbstractStoredEntity {
 	/**
 	 * @return the passwordHash
 	 */
+	@JsonIgnore
 	String getPasswordHash() {
 		return passwordHash;
 	}
@@ -176,6 +186,7 @@ public class Player extends AbstractStoredEntity {
 	/**
 	 * @return the releasedCharacterStates
 	 */
+	@JsonIgnore
 	Set<CharacterState> getReleasedCharacterStates() {
 		return releasedCharacterStates;
 	}

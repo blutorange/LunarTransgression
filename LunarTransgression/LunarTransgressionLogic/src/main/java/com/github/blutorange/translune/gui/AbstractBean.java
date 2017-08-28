@@ -16,6 +16,7 @@ import com.github.blutorange.common.ThrowingSupplier;
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.ic.ComponentFactory;
 
+@SuppressWarnings("serial")
 public abstract class AbstractBean {
 	@Inject @Classed(AbstractBean.class)
 	Logger logger;

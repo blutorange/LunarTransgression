@@ -5,7 +5,6 @@ import com.github.blutorange.translune.socket.IMessageResponse;
 import com.jsoniter.annotation.JsonIgnore;
 
 abstract class AMessageResponse implements ILunarPayload, IMessageResponse {
-	@JsonIgnore(ignoreDecoding = true, ignoreEncoding = false)
 	int origin;
 
 	public AMessageResponse() {
@@ -19,6 +18,7 @@ abstract class AMessageResponse implements ILunarPayload, IMessageResponse {
 	 * @return the origin
 	 */
 	@Override
+	@JsonIgnore(ignoreDecoding = true, ignoreEncoding = false)
 	public int getOrigin() {
 		return origin;
 	}

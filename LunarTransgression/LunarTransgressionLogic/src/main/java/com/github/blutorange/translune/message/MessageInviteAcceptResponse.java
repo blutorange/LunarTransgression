@@ -8,7 +8,6 @@ import com.github.blutorange.translune.socket.LunarMessage;
 import com.jsoniter.annotation.JsonProperty;
 
 public class MessageInviteAcceptResponse extends AMessageMessageResponse {
-	@JsonProperty(required = true)
 	String nickname = StringUtils.EMPTY;
 
 	@Deprecated
@@ -21,12 +20,13 @@ public class MessageInviteAcceptResponse extends AMessageMessageResponse {
 	}
 
 	public MessageInviteAcceptResponse(final LunarMessage requestMessage, final String nickname, final String message) {
-		this(requestMessage.getId(), message, nickname);
+		this(requestMessage.getTime(), message, nickname);
 	}
 
 	/**
 	 * @return the nickname
 	 */
+	@JsonProperty(required = true)
 	public String getNickname() {
 		return nickname;
 	}
@@ -40,7 +40,7 @@ public class MessageInviteAcceptResponse extends AMessageMessageResponse {
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.INVITE_ACCEPT_RESPONSE;
 	}
 }

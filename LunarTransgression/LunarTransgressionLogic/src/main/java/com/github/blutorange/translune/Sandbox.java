@@ -9,18 +9,29 @@ import com.github.blutorange.translune.db.ModifiableItem;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.logic.EExperienceGroup;
+import com.github.blutorange.translune.message.MessageFetchDataResponse;
+import com.github.blutorange.translune.socket.ELunarMessageType;
+import com.github.blutorange.translune.socket.ELunarStatusCode;
+import com.github.blutorange.translune.socket.LunarMessage;
 
 public class Sandbox {
 	public static void main(final String[] args) throws Exception {
 		// testing...
-//		final LunarServletContextListener scl = new LunarServletContextListener();
-//		scl.initialize();
+		final LunarServletContextListener scl = new LunarServletContextListener();
+		scl.initialize();
 		try {
-			mime();
+			jsoniter();
 		}
 		finally {
-//			scl.destroy();
+			scl.destroy();
 		}
+	}
+
+	static void ic() {
+		final String initId = ComponentFactory.getLunarComponent().initIdStore().store("abc");
+		final boolean assertion = ComponentFactory.getLunarComponent().initIdStore().assertToken("abc", initId);
+		System.out.println(initId);
+		System.out.println(assertion);
 	}
 
 	static void mime() {
@@ -28,7 +39,7 @@ public class Sandbox {
 	}
 
 	static void importing() throws IOException {
-		try (ZipFile zipFile = new ZipFile("/tmp/test.zip")) {
+		try (ZipFile zipFile = new ZipFile("/tmp/output.zip")) {
 			ComponentFactory.getLunarComponent().iImportProcessing().importDataSet(zipFile);
 		}
 	}
@@ -67,18 +78,13 @@ public class Sandbox {
 	}
 
 	static void jsoniter() {
-//		new JsoniterConfig().setup();
-//		final LunarMessage msg = new LunarMessage(2, ELunarMessageType.AUTHORIZE, ELunarStatusCode.OK, "test");
-//		final ILunarPayload m = new MessageBattleStepped(new BattleAction[] {
-//				new BattleAction(new String[] { "Hello world" }, "baz", new String[] { "foo", "bar" }) });
-//		msg.setPayload(JsonStream.serialize(m));
-//		final String json = JsonStream.serialize(msg);
-//		System.out.println(json);
-//		final LunarMessage de = JsonIterator.deserialize(json, LunarMessage.class);
-//		System.out.println(de);
-//		System.out.println(de.getId());
-//		System.out.println(de.getType());
-//		System.out.println(de.getPayload());
-//		System.exit(0);
+		final Player player = ComponentFactory.getLunarComponent().iLunarDatabaseManager().find(Player.class, "blutorange");
+		if (player == null)
+			throw new RuntimeException("player not found");
+		final MessageFetchDataResponse msg = new MessageFetchDataResponse(0, player);
+		final String payload = ComponentFactory.getLunarComponent().jsoniter().get().serialize(msg);
+		final LunarMessage message = new LunarMessage(4, ELunarMessageType.FETCH_DATA_RESPONSE, ELunarStatusCode.OK, payload);
+		final String json = ComponentFactory.getLunarComponent().jsoniter().get().serialize(message);
+		System.err.println(json);
 	}
 }

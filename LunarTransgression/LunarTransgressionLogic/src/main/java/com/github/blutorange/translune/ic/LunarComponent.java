@@ -18,6 +18,7 @@ import com.github.blutorange.translune.gui.PlayerBean;
 import com.github.blutorange.translune.gui.SessionBean;
 import com.github.blutorange.translune.gui.StatusBean;
 import com.github.blutorange.translune.handler.HandlerAuthorize;
+import com.github.blutorange.translune.handler.HandlerFetchData;
 import com.github.blutorange.translune.handler.HandlerInvite;
 import com.github.blutorange.translune.handler.HandlerInviteAccept;
 import com.github.blutorange.translune.handler.HandlerInviteReject;
@@ -35,8 +36,15 @@ import com.github.blutorange.translune.logic.BattleRunner;
 import com.github.blutorange.translune.logic.BattleStore;
 import com.github.blutorange.translune.logic.IBattleProcessing;
 import com.github.blutorange.translune.logic.IBattleRunner;
+import com.github.blutorange.translune.logic.IInitIdStore;
+import com.github.blutorange.translune.logic.IInvitationStore;
 import com.github.blutorange.translune.logic.IRandomSupplier;
+import com.github.blutorange.translune.logic.ISessionStore;
+import com.github.blutorange.translune.logic.InitIdStore;
+import com.github.blutorange.translune.logic.InvitationStore;
+import com.github.blutorange.translune.logic.SessionStore;
 import com.github.blutorange.translune.serial.IImportProcessing;
+import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 import com.github.blutorange.translune.serial.ImportProcessing;
 import com.github.blutorange.translune.servlet.BaseResourceServlet;
 import com.github.blutorange.translune.socket.ELunarMessageType;
@@ -81,6 +89,7 @@ public interface LunarComponent {
 	@NonNull @LunarMessageTyped(ELunarMessageType.PREPARE_BATTLE) ILunarMessageHandler ihandlerPrepareBattle();
 	@NonNull @LunarMessageTyped(ELunarMessageType.STEP_BATTLE) ILunarMessageHandler ihandlerStepBattle();
 	@NonNull @LunarMessageTyped(ELunarMessageType.LOOT) ILunarMessageHandler ihandlerLoot();
+	@NonNull @LunarMessageTyped(ELunarMessageType.FETCH_DATA) ILunarMessageHandler ihandlerFetchData();
 	@NonNull ISocketProcessing iSocketProcessing();
 
 	ILunarDatabaseManager iLunarDatabaseManager();
@@ -98,10 +107,15 @@ public interface LunarComponent {
 	@NonNull @Named("basic") IRandomSupplier randomBasic();
 
 	BattleStore battleStore();
+	IInitIdStore initIdStore();
+	ISessionStore sessionStore();
+	IInvitationStore invitationStore();
 
+	InitIdStore _initIdStore();
 	SocketProcessing _socketProcessing();
 	ImportProcessing _importProcessing();
 	LocalizationBundle _localizationBundle();
+
 	HandlerAuthorize _handlerAuthorize();
 	HandlerInvite _handlerInvite();
 	HandlerInviteAccept _handlerInviteAccept();
@@ -110,4 +124,9 @@ public interface LunarComponent {
 	HandlerPrepareBattle _handlerPrepareBattle();
 	HandlerStepBattle _handlerStepBattle();
 	HandlerLoot _handlerLoot();
+	HandlerFetchData _handlerFetchData();
+
+	SessionStore _sessionStore();
+	InvitationStore _invitationStore();
+	IJsoniterSupplier jsoniter();
 }

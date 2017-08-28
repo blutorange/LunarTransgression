@@ -10,10 +10,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.blutorange.translune.serial.JsoniterConfig;
-import com.jsoniter.JsonIterator;
-import com.jsoniter.spi.DecodingMode;
-
 @SuppressWarnings("nls")
 public class LunarServletContainerInitializer implements ServletContainerInitializer {
 	private final static Logger LOG = LoggerFactory.getLogger(ServletContainerInitializer.class);
@@ -21,14 +17,13 @@ public class LunarServletContainerInitializer implements ServletContainerInitial
 	@Override
 	public void onStartup(final @Nullable Set<@Nullable Class<?>> classes, final @Nullable ServletContext servletContext)
 			throws ServletException {
+		init();
+	}
+
+	void init() throws ServletException {
 		try {
 			LOG.info("initializing application server");
-
-			LOG.info("setting json iterator mode to static");
-			JsonIterator.setMode(DecodingMode.STATIC_MODE);
-
-			LOG.info("applying jsoniter configuration");
-			new JsoniterConfig().setup();
+//			new JsoniterConfig().setup();
 		}
 		catch (final Exception e) {
 			LOG.error("failed to process lunar initializer", e);

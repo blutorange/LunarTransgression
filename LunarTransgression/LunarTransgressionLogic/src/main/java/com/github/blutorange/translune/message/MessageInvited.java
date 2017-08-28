@@ -7,7 +7,6 @@ import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.jsoniter.annotation.JsonProperty;
 
 public class MessageInvited extends AMessageMessage {
-	@JsonProperty(required = true)
 	String nickname = StringUtils.EMPTY;
 
 	@Deprecated
@@ -22,6 +21,7 @@ public class MessageInvited extends AMessageMessage {
 	/**
 	 * @return the nickname
 	 */
+	@JsonProperty(required = true)
 	public String getNickname() {
 		return nickname;
 	}
@@ -34,7 +34,7 @@ public class MessageInvited extends AMessageMessage {
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.INVITED;
 	}
 }

@@ -8,7 +8,6 @@ import com.github.blutorange.translune.socket.ILunarPayload;
 import com.jsoniter.annotation.JsonProperty;
 
 public class MessageInviteRetracted implements ILunarPayload {
-	@JsonProperty(required = true)
 	String nickname = StringUtils.EMPTY;
 
 	@Deprecated
@@ -22,19 +21,21 @@ public class MessageInviteRetracted implements ILunarPayload {
 	/**
 	 * @return the nickname
 	 */
+	@JsonProperty(required = true)
 	public String getNickname() {
 		return nickname;
 	}
 
 	/**
-	 * @param nickname the nickname to set
+	 * @param nickname
+	 *            the nickname to set
 	 */
 	public void setNickname(@Nullable final String nickname) {
 		this.nickname = nickname != null ? nickname : StringUtils.EMPTY;
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.INVITE_RETRACTED;
 	}
 }

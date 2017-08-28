@@ -25,17 +25,20 @@ import com.github.blutorange.translune.logic.IInvitationStore;
 import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.message.MessageInviteRejected;
 import com.github.blutorange.translune.message.MessageInviteRetracted;
+import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 import com.github.blutorange.translune.util.Constants;
-import com.jsoniter.JsonIterator;
 import com.jsoniter.output.JsonStream;
 
 @Singleton
 public class SocketProcessing implements ISocketProcessing {
-	@Inject @Classed(SocketProcessing.class)
+	@Inject
+	@Classed(SocketProcessing.class)
 	Logger logger;
 
 	@Inject
 	ILunarDatabaseManager databaseManager;
+
+	@Inject IJsoniterSupplier jsoniter;
 
 	@Inject
 	ISessionStore sessionStore;
@@ -49,16 +52,26 @@ public class SocketProcessing implements ISocketProcessing {
 
 	@Override
 	public Future<@Nullable Void> dispatchMessage(final Session session, final String message) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("sending message for session " + session.getId());
+			logger.debug(message);
+		}
 		return session.getAsyncRemote().sendText(message);
 	}
 
 	@Override
-	public Future<@Nullable Void> dispatchMessage(final Session session, final ELunarStatusCode status, final ILunarPayload message) {
+	public Future<@Nullable Void> dispatchMessage(final Session session, final ELunarStatusCode status,
+			final ILunarPayload message) {
 		final String payload = JsonStream.serialize(message);
 		final AtomicInteger time = (AtomicInteger) session.getUserProperties().get(Constants.SESSION_KEY_SERVER_TIME);
 		if (time == null)
 			throw new RuntimeException("initSession not called, sever time is null");
-		final LunarMessage msg = new LunarMessage(time.getAndIncrement(), message.getMessageType(), status, payload);
+		final LunarMessage msg = new LunarMessage(time.getAndIncrement(), message.messageType(), status, payload);
+		if (logger.isDebugEnabled()) {
+			logger.debug("sending message for session " + session.getId());
+			logger.debug(msg.toString());
+			logger.debug(payload);
+		}
 		return session.getAsyncRemote().sendObject(msg);
 	}
 
@@ -72,6 +85,8 @@ public class SocketProcessing implements ISocketProcessing {
 
 	@Override
 	public void close(final Session session, final CloseCodes closeCode, final String closeReason) {
+		logger.debug(String.format("now closing session %s wit code %s: %s", session.getId(),
+				Integer.valueOf(closeCode.getCode()), closeReason));
 		try {
 			session.close(new CloseReason(closeCode, closeReason));
 		}
@@ -115,7 +130,7 @@ public class SocketProcessing implements ISocketProcessing {
 
 	@Override
 	public void markAuthorized(final Session session) {
-		session.getUserProperties().put(Constants.SESSION_KEY_AUTHORIZED, null);
+		session.getUserProperties().put(Constants.SESSION_KEY_AUTHORIZED, Boolean.TRUE);
 	}
 
 	@Override
@@ -132,7 +147,7 @@ public class SocketProcessing implements ISocketProcessing {
 	@Override
 	public <T extends ILunarPayload> T getMessage(final String payload, final Class<T> clazz) {
 		try {
-			return JsonIterator.deserialize(payload, clazz);
+			return jsoniter.get().deserialize(payload, clazz);
 		}
 		catch (final Exception e) {
 			logger.error("failed to parse message " + clazz.getCanonicalName(), e);
@@ -181,6 +196,5 @@ public class SocketProcessing implements ISocketProcessing {
 		databaseManager.detach(Player.class, nickname);
 		session.getUserProperties().clear();
 	}
-
 
 }

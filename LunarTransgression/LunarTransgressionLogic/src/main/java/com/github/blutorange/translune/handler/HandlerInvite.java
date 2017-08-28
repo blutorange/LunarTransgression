@@ -42,7 +42,7 @@ public class HandlerInvite implements ILunarMessageHandler {
 	public void handle(final String user, final Session session, final LunarMessage message) {
 		if (socketProcessing.getGameState(session) != EGameState.IN_MENU) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteResponse(message.getId(), "Game state must be menu for sending invitations"));
+					new MessageInviteResponse(message, "Game state must be menu for sending invitations"));
 			return;
 		}
 

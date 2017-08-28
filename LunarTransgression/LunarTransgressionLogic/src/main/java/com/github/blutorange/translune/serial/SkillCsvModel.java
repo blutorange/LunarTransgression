@@ -28,7 +28,7 @@ public class SkillCsvModel {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(@Nullable final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -71,6 +71,10 @@ public class SkillCsvModel {
 	 */
 	public void setAccuracy(final int accuracy) {
 		builder.setAccuracy(accuracy);
+	}
+
+	public void setAlwaysHits(final boolean alwaysHits) {
+		builder.setAlwaysHits(alwaysHits);
 	}
 
 	public void setAttackPower(final int power) {

@@ -4,7 +4,7 @@ public interface IInitIdStore {
 
 	String store(String nickname);
 
-	boolean assertAndClear(String nickname, String initId);
+	boolean assertToken(String nickname, String initId);
 
 	void clear(String nickname);
 }

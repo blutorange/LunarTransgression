@@ -22,6 +22,7 @@ import com.github.blutorange.translune.logic.EActionTarget;
 import com.github.blutorange.translune.logic.EItemEffect;
 import com.github.blutorange.translune.logic.ITargettable;
 import com.github.blutorange.translune.util.Constants;
+import com.jsoniter.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "item")
@@ -54,7 +55,7 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 	@Column(name = "target", nullable = false, unique = false, updatable = false)
 	private EActionTarget target = EActionTarget.OPPONENTS_FIELD;
 
-	Item() {
+	public Item() {
 	}
 
 	@Override
@@ -70,6 +71,7 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 	}
 
 	@Override
+	@JsonIgnore
 	public EEntityMeta getEntityMeta() {
 		return EEntityMeta.ITEM;
 	}
@@ -90,6 +92,7 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 
 	@NonNull
 	@Override
+	@JsonIgnore
 	public Serializable getPrimaryKey() {
 		return name;
 	}

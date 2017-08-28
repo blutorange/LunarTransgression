@@ -2,8 +2,6 @@ package com.github.blutorange.translune.logic;
 
 import java.util.function.Consumer;
 
-import com.github.blutorange.translune.db.CharacterState;
-
 class EffectorBattleStatus implements IGlobalBattleEffector {
 	int player;
 	int character;
@@ -39,7 +37,7 @@ class EffectorBattleStatus implements IGlobalBattleEffector {
 	}
 
 	@Override
-	public boolean allowTurn(final IBattleContext context, final CharacterState characterState) {
+	public boolean allowTurn(final IBattleContext context, final IComputedBattleStatus characterState) {
 		return true;
 	}
 }

@@ -45,11 +45,12 @@ public class HandlerAuthorize implements ILunarMessageHandler {
 	@Override
 	public void handle(final String user, final Session session, final LunarMessage message) {
 		final MessageAuthorize msg = socketProcessing.getMessage(message, MessageAuthorize.class);
-		if (msg == null || !initIdStore.assertAndClear(msg.getNickname(), msg.getInitId())) {
+		if (msg == null || !initIdStore.assertToken(msg.getNickname(), msg.getInitId())) {
 			logger.info("found invalid credentials: " + session.getId());
 			socketProcessing.close(session, CloseCodes.CANNOT_ACCEPT, "invalid credentials");
 			return;
 		}
+		logger.info("authorized session " + session.getId());
 		final String nickname = msg.getNickname();
 		sessionStore.store(msg.getNickname(), session, oldSession -> {
 			if (oldSession != null && oldSession.isOpen()) {
@@ -61,6 +62,7 @@ public class HandlerAuthorize implements ILunarMessageHandler {
 			socketProcessing.markAuthorized(session);
 			socketProcessing.setGameState(session, EGameState.IN_MENU);
 		});
+
 
 		// Prefetch data
 		databaseManager.find(Player.class, nickname);

@@ -25,7 +25,7 @@ import com.github.blutorange.translune.util.CustomProperties;
 @WebListener(value="Listener for the lunar application")
 public class LunarServletContextListener implements ServletContextListener {
 	@Inject @Classed(LunarServletContextListener.class)
-	private Logger logger;
+	Logger logger;
 
 	@Inject @Named("default")
 	Scheduler scheduler;

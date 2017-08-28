@@ -188,5 +188,9 @@ public class BattleAction {
 				throw new IllegalStateException("character is not set");
 			return new BattleAction(character, targets, sentences.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 		}
+
+		public List<String> getSentences() {
+			return sentences;
+		}
 	}
 }

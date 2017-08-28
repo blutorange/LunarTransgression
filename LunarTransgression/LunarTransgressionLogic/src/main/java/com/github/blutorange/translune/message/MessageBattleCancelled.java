@@ -12,7 +12,7 @@ public class MessageBattleCancelled extends AMessageMessage {
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.BATTLE_CANCELLED;
 	}
 }

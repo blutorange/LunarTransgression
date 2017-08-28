@@ -7,21 +7,17 @@ import com.github.blutorange.translune.socket.ILunarPayload;
 import com.jsoniter.annotation.JsonProperty;
 
 public class MessageLoot implements ILunarPayload {
-	@JsonProperty(required = false)
 	@Nullable
 	String characterState;
 
-	@JsonProperty(required = false)
 	@Nullable
 	String dropCharacterState;
 
-	@JsonProperty(required = false)
-	@Nullable
-	String item;
-
-	@JsonProperty(required = false)
 	@Nullable
 	String dropItem;
+
+	@Nullable
+	String item;
 
 	@Deprecated
 	public MessageLoot() {
@@ -36,36 +32,15 @@ public class MessageLoot implements ILunarPayload {
 	 * @return the characterState. null if no character is to be looted.
 	 */
 	@Nullable
+	@JsonProperty(required = false)
 	public String getCharacterState() {
 		return characterState;
 	}
 
 	/**
-	 * @return the item. null iff no item is to be looted.
-	 */
-	@Nullable
-	public String getItem() {
-		return item;
-	}
-
-	/**
-	 * @param characterState the characterState to set
-	 */
-	public void setCharacterState(@Nullable final String characterState) {
-		this.characterState = characterState;
-	}
-
-	/**
-	 * @param item the item to set
-	 */
-	public void setItem(@Nullable final String item) {
-		this.item = item;
-	}
-
-
-	/**
 	 * @return the dropCharacterState
 	 */
+	@JsonProperty(required = false)
 	@Nullable
 	public String getDropCharacterState() {
 		return dropCharacterState;
@@ -75,26 +50,54 @@ public class MessageLoot implements ILunarPayload {
 	 * @return the dropItem
 	 */
 	@Nullable
+	@JsonProperty(required = false)
 	public String getDropItem() {
 		return dropItem;
 	}
 
 	/**
-	 * @param dropCharacterState the dropCharacterState to set
+	 * @return the item. null iff no item is to be looted.
+	 */
+	@JsonProperty(required = false)
+	@Nullable
+	public String getItem() {
+		return item;
+	}
+
+	@Override
+	public ELunarMessageType messageType() {
+		return ELunarMessageType.LOOT;
+	}
+
+	/**
+	 * @param characterState
+	 *            the characterState to set
+	 */
+	public void setCharacterState(@Nullable final String characterState) {
+		this.characterState = characterState;
+	}
+
+	/**
+	 * @param dropCharacterState
+	 *            the dropCharacterState to set
 	 */
 	public void setDropCharacterState(final String dropCharacterState) {
 		this.dropCharacterState = dropCharacterState;
 	}
 
 	/**
-	 * @param dropItem the dropItem to set
+	 * @param dropItem
+	 *            the dropItem to set
 	 */
 	public void setDropItem(final String dropItem) {
 		this.dropItem = dropItem;
 	}
 
-	@Override
-	public ELunarMessageType getMessageType() {
-		return ELunarMessageType.LOOT;
+	/**
+	 * @param item
+	 *            the item to set
+	 */
+	public void setItem(@Nullable final String item) {
+		this.item = item;
 	}
 }

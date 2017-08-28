@@ -9,7 +9,6 @@ import com.jsoniter.annotation.JsonProperty;
 
 public class MessageBattleEnded implements ILunarPayload {
 	private BattleResult[] battleResults;
-	@JsonProperty(required = true)
 	boolean isVictory;
 
 	@Deprecated
@@ -32,12 +31,13 @@ public class MessageBattleEnded implements ILunarPayload {
 	/**
 	 * @return Whether the player won.
 	 */
+	@JsonProperty(required = true)
 	public boolean getIsVictory() {
 		return isVictory;
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.BATTLE_ENDED;
 	}
 

@@ -16,7 +16,7 @@ public class InitIdStore implements IInitIdStore {
 	private final Map<String, InitIdStoreEntry> store;
 
 	@Inject @Named("secure")
-	private IRandomSupplier random;
+	IRandomSupplier random;
 
 	@Inject
 	CustomProperties customProperties;
@@ -37,12 +37,14 @@ public class InitIdStore implements IInitIdStore {
 
 
 	@Override
-	public boolean assertAndClear(final String nickname, final String initId) {
-		final InitIdStoreEntry entry = store.remove(nickname);
+	public boolean assertToken(final String nickname, final String initId) {
+		final InitIdStoreEntry entry = store.get(nickname);
 		if (entry == null)
 			return false;
-		if (System.currentTimeMillis() - entry.created > customProperties.getTimeoutInitIdMillis())
+		if (System.currentTimeMillis() - entry.created > customProperties.getTimeoutInitIdMillis()) {
+			store.remove(nickname);
 			return false;
+		}
 		return entry.initId.equals(initId);
 	}
 

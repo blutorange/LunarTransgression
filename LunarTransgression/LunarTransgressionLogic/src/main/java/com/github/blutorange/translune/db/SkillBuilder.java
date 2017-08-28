@@ -44,7 +44,7 @@ public class SkillBuilder implements Builder<Skill> {
 	}
 
 	public void addStageChanges(final Map<EStatusValue, Integer> stageChanges) {
-		stageChanges.putAll(stageChanges);
+		this.stageChanges.putAll(stageChanges);
 	}
 
 	@Override

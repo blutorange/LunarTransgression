@@ -13,11 +13,11 @@ public class MessageStepBattleResponse extends AMessageMessageResponse {
 	}
 
 	public MessageStepBattleResponse(final LunarMessage requestMessage, final String message) {
-		this(requestMessage.getId(), message);
+		this(requestMessage.getTime(), message);
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.STEP_BATTLE_RESPONSE;
 	}
 }

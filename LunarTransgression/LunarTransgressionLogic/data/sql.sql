@@ -31,10 +31,10 @@ select replace(upper(m.identifier),'-','_') as effect
 .output output/character.csv
 select 
         upper(substr(names.name,1,1)) || substr(names.name,2) as name,
-        (substr('000'||p.species_id,-3,3) || '.gif') as imgFront,
-        (substr('000'||p.species_id,-3,3) || 'b.gif') as imgBack,
+        (substr('000'||p.species_id,-3,3) || '.json') as imgFront,
+        (substr('000'||p.species_id,-3,3) || 'b.json') as imgBack,
         p.species_id || '.png' as imgIcon,
-        (p.species_id || '.ogg') as cry,
+        (p.species_id || '.webm') as cry,
         upper(replace(case gr.identifier
             when 'slow-then-very-fast' then 'erratic'
             when 'fast-then-very-slow' then 'fluctuating'
@@ -94,7 +94,6 @@ select
     order by p.species_id
 ;
 
-
 -- Skill
 .output output/skill.csv
 select
@@ -104,6 +103,8 @@ select
         ifnull(mm.healing,0) as healPower,
         (select replace(group_concat(upper(
                     case s.identifier
+                    when 'attack' then 'physical-attack'
+                    when 'defense' then 'physical-defense'
                     when 'special-attack' then 'magical-attack'
                     when 'special-defense' then 'magical-defense'
                     else s.identifier end), ','), '-', '_')
@@ -139,7 +140,7 @@ select
     join move_meta as mm on mm.move_id=m.id
     join move_meta_ailments as mma on mm.meta_ailment_id = mma.id
     join move_meta_categories as mmc on mm.meta_category_id = mmc.id
-    where mepl.iso639 = 'en'
+    where mepl.iso639 = 'en' and m.identifier != 'struggle'
     order by mmc.identifier,m.identifier
 ;
 

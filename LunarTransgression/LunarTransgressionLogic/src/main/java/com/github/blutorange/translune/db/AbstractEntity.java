@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.jsoniter.annotation.JsonIgnore;
+
 public abstract class AbstractEntity {
 	/*
 	 * (non-Javadoc)
@@ -41,6 +43,7 @@ public abstract class AbstractEntity {
 	@Override
 	public abstract String toString();
 
+	@JsonIgnore
 	@NonNull
 	public abstract Serializable getPrimaryKey();
 }

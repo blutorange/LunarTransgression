@@ -7,20 +7,15 @@ import com.jsoniter.annotation.JsonIgnore;
 import com.jsoniter.annotation.JsonProperty;
 
 public class LunarMessage {
-	@JsonProperty(required = true)
-	int time;
+	private final long receptionTime = System.currentTimeMillis();
 
-	@JsonProperty(required = true)
-	ELunarMessageType type = ELunarMessageType.UNKNOWN;
-
-	@JsonProperty(required = false)
-	ELunarStatusCode status = ELunarStatusCode.OK;
-
-	@JsonProperty(required = false)
 	String payload = StringUtils.EMPTY;
 
-	@JsonIgnore(ignoreDecoding = false, ignoreEncoding = false)
-	private final long receptionTime = System.currentTimeMillis();
+	ELunarStatusCode status = ELunarStatusCode.OK;
+
+	int time;
+
+	ELunarMessageType type = ELunarMessageType.UNKNOWN;
 
 	public LunarMessage() {
 	}
@@ -34,67 +29,73 @@ public class LunarMessage {
 	}
 
 	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return time;
-	}
-
-	/**
-	 * @return the time
-	 */
-	public int getTime() {
-		return time;
-	}
-
-	/**
 	 * @return the payload
 	 */
+	@JsonProperty(required = false)
 	public String getPayload() {
 		return payload;
 	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(final int id) {
-		this.time = id;
-	}
-	/**
-	 * @param payload the payload to set
-	 */
 
-	public void setPayload(@Nullable final String payload) {
-		this.payload = payload != null ? payload : StringUtils.EMPTY;
-	}
-	/**
-	 * @return the type
-	 */
-	public ELunarMessageType getType() {
-		return type;
-	}
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(@Nullable final ELunarMessageType type) {
-		this.type = type != null ? type : ELunarMessageType.UNKNOWN;
+	@JsonIgnore(ignoreDecoding = true, ignoreEncoding = true)
+	public long getReceptionTime() {
+		return receptionTime;
 	}
 
 	/**
 	 * @return the status
 	 */
+	@JsonProperty(required = false)
 	public ELunarStatusCode getStatus() {
 		return status;
 	}
 
 	/**
-	 * @param status the status to set
+	 * @return the time
+	 */
+	@JsonProperty(required = true)
+	public int getTime() {
+		return time;
+	}
+
+	/**
+	 * @return the type
+	 */
+	@JsonProperty(required = true)
+	public ELunarMessageType getType() {
+		return type;
+	}
+
+	/**
+	 * @param payload
+	 *            the payload to set
+	 */
+
+	public void setPayload(@Nullable final String payload) {
+		this.payload = payload != null ? payload : StringUtils.EMPTY;
+	}
+
+	/**
+	 * @param status
+	 *            the status to set
 	 */
 	public void setStatus(@Nullable final ELunarStatusCode status) {
 		this.status = status != null ? status : ELunarStatusCode.OK;
 	}
 
-	public long getReceptionTime() {
-		return receptionTime;
+	/**
+	 * @param time
+	 *            the time to set
+	 */
+	public void setTime(final int time) {
+		this.time = time;
+	}
+
+	/**
+	 * @param type
+	 *            the type to set
+	 */
+	public void setType(@Nullable final ELunarMessageType type) {
+		this.type = type != null ? type : ELunarMessageType.UNKNOWN;
 	}
 
 	@Override

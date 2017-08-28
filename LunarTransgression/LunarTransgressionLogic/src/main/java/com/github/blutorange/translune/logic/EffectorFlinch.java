@@ -37,7 +37,7 @@ class EffectorFlinch implements IGlobalBattleEffector {
 	}
 
 	@Override
-	public boolean allowTurn(final IBattleContext context, final CharacterState characterState) {
+	public boolean allowTurn(final IBattleContext context, final IComputedBattleStatus characterState) {
 		final CharacterState user = context.getCharacterState(player, character);
 		final BattleAction action = new BattleAction.Builder().character(user).targets(user)
 				.addSentences(String.format("%s flinched and couldn't move.", user.getNickname())).build();

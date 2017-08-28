@@ -8,7 +8,6 @@ import com.github.blutorange.translune.socket.ILunarPayload;
 import com.jsoniter.annotation.JsonProperty;
 
 public class MessageBattleStepped implements ILunarPayload {
-	@JsonProperty(required = true)
 	private BattleAction[] battleResults;
 
 	/**
@@ -31,12 +30,13 @@ public class MessageBattleStepped implements ILunarPayload {
 	/**
 	 * @return the battleResults
 	 */
+	@JsonProperty(required = true)
 	public BattleAction[] getBattleResults() {
 		return battleResults;
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.BATTLE_STEPPED;
 	}
 

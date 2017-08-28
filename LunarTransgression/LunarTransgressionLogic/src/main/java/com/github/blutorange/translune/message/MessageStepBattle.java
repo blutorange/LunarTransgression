@@ -5,6 +5,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.github.blutorange.translune.socket.BattleCommand;
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ILunarPayload;
+import com.jsoniter.annotation.JsonProperty;
 
 public class MessageStepBattle implements ILunarPayload {
 	private final static BattleCommand COMMAND_DEFENSE = new BattleCommand();
@@ -29,6 +30,7 @@ public class MessageStepBattle implements ILunarPayload {
 	/**
 	 * @return the battleCommandCharacter1
 	 */
+	@JsonProperty(required = true)
 	public BattleCommand getBattleCommandCharacter1() {
 		return battleCommandCharacter1;
 	}
@@ -36,6 +38,7 @@ public class MessageStepBattle implements ILunarPayload {
 	/**
 	 * @return the battleCommandCharacter2
 	 */
+	@JsonProperty(required = true)
 	public BattleCommand getBattleCommandCharacter2() {
 		return battleCommandCharacter2;
 	}
@@ -43,6 +46,7 @@ public class MessageStepBattle implements ILunarPayload {
 	/**
 	 * @return the battleCommandCharacter3
 	 */
+	@JsonProperty(required = true)
 	public BattleCommand getBattleCommandCharacter3() {
 		return battleCommandCharacter3;
 	}
@@ -50,12 +54,13 @@ public class MessageStepBattle implements ILunarPayload {
 	/**
 	 * @return the battleCommandCharacter4
 	 */
+	@JsonProperty(required = true)
 	public BattleCommand getBattleCommandCharacter4() {
 		return battleCommandCharacter4;
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.STEP_BATTLE;
 	}
 

@@ -19,7 +19,8 @@ public abstract class ABattleCommandHandler implements IBattleCommandHandler {
 	@Inject
 	protected IBattleProcessing battleProcessing;
 
-	public ABattleCommandHandler(final IBattleContext battleContext, final int player, final int character, final BattleCommand battleCommand) {
+	public ABattleCommandHandler(final IBattleContext battleContext, final int player, final int character,
+			final BattleCommand battleCommand) {
 		ComponentFactory.getLunarComponent().inject(this);
 		this.context = battleContext;
 		this.player = player;
@@ -40,7 +41,8 @@ public abstract class ABattleCommandHandler implements IBattleCommandHandler {
 
 	@Override
 	public int getSpeed() {
-		return context.getComputedBattleStatus(player, character).getComputedBattleSpeed() * battleOrderSpeedDeviation / 100;
+		return context.getComputedBattleStatus(player, character).getComputedBattleSpeed() * battleOrderSpeedDeviation
+				/ 100;
 	}
 
 	@Override
@@ -49,8 +51,13 @@ public abstract class ABattleCommandHandler implements IBattleCommandHandler {
 	}
 
 	@Override
-	public @NonNull CharacterState getCharacterState() {
+	public CharacterState getCharacterState() {
 		return context.getCharacterState(player, character);
+	}
+
+	@Override
+	public IComputedBattleStatus getComputedBattleStatus() {
+		return context.getComputedBattleStatus(player, character);
 	}
 
 	@Override

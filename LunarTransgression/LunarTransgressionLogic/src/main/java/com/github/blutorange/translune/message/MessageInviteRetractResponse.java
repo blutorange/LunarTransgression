@@ -11,13 +11,13 @@ public class MessageInviteRetractResponse extends  AMessageMessageResponse {
 	public MessageInviteRetractResponse(final int origin, final String message) {
 		super(origin, message);
 	}
-	
+
 	public MessageInviteRetractResponse(final LunarMessage requestMessage, final String message) {
-		this(requestMessage.getId(), message);
+		this(requestMessage.getTime(), message);
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.INVITE_RETRACT_RESPONSE;
 	}
 }

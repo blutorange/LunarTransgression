@@ -3,6 +3,7 @@ package com.github.blutorange.translune.db;
 import java.io.Serializable;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -13,6 +14,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -32,6 +34,8 @@ import com.github.blutorange.common.IAccessible;
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.EExperienceGroup;
 import com.github.blutorange.translune.util.Constants;
+import com.jsoniter.annotation.JsonIgnore;
+import com.jsoniter.annotation.JsonProperty;
 
 @Entity
 @Table(name = "\"character\"")
@@ -53,7 +57,7 @@ public class Character extends AbstractStoredEntity {
 	@NonNull
 	@NotNull
 	@Column(name = "elements", nullable = false, unique = false, updatable = false)
-	@ElementCollection(targetClass = EElement.class)
+	@ElementCollection(targetClass = EElement.class, fetch = FetchType.EAGER)
 	@CollectionTable(name = "charelements", joinColumns = @JoinColumn(name = "\"character\""), foreignKey = @ForeignKey(name = "fk_charelements_char"))
 	private Set<@NonNull EElement> elements = EnumSet.noneOf(EElement.class);
 
@@ -130,12 +134,19 @@ public class Character extends AbstractStoredEntity {
 	@Column(name = "speed", nullable = false, unique = false, updatable = false)
 	private int speed;
 
-	Character() {
+	public Character() {
 	}
 
 	@Override
 	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
-		associated(skills.keySet(), consumer);
+		final Set<Skill> set = new HashSet<>(skills.keySet());
+		associated(set, consumer);
+		for (final Skill skill : set) {
+			final Integer level = skills.remove(skill);
+			if (level != null) {
+				skills.put(skill, level);
+			}
+		}
 	}
 
 	/**
@@ -166,6 +177,7 @@ public class Character extends AbstractStoredEntity {
 		return elements;
 	}
 
+	@JsonIgnore
 	@Override
 	public EEntityMeta getEntityMeta() {
 		return EEntityMeta.CHARACTER;
@@ -254,6 +266,7 @@ public class Character extends AbstractStoredEntity {
 
 	@NonNull
 	@Override
+	@JsonIgnore
 	public Serializable getPrimaryKey() {
 		return name;
 	}
@@ -270,10 +283,13 @@ public class Character extends AbstractStoredEntity {
 	}
 
 	@NonNull
+	@JsonProperty(from="elements", to = "elements")
 	public Set<@NonNull EElement> getUnmodifiableElements() {
 		return elements;
 	}
 
+	@JsonProperty(value = "skills", from = "skills", to ="skills")
+	@NonNull
 	public Map<Skill, Integer> getUnmodifiableSkills() {
 		return skills;
 	}

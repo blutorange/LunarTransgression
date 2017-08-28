@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
@@ -51,10 +50,13 @@ public class LunarEndpoint {
 	@Inject
 	CustomProperties customProperties;
 
+	public LunarEndpoint() {
+		init();
+	}
 
-	@PostConstruct
 	private void init() {
 		ComponentFactory.getLunarComponent().inject(this);
+		logger.info("lunar endpoint created");
 	}
 
 	@OnOpen
@@ -83,7 +85,7 @@ public class LunarEndpoint {
 	@OnMessage
 	public void message(final Session session, final LunarMessage message) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("retrieving lunar message " + session.getId());
+			logger.debug("receiving lunar message " + message.getTime() + " - session " + session.getId());
 			logger.debug(message.toString());
 		}
 		// For the same session, only one message handler is called at the same
@@ -120,8 +122,8 @@ public class LunarEndpoint {
 	public void close(final Session session, final CloseReason closeReason) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("closing lunar session " + session.getId());
-			logger.debug(
-					String.format("CloseReason: %d %s", closeReason.getCloseCode(), closeReason.getReasonPhrase()));
+			logger.debug(String.format("CloseReason: %s %s", Integer.valueOf(closeReason.getCloseCode().getCode()),
+					closeReason.getReasonPhrase()));
 		}
 		socketProcessing.finalizeSession(session);
 	}
@@ -133,15 +135,17 @@ public class LunarEndpoint {
 
 	private void handleAuthorization(final Session session, final LunarMessage message) {
 		if (message.getType() != ELunarMessageType.AUTHORIZE) {
+			logger.debug("not authorized, discarding message");
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.ACCESS_DENIED, new MessageUnknown());
 			return;
 		}
+		logger.debug("not authorized, validating credentials");
 		ELunarMessageType.AUTHORIZE.handle(session, message);
 	}
 
 	private void processMessage(final Session session, final LunarMessage message) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("processing lunar message " + session.getId());
+			logger.debug("processing lunar message " + message.getTime() + " - session " + session.getId());
 			logger.debug(message.toString());
 		}
 		if (socketProcessing.isAuthorized(session)) {

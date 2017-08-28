@@ -5,7 +5,7 @@ import com.github.blutorange.translune.socket.ILunarPayload;
 
 public class MessageUnknown implements ILunarPayload {
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.UNKNOWN;
 	}
 }

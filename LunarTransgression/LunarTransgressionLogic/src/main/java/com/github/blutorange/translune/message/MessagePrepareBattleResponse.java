@@ -13,11 +13,11 @@ public class MessagePrepareBattleResponse extends AMessageMessageResponse {
 	}
 
 	public MessagePrepareBattleResponse(final LunarMessage requestMessage, final String message) {
-		this(requestMessage.getId(), message);
+		this(requestMessage.getTime(), message);
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.PREPARE_BATTLE_RESPONSE;
 	}
 }

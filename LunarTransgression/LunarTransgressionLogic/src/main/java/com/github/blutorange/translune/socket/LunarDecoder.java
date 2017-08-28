@@ -10,10 +10,11 @@ import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.ic.ComponentFactory;
-import com.jsoniter.JsonIterator;
+import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 
 public class LunarDecoder implements Decoder.Text<LunarMessage> {
 	@Inject @Classed(LunarDecoder.class) Logger logger;
+	@Inject IJsoniterSupplier jsoniter;
 
 	@Override
 	public void destroy() {
@@ -27,9 +28,10 @@ public class LunarDecoder implements Decoder.Text<LunarMessage> {
 
 	@Override
 	public LunarMessage decode(final String message) throws DecodeException {
+		logger.debug(message);
 		LunarMessage msg;
 		try {
-			msg = JsonIterator.deserialize(message, LunarMessage.class);
+			msg = jsoniter.get().deserialize(message, LunarMessage.class);
 		}
 		catch (final Exception e) {
 			logger.error("failed to decode message", e);

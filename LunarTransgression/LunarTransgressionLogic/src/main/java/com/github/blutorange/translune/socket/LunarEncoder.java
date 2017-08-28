@@ -9,10 +9,11 @@ import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.ic.ComponentFactory;
-import com.jsoniter.output.JsonStream;
+import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 
 public class LunarEncoder implements Encoder.Text<LunarMessage> {
 	@Inject @Classed(LunarEncoder.class) Logger logger;
+	@Inject IJsoniterSupplier jsoniter;
 
 	@Override
 	public void destroy() {
@@ -27,7 +28,7 @@ public class LunarEncoder implements Encoder.Text<LunarMessage> {
 	@Override
 	public String encode(final LunarMessage message) throws EncodeException {
 		try {
-			return JsonStream.serialize(message);
+			return jsoniter.get().serialize(message);
 		}
 		catch (final Exception e) {
 			logger.error("failed to encode message", e);

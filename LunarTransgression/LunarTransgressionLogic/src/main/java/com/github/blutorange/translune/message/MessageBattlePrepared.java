@@ -8,7 +8,7 @@ public class MessageBattlePrepared implements ILunarPayload {
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.BATTLE_PREPARED;
 	}
 }

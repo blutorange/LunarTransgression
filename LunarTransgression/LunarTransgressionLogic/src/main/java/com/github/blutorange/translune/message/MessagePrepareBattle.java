@@ -5,6 +5,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ILunarPayload;
+import com.jsoniter.annotation.JsonProperty;
 
 public class MessagePrepareBattle implements ILunarPayload {
 	private String[] items = ArrayUtils.EMPTY_STRING_ARRAY;
@@ -15,13 +16,14 @@ public class MessagePrepareBattle implements ILunarPayload {
 	}
 
 	@Override
-	public ELunarMessageType getMessageType() {
+	public ELunarMessageType messageType() {
 		return ELunarMessageType.PREPARE_BATTLE;
 	}
 
 	/**
 	 * @return the items
 	 */
+	@JsonProperty(required = true)
 	public String[] getItems() {
 		return items;
 	}
@@ -29,6 +31,7 @@ public class MessagePrepareBattle implements ILunarPayload {
 	/**
 	 * @return the characterStates
 	 */
+	@JsonProperty(required = true)
 	public String[] getCharacterStates() {
 		return characterStates;
 	}

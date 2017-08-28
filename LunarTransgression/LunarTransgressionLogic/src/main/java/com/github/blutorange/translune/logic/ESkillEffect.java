@@ -3,7 +3,7 @@ package com.github.blutorange.translune.logic;
 import com.github.blutorange.translune.db.Skill;
 import com.github.blutorange.translune.socket.BattleCommand;
 
-// TODO implement FIELD_EFFECT(14), FORCE_SWITCH(2), OHKO(4), WHOLE_FIELD_EFFECT(16)
+// TODO implement FIELD_EFFECT(14), FORCE_SWITCH(2), WHOLE_FIELD_EFFECT(16)
 public enum ESkillEffect implements ISkillExecutor {
 	AILMENT(new SkillExecutorBasic()),
 	DAMAGE(new SkillExecutorBasic()),
@@ -16,7 +16,7 @@ public enum ESkillEffect implements ISkillExecutor {
 	HEAL(new SkillExecutorHeal()),
 	NET_GOOD_STATS(new SkillExecutorBasic()),
 	NONE(new SkillExecutorNoEffect()),
-	OHKO(new SkillExecutorNoEffect()),
+	OHKO(new SkillExecutorOhko()),
 	SWAGGER(new SkillExecutorBasic()),
 	UNIQUE(new SkillExecutorUnique()),
 	WHOLE_FIELD_EFFECT(new SkillExecutorNoEffect()),

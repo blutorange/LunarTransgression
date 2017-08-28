@@ -11,12 +11,13 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.MapKeyEnumerated;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -33,15 +34,18 @@ import com.github.blutorange.translune.logic.ESkillEffect;
 import com.github.blutorange.translune.logic.EStatusCondition;
 import com.github.blutorange.translune.logic.IAccuracied;
 import com.github.blutorange.translune.logic.IFlinched;
+import com.github.blutorange.translune.logic.IHealing;
 import com.github.blutorange.translune.logic.ISkilled;
 import com.github.blutorange.translune.logic.IStaged;
 import com.github.blutorange.translune.logic.IStatusConditioned;
 import com.github.blutorange.translune.logic.ITargettable;
 import com.github.blutorange.translune.util.Constants;
+import com.jsoniter.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "skill")
-public class Skill extends AbstractStoredEntity implements ITargettable, ISkilled, IAccuracied, IStatusConditioned, IFlinched, IStaged {
+public class Skill extends AbstractStoredEntity
+		implements ITargettable, ISkilled, IAccuracied, IStatusConditioned, IFlinched, IStaged, IHealing {
 	@Min(0)
 	@Max(Constants.MAX_ACCURACY)
 	@Column(name = "accuracy", nullable = false, unique = false, updatable = false)
@@ -57,7 +61,7 @@ public class Skill extends AbstractStoredEntity implements ITargettable, ISkille
 
 	@Nullable
 	@Enumerated(value = EnumType.STRING)
-	@Column(name = "condition", nullable = true, unique = false, updatable = false, insertable = true)
+	@Column(name = "\"condition\"", nullable = true, unique = false, updatable = false, insertable = true)
 	private EStatusCondition condition;
 
 	@Min(0)
@@ -128,12 +132,12 @@ public class Skill extends AbstractStoredEntity implements ITargettable, ISkille
 	private int stageChance;
 
 	@NotNull
-	@ElementCollection
-	@CollectionTable(name = "skillstagechange", uniqueConstraints = @UniqueConstraint(name = "uk_skillstagechange", columnNames = {
-			"stagepower", "statusvalue",
-			"skill" }), foreignKey = @ForeignKey(name = "fk_skillstagechange_skill"), joinColumns = @JoinColumn(name = "skill", nullable = false, unique = false, updatable = false, insertable = true))
-	@MapKeyJoinColumn(name = "skill", foreignKey = @ForeignKey(name = "fk_charskill_skill"))
-	@Column(name = "level", updatable = false, insertable = true, unique = false, nullable = false)
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "skillstagechange", foreignKey = @ForeignKey(name = "fk_skillstagechange_skill"),
+		joinColumns = @JoinColumn(name = "skill", nullable = false, unique = false, updatable = false, insertable = true))
+	@MapKeyColumn(name = "statusvalue")
+	@MapKeyEnumerated(EnumType.STRING)
+	@Column(name = "stagepower", updatable = false, insertable = true, unique = false, nullable = false)
 	private Map<EStatusValue, Integer> stageChanges;
 
 	@NonNull
@@ -142,7 +146,7 @@ public class Skill extends AbstractStoredEntity implements ITargettable, ISkille
 	@Column(name = "target", nullable = false, unique = false, updatable = false)
 	private EActionTarget target = EActionTarget.OPPONENTS_FIELD;
 
-	Skill() {
+	public Skill() {
 	}
 
 	/**
@@ -205,6 +209,7 @@ public class Skill extends AbstractStoredEntity implements ITargettable, ISkille
 		return element;
 	}
 
+	@JsonIgnore
 	@Override
 	public EEntityMeta getEntityMeta() {
 		return EEntityMeta.SKILL;
@@ -228,6 +233,7 @@ public class Skill extends AbstractStoredEntity implements ITargettable, ISkille
 	/**
 	 * @return the healPower
 	 */
+	@Override
 	public int getHealPower() {
 		return healPower;
 	}
@@ -264,6 +270,7 @@ public class Skill extends AbstractStoredEntity implements ITargettable, ISkille
 
 	@NonNull
 	@Override
+	@JsonIgnore
 	public Serializable getPrimaryKey() {
 		return name;
 	}
@@ -278,6 +285,7 @@ public class Skill extends AbstractStoredEntity implements ITargettable, ISkille
 	/**
 	 * @return the stageChance
 	 */
+	@Override
 	public int getStageChance() {
 		return stageChance;
 	}

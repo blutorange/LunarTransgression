@@ -139,6 +139,22 @@ public class BattleProcessing implements IBattleProcessing {
 	}
 
 	@Override
+	public void performHeal(final IHealing healData, final IComputedBattleStatus user, final List<String> messages,
+			final IBattleContext context) {
+		// Computed heal amount and do the healing.
+		final int hpBefore = user.getComputedBattleMaxHp();
+		final int healAmount = healData.getHealPower() * user.getComputedBattleMaxHp() / 100;
+		user.modifyHp(healAmount);
+		final int hpAfter = user.getComputedBattleMaxHp();
+
+		// Inform the combatants.
+		if (hpAfter != hpBefore)
+			messages.add(String.format("%s HP healed its HP by %d!", Integer.valueOf(hpAfter - hpBefore)));
+		else
+			messages.add("But its HP were already full.");
+	}
+
+	@Override
 	public void makeFlinch(final IFlinched flinchData, final IComputedBattleStatus target, final List<String> messages,
 			final IBattleContext context) {
 		final int flinchChance = flinchData.getFlinchChance();
@@ -198,6 +214,9 @@ public class BattleProcessing implements IBattleProcessing {
 			messages.add(effectiveMessage);
 		messages.add(String.format("%s took %d damage!", target.getCharacterState().getNickname(),
 				Integer.valueOf(damageResult.getDamage())));
+		if (target.getBattleStatus().getHp() <= 0) {
+			messages.add(String.format("%s fainted!", target.getCharacterState().getNickname()));
+		}
 	}
 
 	@Override
@@ -343,7 +362,7 @@ public class BattleProcessing implements IBattleProcessing {
 		for (final Iterator<IGlobalBattleEffector> it = handler.getBattleContext().getEffectorStack().iterator(); it
 				.hasNext();) {
 			final IGlobalBattleEffector effector = it.next();
-			if (!effector.allowTurn(handler.getBattleContext(), handler.getCharacterState()))
+			if (!effector.allowTurn(handler.getBattleContext(), handler.getComputedBattleStatus()))
 				return false;
 		}
 		return true;
@@ -456,13 +475,13 @@ public class BattleProcessing implements IBattleProcessing {
 		return count;
 	}
 
-	private void makeCommandHandler(final IBattleContext battleContext, final int player,
+	private void makeCommandHandler(final IBattleContext context, final int player,
 			final IBattleCommandHandler[] out, final int offset, final BattleCommand... battleCommands) {
 		for (int character = 4; character-- > 0;) {
-			final CharacterState characterState = battleContext.getCharacterState(player, character);
+			final CharacterState characterState = context.getCharacterState(player, character);
 			if (characterState == null)
 				throw new IllegalArgumentException("Character state does not exist: " + player + ", " + character);
-			out[character + offset] = IBattleCommandHandler.create(battleContext, player, character,
+			out[character + offset] = IBattleCommandHandler.create(context, player, character,
 					battleCommands[character]);
 		}
 	}

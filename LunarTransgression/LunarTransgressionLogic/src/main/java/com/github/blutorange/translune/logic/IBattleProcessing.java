@@ -33,12 +33,13 @@ public interface IBattleProcessing {
 
 	void handleError(IBattleContext context, CharacterState user, String... messages);
 
-	void inflictCondition(IStatusConditioned conditionData, IComputedBattleStatus target,
-			List<String> messages, IBattleContext context);
+	void inflictCondition(IStatusConditioned conditionData, IComputedBattleStatus target, List<String> messages,
+			IBattleContext context);
 
 	void makeFlinch(IFlinched flinchData, IComputedBattleStatus target, List<String> messages, IBattleContext context);
 
-	boolean moveHits(IAccuracied accuracyData, IComputedBattleStatus user, IComputedBattleStatus target, List<String> messages);
+	boolean moveHits(IAccuracied accuracyData, IComputedBattleStatus user, IComputedBattleStatus target,
+			List<String> messages);
 
 	/**
 	 *
@@ -54,4 +55,6 @@ public interface IBattleProcessing {
 			List<IGlobalBattleEffector> effectorStack, int turn);
 
 	void changeStages(IStaged skill, IComputedBattleStatus target, List<String> messages, IBattleContext context);
+
+	void performHeal(IHealing healData, IComputedBattleStatus user, List<String> messages, IBattleContext context);
 }

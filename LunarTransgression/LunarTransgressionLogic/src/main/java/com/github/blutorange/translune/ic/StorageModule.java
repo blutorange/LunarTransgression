@@ -5,17 +5,16 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Singleton;
 
-import org.slf4j.Logger;
-
-import com.github.blutorange.translune.logic.BattleStore;
 import com.github.blutorange.translune.logic.IBattleStore;
 import com.github.blutorange.translune.logic.IInitIdStore;
 import com.github.blutorange.translune.logic.IInvitationStore;
 import com.github.blutorange.translune.logic.ISessionStore;
-import com.github.blutorange.translune.logic.InitIdStore;
-import com.github.blutorange.translune.logic.InvitationStore;
-import com.github.blutorange.translune.logic.SessionStore;
+import com.github.blutorange.translune.serial.IJsoniter;
+import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
+import com.github.blutorange.translune.serial.JsoniterConfig;
 import com.github.blutorange.translune.util.CustomProperties;
+import com.jsoniter.JsonIterator;
+import com.jsoniter.output.JsonStream;
 
 import dagger.Module;
 import dagger.Provides;
@@ -23,18 +22,39 @@ import dagger.Provides;
 @Module
 public class StorageModule {
 	@Provides @Singleton static IInitIdStore provideInitIdStore() {
-		return new InitIdStore();
+		return ComponentFactory.getLunarComponent()._initIdStore();
 	}
 	@Provides @Singleton static ISessionStore provideSessionStore() {
-		return new SessionStore();
+		return ComponentFactory.getLunarComponent()._sessionStore();
 	}
 	@Provides @Singleton static IInvitationStore provideInvitationStore() {
-		return new InvitationStore();
+		return ComponentFactory.getLunarComponent()._invitationStore();
 	}
-	@Provides @Singleton static IBattleStore provideBattleStore(@Classed(BattleStore.class) final Logger logger) {
+	@Provides @Singleton static IBattleStore provideBattleStore() {
 		return ComponentFactory.getLunarComponent().battleStore();
 	}
 	@Provides @Singleton static ExecutorService provideExecutorService(final CustomProperties customProperties) {
 		return Executors.newFixedThreadPool(customProperties.getMaxThreadCount());
+	}
+
+	@Provides @Singleton IJsoniterSupplier provideJsonDeserializer() {
+		return ThreadLocal.<IJsoniter>withInitial(() -> new IJsoniterImpl())::get;
+	}
+
+	protected static class IJsoniterImpl implements IJsoniter {
+		public IJsoniterImpl() {
+			synchronized (JsoniterConfig.class) {
+				JsoniterConfig.doSetup();
+			}
+		}
+		@Override
+		public String serialize(final Object object) {
+			return JsonStream.serialize(object);
+		}
+
+		@Override
+		public <T> T deserialize(final String input, final Class<T> clazz) {
+			return JsonIterator.deserialize(input, clazz);
+		}
 	}
 }

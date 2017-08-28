@@ -1,7 +1,5 @@
 package com.github.blutorange.translune.gui;
 
-import java.io.Serializable;
-
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -30,7 +28,7 @@ import com.github.blutorange.translune.util.CustomProperties;
 @SuppressWarnings("serial")
 @ManagedBean(eager = true, name = "sessionBean")
 @SessionScoped
-public class SessionBean extends AbstractBean implements Serializable {
+public class SessionBean extends AbstractBean {
 	private String username = StringUtils.EMPTY;
 
 	private String password = StringUtils.EMPTY;
@@ -190,6 +188,10 @@ public class SessionBean extends AbstractBean implements Serializable {
 				redirect = "/public/admin.xhtml";
 			}
 			else {
+				if (!customProperties.isOnline()) {
+					addMessage(FacesMessage.SEVERITY_WARN, "server is currently in maintenance mode");
+					return;
+				}
 				final Player player = databaseManager.find(Player.class, username);
 				if (player == null || !player.verifyPassword(password)) {
 					addMessage(FacesMessage.SEVERITY_ERROR, "username or password wrong");
