@@ -41,40 +41,55 @@ class TransluneGame {
 	}
 	
 	start() {
+		PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 		this.net.registerConnectListener(this._onConnect.bind(this));
 		this.net.registerFinalizeListener(this._onFinalize.bind(this));
 		this.app = new PIXI.Application(1280,720, {
 			backgroundColor: 0x000000
 		});
+		this.addStack = [];
+		this.removalStack = [];
 		this.app.loader.baseUrl = this.net.httpBase;
 		this.loaders['base'] = this.app.loader;
-		PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 		this._prepareLoader();
 		
-		const start = new Date().getTime()
-		this.pushScene(new TransluneSceneLoad(this, {
-			getProgress: () => {
-				return (new Date().getTime()-start)/10000.0
-			}
-		}));
+		const loadableResource = new LoaderLoadable(this.app.loader, this.onLoaded.bind(this));
+		const loadableNet = new ManualLoadable();
+		const loadableChained = new ChainedLoadable(loadableResource, loadableNet);
+		loadableChained.addCompletionListener(this.onLoaded.bind(this));
 		
-		this.app.ticker.add(this._update, this);	
-		for (let child of this.window.document.body.children) child.remove();
+		this.loadableNet = loadableNet;
+		this.pushScene(new TransluneSceneLoad(this, loadableChained));
+		this.app.ticker.add(this._update, this);
+		for (let child of this.window.document.body.children) child.remove();	
+		this.net.connect();
+		this.app.loader.load();
+		
 		this.window.document.body.appendChild(this.app.view);
-		this.net.connect();		
+	}
+	
+	/**
+	 * @private
+	 */
+	onLoaded() {
+		new TransluneSceneMenu(this);
 	}
 	
 	/**
 	 * @private
 	 */
 	_prepareLoader() {
-		
+		this.app.loader
+			.add('textbox', 'resources/translune/static/textbox-blue.9.json')
+			//.add()
+		;
 	}
 	
 	/**
 	 * @private
 	 */
 	_onConnect() {
+		this.loadableNet.progress = 1;
 		const _this = this;
 		_this.net.dispatchMessage(Lunar.Message.fetchData, {
 			fetch: Lunar.FetchType.userPlayer		
@@ -95,19 +110,32 @@ class TransluneGame {
 			console.log("done2");
 			_this.window.setTimeout(() => _this.net.finalize(), 20000);
 		});
-		
 	}
 	
 	pushScene(scene) {
-		this.scenes.push(scene);
-		this.app.stage.addChild(scene.view);
+		this.addStack.push(scene);
 	}
 	
 	removeScene(scene) {
-		const index = this.scenes.indexOf(scene);
-		if (index >= 0)
-			this.scenes.push(this.scenes.splice(index,1));
-		this.app.stage.removeChild(scene.view);
+		this.removalStack.push(scene);
+	}
+	
+	/**
+	 * @private
+	 */
+	_addRemoveScenes() {
+		for (let scene of this.addStack) {
+			this.scenes.push(scene);
+			this.app.stage.addChild(scene.view);
+		}
+		for (let scene of this.removalStack) {
+			const index = this.scenes.indexOf(scene);
+			if (index >= 0)
+				this.scenes.splice(index,1);
+			this.app.stage.removeChild(scene.view);
+		}
+		this.addStack = [];
+		this.removalStack = [];
 	}
 	
 	/**
@@ -118,6 +146,10 @@ class TransluneGame {
 		if (loader)
 			return loader;
 		return this.loaders[name] = new PIXI.loaders.Loader(this.net.httpBase);
+	}
+	
+	get baseLoader() {
+		return this.loaderFor('base');
 	}
 	
 	/**
@@ -144,10 +176,27 @@ class TransluneGame {
 		return (this.app.renderer.height * 0.5 * (1.0-relativeY)) | 0;
 	}
 	
+	get w() {
+		return this.app.renderer.width;
+	}
+	
+	dx(relative) {
+		return this.app.renderer.width*relative;
+	}
+	
+	dy(relative) {
+		return this.app.renderer.height*relative;
+	}
+	
+	get h() {
+		return this.app.renderer.height;
+	}
+	
 	/**
 	 * @private
 	 */
 	_update(delta) {
+		this._addRemoveScenes();
 		const deltaTime = delta / 60.0;
 		for (let scene of this.scenes)
 			scene.update(deltaTime);
@@ -158,8 +207,8 @@ class TransluneGame {
 	 */
 	_onFinalize() {
 		for (let scene of this.scenes)
-			scenes.destroy();
-		for (let loader of this.loaders)
+			scene.destroy();
+		for (let loader of Object.values(this.loaders))
 			loader.destroy();
 		this.app.destroy();
 		this.window.alert("Network closed, ending game.");

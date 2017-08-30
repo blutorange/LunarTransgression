@@ -45,6 +45,108 @@ class PriorityQueue {
 	}
 }
 
+class Loadable {
+	constructor() {
+		this.start = new Date().getTime();
+		this.completionListeners = [];
+	}
+
+	getProgress() {
+		return (new Date().getTime()-this.start)/10000.0
+	}
+	
+	addCompletionListener(listener) {
+		this.completionListeners.push(listener);
+	}
+	
+	notifyCompletionListeners() {
+		for (let listener of this.completionListeners)
+			listener();
+	}
+}
+
+class ManualLoadable extends Loadable {
+	constructor() {
+		super();
+		this._progress = 0;
+	}
+	
+	get progress() {
+		return this._progress;
+	}
+	
+	set progress(progress) {
+		this._progress = progress;
+	}
+	
+	getProgress() {
+		return this.progress;
+	}
+}
+
+class DelegateLoadable extends Loadable {
+	constructor(progressReporter) {
+		super();
+		this.progressReporter = progressReporter; 
+	}
+	
+	getProgress() {
+		const progress = this.progressReporter();
+		if (progress === true) return 1;
+		if (progress === false) return 0;
+		return progress;
+	}
+}
+
+class ChainedLoadable extends Loadable {
+	constructor(...loadables) {
+		super();
+		this.loadables = loadables || [];
+		this.loaded = 0;
+		this.done = false;
+		const _this = this;
+	}
+	getProgress() {
+		let progress = 0;
+		for (let loadable of this.loadables) {
+			const p = loadable.getProgress();
+			progress += p;
+		}
+		if (progress === this.loadables.length && !this.done) {
+			for (let loadable of this.loadables)
+				loadable.notifyCompletionListeners();
+			this.done = true;
+		}
+		return this.loadables.length === 0 || this.done ? 1 : progress / this.loadables.length;
+	}
+}
+
+class LoaderLoadable extends Loadable {
+	/**
+	 * @param {PIXI.loaders.Loader} loader
+	 */
+	constructor(loader) {
+		super();
+		this.loaded = 0;
+		this.loader = loader;
+		this.done = false;
+		const _this = this;
+		loader.onProgress.add(this.onLoaderProgress.bind(this));
+		loader.onComplete.add(this.onLoaderComplete.bind(this));
+	}
+	getProgress() {
+		const len = Object.keys(this.loader.resources).length;
+		return this.done  || len === 0 ? 1 : this.loaded / len;
+	}
+	onLoaderProgress() {
+		++this.loaded;
+	}
+	onLoaderComplete() {
+		this.loaded = Object.keys(this.loader.resources).length;
+		this.done = true;
+	}
+}
+
 window.Lunar = {};
 
 /**

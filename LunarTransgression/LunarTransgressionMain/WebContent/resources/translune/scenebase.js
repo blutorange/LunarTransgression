@@ -4,17 +4,26 @@
  */
 class TransluneSceneBase {
 	constructor(game) {
-		this.game = game;
+		this._game = game;
 		this._view = new PIXI.Container();
+		this._time = 0;
 	}
 	
 	destroy() {
-		this.game = undefined;
+		this._game = undefined;
 		this._view.destroy();
 	}
 	
 	update(delta) {
-		
+		this._time += delta;
+	}
+	
+	get time() {
+		return this._time;
+	}
+	
+	get game() {
+		return this._game;
 	}
 	
 	get view() {
@@ -22,37 +31,15 @@ class TransluneSceneBase {
 	}
 }
 
-/**
- * 
- */
-class TransluneSceneMenu {
-	constructor(game) {
-		this.game = game;
-		this._view = new PIXI.Container();
-	}
-	
-	destroy() {
-		this.game = undefined;
-		this._view.destroy();
-	}
-	
-	update(delta) {
-		
-	}
-	
-	get view() {
-		return this._view;
-	}
-}
-
-class TransluneSceneLoad {
+class TransluneSceneLoad extends TransluneSceneBase {
 	/**
-	 * @param {progress: number} loadable An optional object that
-	 * reporting the current loading progress as a number between 0
+	 * @param {Loadable} loadable An optional object that
+	 * reports the current loading progress as a number between 0
 	 * and 1. If given, the progress is displayed by the load scene.
 	 */
 	constructor(game, loadable = undefined) {
-		const view = new PIXI.Container();
+		super(game);
+		
 		const style = new PIXI.TextStyle({
 		    fontFamily: 'Arial',
 		    fontSize: 36,
@@ -74,43 +61,40 @@ class TransluneSceneLoad {
 		overlay.beginFill(0x222222, 0.75);
 		overlay.drawRect(game.x(-1), game.y(-1), game.x(1)-game.x(-1), game.y(1)-game.y(-1));
 		overlay.endFill();
-		view.addChild(overlay);
+		this.view.addChild(overlay);
 		
 		const loadText = new PIXI.Text('Now loading...', style);
 		loadText.x = game.x(0);
 		loadText.y = game.y(0);
 		loadText.anchor.set(0.5,0.5);
-		view.addChild(loadText);
+		this.view.addChild(loadText);
 			
-		this._view = view;
-		this.game = game;
 		this.loadText = loadText;
 		this.overlay = overlay;
 		this.loadable = loadable;
-		this.time = 0;
 		this.zeroUntil = Lunar.Interpolation.zeroUntil(0.55);
+		this.done = false;
 	}
 	
 	destroy() {
-		this.game = undefined;
+		super.destroy();
 		this.loadable = undefined;
-		this.loadText.destroy();
-		this.overlay.destroy();
-		this._view.destroy();
 	}
 	
 	update(delta) {
-		this.time += delta;
+		super.update(delta);
 		if (this.loadable) {
-			const progress = Math.round(100.0*this.loadable.getProgress());
+			const raw = this.loadable.getProgress();
+			const progress = Math.round(100.0*raw);
 			this.loadText.text = `Now loading... ${progress < 0 ? 0 : progress > 100 ? 100 : progress}%`;
+			if (raw === 1 && !this.done) {
+				this.loadable.notifyCompletionListeners();
+				this.done = true;
+				this.game.removeScene(this);
+			}
 		}
 		this.loadText.alpha = 0.25+0.75*Lunar.Interpolation.slowInSlowOut(Lunar.Interpolation.backAndForth((this.time%3)/3.0));
 		this.loadText.scale.set(1.0+0.2*Lunar.Interpolation.slowInSlowOut(Lunar.Interpolation.backAndForth((this.time%2)/2.0)));
 		this.loadText.rotation = Lunar.Constants.pi2*Lunar.Interpolation.slowInSlowOut(this.zeroUntil((this.time%2.5)/2.5));
-	}
-	
-	get view() {
-		return this._view;
 	}
 }
