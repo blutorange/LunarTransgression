@@ -25,6 +25,7 @@ import com.github.blutorange.translune.handler.HandlerInviteReject;
 import com.github.blutorange.translune.handler.HandlerInviteRetract;
 import com.github.blutorange.translune.handler.HandlerLoot;
 import com.github.blutorange.translune.handler.HandlerPrepareBattle;
+import com.github.blutorange.translune.handler.HandlerRequestSpritesheet;
 import com.github.blutorange.translune.handler.HandlerStepBattle;
 import com.github.blutorange.translune.i18n.ILocalizationBundle;
 import com.github.blutorange.translune.i18n.LocalizationBundle;
@@ -47,6 +48,7 @@ import com.github.blutorange.translune.serial.IImportProcessing;
 import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 import com.github.blutorange.translune.serial.ImportProcessing;
 import com.github.blutorange.translune.servlet.BaseResourceServlet;
+import com.github.blutorange.translune.servlet.BaseSpritesheetServlet;
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ILunarMessageHandler;
 import com.github.blutorange.translune.socket.ISocketProcessing;
@@ -70,7 +72,8 @@ public interface LunarComponent {
 	void inject(ManageBean abstractBean);
 	void inject(StatusBean abstractBean);
 	void inject(AbstractBean abstractBean);
-	void inject(BaseResourceServlet abstractResourceServlet);
+	void inject(BaseResourceServlet baseResourceServlet);
+	void inject(BaseSpritesheetServlet baseSpritesheetServlet);	
 	void inject(LunarServletContextListener lunarServletContextListener);
 
 	void inject(LunarDatabaseManager lunarDatabaseManager);
@@ -90,6 +93,7 @@ public interface LunarComponent {
 	@NonNull @LunarMessageTyped(ELunarMessageType.STEP_BATTLE) ILunarMessageHandler ihandlerStepBattle();
 	@NonNull @LunarMessageTyped(ELunarMessageType.LOOT) ILunarMessageHandler ihandlerLoot();
 	@NonNull @LunarMessageTyped(ELunarMessageType.FETCH_DATA) ILunarMessageHandler ihandlerFetchData();
+	@NonNull @LunarMessageTyped(ELunarMessageType.REQUEST_SPRITESHEET) ILunarMessageHandler ihandlerRequestSpritesheet();	
 	@NonNull ISocketProcessing iSocketProcessing();
 
 	ILunarDatabaseManager iLunarDatabaseManager();
@@ -125,7 +129,8 @@ public interface LunarComponent {
 	HandlerStepBattle _handlerStepBattle();
 	HandlerLoot _handlerLoot();
 	HandlerFetchData _handlerFetchData();
-
+	HandlerRequestSpritesheet _handlerRequestSpritesheet();
+	
 	SessionStore _sessionStore();
 	InvitationStore _invitationStore();
 	IJsoniterSupplier jsoniter();
