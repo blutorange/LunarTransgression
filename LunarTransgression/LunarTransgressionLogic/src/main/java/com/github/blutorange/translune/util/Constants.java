@@ -74,5 +74,8 @@ public final class Constants {
 	public static final String SESSION_KEY_SERVER_TIME = "stime";
 	public static final String SESSION_KEY_STARTED = "start";
 
+	public static final String SERVLET_KEY_GZIP = "gzip";
+	public static final String SERVLET_KEY_RESOURCES = "resources";
+
 	public static final String USERNAME_SADMIN = "sadmin";
 }

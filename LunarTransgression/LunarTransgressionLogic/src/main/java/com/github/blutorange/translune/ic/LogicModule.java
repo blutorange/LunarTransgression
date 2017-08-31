@@ -22,6 +22,7 @@ import com.github.blutorange.translune.logic.BattleRunner;
 import com.github.blutorange.translune.logic.IBattleProcessing;
 import com.github.blutorange.translune.logic.IBattleRunner;
 import com.github.blutorange.translune.logic.IRandomSupplier;
+import com.github.blutorange.translune.media.IImageProcessing;
 
 import dagger.Module;
 import dagger.Provides;
@@ -81,6 +82,12 @@ public class LogicModule {
 	IRandomSupplier provideRandomBasic() {
 		final ThreadLocal<Random> threadLocal = ThreadLocal.withInitial(() -> new Random());
 		return () -> threadLocal.get();
+	}
+
+	@Provides
+	@Singleton
+	IImageProcessing provideImageProcessing() {
+		return ComponentFactory.getLunarComponent()._imageProcessing();
 	}
 
 	@Provides

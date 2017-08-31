@@ -1,6 +1,5 @@
 package com.github.blutorange.translune.socket;
 
-import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -34,8 +33,6 @@ public interface ISocketProcessing {
 	<T extends ILunarPayload> T getMessage(final String payload, final Class<T> clazz);
 
 	String getNickname(final Session session);
-
-	Map<String, Future<String>> getSpritesheetResources(final Session session);
 
 	/**
 	 * @param session Session of interest.

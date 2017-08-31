@@ -18,10 +18,10 @@ import com.github.blutorange.translune.handler.HandlerInviteReject;
 import com.github.blutorange.translune.handler.HandlerInviteRetract;
 import com.github.blutorange.translune.handler.HandlerLoot;
 import com.github.blutorange.translune.handler.HandlerPrepareBattle;
-import com.github.blutorange.translune.handler.HandlerRequestSpritesheet;
 import com.github.blutorange.translune.handler.HandlerStepBattle;
 import com.github.blutorange.translune.logic.BattleRunner;
 import com.github.blutorange.translune.logic.BattleStore;
+import com.github.blutorange.translune.media.ImageProcessing;
 import com.github.blutorange.translune.serial.ImportProcessing;
 import com.github.blutorange.translune.servlet.BaseResourceServlet;
 import com.github.blutorange.translune.socket.LunarDecoder;
@@ -139,11 +139,12 @@ public class LoggingModule {
 	@Provides @Singleton @Classed(LunarServletContextListener.class) static Logger provideLogger28() {
 		return provideLogger(LunarServletContextListener.class);
 	}
-	
-	@Provides @Singleton @Classed(HandlerRequestSpritesheet.class) static Logger provideLogger29() {
-		return provideLogger(HandlerRequestSpritesheet.class);
+
+	@Provides @Singleton @Classed(ImageProcessing.class) static Logger provideLogger29() {
+		return provideLogger(ImageProcessing.class);
 	}
-	
+
+
 	private static Logger provideLogger(final Class<?> clazz) {
 		return LoggerFactory.getLogger(clazz);
 	}

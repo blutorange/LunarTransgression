@@ -1,1 +1,29 @@
 @CHARSET "UTF-8";
+
+body, canvas {
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+}
+
+body.fullscreen, canvas.fullscreen {
+}
+
+body.windowed {
+	background-color: #333;
+	border-radius: 8px;
+}
+canvas.windowed {
+	display: block;
+    padding: 0;
+	margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+	outline-color: black;
+    outline-width: 2px;
+    outline-style: dotted;
+    outline-offset: 0px;    
+}

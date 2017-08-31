@@ -43,8 +43,6 @@ public enum ELunarMessageType {
 	LOOT_RESPONSE(ELunarMessageHandler.NOOP),
 
 	UNKNOWN(ELunarMessageHandler.NOOP),
-	REQUEST_SPRITESHEET(ComponentFactory.getLunarComponent().ihandlerRequestSpritesheet()),
-	REQUEST_SPRITESHEET_RESPONSE(ELunarMessageHandler.NOOP),
 	;
 
 	ILunarMessageHandler handler;

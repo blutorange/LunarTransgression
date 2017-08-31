@@ -25,7 +25,6 @@ import com.github.blutorange.translune.handler.HandlerInviteReject;
 import com.github.blutorange.translune.handler.HandlerInviteRetract;
 import com.github.blutorange.translune.handler.HandlerLoot;
 import com.github.blutorange.translune.handler.HandlerPrepareBattle;
-import com.github.blutorange.translune.handler.HandlerRequestSpritesheet;
 import com.github.blutorange.translune.handler.HandlerStepBattle;
 import com.github.blutorange.translune.i18n.ILocalizationBundle;
 import com.github.blutorange.translune.i18n.LocalizationBundle;
@@ -44,6 +43,8 @@ import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.logic.InitIdStore;
 import com.github.blutorange.translune.logic.InvitationStore;
 import com.github.blutorange.translune.logic.SessionStore;
+import com.github.blutorange.translune.media.IImageProcessing;
+import com.github.blutorange.translune.media.ImageProcessing;
 import com.github.blutorange.translune.serial.IImportProcessing;
 import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 import com.github.blutorange.translune.serial.ImportProcessing;
@@ -73,7 +74,7 @@ public interface LunarComponent {
 	void inject(StatusBean abstractBean);
 	void inject(AbstractBean abstractBean);
 	void inject(BaseResourceServlet baseResourceServlet);
-	void inject(BaseSpritesheetServlet baseSpritesheetServlet);	
+	void inject(BaseSpritesheetServlet baseSpritesheetServlet);
 	void inject(LunarServletContextListener lunarServletContextListener);
 
 	void inject(LunarDatabaseManager lunarDatabaseManager);
@@ -93,12 +94,12 @@ public interface LunarComponent {
 	@NonNull @LunarMessageTyped(ELunarMessageType.STEP_BATTLE) ILunarMessageHandler ihandlerStepBattle();
 	@NonNull @LunarMessageTyped(ELunarMessageType.LOOT) ILunarMessageHandler ihandlerLoot();
 	@NonNull @LunarMessageTyped(ELunarMessageType.FETCH_DATA) ILunarMessageHandler ihandlerFetchData();
-	@NonNull @LunarMessageTyped(ELunarMessageType.REQUEST_SPRITESHEET) ILunarMessageHandler ihandlerRequestSpritesheet();	
 	@NonNull ISocketProcessing iSocketProcessing();
 
 	ILunarDatabaseManager iLunarDatabaseManager();
 	IEntityManagerFactory entityManagerFactory();
 	IImportProcessing iImportProcessing();
+	IImageProcessing imageProcessing();
 
 	IBattleRunner battleRunner();
 	IBattleProcessing battleProcessing();
@@ -119,6 +120,7 @@ public interface LunarComponent {
 	SocketProcessing _socketProcessing();
 	ImportProcessing _importProcessing();
 	LocalizationBundle _localizationBundle();
+	ImageProcessing _imageProcessing();
 
 	HandlerAuthorize _handlerAuthorize();
 	HandlerInvite _handlerInvite();
@@ -129,8 +131,7 @@ public interface LunarComponent {
 	HandlerStepBattle _handlerStepBattle();
 	HandlerLoot _handlerLoot();
 	HandlerFetchData _handlerFetchData();
-	HandlerRequestSpritesheet _handlerRequestSpritesheet();
-	
+
 	SessionStore _sessionStore();
 	InvitationStore _invitationStore();
 	IJsoniterSupplier jsoniter();

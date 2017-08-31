@@ -1,7 +1,10 @@
 package com.github.blutorange.translune;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.zip.ZipFile;
+
+import org.apache.commons.io.FileUtils;
 
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.Item;
@@ -9,6 +12,8 @@ import com.github.blutorange.translune.db.ModifiableItem;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.logic.EExperienceGroup;
+import com.github.blutorange.translune.media.IAtlasImage;
+import com.github.blutorange.translune.media.IImageProcessing;
 import com.github.blutorange.translune.message.MessageFetchDataResponse;
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
@@ -16,19 +21,25 @@ import com.github.blutorange.translune.socket.LunarMessage;
 
 public class Sandbox {
 	public static void main(final String[] args) throws Exception {
-		for (ELunarMessageType type : ELunarMessageType.values())
-			System.out.println(String.format("\\textsc{%s} & a \\\\", type.name().toLowerCase().replace('_', ' ')));
-System.exit(0);	
-
 		// testing...
 		final LunarServletContextListener scl = new LunarServletContextListener();
 		scl.initialize();
 		try {
-			jsoniter();
+			image();
 		}
 		finally {
 			scl.destroy();
 		}
+	}
+
+	static void image() throws IOException {
+		final IImageProcessing imageProcessing = ComponentFactory.getLunarComponent().imageProcessing();
+		final String[] res = new String[50];
+		for (int i = 50; i-->0;)
+			res[i] = String.format("ico/%d.png", i+1);
+		final IAtlasImage img = imageProcessing.packResources("spritesheet.png?gzip&resources=1.png,2p.png", res);
+		FileUtils.write(new File("/tmp/packed.json"), img.getAtlasJson());
+		FileUtils.writeByteArrayToFile(new File("/tmp/packed.png"), img.getImageBytes());
 	}
 
 	static void ic() {

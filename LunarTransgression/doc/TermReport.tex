@@ -1,9 +1,12 @@
 %% A simple template for a lab or course report using the Hagenberg setup
 %% with the standard LaTeX 'report' class
 
-\documentclass[english,11pt]{report}		
-%\documentclass[ngerman,11pt]{report}
+%\documentclass[english,11pt]{report}		
+\documentclass[ngerman,11pt]{report}
 
+
+
+\usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage{hgb}
 \usepackage{hgbbib}
 \usepackage{hgbheadings}
@@ -54,15 +57,15 @@ von Sessions und die Struktur (Protokoll) der zwischen Client und Server ausgeta
 Für die Struktur der Nachrichten wird das \textsc{json}-Format verwendet. Es wird von vielen
 Software-Implementierungen unterstüzt. Die zusätzliche Ausdrucksfähigkeit und damit verbundene
 Komplexität von \textsc{xml} wird nicht benötigt. Im folgenden wird die \textsc{json}-Struktur
-beschrieben. Jede Nachricht beginnt mit der Metanachricht \textsc{lunarmessage}, die folgende Informationen
-enthält.
+beschrieben. Jede Nachricht beginnt mit der Metanachricht \textsc{lunarmessage}, die folgende
+Informationen enthält, siehe hierzu auch Tabelle \ref{table:lunarmessage}.
 
 Der Eintrag status gibt den Verarbeitungsstatus an, dieser ist \textsc{ok} bei korrekter
-Verarbeitung. Mögliche Status sind in der Tabelle zusammengestellt.
+Verarbeitung. Mögliche Status sind in der Tabelle \ref{table:messagesStatus} zusammengestellt.
 
 Im Eintrag payload werden nachrichtenspezifische Informatione mitgesendet und der Eintrag
-type gibt an, um welchen Typ es sich handelt. Die Zeichenkette im Eintrag payload ist ein
-\textsc{json}-String.
+type gibt an, um welchen Typ es sich handelt, siehe \ref{table:messageType}. Die Zeichenkette
+im Eintrag payload ist ein \textsc{json}-String.
 
 \textsc{tcp} garantiert die Reihenfolge des Nachrichtenempfangs in Reihenfolge des Versandes,
 aber nicht die logische Reihenfolge und die Verarbeitung in dieser Reihenfolge durch die
@@ -90,10 +93,122 @@ Request-Response-Mechanismus für Nachrichten des Clients implementiert. Alle Na
 type auf \textsc{response} endet, enthalten im payload-\textsc{json} den Eintrag origin, der
 den Laufindex der Nachricht enthält, auf die geantwortet wird.
 
+Clients werden bereits vor dem Aufbau der Websocket-Verbindung mittels einer Login-Eingabemaske
+auf der Webseite authorisiert. Dabei wird ein zeitbegrenztes Token erstellt und dem Client
+übermittelt. Initial wird beim Öffnen einer Websocket-Session diese als unauthorisiert markiert
+und bis auf \textsc{authorize} keine anderen Nachrichten akzeptiert. Das Token und der Nutzername wird in
+der \textsc{authorize}-Nachricht an den Server übermittelt, der mit \textsc{authorize\char`_response} antwortet.
+Bei erfolgreicher Authorisierung wird die Session als authorisiert markiert und der Statuscode \textsc{ok}
+übermittelt, \textsc{generic error} andernfalls.
+
+\begin{center}
+\textbf{Don't just show your program code!} 
+\end{center}
+
+By the way, all you ever need to know about image processing (and more) can be 
+found in \cite{BurgerBurge08}.%
+
+%%%----------------------------------------------------------
+\chapter{Server}
+%%%----------------------------------------------------------
+
+\section{Eingesetzte Technologien}
+
+Auf dem Server wird \textsc{jsf} (Java Server Faces) eingesetzt, konkreter
+Primefaces\footnote{https://www.primefaces.org/ Eine Übersicht über alle
+Funktionionen ist unter https://www.primefaces.org/showcase/ zu finden.}.
+Das System kann auf verschiedenen Servlet-Containern laufen, zur Entwicklung
+wurde Tomcat 8.5 genutzt.
+
+Um periodische Aufgaben auszuführen, wird der
+Quartz-Scheduler\footnote{http://www.quartz-scheduler.org/} eingesetzt.
+
+Die Persistierung von Daten nutzt eine Datenbank. Aus Zeitgründen wird ein ORM
+(Object Relational Mapping) genutzt, konkret \textsc{jpa} (Java Persistence API)
+mit Hibernate\footnote{http://hibernate.org/} als JPA-Provider. Weiterhin wird
+HikariCP\footnote{https://github.com/brettwooldridge/HikariCP} eingesetzt, um
+Verbindungen zur Datenbank zu verwalten. HikariCP stellt einen Pool an
+aufrechgehaltenen Datenbankverbindungen bereit, sodass nicht für jede Anfrage
+eine Verbindung geöffnet werden muss.
+
+Das \textsc{erm} für das \textsc{orm} ist in der Abbildungen zu finden. Die Hauptentität
+ist die Entität \textsc{player}, welche Assoziatonen auf die \textsc{item}s und
+\textsc{characterstate}s des Spielers hat. Diese Informationen werden bei Beginn der
+Session aus der Datenbank geladen und zwischengespeichert, um unnötige Datenbankanfragen
+zu vermeiden.
+
+\textsc{item}, \textsc{character}, \textsc{item} sind immutable Entitäten, diese Daten
+werden einmalig bei der Installation in die Datenbank eingespielt. \textsc{player} und
+\textsc{characterstate} sind mutabel und werden öfters im Laufe des Programms geändert.
+
+Der Server ist für die Logik und die Konsistenz der Daten verantwortlich und muss davon
+ausgehen, dass es böswillige Client geben kann, demgemäß müssen alle Eingaben und Nachrichten
+validiert werden. Dies bedeutet auch, dass die Client-Software nicht für Datenkonsistenz
+verantworlich ist, was den Programmiertaufwand reduziert.
+
+Schließlich seien noch kurz weitere eingesetzte Bibliotheken erwähnt: Google
+Dagger\footnote{https://github.com/google/dagger} für Dependency Injection,
+Jsoniter\footnote{http://jsoniter.com/} für die Serialisierung und
+Deserialisierung von Objekten, slf4j für Logging.
+
+\section{Servlets}
+
+Die eingesetzten clientseitigen Technologien erfordern, dass mediale Ressourcen mittels
+als \textsc{http}-Response ausgeliefert werden. Es gibt statische und dynamische Inhalte.
+Erstere können direkt über den Servlet-Container bereitgestellt werden. Dynamische Inhalte
+wie beispielsweise Grafiken der Charaktere, über die der Spieler momentan verfügt, können
+nicht statisch ausgeliefert werden. Hierzu gibt es zwei \textsc{http}-Servlets.
+
+Das Resourcen-Servlet stellt Dateien bereit, die dynamisch in der Datenbank gespeichert sind.
+Die Dateien werden nicht durch den Nutzer bereitgestellt und liegen somit in der Kontrolle des
+Programmierers beziehungsweise des Administrators. Zudem ist keine hierarchische Gliederung
+der Dateien notwendig. Daher wurde ein einfaches Datenbankschema mit einem eindeutigen Namen
+als primärer Schlüssel gewählt. Es muss darauf geachtet werden, keine doppelten Namen zu nutzen.
+
+Das Spritesheet-Servlet erlaubt das Abholen mehrerer Dateien mit einem \textsc{http}-Request.
+Ziel ist es, zu vermeiden, dass clientseitig bis zu fünfzig und mehr kleinere Bilddateien im
+KiB-Bereich angefordert werden müssen. Dazu wird serverseitig eine große Bilddatei generiert,
+die die kleineren Bilder enthält und serverseitig in einem Cache gehalten.
+In einer dazugehörigen \textsc{json}-Datei ist festgehalten, an welcher Position sich jedes Bild befindet. Der Client fordert zuerst das \textsc{json} an und anschließend die Bilddatei. Der Cache
+dient dazu, bei der zweiten Anforderung die Bilddatein nicht erneut generieren zu müssen und die
+Einträge haben daher eine kurze Lebensdauer.
+
+%%%----------------------------------------------------------     
+\chapter{Client}
+%%%----------------------------------------------------------
+
+Die Clientsofware ist ES6-JavaScript und läuft in einem Webbrowser. Die Aufgabe
+des Clients besteht in der grafischen Darstellung des Programmzustands zur
+Nutzerinteraktion und Weiterleitung der Nutzereingaben an den Server.
+
+Für die grafische Darstellung wird die Bibliothek PixiJS\footnote{http://www.pixijs.com/}
+verwendet, die \glqq The HTML5 Creation Engine\grqq. PixiJS nutzt \textsc{WebGL} mit
+Fallback auf Canvas, wenn \textsc{WebGL} nicht zur Verfügung steht. Diese Bibliothek
+wurde gewählt, da sie aktuell und lightweight ist sowie  eine gute Dokumenation mit
+Beispielen besitzt.
+
+Für die Ausgabe von Audio wird die Bibliothek HowlerJS\footnote{https://howlerjs.com/}
+verwendet. Diese Bibliothek unterstützt alle gängigen Formate mit Fallbacks. In
+diesem Projekt wird das Format webm verwendet, da es allen modernen Browser Stunden
+unterstützt wird.
+
+%%%----------------------------------------------------------     
+\chapter{Einrichtung und Installation}
+%%%----------------------------------------------------------
+
+More chapters will follow.
+
+
+This could be a good place to describe how you experienced this course, what you liked or didn't, and to provide suggestions for improvement.
+
+%%%----------------------------------------------------------     
+\chapter{Abbildungen und Tabellen}
+%%%----------------------------------------------------------
+
 \begin{table}[]
 \centering
 \caption{Einträge der \textsc{json}-Struktur der Metanachricht \textsc{lunarmessage}}
-\label{table-lunarmessage}
+\label{table:lunarmessage}
 \begin{tabularx}{\textwidth}{l|l|X}
 Eintrag & Datentyp & Erläuterung \\ \hline
 time    & int    & Eine bei null beginnende Ganzzahl. Dient der Synchronisation der Nachrichten. \\
@@ -107,7 +222,7 @@ payload & string & Typenspezifische Nachricht. Enthält einen \textsc{json}-Stri
 \begin{table}[]
 \centering
 \caption{Mögliche Verabeitungsstatus in der Metanachricht \textsc{lunarmessage}}
-\label{table-message-status}
+\label{table:messagesStatus}
 \begin{tabularx}{\textwidth}{l|l|X}
 Bezeichnung            & Wert & Erläuterung \\ \hline
 \textsc{ok}            & 0    & Fehlerfreie Verarbeitung. \\
@@ -118,93 +233,42 @@ Bezeichnung            & Wert & Erläuterung \\ \hline
 \end{tabularx}
 \end{table}
 
+
 \begin{table}[]
 \centering
 \caption{Nachrichtentypen im Eintrag payload einer \textsc{lunarmessage}}
-\label{table-message-type}
+\label{table:messageType}
 \begin{tabularx}{\textwidth}{l|X}
 Bezeichnung & Erläuterung \\ \hline
-\textsc{authorize}                       & Au \\
-\textsc{authorize\char`_response}        & a \\
-\textsc{fetch\char`_data}                & a \\
-\textsc{fetch\char`_data\char`_response} & a \\
-\textsc{invite}                          & a \\
-\textsc{invite\char`_response}           & a \\
-\textsc{invited}                         & a \\
-\textsc{invite\char`_accept}             & a \\
-\textsc{invite\char`_accept\char`_response}  & a \\
-\textsc{invite\char`_accepted}         & a \\
-\textsc{invite\char`_retract}          & a \\
-\textsc{invite\char`_retract\char`_response} & a \\
-\textsc{invite\char`_retracted}        & a \\
-\textsc{invite\char`_reject}           & a \\
-\textsc{invite\char`_reject\char`_response}  & a \\
-\textsc{invite\char`_rejected}         & a \\
-\textsc{prepare\char`_battle}          & a \\
-\textsc{prepare\char`_battle\char`_response} & a \\
-\textsc{step\char`_battle}             & a \\
-\textsc{step\char`_battle\char`_response}    & a \\
-\textsc{battle\char`_prepared}         & a \\
-\textsc{battle\char`_stepped}          & a \\
-\textsc{battle\char`_cancelled}        & a \\
-\textsc{battle\char`_ended}            & a \\
-\textsc{loot}                    & a \\
-\textsc{loot\char`_response}           & a \\
-\textsc{unknown}                 & a
+\textsc{authorize}                           & Authorisierung der Session \\
+\textsc{authorize\char`_response}            & Status \textsc{ok}, wenn authorisiert\\
+\textsc{fetch\char`_data}                    & Ahbolen von benötigten Daten, beispielweise Daten von Items\\
+\textsc{fetch\char`_data\char`_response}     & Antwort mit denangeforderten Daten. \\
+\textsc{invite}                              & Einladen eines anderen Spielers \\
+\textsc{invite\char`_response}               & Antwort. \\
+\textsc{invited}                             & Nachricht vom Server an Client, wenn Einladung von anderem Client vorliegt \\
+\textsc{invite\char`_accept}                 & Client lädt einen anderen Client ein \\
+\textsc{invite\char`_accept\char`_response}  & Antwort. \\
+\textsc{invite\char`_accepted}               & Nachricht vom Server an Client, wenn anderer Client Einladung akzeptiert hat \\
+\textsc{invite\char`_retract}                & Client zieht Einladung zurück \\
+\textsc{invite\char`_retract\char`_response} & Antwort. \\
+\textsc{invite\char`_retracted}              & Nachricht vom Server an Client, wenn anderer Client die Einladung zurückgezogen hat \\
+\textsc{invite\char`_reject}                 & Client akzeptiert Einladung nicht \\
+\textsc{invite\char`_reject\char`_response}  & Antwort. \\
+\textsc{invite\char`_rejected}               & Nachricht vom Server an Client, wenn anderer Client Einladung nicht akzeptiert hat \\
+\textsc{prepare\char`_battle}                & Client sendet Kampfkonfiguration \\
+\textsc{prepare\char`_battle\char`_response} & Antwort. \\
+\textsc{step\char`_battle}                   & Client sendet Kampfzugkonfiguration \\
+\textsc{step\char`_battle\char`_response}    & Antwort. \\
+\textsc{battle\char`_prepared}               & Nachricht vom Server an beide Clients, wenn Kampfvorbereitung abgeschlossen \\
+\textsc{battle\char`_stepped}                & Nachricht vom Server an beide Clients, wenn Kampfzugberechnung abgeschlossen \\
+\textsc{battle\char`_cancelled}              & Nachricht vom Server an beide Clients, wenn Kampf abgebrochen wurde \\
+\textsc{battle\char`_ended}                  & Nachricht vom Server an beide Clients, wenn Kampfende erreicht wurde \\
+\textsc{loot}                                & Client sendet Beuteinformationen \\
+\textsc{loot\char`_response}                 & Antwort. \\
+\textsc{unknown}                             & Fallback für unbekannte Nachrichten
 \end{tabularx}
 \end{table}
-
-Clients werden bereits vor dem Aufbau der Websocket-Verbindung mittels einer Login-Eingabemaske
-auf der Webseite authorisiert. Dabei wird ein zeitbegrenztes Token erstellt und dem Client
-übermittelt. Initial wird beim Öffnen einer Websocket-Session diese als unauthorisiert markiert
-und bis auf \textsc{authorize} keine anderen Nachrichten akzeptiert. Das Token und der Nutzername wird in
-der \textsc{authorize}-Nachricht an den Server übermittelt, der mit \textsc{authorize response} antwortet.
-Bei erfolgreicher Authorisierung wird die Session als authorisiert markiert und der Statuscode \textsc{ok}
-übermittelt, \textsc{generic error} andernfalls.
-
-%
-\begin{center}
-\textbf{Don't just show your program code!} 
-\end{center}
-%
-By the way, all you ever need to know about image processing (and more) can be 
-found in \cite{BurgerBurge08}.%
-\footnote{This ridiculous statement should only produce a citation so the 
-bibliography is not empty.} 
-
-
-%%%----------------------------------------------------------
-\chapter{Server}
-%%%----------------------------------------------------------
-
-Description of this task follows here.
-
-
-
-%%%----------------------------------------------------------     
-\chapter{Client}
-%%%----------------------------------------------------------
-
-More chapters will follow.
-
-
-\chapter{Summary and comments}
-
-This could be a good place to describe how you experienced this course, what you liked or didn't, and to provide suggestions for improvement.
-
-
-
-%%%----------------------------------------------------------     
-\chapter{Einrichtung und Installation}
-%%%----------------------------------------------------------
-
-More chapters will follow.
-
-
-\chapter{Summary and comments}
-
-This could be a good place to describe how you experienced this course, what you liked or didn't, and to provide suggestions for improvement.
-
 
 
 %%%----------------------------------------------------------
@@ -212,3 +276,4 @@ This could be a good place to describe how you experienced this course, what you
 %%%----------------------------------------------------------
 
 \end{document}
+

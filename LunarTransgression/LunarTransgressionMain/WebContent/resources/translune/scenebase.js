@@ -14,6 +14,13 @@ class TransluneSceneBase {
 		this._view.destroy();
 	}
 	
+	sceneToAdd() {
+		return this;
+	}
+	
+	onAdd() {}
+	onRemove() {}
+	
 	update(delta) {
 		this._time += delta;
 	}
@@ -31,6 +38,81 @@ class TransluneSceneBase {
 	}
 }
 
+class TransluneSceneConfirmDialog extends TransluneSceneBase {
+	/**
+	 * @param {text: string, callback: function()} choices 
+	 */
+	constructor(game, options) {
+		super(game);
+	
+		const overlay = new PIXI.Graphics();
+		overlay.beginFill(0x222222, 0.75);
+		overlay.drawRect(game.x(-1), game.y(-1), game.x(1)-game.x(-1), game.y(1)-game.y(-1));
+		overlay.endFill();
+		this.view.addChild(overlay);
+
+		const style = options.style || Lunar.FontStyle.dialog;
+		const textMessage = new PIXI.Text(options.message, style);
+		textMessage.x = game.x(0);
+		textMessage.y = game.y(0.2);
+		textMessage.anchor.set(0.5,0.5);
+		this.view.addChild(textMessage);
+		
+		this.updateCallback = options.update;
+		this.textMessage = textMessage;
+		this.textChoices = this._makeButtons(options.choices);
+	}
+	
+	update(delta) {
+		if (this.updateCallback) {
+			this.updateCallback(delta, this.textMessage, this.textChoices);
+		}
+	}
+	
+	/**
+	 * @private
+	 */
+	_makeButtons(choices) {
+		const _this = this;
+		const paddingInner = 10;
+		const paddingLeft = 0.2;
+		const paddingRight = 0.2;
+		const choiceButtons = [];
+		// choices.length*width + (choices.length-1) * padding + (paddingLeft + paddingRight)*this.game.w = this.game.w
+		const width = (this.game.w - (choices.length-1) * paddingInner - (paddingLeft + paddingRight) * this.game.w) / choices.length;
+		const height = this.game.dy(0.15);
+		const y = this.game.y(-0.2);
+		const close = this._close.bind(this);
+		let x = paddingLeft * this.game.w;
+		return choices.map(choice => {
+			const button = new PIXI.NinePatch(_this.game.loaderFor('base').resources.textbox, width, height);
+			button.position.set(x, y);		
+			button.interactive = true;
+			button.buttonMode = true;
+			button.on('pointerover', () => text.style = choice.styleActive || Lunar.FontStyle.buttonActive);
+			button.on('pointerout', () => text.style = choice.style || Lunar.FontStyle.button);
+			button.on('pointerdown', () => choice.callback(close));
+			
+			const text = new PIXI.Text(choice.text, choice.style || Lunar.FontStyle.button);
+			text.anchor.set(0.5, 0.5);
+			text.position.set(0.5*button.bodyWidth, 0.5*button.bodyHeight);
+			
+			button.body.addChild(text);
+			_this.view.addChild(button);
+			
+			x = x + width + paddingInner;
+			return text;
+		});
+	}
+	
+	/**
+	 * @private
+	 */
+	_close() {
+		this.game.removeScene(this);
+	}
+}
+
 class TransluneSceneLoad extends TransluneSceneBase {
 	/**
 	 * @param {Loadable} loadable An optional object that
@@ -40,22 +122,7 @@ class TransluneSceneLoad extends TransluneSceneBase {
 	constructor(game, loadable = undefined) {
 		super(game);
 		
-		const style = new PIXI.TextStyle({
-		    fontFamily: 'Arial',
-		    fontSize: 36,
-		    fontStyle: '',
-		    fontWeight: 'bold',
-		    fill: ['#ffffff', '#00ff99'], // gradient
-		    stroke: '#4a1850',
-		    strokeThickness: 5,
-		    dropShadow: true,
-		    dropShadowColor: '#000000',
-		    dropShadowBlur: 4,
-		    dropShadowAngle: Math.PI / 6,
-		    dropShadowDistance: 6,
-		    wordWrap: true,
-		    wordWrapWidth: game.x(0.8)
-		});
+		const style = Lunar.FontStyle.load;
 		
 		const overlay = new PIXI.Graphics();
 		overlay.beginFill(0x222222, 0.75);

@@ -201,3 +201,81 @@ Lunar.Constants = {
 	queueInterval: 0.25, // seconds,
 	pi2: 2*Math.PI
 };
+
+Lunar.FontStyle = {
+	setup: function(game) {
+		Lunar.FontStyle.dialog= new PIXI.TextStyle({
+		    fontFamily: 'Arial',
+		    fontSize: game.dx(0.040),
+		    fontStyle: '',
+		    fontWeight: 'bold',
+		    fill: ['#ffffff', '#00ff99'], // gradient
+		    stroke: '#4a1850',
+		    strokeThickness: 5,
+		    dropShadow: true,
+		    dropShadowColor: '#000000',
+		    dropShadowBlur: 4,
+		    dropShadowAngle: Math.PI / 6,
+		    dropShadowDistance: 6,
+		    wordWrap: true,
+		    wordWrapWidth: game.dx(0.8)
+		});
+		Lunar.FontStyle.load = new PIXI.TextStyle({
+		    fontFamily: 'Arial',
+		    fontSize: game.dx(0.028),
+		    fontStyle: '',
+		    fontWeight: 'bold',
+		    fill: ['#ffffff', '#00ff99'], // gradient
+		    stroke: '#4a1850',
+		    strokeThickness: 5,
+		    dropShadow: true,
+		    dropShadowColor: '#000000',
+		    dropShadowBlur: 4,
+		    dropShadowAngle: Math.PI / 6,
+		    dropShadowDistance: 6,
+		    wordWrap: true,
+		    wordWrapWidth: game.w
+		});
+		Lunar.FontStyle.button = new PIXI.TextStyle({
+		    fontFamily: 'Arial',
+		    fontSize: game.dx(0.032),
+		    fontStyle: '',
+		    fontWeight: 'bold',
+		    fill: ['#ffffff', '#00ff99'], // gradient
+		    stroke: '#4a1850',
+		    strokeThickness: 5,
+		    dropShadow: true,
+		    dropShadowColor: '#000000',
+		    dropShadowBlur: 4,
+		    dropShadowAngle: Math.PI / 6,
+		    dropShadowDistance: 6,
+		    wordWrap: true,
+		    wordWrapWidth: game.w
+		});
+		Lunar.FontStyle.buttonActive = new PIXI.TextStyle({
+		    fontFamily: 'Arial',
+		    fontSize: game.dx(0.036),
+		    fontStyle: '',
+		    fontWeight: 'bold',
+		    fill: ['#00ff99', '#ffffff'], // gradient
+		    stroke: '#900020',
+		    strokeThickness: 5,
+		    dropShadow: true,
+		    dropShadowColor: '#000000',
+		    dropShadowBlur: 4,
+		    dropShadowAngle: Math.PI / 6,
+		    dropShadowDistance: 6,
+		    wordWrap: true,
+		    wordWrapWidth: game.w
+		});
+	},
+};
+
+/**
+ * @return number A random integer in the range [0,maxExclusive)
+ */
+Lunar.Random = {
+	int: function(maxExclusive) {
+		return Math.floor(Math.random()*maxExclusive);
+	}
+}
