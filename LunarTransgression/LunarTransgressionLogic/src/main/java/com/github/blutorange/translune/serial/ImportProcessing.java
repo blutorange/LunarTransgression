@@ -10,6 +10,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -20,11 +21,16 @@ import java.util.zip.ZipFile;
 import javax.activation.MimetypesFileTypeMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.eclipse.jdt.annotation.Nullable;
 import org.sfm.csv.CsvParser;
 import org.slf4j.Logger;
 
@@ -32,6 +38,7 @@ import com.github.blutorange.common.StringUtil;
 import com.github.blutorange.translune.db.Character;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.Resource;
+import com.github.blutorange.translune.db.Resource_;
 import com.github.blutorange.translune.db.Skill;
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.util.Constants;
@@ -49,9 +56,47 @@ public final class ImportProcessing implements IImportProcessing {
 	@Inject
 	MimetypesFileTypeMap mimetypesFileTypeMap;
 
+	@Nullable
+	private AvailableBgAndBgm availableBgAndBgm;
+
 	@Inject
 	public ImportProcessing() {
 
+	}
+
+	@Override
+	public AvailableBgAndBgm availableBgAndBgm() throws IOException {
+		AvailableBgAndBgm availableBgAndBgm = this.availableBgAndBgm;
+		if (availableBgAndBgm != null)
+			return availableBgAndBgm;
+		synchronized (logger) {
+			availableBgAndBgm = this.availableBgAndBgm;
+			if (availableBgAndBgm != null)
+				return availableBgAndBgm;
+			final AvailableBgAndBgm result = databaseManager.withEm(false, em -> {
+				final Map<String, Set<String>> bgMenu = retrieveAvailable(em, Constants.FILE_PREFIX_BG_MENU);
+				final Map<String, Set<String>> bgmMenu = retrieveAvailable(em, Constants.FILE_PREFIX_BGM_MENU);
+				final Map<String, Set<String>> bgBattle = retrieveAvailable(em, Constants.FILE_PREFIX_BG_BATTLE);
+				final Map<String, Set<String>> bgmBattle = retrieveAvailable(em, Constants.FILE_PREFIX_BGM_BATTLE);
+				return new AvailableBgAndBgm(bgMenu, bgmMenu, bgBattle, bgmBattle);
+			});
+			if (result == null)
+				throw new IOException("failed to load resources");
+			return this.availableBgAndBgm = result;
+		}
+	}
+
+	private Map<String, Set<String>> retrieveAvailable(final EntityManager em, final String prefix) {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<String> cq = cb.createQuery(String.class);
+		final Path<String> path = cq.from(Resource.class).get(Resource_.name);
+		final List<String> list = em.createQuery(cq.where(cb.like(path, prefix + "%")).select(path)).getResultList();
+		final Map<String, Set<String>> map = new HashMap<>();
+		for (final String name : list) {
+			final String key = FilenameUtils.removeExtension(name);
+			map.computeIfAbsent(key, k -> new HashSet<>()).add(name);
+		}
+		return map;
 	}
 
 	@Override
@@ -63,6 +108,10 @@ public final class ImportProcessing implements IImportProcessing {
 		final Map<String, ZipEntry> filesCry = new HashMap<>();
 		final Map<String, ZipEntry> filesImg = new HashMap<>();
 		final Map<String, ZipEntry> filesIcon = new HashMap<>();
+		final Map<String, ZipEntry> filesBgMenu = new HashMap<>();
+		final Map<String, ZipEntry> filesBgBattle = new HashMap<>();
+		final Map<String, ZipEntry> filesBgmMenu = new HashMap<>();
+		final Map<String, ZipEntry> filesBgmBattle = new HashMap<>();
 		// Read data from the ZIP file.
 		while (entries.hasMoreElements()) {
 			final ZipEntry entry = entries.nextElement();
@@ -74,19 +123,36 @@ public final class ImportProcessing implements IImportProcessing {
 			final String parent = FilenameUtils.getBaseName(FilenameUtils.getFullPathNoEndSeparator(entry.getName()));
 			if (entry.isDirectory())
 				continue;
-			if (Constants.IMPORT_DIR_CHARACTER_CRY.equals(parent)) {
+			switch (parent.toLowerCase(Locale.ROOT)) {
+			case Constants.IMPORT_DIR_CHARACTER_CRY:
 				logger.debug("found cry sound file " + entry.getName());
 				filesCry.put(FilenameUtils.getName(name), entry);
-			}
-			else if (Constants.IMPORT_DIR_CHARACTER_IMG.equals(parent)) {
+				break;
+			case Constants.IMPORT_DIR_CHARACTER_IMG:
 				logger.debug("found image file " + entry.getName());
 				filesImg.put(FilenameUtils.getName(name), entry);
-			}
-			else if (Constants.IMPORT_DIR_CHARACTER_ICON.equals(parent)) {
+				break;
+			case Constants.IMPORT_DIR_CHARACTER_ICON:
 				logger.debug("found image file " + entry.getName());
 				filesIcon.put(FilenameUtils.getName(name), entry);
-			}
-			else {
+				break;
+			case Constants.IMPORT_DIR_BG_MENU:
+				logger.debug("found bg menu file " + entry.getName());
+				filesBgMenu.put(FilenameUtils.getName(name), entry);
+				break;
+			case Constants.IMPORT_DIR_BGM_MENU:
+				logger.debug("found bgm menu file " + entry.getName());
+				filesBgmMenu.put(FilenameUtils.getName(name), entry);
+				break;
+			case Constants.IMPORT_DIR_BG_BATTLE:
+				logger.debug("found bg battle file " + entry.getName());
+				filesBgBattle.put(FilenameUtils.getName(name), entry);
+				break;
+			case Constants.IMPORT_DIR_BGM_BATTLE:
+				logger.debug("found bgm battle file " + entry.getName());
+				filesBgmBattle.put(FilenameUtils.getName(name), entry);
+				break;
+			default:
 				switch (StringUtil.toRootLowerCase(FilenameUtils.getName(name))) {
 				case Constants.IMPORT_FILE_CHARACTER:
 					logger.debug("found character data %s" + entry.getName());
@@ -121,6 +187,10 @@ public final class ImportProcessing implements IImportProcessing {
 		addFiles(requiredFiles, filesImg, Constants.FILE_PREFIX_CHARACTER_IMG);
 		addFiles(requiredFiles, filesIcon, Constants.FILE_PREFIX_CHARACTER_ICON);
 		addFiles(requiredFiles, filesCry, Constants.FILE_PREFIX_CHARACTER_CRY);
+		addFiles(requiredFiles, filesBgBattle, Constants.FILE_PREFIX_BG_BATTLE);
+		addFiles(requiredFiles, filesBgmBattle, Constants.FILE_PREFIX_BGM_BATTLE);
+		addFiles(requiredFiles, filesBgMenu, Constants.FILE_PREFIX_BG_MENU);
+		addFiles(requiredFiles, filesBgmMenu, Constants.FILE_PREFIX_BGM_MENU);
 		logger.debug("writing imported files to database");
 		writeImportToDb(requiredFiles, characters, skills, zipFile);
 		return characters.size() + skills.size() + requiredFiles.size();

@@ -12,6 +12,7 @@ import com.github.blutorange.translune.gui.ManageBean;
 import com.github.blutorange.translune.gui.PlayerBean;
 import com.github.blutorange.translune.gui.StatusBean;
 import com.github.blutorange.translune.handler.HandlerAuthorize;
+import com.github.blutorange.translune.handler.HandlerFetchData;
 import com.github.blutorange.translune.handler.HandlerInvite;
 import com.github.blutorange.translune.handler.HandlerInviteAccept;
 import com.github.blutorange.translune.handler.HandlerInviteReject;
@@ -144,6 +145,9 @@ public class LoggingModule {
 		return provideLogger(ImageProcessing.class);
 	}
 
+	@Provides @Singleton @Classed(HandlerFetchData.class) static Logger provideLogger30() {
+		return provideLogger(HandlerFetchData.class);
+	}
 
 	private static Logger provideLogger(final Class<?> clazz) {
 		return LoggerFactory.getLogger(clazz);

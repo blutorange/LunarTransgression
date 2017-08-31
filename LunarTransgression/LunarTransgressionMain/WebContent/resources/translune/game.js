@@ -87,12 +87,12 @@ class TransluneGame {
         if (!requestFullscreen)
         	return;
         const onFullscreenChange =
-        		document.documentElement.onfullscreenchange ||
-        		document.documentElement.onmozfullscreenchange ||
-        		document.documentElement.MSFullscreenChange ||
-        		document.documentElement.onwebkitfullscreenchange;
+        		document.documentElement.onfullscreenchange ? 'onfullscreenchange' :
+        		document.documentElement.onmozfullscreenchange  ? 'onmozfullscreenchange' :
+        		document.documentElement.MSFullscreenChange ? 'MSFullscreenChange' :
+        		document.documentElement.onwebkitfullscreenchange ? 'onwebkitfullscreenchange' : undefined;
         if (onFullscreenChange) {
-        	onFullscreenChange = () => {
+        	document.documentElement[onFullscreenChange] = () => {
     			_this.updateScreen();
         	}
         }

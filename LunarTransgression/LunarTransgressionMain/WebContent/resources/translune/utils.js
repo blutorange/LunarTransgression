@@ -65,6 +65,10 @@ class Loadable {
 	}
 }
 
+class A extends Loadable {
+	
+}
+
 class ManualLoadable extends Loadable {
 	constructor() {
 		super();
@@ -184,6 +188,7 @@ Lunar.Status = {
 Lunar.Message = {
 	authorize: 'AUTHORIZE',
 	fetchData: 'FETCH_DATA',
+	availableBgAndBgm: 'AVAILABLE_BG_AND_BGM',
 	unknown: 'UNKNOWN'
 };
 

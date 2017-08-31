@@ -15,9 +15,11 @@ import com.github.blutorange.translune.logic.EExperienceGroup;
 import com.github.blutorange.translune.media.IAtlasImage;
 import com.github.blutorange.translune.media.IImageProcessing;
 import com.github.blutorange.translune.message.MessageFetchDataResponse;
+import com.github.blutorange.translune.serial.AvailableBgAndBgm;
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.LunarMessage;
+import com.jsoniter.output.JsonStream;
 
 public class Sandbox {
 	public static void main(final String[] args) throws Exception {
@@ -25,11 +27,24 @@ public class Sandbox {
 		final LunarServletContextListener scl = new LunarServletContextListener();
 		scl.initialize();
 		try {
-			image();
+			availableBgAndBgm();
 		}
 		finally {
 			scl.destroy();
 		}
+	}
+
+	static void availableBgAndBgm() throws IOException {
+		final AvailableBgAndBgm a = ComponentFactory.getLunarComponent().iImportProcessing().availableBgAndBgm();
+		System.out.println("\n\nbg-menu");
+		System.out.println(a.getBgMenu());
+		System.out.println("\n\nbgm-menu");
+		System.out.println(a.getBgmMenu());
+		System.out.println("\n\nbg-battle");
+		System.out.println(a.getBgBattle());
+		System.out.println("\n\nbgm-battle");
+		System.out.println(a.getBgmBattle());
+		System.err.println(JsonStream.serialize(a));
 	}
 
 	static void image() throws IOException {

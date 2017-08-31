@@ -24,6 +24,10 @@ public final class Constants {
 	public static final String FILE_PREFIX_CHARACTER_CRY = "cry/";
 	public static final String FILE_PREFIX_CHARACTER_ICON = "ico/";
 	public static final String FILE_PREFIX_CHARACTER_IMG = "img/";
+	public static final String FILE_PREFIX_BG_MENU = "bgm/";
+	public static final String FILE_PREFIX_BGM_MENU = "bmm/";
+	public static final String FILE_PREFIX_BG_BATTLE = "bgb/";
+	public static final String FILE_PREFIX_BGM_BATTLE = "bmb/";
 
 	public static final Fraction FRACTION_THREE_HALFS = Fraction.getFraction(3, 2);
 	public static final Fraction FRACTION_TWO = Fraction.getFraction(2, 1);
@@ -35,6 +39,11 @@ public final class Constants {
 	public static final String IMPORT_DIR_CHARACTER_CRY = "character-cry";
 	public static final String IMPORT_DIR_CHARACTER_ICON = "character-icon";
 	public static final String IMPORT_DIR_CHARACTER_IMG = "character-img";
+	public static final String IMPORT_DIR_BG_MENU= "bg-menu";
+	public static final String IMPORT_DIR_BGM_MENU= "bgm-menu";
+	public static final String IMPORT_DIR_BG_BATTLE= "bg-battle";
+	public static final String IMPORT_DIR_BGM_BATTLE= "bgm-battle";
+
 	public static final String IMPORT_FILE_CHARACTER = "character.csv";
 	public static final String IMPORT_FILE_CHARACTER_SKILL = "character_skill.csv";
 	public static final String IMPORT_FILE_SKILL = "skill.csv";

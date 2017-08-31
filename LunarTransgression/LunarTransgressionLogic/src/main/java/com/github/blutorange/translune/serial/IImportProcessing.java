@@ -9,4 +9,6 @@ public interface IImportProcessing {
 	int importDataSet(ZipFile zipFile) throws IOException;
 
 	void uploadFile(ZipFile zipFile, ZipEntry entry, String prefix) throws IOException;
+
+	AvailableBgAndBgm availableBgAndBgm() throws IOException;
 }

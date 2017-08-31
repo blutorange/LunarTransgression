@@ -12,11 +12,11 @@ class TransluneSceneMenu extends TransluneSceneBase {
 			return super.sceneToAdd();
 		const loader = this.game.loaderFor("menu");
 		loader.reset();
-		loader.add("bg", `resources/translune/static/menu/bg${Lunar.Random.int(17)+1}.jpg`);
+		loader.add("bg", `resource/bgm/bg${Lunar.Random.int(17)+1}.jpg`);
 		loader.add("packed", 'resources/translune/static/menu/packed.json');
 		const loadable = new LoaderLoadable(loader);
 		loadable.addCompletionListener(this.init.bind(this));
-		this.game.switchBgm(`static/menu/bgm${Lunar.Random.int(20)+1}`);
+		this.game.switchBgm(`/resource/bmm/bgm${Lunar.Random.int(20)+1}`);
 		loader.load();		
 		return new TransluneSceneLoad(this.game, loadable);
 	}

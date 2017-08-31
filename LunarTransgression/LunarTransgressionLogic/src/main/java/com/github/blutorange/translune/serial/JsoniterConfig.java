@@ -164,12 +164,18 @@ public class JsoniterConfig implements StaticCodegenConfig {
 
 	@Override
 	public TypeLiteral<?>[] whatToCodegen() {
-		return new TypeLiteral<?>[] { TypeLiteral.create(LunarMessage.class),
+		return new TypeLiteral<?>[] {
 				TypeLiteral.create(Player.class),
 				TypeLiteral.create(Item.class),
 				TypeLiteral.create(CharacterState.class),
 				TypeLiteral.create(Character.class),
 				TypeLiteral.create(Skill.class),
+
+				TypeLiteral.create(LunarMessage.class),
+				TypeLiteral.create(BattleAction.class),
+				TypeLiteral.create(BattleCommand.class),
+				TypeLiteral.create(BattleResult.class),
+				TypeLiteral.create(AvailableBgAndBgm.class),
 
 				TypeLiteral.create(MessageFetchData.class),
 				TypeLiteral.create(MessageFetchDataResponse.class),
@@ -204,10 +210,6 @@ public class JsoniterConfig implements StaticCodegenConfig {
 				TypeLiteral.create(MessageBattleStepped.class),
 				TypeLiteral.create(MessageBattleCancelled.class),
 				TypeLiteral.create(MessageBattleEnded.class),
-
-				TypeLiteral.create(BattleAction.class),
-				TypeLiteral.create(BattleCommand.class),
-				TypeLiteral.create(BattleResult.class),
 
 				TypeLiteral.create(MessageUnknown.class) };
 	}

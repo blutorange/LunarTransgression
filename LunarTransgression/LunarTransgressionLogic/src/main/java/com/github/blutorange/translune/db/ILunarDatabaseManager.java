@@ -89,7 +89,7 @@ public interface ILunarDatabaseManager {
 
 		@Override
 		public <@Nullable T> @Nullable T withEm(final boolean transactional,
-				final ThrowingFunction<EntityManager, T, Exception> runnable) {
+				final ThrowingFunction<@NonNull EntityManager, T, Exception> runnable) {
 			throw new RuntimeException("mock - injection probably failed");
 		}
 
@@ -155,7 +155,7 @@ public interface ILunarDatabaseManager {
 	<@NonNull T extends AbstractStoredEntity> T[] findRandom(EEntityMeta entityMeta, int amount);
 
 	@Nullable
-	<@Nullable T> T withEm(boolean transactional, ThrowingFunction<EntityManager, T, Exception> runnable);
+	<@Nullable T> T withEm(boolean transactional, ThrowingFunction<@NonNull EntityManager, T, Exception> runnable);
 
 	void checkConnection() throws Exception;
 

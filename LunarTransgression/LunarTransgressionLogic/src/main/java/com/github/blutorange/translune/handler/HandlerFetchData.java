@@ -4,7 +4,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.websocket.Session;
 
+import org.slf4j.Logger;
+
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
+import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.logic.EGameState;
 import com.github.blutorange.translune.message.MessageFetchData;
 import com.github.blutorange.translune.message.MessageFetchDataResponse;
@@ -21,6 +24,9 @@ public class HandlerFetchData implements ILunarMessageHandler {
 	@Inject
 	ILunarDatabaseManager databaseManager;
 
+	@Inject @Classed(HandlerFetchData.class)
+	Logger logger;
+
 	@Inject
 	public HandlerFetchData() {}
 
@@ -34,10 +40,20 @@ public class HandlerFetchData implements ILunarMessageHandler {
 			return;
 		}
 
-		final Object data = fetchData.getFetch().fetch(session, socketProcessing, databaseManager);
-
-		if (data == null)
+		final Object data;
+		try {
+			data = fetchData.getFetch().fetch(session, socketProcessing, databaseManager);
+		}
+		catch (final Exception e) {
+			logger.error("failed to fetch the requested data", e);
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR, new MessageFetchDataResponse(message));
+			return;
+		}
+
+		if (data == null) {
+			logger.error("failed to fetch the requested data");
+			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR, new MessageFetchDataResponse(message));
+		}
 		else
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageFetchDataResponse(message, data));
 	}

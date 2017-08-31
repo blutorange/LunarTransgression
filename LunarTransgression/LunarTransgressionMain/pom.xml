@@ -111,6 +111,41 @@
 		</testResources>
 		<plugins>
 			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.5</version>
+
+				<configuration>
+					<nodeVersion>v6.11.2</nodeVersion>
+				</configuration>
+
+				<executions>
+					<execution>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<phase>generate-sources</phase>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+						<phase>generate-sources</phase>
+					</execution>
+					<execution>
+						<id>grunt build</id>
+						<goals>
+							<goal>grunt</goal>
+						</goals>
+						<phase>generate-sources</phase>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -126,6 +161,9 @@
 					<webResources>
 						<webResource>
 							<directory>WebContent/WEB-INF</directory>
+						</webResource>
+						<webResource>				
+							<directory>${project.build.directory}/generated-sources/js</directory>
 						</webResource>
 					</webResources>
 				</configuration>

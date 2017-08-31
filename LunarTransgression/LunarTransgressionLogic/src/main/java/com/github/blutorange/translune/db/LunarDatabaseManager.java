@@ -288,7 +288,7 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 
 	@Nullable
 	@Override
-	public <@Nullable T> T withEm(final boolean transactional, final ThrowingFunction<EntityManager, T, Exception> runnable) {
+	public <@Nullable T> T withEm(final boolean transactional, final ThrowingFunction<@NonNull EntityManager, T, Exception> runnable) {
 		logger.debug("opening entity manager");
 		final EntityManager em;
 		try {
