@@ -131,7 +131,7 @@ public class ImageProcessing implements IImageProcessing {
 	public IAtlasImage packResources(final String imageName, final String[] resources) throws IOException {
 		final List<Resource> resourceList = databaseManager.withEm(false, em -> {
 			final List<Resource> list = em.unwrap(Session.class).byMultipleIds(Resource.class).multiLoad(resources);
-			if (list == null || list.size() != resources.length) {
+			if (list == null || list.size() != resources.length || list.contains(null)) {
 				logger.error("failed to load resources");
 				return null;
 			}

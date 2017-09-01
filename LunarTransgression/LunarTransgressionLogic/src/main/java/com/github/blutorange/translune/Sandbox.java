@@ -19,7 +19,6 @@ import com.github.blutorange.translune.serial.AvailableBgAndBgm;
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
 import com.github.blutorange.translune.socket.LunarMessage;
-import com.jsoniter.output.JsonStream;
 
 public class Sandbox {
 	public static void main(final String[] args) throws Exception {
@@ -27,7 +26,7 @@ public class Sandbox {
 		final LunarServletContextListener scl = new LunarServletContextListener();
 		scl.initialize();
 		try {
-			availableBgAndBgm();
+			importing();
 		}
 		finally {
 			scl.destroy();
@@ -35,6 +34,7 @@ public class Sandbox {
 	}
 
 	static void availableBgAndBgm() throws IOException {
+
 		final AvailableBgAndBgm a = ComponentFactory.getLunarComponent().iImportProcessing().availableBgAndBgm();
 		System.out.println("\n\nbg-menu");
 		System.out.println(a.getBgMenu());
@@ -44,7 +44,8 @@ public class Sandbox {
 		System.out.println(a.getBgBattle());
 		System.out.println("\n\nbgm-battle");
 		System.out.println(a.getBgmBattle());
-		System.err.println(JsonStream.serialize(a));
+		final MessageFetchDataResponse msg = new MessageFetchDataResponse(9);
+		System.err.println(ComponentFactory.getLunarComponent().jsoniter().get().serialize(new String[0]));
 	}
 
 	static void image() throws IOException {
@@ -69,7 +70,7 @@ public class Sandbox {
 	}
 
 	static void importing() throws IOException {
-		try (ZipFile zipFile = new ZipFile("/tmp/output.zip")) {
+		try (ZipFile zipFile = new ZipFile("/home/madgaksha/Resources/LunarTransgression/data/output.zip")) {
 			ComponentFactory.getLunarComponent().iImportProcessing().importDataSet(zipFile);
 		}
 	}
@@ -114,7 +115,7 @@ public class Sandbox {
 		final MessageFetchDataResponse msg = new MessageFetchDataResponse(0, player);
 		final String payload = ComponentFactory.getLunarComponent().jsoniter().get().serialize(msg);
 		final LunarMessage message = new LunarMessage(4, ELunarMessageType.FETCH_DATA_RESPONSE, ELunarStatusCode.OK, payload);
-		final String json = ComponentFactory.getLunarComponent().jsoniter().get().serialize(message);
+		final String json = ComponentFactory.getLunarComponent().jsoniter().get().serialize(new String[0]);
 		System.err.println(json);
 	}
 }

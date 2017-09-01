@@ -1,10 +1,12 @@
-const transluneNet = new TransluneNet(window);
-const transluneGame = new TransluneGame(window, transluneNet);
-try {
-	transluneGame.start();
-}
-catch (e) {
-	console.error(e);
-	alert("Failed to start game: " + e);
-	transluneNet.finalize();
-}
+(function(Lunar) {
+	const net = new Lunar.Net(window);
+	const game = new Lunar.Game(window, net);
+	try {
+		game.start();
+	}
+	catch (e) {
+		console.error(e);
+		alert("Failed to start game: " + e);
+		net.finalize();
+	}
+})(window.Lunar);

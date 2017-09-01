@@ -11,6 +11,7 @@ import com.github.blutorange.translune.db.CharacterBuilder;
 import com.github.blutorange.translune.db.Skill;
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.EExperienceGroup;
+import com.github.blutorange.translune.util.Constants;
 
 public class CharacterCsvModel {
 
@@ -76,7 +77,7 @@ public class CharacterCsvModel {
 	 *            the cry to set
 	 */
 	public void setCry(final String cry) {
-		builder.setCry(cry);
+		builder.setCry(Constants.FILE_PREFIX_CHARACTER_CRY + cry);
 	}
 
 	/**
@@ -113,7 +114,7 @@ public class CharacterCsvModel {
 	 *            the imgBack to set
 	 */
 	public void setImgBack(final String imgBack) {
-		builder.setImgBack(imgBack);
+		builder.setImgBack(Constants.FILE_PREFIX_CHARACTER_IMG + imgBack);
 	}
 
 	/**
@@ -121,11 +122,11 @@ public class CharacterCsvModel {
 	 *            the imgFront to set
 	 */
 	public void setImgFront(final String imgFront) {
-		builder.setImgFront(imgFront);
+		builder.setImgFront(Constants.FILE_PREFIX_CHARACTER_IMG + imgFront);
 	}
 
 	public void setImgIcon(final String imgIcon) {
-		builder.setImgIcon(imgIcon);
+		builder.setImgIcon(Constants.FILE_PREFIX_CHARACTER_ICON + imgIcon);
 	}
 
 	/**

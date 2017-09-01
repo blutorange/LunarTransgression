@@ -89,6 +89,28 @@ public class JsoniterConfig implements StaticCodegenConfig {
 		registerEnum(EStatusValue.class);
 		registerEnum(EStatusCondition.class);
 
+		JsoniterSpi.registerTypeEncoder(JsoniterEmptyMap.class, new Encoder() {
+			@Override
+			public void encode(@Nullable final Object obj, @NonNull final JsonStream stream) throws IOException {
+				if (obj == null)
+					stream.writeNull();
+				else
+					stream.writeEmptyObject();
+			}
+		});
+		JsoniterSpi.registerTypeDecoder(JsoniterEmptyMap.class, new Decoder() {
+			@Override
+			public @Nullable Object decode(@NonNull final JsonIterator iter) throws IOException {
+				if (iter.whatIsNext() == ValueType.NULL) {
+					iter.readNull();
+					return null;
+				}
+				iter.readObject();
+				iter.readObject();
+				return JsoniterCollections.EMPTY_MAP;
+			}
+		});
+
 		JsoniterSpi.registerTypeEncoder(IComputedBattleStatus.class, IComputedBattleStatus::encodeJson);
 		JsoniterSpi.registerPropertyEncoder(LunarMessage.class, "status", new Encoder() {
 			@Override

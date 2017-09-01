@@ -126,15 +126,15 @@ public final class ImportProcessing implements IImportProcessing {
 			switch (parent.toLowerCase(Locale.ROOT)) {
 			case Constants.IMPORT_DIR_CHARACTER_CRY:
 				logger.debug("found cry sound file " + entry.getName());
-				filesCry.put(FilenameUtils.getName(name), entry);
+				filesCry.put(Constants.FILE_PREFIX_CHARACTER_CRY + FilenameUtils.getName(name), entry);
 				break;
 			case Constants.IMPORT_DIR_CHARACTER_IMG:
 				logger.debug("found image file " + entry.getName());
-				filesImg.put(FilenameUtils.getName(name), entry);
+				filesImg.put(Constants.FILE_PREFIX_CHARACTER_IMG + FilenameUtils.getName(name), entry);
 				break;
 			case Constants.IMPORT_DIR_CHARACTER_ICON:
 				logger.debug("found image file " + entry.getName());
-				filesIcon.put(FilenameUtils.getName(name), entry);
+				filesIcon.put(Constants.FILE_PREFIX_CHARACTER_ICON + FilenameUtils.getName(name), entry);
 				break;
 			case Constants.IMPORT_DIR_BG_MENU:
 				logger.debug("found bg menu file " + entry.getName());

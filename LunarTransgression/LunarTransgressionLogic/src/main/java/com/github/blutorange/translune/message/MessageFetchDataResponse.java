@@ -1,9 +1,8 @@
 package com.github.blutorange.translune.message;
 
-import java.util.Collections;
-
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.github.blutorange.translune.serial.JsoniterCollections;
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.LunarMessage;
 import com.jsoniter.annotation.JsonIgnore;
@@ -13,7 +12,7 @@ public class MessageFetchDataResponse extends AMessageResponse {
 
 	@Deprecated
 	public MessageFetchDataResponse() {
-		data = Collections.emptyMap();
+		data = JsoniterCollections.emptyMap();
 	}
 
 	public MessageFetchDataResponse(final int origin, final Object data) {
@@ -22,7 +21,7 @@ public class MessageFetchDataResponse extends AMessageResponse {
 	}
 
 	public MessageFetchDataResponse(final int origin) {
-		this(origin, Collections.emptyMap());
+		this(origin, JsoniterCollections.emptyMap());
 	}
 
 	public MessageFetchDataResponse(final LunarMessage requestMessage, final Object data) {
@@ -30,7 +29,7 @@ public class MessageFetchDataResponse extends AMessageResponse {
 	}
 
 	public MessageFetchDataResponse(final LunarMessage message) {
-		this(message, Collections.emptyMap());
+		this(message, JsoniterCollections.emptyMap());
 	}
 
 	/**
@@ -51,6 +50,6 @@ public class MessageFetchDataResponse extends AMessageResponse {
 	 *            the data to set
 	 */
 	public void setData(@Nullable final Object data) {
-		this.data = data != null ? data : Collections.emptyMap();
+		this.data = data != null ? data : JsoniterCollections.emptyMap();
 	}
 }

@@ -24,9 +24,9 @@ module.exports = function(grunt)
             build: {
                 files: [{
                     expand: true,
-                    cwd: 'target/dist/resources/js',
+                    cwd: 'target/generated-sources/js/resources',
                     src: ['*.js', '**/*.js'],
-                    dest: 'target/generated-sources/js/resources/translune'
+                    dest: 'target/generated-sources/js/resources'
                 }]
             }
         }
