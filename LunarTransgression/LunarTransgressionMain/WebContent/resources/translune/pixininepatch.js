@@ -50,7 +50,7 @@
     	constructor(options, _opt1, _opt2) {
 	        super();
 	
-	        if (arguments.length > 1) {
+	        if (arguments.length > 1 || options instanceof PIXI.loaders.Resource) {
 	        	options = {
         			width: _opt1,
         			height: _opt2,
@@ -110,6 +110,15 @@
 	        }
 	        
             this.update();
+        }
+        
+        get bodyDimension() {
+        	return {
+        		x: this._bodyX,
+        		y: this._bodyY,
+        		w: this._bodyWidth,
+        		h: this._bodyHeight
+        	};
         }
         
         get bodyWidth() {
@@ -281,4 +290,4 @@
         DEFAULT: 1,
         NINEPATCH: 2
     };
-})(PIXI);
+})(window.PIXI);

@@ -26,7 +26,7 @@ public class Sandbox {
 		final LunarServletContextListener scl = new LunarServletContextListener();
 		scl.initialize();
 		try {
-			importing();
+			jsoniter();
 		}
 		finally {
 			scl.destroy();
@@ -87,8 +87,6 @@ public class Sandbox {
 
 	static void ldm() {
 		final ILunarDatabaseManager ldm = ComponentFactory.getLunarComponent().iLunarDatabaseManager();
-		System.out.println(ldm.find(Player.class, "blutorange"));
-		if (true) return;
 
 //		final Player player = new Player("player2", "123", "im a me", new HashSet<>(), new HashSet<>());
 //		final Item item = new Item("item2", player, EItemEffect.HEAL, 20);
@@ -115,7 +113,7 @@ public class Sandbox {
 		final MessageFetchDataResponse msg = new MessageFetchDataResponse(0, player);
 		final String payload = ComponentFactory.getLunarComponent().jsoniter().get().serialize(msg);
 		final LunarMessage message = new LunarMessage(4, ELunarMessageType.FETCH_DATA_RESPONSE, ELunarStatusCode.OK, payload);
-		final String json = ComponentFactory.getLunarComponent().jsoniter().get().serialize(new String[0]);
-		System.err.println(json);
+		final String json = ComponentFactory.getLunarComponent().jsoniter().get().serialize(message);
+		System.out.println(json);
 	}
 }

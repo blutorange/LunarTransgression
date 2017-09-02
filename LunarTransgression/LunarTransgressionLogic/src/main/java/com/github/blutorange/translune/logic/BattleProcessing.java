@@ -233,7 +233,7 @@ public class BattleProcessing implements IBattleProcessing {
 	@Override
 	public IComputedBattleStatus getComputedStatus(final CharacterState characterState,
 			final BattleStatus battleStatus) {
-		return new ComputedBattleStatus(characterState, battleStatus);
+		return IComputedBattleStatus.get(characterState, battleStatus);
 	}
 
 	@Override

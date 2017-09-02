@@ -10,6 +10,7 @@
 			this._game = game;
 			this._view = new PIXI.Container();
 			this._time = 0;
+			this._hierarchy = {};
 		}
 		
 		method(name) {
@@ -17,19 +18,35 @@
 		}
 		
 		destroy() {
+			this._hierarchy = {};
 			this._game = undefined;
-			this._view.destroy();
+			this._view.destroy(true);
 		}
 		
 		sceneToAdd() {
 			return this;
 		}
 		
-		onAdd() {}
-		onRemove() {}
+		layout() {}
+		
+		onAdd() {
+			this.layout();
+		}
+		
+		onRemove() {
+			this.destroy();
+		}
 		
 		update(delta) {
 			this._time += delta;
+		}
+		
+		get hierarchy() {
+			return this._hierarchy;
+		}
+		
+		set hierarchy(hierarchy) {
+			this._hierarchy = hierarchy;
 		}
 		
 		get time() {
@@ -58,6 +75,55 @@
 				]
 			}));
 		}
+		
+		geo(dimensionable, geometry, {rotation, scale, anchor, proportional, keepSize} = {}) {
+			if (dimensionable.constructor !== PIXI.Container && !keepSize) {
+				if (proportional)
+					Lunar.Geometry.proportionalScale(dimensionable, geometry.w, geometry.h);	
+				else {
+					dimensionable.width = geometry.w;
+					dimensionable.height = geometry.h;
+				}
+			}
+			const a = anchor !== undefined ? Array.isArray(anchor) ? anchor : [anchor] : [0];
+			const ax = a[0];
+			const ay = a.length > 1 ? a[1] : ax;
+			dimensionable.position.set(geometry.x + ax*geometry.w, geometry.y + ay*geometry.h)
+			if (rotation !== undefined)
+				dimensionable.rotation = rotation;
+			if (scale !== undefined)
+				dimensionable.scale.set(...Array.isArray(scale)?scale:[scale]);
+			if (anchor !== undefined)
+				dimensionable.anchor.set(...a);
+			return dimensionable;
+		}
+
+		/**
+		 * @param {PIXI.text} text
+		 * @param {PIXI.NinePatch} ninepatch May be omitted if the text is the immediate child of the ninepatch.
+		 */
+		layoutButtonText(text, keepSize = false, ninepatch = undefined) {
+			ninepatch = ninepatch === undefined ? text.parent.parent : ninepatch;
+			const width = ninepatch.bodyWidth || ninepatch.width;
+			const height = ninepatch.bodyHeight || ninepatch.height;
+			this.geo(text, {x:0,y:0,w:width,h:height}, {keepSize: keepSize, anchor: 0.5});
+		}
+
+		
+		/**
+		 * @param {PIXI.Container} ninepatch
+		 * @param {string} text
+		 * @param {PIXI.TextStyle} style
+		 * @param {PIXI.TextStyle} styleActive
+		 */
+		createButtonText(ninepatch, text = "", style = Lunar.FontStyle.button, styleActive = Lunar.FontStyle.buttonActive) {
+			const pixiText = new PIXI.Text(text, style);
+			ninepatch.interactive = true;
+			ninepatch.buttonMode = true;
+			ninepatch.on('pointerover', () => pixiText.style = Lunar.FontStyle.buttonActive);
+			ninepatch.on('pointerout', () => pixiText.style = Lunar.FontStyle.button);
+			return pixiText;
+		}
 	}
 	
 	Lunar.Scene.Dialog = class extends Lunar.Scene.Base {
@@ -66,65 +132,108 @@
 		 */
 		constructor(game, options) {
 			super(game);
+			this.options = options;
+		}
 		
-			const overlay = new PIXI.Graphics();
-			overlay.beginFill(0x222222, 0.75);
-			overlay.drawRect(game.x(-1), game.y(-1), game.x(1)-game.x(-1), game.y(1)-game.y(-1));
-			overlay.endFill();
-			this.view.addChild(overlay);
-	
-			const style = options.style || Lunar.FontStyle.dialog;
-			const textMessage = new PIXI.Text(options.message, style);
-			textMessage.x = game.x(0);
-			textMessage.y = game.y(0.2);
-			textMessage.anchor.set(0.5,0.5);
-			this.view.addChild(textMessage);
+		onAdd() {
+			this._initScene();
+			super.onAdd();
+		}
+		
+		destroy() {
+			this.options = undefined;
+		}
+		
+		layout() {
+			super.layout();
+			const h = this.hierarchy;
+			const geoRoot = Lunar.Geometry.layoutVbox({
+				box: {w: this.game.w, h: this.game.h},
+				padding: {
+					left: 0.2,
+					right: 0.2,
+					top: 0.2,
+					bottom: 0.2
+				},				
+				dimension: 2,
+			});
+			const geoMessage = Lunar.Geometry.layoutHbox({
+				box: geoRoot[0],
+				relative: true
+			});
+			const geoButton = Lunar.Geometry.layoutHbox({
+				box: geoRoot[1],
+				dimension: this.options.choices.length,
+				padding: {
+					x: 6
+				},
+				relative: true
+			});
 			
-			this.updateCallback = options.update;
-			this.textMessage = textMessage;
-			this.textChoices = this._makeButtons(options.choices);
+			h.$overlay.clear();
+			h.$overlay.beginFill(0x222222, 0.97);
+			h.$overlay.drawRect(this.game.x(-1), this.game.y(-1), this.game.w, this.game.h);
+			h.$overlay.endFill();
+			
+			this.geo(h.$top, geoRoot[0]);
+			this.geo(h.$bottom, geoRoot[1]);
+			this.geo(h.top.$message, geoMessage[0], {anchor: 0.5, keepSize: true});
+			for (let i = this.options.choices.length; i-->0;) {
+				this.geo(h.bottom.$buttons[i].$button, geoButton[i]);
+				this.layoutButtonText(h.bottom.$buttons[i].button.$text, true);
+			}
 		}
 		
 		update(delta) {
-			if (this.updateCallback) {
-				this.updateCallback(delta, this.textMessage, this.textChoices);
-			}
+			super.update(delta);
+			if (this.options.update)
+				this.options.update(delta, this);
 		}
 		
 		/**
 		 * @private
 		 */
-		_makeButtons(choices) {
+		_initScene() {
 			const _this = this;
-			const paddingInner = 10;
-			const paddingLeft = 0.2;
-			const paddingRight = 0.2;
-			const choiceButtons = [];
-			// choices.length*width + (choices.length-1) * padding + (paddingLeft + paddingRight)*this.game.w = this.game.w
-			const width = (this.game.w - (choices.length-1) * paddingInner - (paddingLeft + paddingRight) * this.game.w) / choices.length;
-			const height = this.game.dy(0.15);
-			const y = this.game.y(-0.2);
-			const close = this._close.bind(this);
-			let x = paddingLeft * this.game.w;
-			return choices.map(choice => {
-				const button = new PIXI.NinePatch(_this.game.loaderFor('base').resources.textbox, width, height);
-				button.position.set(x, y);		
-				button.interactive = true;
-				button.buttonMode = true;
-				button.on('pointerover', () => text.style = choice.styleActive || Lunar.FontStyle.buttonActive);
-				button.on('pointerout', () => text.style = choice.style || Lunar.FontStyle.button);
+			const close = this.method('_close');
+			const overlay = new PIXI.Graphics();
+			const topContainer = new PIXI.Container();
+			const bottomContainer = new PIXI.Container();
+			const styleMessage = this.options.style || Lunar.FontStyle.dialog;
+			const textMessage = new PIXI.Text(this.options.message, styleMessage);
+			
+			const bottomButtons = this.options.choices.map(choice => {
+				const button = new PIXI.NinePatch(_this.game.loaderFor('base').resources.textbox);
+				const buttonText = _this.createButtonText(button, 
+						choice.text, choice.style || Lunar.FontStyle.button,
+						choice.styleActive || Lunar.FontStyle.buttonActive);
 				button.on('pointerdown', () => choice.callback(close));
-				
-				const text = new PIXI.Text(choice.text, choice.style || Lunar.FontStyle.button);
-				text.anchor.set(0.5, 0.5);
-				text.position.set(0.5*button.bodyWidth, 0.5*button.bodyHeight);
-				
-				button.body.addChild(text);
-				_this.view.addChild(button);
-				
-				x = x + width + paddingInner;
-				return text;
+				button.body.addChild(buttonText);
+				bottomContainer.addChild(button);
+				return {
+					$button: button,
+					button: {
+						$text: buttonText
+					}
+				};
 			});
+
+			this.view.addChild(topContainer);
+			this.view.addChild(bottomContainer);
+			this.view.addChild(overlay);
+			topContainer.addChild(textMessage);
+
+			this.hierarchy = {
+				$top: topContainer,
+				$bottom: bottomContainer,
+				$overlay: overlay,
+				top: {
+					$message: textMessage
+				},
+				bottom: {
+					$buttons: bottomButtons
+				}
+			};
 		}
 		
 		/**
@@ -166,8 +275,8 @@
 		}
 		
 		destroy() {
-			super.destroy();
 			this.loadable = undefined;
+			super.destroy();
 		}
 		
 		update(delta) {

@@ -123,6 +123,9 @@ Scene battle
 				this.app.view.style.width = "";
 				this.app.view.style.height = "";
 			}
+			Lunar.FontStyle.layout(this);
+			for (let scene of this.scenes)
+				scene.layout();
 		}
 		
 		/**

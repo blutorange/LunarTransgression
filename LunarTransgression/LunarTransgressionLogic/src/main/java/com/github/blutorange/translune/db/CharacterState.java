@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -25,8 +26,10 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.common.IAccessible;
 import com.github.blutorange.translune.logic.ENature;
+import com.github.blutorange.translune.logic.IComputedStatus;
 import com.github.blutorange.translune.util.Constants;
 import com.jsoniter.annotation.JsonIgnore;
+import com.jsoniter.annotation.JsonProperty;
 
 @Entity
 @Table(name = "charstate")
@@ -159,6 +162,13 @@ public class CharacterState extends AbstractStoredEntity {
 	 */
 	public int getIvMp() {
 		return ivMp;
+	}
+
+	@JsonProperty
+	@JsonIgnore(ignoreDecoding = true, ignoreEncoding = false)
+	@Transient
+	public IComputedStatus getComputedStatus() {
+		return IComputedStatus.get(this);
 	}
 
 	/**

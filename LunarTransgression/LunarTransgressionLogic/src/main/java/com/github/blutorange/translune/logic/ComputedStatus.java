@@ -16,7 +16,7 @@ class ComputedStatus implements IComputedStatus {
 	private int physicalDefense;
 	private int speed;
 	private int cachedLevel = 0;
-	
+
 	protected final CharacterState characterState;
 
 	public ComputedStatus(final CharacterState characterState) {
@@ -167,18 +167,18 @@ class ComputedStatus implements IComputedStatus {
 	public IComputedStatus getSnapshot() {
 		return new ComputedStatusSnapshot();
 	}
-	
+
 	protected class ComputedStatusSnapshot implements IComputedStatus {
-		private int accuracy;
-		private int evasion;
-		private int maxHp;
-		private int magicalAttack;
-		private int magicalDefense;
+		private final int accuracy;
+		private final int evasion;
+		private final int maxHp;
+		private final int magicalAttack;
+		private final int magicalDefense;
 		private int maxMp;
-		private int physicalAttack;
-		private int physicalDefense;
-		private int speed;
-		
+		private final int physicalAttack;
+		private final int physicalDefense;
+		private final int speed;
+
 		public ComputedStatusSnapshot() {
 			accuracy = getComputedAccuracy();
 			evasion = getComputedEvasion();
