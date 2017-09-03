@@ -276,10 +276,10 @@
 				choices: [
 					{
 						text: "Keep playing",
-						callback: close => {
+						callback: dialog => {
 							_this.game.window.clearTimeout(id);
 							_this.game.sfx('resources/translune/static/ping');
-							close();
+							dialog.close();
 						}
 					}
 				]
@@ -290,6 +290,10 @@
 		 * @private
 		 */
 		onClickChar() {
+			if (this._tabState === 'char') {
+				this.game.sfx('resources/translune/static/unable');
+				return;
+			}
 			this.game.sfx('resources/translune/static/buttonclick');
 			if (this._tabScene)
 				this.game.removeScene(this._tabScene);
@@ -298,6 +302,7 @@
 			this._tabDetails = undefined;
 			this._tabScene = new Lunar.Scene.MenuChar(this.game, this);
 			this.game.pushScene(this._tabScene, this.hierarchy.mid.$left.body);
+			this._tabState = 'char';
 		}
 		
 		onSelectChar(characterState) {
@@ -320,21 +325,36 @@
 		 * @private
 		 */
 		onClickItem() {
+			if (this._tabState === 'item') {
+				this.game.sfx('resources/translune/static/unable');
+				return;
+			}
 			this.game.sfx('resources/translune/static/buttonclick');
+			this._tabState = 'item';
 		}
 		
 		/**
 		 * @private
 		 */
 		onClickCollection() {
+			if (this._tabState === 'collection') {
+				this.game.sfx('resources/translune/static/unable');
+				return;
+			}
 			this.game.sfx('resources/translune/static/buttonclick');
+			this._tabState === 'collection'
 		}
 		
 		/**
 		 * @private
 		 */
 		onClickInvite() {
+			if (this._tabState === 'invite') {
+				this.game.sfx('resources/translune/static/unable');
+				return;
+			}
 			this.game.sfx('resources/translune/static/buttonclick');
+			this._tabState === 'invite'
 		}
 	
 		update(delta) {

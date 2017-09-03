@@ -1,6 +1,7 @@
 package com.github.blutorange.translune.serial;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -19,7 +20,7 @@ public class JsoniterEnumDecoder<E extends Enum<E>> implements Decoder {
 		final String type = iter.readString();
 		if (type == null || type.isEmpty()) return null;
 		try {
-			return Enum.valueOf(enumType, type);
+			return Enum.valueOf(enumType, type.replace('-', '_').toUpperCase(Locale.ROOT));
 		}
 		catch (final IllegalArgumentException e) {
 			throw new IOException("invalid enum type " + type, e);

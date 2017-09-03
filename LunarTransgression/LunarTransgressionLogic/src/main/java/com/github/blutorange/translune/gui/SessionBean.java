@@ -1,5 +1,7 @@
 package com.github.blutorange.translune.gui;
 
+import java.io.IOException;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -131,11 +133,11 @@ public class SessionBean extends AbstractBean {
 		}
 		final String nickname = this.username.trim();
 		final String password = this.password;
-		if (Constants.USERNAME_SADMIN.equals(nickname) || databaseManager.find(Player.class, nickname) != null) {
-			addMessage(FacesMessage.SEVERITY_WARN, "Nickname exists already");
-			return;
-		}
 		try {
+			if (Constants.USERNAME_SADMIN.equals(nickname) || databaseManager.find(Player.class, nickname) != null) {
+				addMessage(FacesMessage.SEVERITY_WARN, "Nickname exists already");
+				return;
+			}
 			createPlayer(nickname, password);
 		}
 		catch (final Exception e) {
@@ -149,7 +151,16 @@ public class SessionBean extends AbstractBean {
 
 	private void createPlayer(final String nickname, final String password) throws CannotPerformOperationException {
 		logger.debug("creating player");
-		final Character[] characters = databaseManager.findRandom(Character.class, 4);
+		Character[] characters;
+		try {
+			characters = databaseManager.findRandom(Character.class, 4);
+		}
+		catch (final IOException e) {
+			logger.error("failed to create player", e);
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Could not create a player", e.getMessage()));
+			return;
+		}
 		logger.debug("found random characters: " + characters.length);
 		if (characters.length != 4) {
 			addMessage(FacesMessage.SEVERITY_ERROR, "Failed to generate characters");

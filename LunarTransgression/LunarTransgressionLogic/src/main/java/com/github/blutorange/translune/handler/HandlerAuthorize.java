@@ -65,7 +65,9 @@ public class HandlerAuthorize implements ILunarMessageHandler {
 
 
 		// Prefetch data
-		databaseManager.find(Player.class, nickname);
+		final Player player = databaseManager.find(Player.class, nickname);
+		if (player == null)
+			logger.warn("could not prefetch player data");
 
 		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageAuthorizeResponse(message));
 	}

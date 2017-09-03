@@ -54,13 +54,12 @@ Scene battle
 			this.finalized = false;
 			this.bgmHowl = undefined;
 			this.bgmId = undefined;
-			this.addStack = [];
-			this.removalStack = [];
+			this.operationStack = [];
 			this.app.loader.baseUrl = this.net.httpBase;
 			this.loaders['base'] = this.app.loader;
 			this._prepareLoader();
 			
-			Lunar.FontStyle.setup(this);
+			Lunar.FontStyle._setup(this);
 			
 			// Resize listener
 			this.window.addEventListener("resize", () => _this._updateScreen());
@@ -123,9 +122,25 @@ Scene battle
 				this.app.view.style.width = "";
 				this.app.view.style.height = "";
 			}
-			Lunar.FontStyle.layout(this);
+			Lunar.FontStyle._layout(this);
 			for (let scene of this.scenes)
 				scene.layout();
+			this._baseLayout(this.app.stage);
+		}
+		
+		/**
+		 * @private
+		 */
+		_baseLayout(element) {
+			for (let child of element.children||[]) {
+				if (child instanceof PIXI.Text || child instanceof PIXI.TextInput) {
+				 	// set dirty flag
+					const text = child.text;
+					child.text = "";
+					child.text = text;
+				}
+				this._baseLayout(child);
+			}
 		}
 		
 		/**
@@ -155,11 +170,11 @@ Scene battle
 		}
 		
 		pushScene(scene, container = undefined) {
-			this.addStack.push({scene: scene, container: container || this.app.stage});
+			this.operationStack.push({type: 'add', scene: scene, container: container || this.app.stage});
 		}
 		
 		removeScene(scene) {
-			this.removalStack.push(scene);
+			this.operationStack.push({type:'del', scene: scene});
 		}
 		
 		/**
@@ -210,24 +225,30 @@ Scene battle
 		/**
 		 * @private
 		 */
-		_addRemoveScenes() {
-			for (let entry of this.addStack) {
-				const delegate = entry.scene.sceneToAdd();
-				this.scenes.push(delegate);
-				entry.container.addChild(delegate.view);
-				delegate.onAdd();
-			}
-			for (let scene of this.removalStack) {
-				const index = this.scenes.indexOf(scene);
-				if (index >= 0) {
-					this.scenes.splice(index,1);
-					scene.onRemove();
+		_applyOperations() {
+			const operationStack = Array.from(this.operationStack);
+			this.operationStack = [];
+			for (let entry of operationStack) {
+				switch (entry.type) {
+				case 'add':
+					const delegate = entry.scene.sceneToAdd();
+					this.scenes.push(delegate);
+					entry.container.addChild(delegate.view);
+					delegate.onAdd();
+					break;
+				case 'del':
+					const index = this.scenes.indexOf(entry.scene);
+					if (index >= 0) {
+						this.scenes.splice(index,1);
+						entry.scene.onRemove();
+					}
+					if (entry.scene.view.parent)
+						entry.scene.view.parent.removeChild(entry.scene.view);
+					break;
+				default:
+					console.warn("unknown stack type", entry.type);
 				}
-				if (scene.view.parent)
-					scene.view.parent.removeChild(scene.view);
 			}
-			this.addStack = [];
-			this.removalStack = [];
 		}
 		
 		/**
@@ -283,6 +304,14 @@ Scene battle
 			return this.app.renderer.height*relative;
 		}
 		
+		get diagonal() {
+			return Math.sqrt(this.w*this.w+this.h*this.h);
+		}
+		
+		get wh() {
+			return 0.5*(this.w+this.h);
+		}
+		
 		get h() {
 			return this.app.renderer.height;
 		}
@@ -291,7 +320,7 @@ Scene battle
 		 * @private
 		 */
 		_update(delta) {
-			this._addRemoveScenes();
+			this._applyOperations();
 			const deltaTime = delta / 60.0;
 			for (let scene of this.scenes)
 				scene.update(deltaTime);
@@ -320,6 +349,7 @@ Scene battle
 			if (this.finalized)
 				return;
 			this.finalized = true;
+			this.operationStack = [];
 			this.switchBgm();
 			for (let scene of this.scenes) {
 				this.removeScene(scene);

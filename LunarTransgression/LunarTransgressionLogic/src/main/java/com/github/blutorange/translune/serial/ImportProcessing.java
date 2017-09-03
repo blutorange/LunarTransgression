@@ -281,6 +281,7 @@ public final class ImportProcessing implements IImportProcessing {
 
 	private void writeImportToDb(final List<Pair<ZipEntry, String>> requiredFiles, final Set<Character> characters,
 			final Set<Skill> skills, final ZipFile zipFile) throws IOException {
+		databaseManager.flushAndEmpty();
 		final Throwable result = databaseManager.withEm(true, em -> {
 			try {
 				characters.forEach(character -> {

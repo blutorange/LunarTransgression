@@ -26,4 +26,5 @@ public interface IEntityStore {
 	<T extends AbstractStoredEntity> T remove(final EEntityMeta entityMeta, final Object primaryKey);
 
 	<T extends AbstractStoredEntity> void store(@SuppressWarnings("unchecked") T... entities);
+	void clear();
 }

@@ -1,5 +1,6 @@
 package com.github.blutorange.translune.logic;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.github.blutorange.translune.db.CharacterState;
@@ -22,11 +23,11 @@ public interface IBattleProcessing {
 	void dealDamage(IDamageResult damageResult, IComputedBattleStatus target, List<String> messages);
 
 	BattleResult[][] distributeExperience(String[] players, List<String[]> characterStates,
-			BattleStatus[][] battleStatus, int turn);
+			BattleStatus[][] battleStatus, int turn) throws IOException;
 
 	IComputedBattleStatus getComputedStatus(CharacterState characterState, BattleStatus battleStatus);
 
-	IComputedBattleStatus getComputedStatus(String characterState, BattleStatus status);
+	IComputedBattleStatus getComputedStatus(String characterState, BattleStatus status) throws IOException;
 
 	IComputedBattleStatus[] getTargetsAlive(ITargettable targettable, IBattleContext context,
 			BattleCommand battleCommand, int player, int character);
@@ -49,10 +50,11 @@ public interface IBattleProcessing {
 	 * @param items
 	 * @param effectorStack
 	 * @return IBattleResult[playerIndex=0..1][characterIndex=0...3]
+	 * @throws IOException
 	 */
 	BattleAction[][] simulateBattleStep(List<BattleCommand[]> commands, String[] players,
 			List<String[]> characterStates, List<String[]> items, BattleStatus[][] battleStatus,
-			List<IGlobalBattleEffector> effectorStack, int turn);
+			List<IGlobalBattleEffector> effectorStack, int turn) throws IOException;
 
 	void changeStages(IStaged skill, IComputedBattleStatus target, List<String> messages, IBattleContext context);
 

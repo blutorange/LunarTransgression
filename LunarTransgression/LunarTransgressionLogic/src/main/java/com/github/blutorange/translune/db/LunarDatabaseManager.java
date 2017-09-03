@@ -20,7 +20,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.hibernate.Session;
@@ -84,7 +83,13 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 			final T e = entityStore.retrieve(entityMeta, primaryKey);
 			if (e != null)
 				return e;
-			saveChangesToDatabase();
+			try {
+				saveChangesToDatabase();
+			}
+			catch (final IOException ex) {
+				logger.error("could not perform find, failed to write changes to database", ex);
+				return null;
+			}
 			entity = withEm(em -> {
 				@SuppressWarnings("unchecked")
 				final @Nullable T object = (T) em.find(entityMeta.getJavaClass(), primaryKey);
@@ -99,7 +104,7 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 
 	@SuppressWarnings({ "unchecked" })
 	@Override
-	public <@NonNull T extends AbstractStoredEntity> T[] findRandom(final Class<T> clazz, final int amount) {
+	public <@NonNull T extends AbstractStoredEntity> T[] findRandom(final Class<T> clazz, final int amount) throws IOException {
 		synchronized (entityStore) {
 			saveChangesToDatabase();
 		}
@@ -133,7 +138,7 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <@NonNull T extends AbstractStoredEntity> T[] findRandom(final EEntityMeta entityMeta, final int amount) {
+	public <@NonNull T extends AbstractStoredEntity> T[] findRandom(final EEntityMeta entityMeta, final int amount)  throws IOException{
 		return (T[])findRandom(entityMeta.getJavaClass(), amount);
 	}
 
@@ -183,19 +188,21 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 	}
 
 	@SuppressWarnings("resource")
-	private void saveChangesToDatabase() {
+	private void saveChangesToDatabase() throws IOException {
 		logger.info("flushing entity changes to database");
 		if (logger.isDebugEnabled()) {
 			logger.debug("flushing entity changes to database");
 			changeList.forEach(change -> logger.debug("need to process change " + change));
 		}
 		if (!changeList.isEmpty()) {
-			withEm(true, em -> {
+			final Boolean result = withEm(true, em -> {
 				final Session session = em.unwrap(Session.class);
 				for (final IChange change : changeList)
 					change.perform(em, session);
-				return StringUtils.EMPTY;
+				return Boolean.TRUE;
 			});
+			if (result == null)
+				throw new IOException("failed to save changes to the database");
 			changeList.clear();
 		}
 	}
@@ -242,12 +249,12 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 	}
 
 	@Override
-	public <@NonNull T extends AbstractStoredEntity> T[] findAll(final Class<T> clazz, final Object[] primaryKeys) {
+	public <@NonNull T extends AbstractStoredEntity> T[] findAll(final Class<T> clazz, final Object[] primaryKeys)  throws IOException{
 		return findAll(EEntityMeta.valueOf(clazz), primaryKeys);
 	}
 
 	@Override
-	public <@NonNull T extends AbstractStoredEntity> T[] findAll(final EEntityMeta entityMeta, final Object[] primaryKeys) {
+	public <@NonNull T extends AbstractStoredEntity> T[] findAll(final EEntityMeta entityMeta, final Object[] primaryKeys)  throws IOException{
 		final Class<?> clazz = entityMeta.getJavaClass();
 		@SuppressWarnings({ "unchecked", "null" })
 		final T@NonNull[] result = (T[]) Array.newInstance(clazz, primaryKeys.length);
@@ -264,12 +271,12 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 	}
 
 	@Override
-	public long count(final EEntityMeta entityMeta) {
+	public long count(final EEntityMeta entityMeta) throws IOException {
 		return count(entityMeta.getJavaClass());
 	}
 
 	@Override
-	public <@NonNull T extends AbstractStoredEntity> long count(final Class<T> clazz) {
+	public <@NonNull T extends AbstractStoredEntity> long count(final Class<T> clazz) throws IOException {
 		synchronized (entityStore) {
 			saveChangesToDatabase();
 		}
@@ -435,12 +442,26 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 	}
 
 	@Override
+	public void flushAndEmpty() throws IOException {
+		logger.debug("number of changes to process " + changeList.size());
+		synchronized (entityStore) {
+			saveChangesToDatabase();
+			entityStore.clear();
+		}
+	}
+
+	@Override
 	public void runPeriodically() throws JobExecutionException {
 		logger.debug("number of changes to process " + changeList.size());
 		if (changeList.isEmpty())
 			return;
 		synchronized (entityStore) {
-			saveChangesToDatabase();
+			try {
+				saveChangesToDatabase();
+			}
+			catch (final IOException e) {
+				throw new JobExecutionException("could not write changes to database", e);
+			}
 		}
 	}
 }

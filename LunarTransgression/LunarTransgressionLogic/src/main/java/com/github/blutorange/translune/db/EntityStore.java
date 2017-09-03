@@ -85,4 +85,9 @@ public class EntityStore implements IEntityStore {
 		for (final T entity : entities)
 			store(entity);
 	}
+
+	@Override
+	public void clear() {
+		typeMap.values().forEach(Map::clear);
+	}
 }

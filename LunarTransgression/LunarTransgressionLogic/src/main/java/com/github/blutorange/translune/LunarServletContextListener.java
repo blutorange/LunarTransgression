@@ -19,15 +19,18 @@ import org.slf4j.Logger;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.ic.ComponentFactory;
+import com.github.blutorange.translune.job.CleanInitId;
 import com.github.blutorange.translune.job.SaveDb;
 import com.github.blutorange.translune.util.CustomProperties;
 
-@WebListener(value="Listener for the lunar application")
+@WebListener(value = "Listener for the lunar application")
 public class LunarServletContextListener implements ServletContextListener {
-	@Inject @Classed(LunarServletContextListener.class)
+	@Inject
+	@Classed(LunarServletContextListener.class)
 	Logger logger;
 
-	@Inject @Named("default")
+	@Inject
+	@Named("default")
 	Scheduler scheduler;
 
 	@Inject
@@ -38,6 +41,7 @@ public class LunarServletContextListener implements ServletContextListener {
 		try {
 			scheduler.start();
 			addJobSaveDb(scheduler);
+			addJobCleanInitId(scheduler);
 		}
 		catch (final SchedulerException e) {
 			logger.error("failed to start quartz", e);
@@ -50,9 +54,21 @@ public class LunarServletContextListener implements ServletContextListener {
 		initialize();
 	}
 
+	private void addJobCleanInitId(final Scheduler scheduler) throws SchedulerException {
+		logger.debug("adding job cleanInitId");
+		final JobDetail jobDetail = JobBuilder.newJob(CleanInitId.class).withIdentity("cleanInitId", "clean")
+				.withDescription("Removes expired initiation tokens.").build();
+		final SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule().withIntervalInHours(12)
+				.repeatForever();
+		final Trigger jobTrigger = TriggerBuilder.newTrigger().withIdentity("triggerCleanInitId", "clean").startNow()
+				.withSchedule(scheduleBuilder).build();
+		scheduler.scheduleJob(jobDetail, jobTrigger);
+	}
+
 	private void addJobSaveDb(final Scheduler scheduler) throws SchedulerException {
 		logger.debug("adding job saveDb");
-		final JobDetail jobDetail = JobBuilder.newJob(SaveDb.class).withIdentity("jobSaveDb", "db").build();
+		final JobDetail jobDetail = JobBuilder.newJob(SaveDb.class).withIdentity("jobSaveDb", "db")
+				.withDescription("Writes local unsaved changes to the database.").build();
 		final SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
 				.withIntervalInMinutes(customProperties.getDatabaseSaveMinutes()).repeatForever();
 		final Trigger jobTrigger = TriggerBuilder.newTrigger().withIdentity("triggerSaveDb", "db").startNow()

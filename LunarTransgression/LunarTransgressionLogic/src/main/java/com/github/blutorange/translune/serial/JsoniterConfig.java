@@ -26,6 +26,7 @@ import com.github.blutorange.translune.logic.ESkillEffect;
 import com.github.blutorange.translune.logic.EStatusCondition;
 import com.github.blutorange.translune.logic.IComputedBattleStatus;
 import com.github.blutorange.translune.message.EFetchDataType;
+import com.github.blutorange.translune.message.EUpdateDataType;
 import com.github.blutorange.translune.message.MessageAuthorize;
 import com.github.blutorange.translune.message.MessageAuthorizeResponse;
 import com.github.blutorange.translune.message.MessageBattleCancelled;
@@ -51,6 +52,8 @@ import com.github.blutorange.translune.message.MessagePrepareBattleResponse;
 import com.github.blutorange.translune.message.MessageStepBattle;
 import com.github.blutorange.translune.message.MessageStepBattleResponse;
 import com.github.blutorange.translune.message.MessageUnknown;
+import com.github.blutorange.translune.message.MessageUpdateData;
+import com.github.blutorange.translune.message.MessageUpdateDataResponse;
 import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 import com.github.blutorange.translune.socket.BattleResult;
@@ -83,6 +86,7 @@ public class JsoniterConfig implements StaticCodegenConfig {
 		registerEnum(EElement.class);
 		registerEnum(EExperienceGroup.class);
 		registerEnum(EFetchDataType.class);
+		registerEnum(EUpdateDataType.class);
 		registerEnum(ELunarMessageType.class);
 		registerEnum(ENature.class);
 		registerEnum(ESkillEffect.class);
@@ -201,6 +205,9 @@ public class JsoniterConfig implements StaticCodegenConfig {
 
 				TypeLiteral.create(MessageFetchData.class),
 				TypeLiteral.create(MessageFetchDataResponse.class),
+
+				TypeLiteral.create(MessageUpdateData.class),
+				TypeLiteral.create(MessageUpdateDataResponse.class),
 
 				TypeLiteral.create(MessageAuthorize.class),
 				TypeLiteral.create(MessageAuthorizeResponse.class),

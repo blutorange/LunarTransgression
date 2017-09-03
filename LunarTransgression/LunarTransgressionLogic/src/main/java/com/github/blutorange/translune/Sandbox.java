@@ -15,10 +15,8 @@ import com.github.blutorange.translune.logic.EExperienceGroup;
 import com.github.blutorange.translune.media.IAtlasImage;
 import com.github.blutorange.translune.media.IImageProcessing;
 import com.github.blutorange.translune.message.MessageFetchDataResponse;
+import com.github.blutorange.translune.message.MessageUpdateData;
 import com.github.blutorange.translune.serial.AvailableBgAndBgm;
-import com.github.blutorange.translune.socket.ELunarMessageType;
-import com.github.blutorange.translune.socket.ELunarStatusCode;
-import com.github.blutorange.translune.socket.LunarMessage;
 
 public class Sandbox {
 	public static void main(final String[] args) throws Exception {
@@ -107,13 +105,14 @@ public class Sandbox {
 	}
 
 	static void jsoniter() {
-		final Player player = ComponentFactory.getLunarComponent().iLunarDatabaseManager().find(Player.class, "blutorange");
-		if (player == null)
-			throw new RuntimeException("player not found");
-		final MessageFetchDataResponse msg = new MessageFetchDataResponse(0, player);
-		final String payload = ComponentFactory.getLunarComponent().jsoniter().get().serialize(msg);
-		final LunarMessage message = new LunarMessage(4, ELunarMessageType.FETCH_DATA_RESPONSE, ELunarStatusCode.OK, payload);
-		final String json = ComponentFactory.getLunarComponent().jsoniter().get().serialize(message);
-		System.out.println(json);
+//		final Player player = ComponentFactory.getLunarComponent().iLunarDatabaseManager().find(Player.class, "blutorange");
+//		if (player == null)
+//			throw new RuntimeException("player not found");
+//		final MessageFetchDataResponse msg = new MessageFetchDataResponse(0, player);
+//		final String payload = ComponentFactory.getLunarComponent().jsoniter().get().serialize(msg);
+//		final LunarMessage message = new LunarMessage(4, ELunarMessageType.FETCH_DATA_RESPONSE, ELunarStatusCode.OK, payload);
+//		final String json = ComponentFactory.getLunarComponent().jsoniter().get().serialize(message);
+		final Object o = ComponentFactory.getLunarComponent().jsoniter().get().deserialize("{\"update\":\"character-nickname\",\"details\":\"{\\\"id\\\":\\\"3861729c-67f0-4c9a-b838-b9b300bd4d3d\\\",\\\"nickname\\\":\\\"qwm\\\"}\"}", MessageUpdateData.class);
+		System.out.println(o);
 	}
 }

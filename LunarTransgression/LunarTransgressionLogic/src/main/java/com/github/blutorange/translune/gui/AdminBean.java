@@ -1,9 +1,12 @@
 package com.github.blutorange.translune.gui;
 
+import java.io.IOException;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.persistence.Transient;
@@ -65,10 +68,17 @@ public class AdminBean extends AbstractBean {
 	}
 
 	public void refreshGamestats() {
-		this.gamestats = createGamestats();
+		try {
+			this.gamestats = createGamestats();
+		}
+		catch (final IOException e) {
+			logger.error("failed to update stats", e);
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Could not refresh stats", e.getMessage()));
+		}
 	}
 
-	private Gamestats createGamestats() {
+	private Gamestats createGamestats() throws IOException {
 		final ILunarDatabaseManager ldm = lunarDatabaseManager;
 		return new Gamestats(ldm.count(Player.class), ldm.count(CharacterState.class));
 	}

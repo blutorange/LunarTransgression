@@ -49,7 +49,7 @@ public final class Constants {
 	public static final String IMPORT_FILE_SKILL = "skill.csv";
 
 	public static final int MAX_ACCURACY = 200;
-	public static final int MAX_CHARACTERS = 20;
+	public static final int MAX_CHARACTERS = 28;
 	public static final int MAX_EVASION = 200;
 	public static final int MAX_EXP = 99999;
 	public static final int MAX_HP = 9999;

@@ -1,5 +1,6 @@
 package com.github.blutorange.translune.logic;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -221,7 +222,7 @@ public class BattleProcessing implements IBattleProcessing {
 
 	@Override
 	public BattleResult[][] distributeExperience(final String[] players, final List<String[]> characterStates,
-			final BattleStatus[][] battleStatus, final int turn) {
+			final BattleStatus[][] battleStatus, final int turn) throws IOException {
 		final IComputedBattleStatus[][] computedBattleStatus = computedBattleStatus(characterStates, battleStatus);
 		final Player[] playerEntities = databaseManager.findAll(Player.class, players);
 		final BattleResult[][] result = new BattleResult[2][];
@@ -237,7 +238,7 @@ public class BattleProcessing implements IBattleProcessing {
 	}
 
 	@Override
-	public IComputedBattleStatus getComputedStatus(final String characterState, final BattleStatus status) {
+	public IComputedBattleStatus getComputedStatus(final String characterState, final BattleStatus status) throws IOException {
 		final CharacterState cs = databaseManager.find(CharacterState.class, characterState);
 		if (cs == null)
 			throw new IllegalArgumentException("character state does not exists");
@@ -266,7 +267,7 @@ public class BattleProcessing implements IBattleProcessing {
 	@Override
 	public BattleAction[][] simulateBattleStep(final List<BattleCommand[]> commands, final String[] players,
 			final List<String[]> characterStates, final List<String[]> items, final BattleStatus[][] battleStatus,
-			final List<IGlobalBattleEffector> effectorStack, final int turn) {
+			final List<IGlobalBattleEffector> effectorStack, final int turn) throws IOException {
 		final IComputedBattleStatus[][] computedBattleStatus = computedBattleStatus(characterStates, battleStatus);
 		final IBattleCommandHandler[] battleCommandHandlers = new IBattleCommandHandler[8];
 		final List<BattleAction> battleActions1 = new ArrayList<>(2 * battleCommandHandlers.length);
@@ -286,7 +287,7 @@ public class BattleProcessing implements IBattleProcessing {
 	}
 
 	private IComputedBattleStatus[][] computedBattleStatus(final List<String @NonNull []> characterStates,
-			final BattleStatus[][] battleStatus) {
+			final BattleStatus[][] battleStatus) throws IOException {
 		final IComputedBattleStatus[][] computedBattleStatus = new IComputedBattleStatus[2][4];
 		for (int player = 1; player-- > 0;) {
 			for (int character = 4; character-- > 0;) {
@@ -438,7 +439,7 @@ public class BattleProcessing implements IBattleProcessing {
 		return new BattleResult(character.getName(), sentences.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 	}
 
-	private CharacterState[][] getCharacterStates(final List<String[]> characterStates) {
+	private CharacterState[][] getCharacterStates(final List<String[]> characterStates) throws IOException {
 		final CharacterState[][] retrievedCharacterStates = new CharacterState[2][4];
 		for (int player = 1; player-- > 0;) {
 			for (int character = 1; character-- > 0;) {

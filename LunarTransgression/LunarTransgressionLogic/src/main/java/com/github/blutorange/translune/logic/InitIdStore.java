@@ -61,4 +61,10 @@ public class InitIdStore implements IInitIdStore {
 	public void clear(final String nickname) {
 		store.remove(nickname);
 	}
+
+	@Override
+	public void cleanExpired() {
+		final long threshold = System.currentTimeMillis() - customProperties.getTimeoutInitIdMillis();
+		store.entrySet().removeIf(entry -> entry.getValue().created < threshold);
+	}
 }

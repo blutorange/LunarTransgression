@@ -12,6 +12,9 @@ public enum ELunarMessageType {
 	FETCH_DATA(ComponentFactory.getLunarComponent().ihandlerFetchData()),
 	FETCH_DATA_RESPONSE(ELunarMessageHandler.NOOP),
 
+	UPDATE_DATA(ComponentFactory.getLunarComponent().ihandlerUpdateData()),
+	UPDATE_DATA_RESPONSE(ELunarMessageHandler.NOOP),
+
 	INVITE(ComponentFactory.getLunarComponent().ihandlerInvite()),
 	INVITE_RESPONSE(ELunarMessageHandler.NOOP),
 	INVITED(ELunarMessageHandler.NOOP),

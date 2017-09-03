@@ -7,4 +7,6 @@ public interface IInitIdStore {
 	boolean assertToken(String nickname, String initId);
 
 	void clear(String nickname);
+
+	void cleanExpired();
 }

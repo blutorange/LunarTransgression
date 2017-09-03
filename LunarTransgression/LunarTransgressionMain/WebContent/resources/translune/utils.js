@@ -215,6 +215,7 @@
 	Lunar.Message = {
 		authorize: 'AUTHORIZE',
 		fetchData: 'FETCH_DATA',
+		updateData: 'UPDATE_DATA',
 		unknown: 'UNKNOWN'
 	};
 	
@@ -262,20 +263,94 @@
 	};
 	
 	Lunar.FontStyle = {
-		layout: function(game) {
-			Lunar.FontStyle.dialog.fontSize = game.dx(0.040);
-			Lunar.FontStyle.dialog.wordWrapWidth = game.dx(0.8);
-			Lunar.FontStyle.load.fontSize = game.dx(0.028);
-			Lunar.FontStyle.load.wordWrapWidth = game.w;
-			Lunar.FontStyle.button.fontSize = game.dx(0.032);
-			Lunar.FontStyle.button.wordWrapWidth = game.w;
-			Lunar.FontStyle.buttonActive.fontSize = game.dx(0.036);
-			Lunar.FontStyle.buttonActive.wordWrapWidth = game.w;
-		},
-		setup: function(game) {
-			Lunar.FontStyle.dialog= new PIXI.TextStyle({
+		_setup: function(game) {
+			Lunar.FontStyle.stat = new PIXI.TextStyle({
+			    fontFamily: 'Arial,sans-serif',
+			    fontSize: game => game.dx(0.020),
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#ff9900'], // gradient
+			    stroke: '#4a1850',
+			    strokeThickness: 2,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: false
+			});
+			Lunar.FontStyle.statValue = new PIXI.TextStyle({
+			    fontFamily: 'Arial,sans-serif',
+			    fontSize: game => game.dx(0.020),
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#99ff00'], // gradient
+			    stroke: '#4a1850',
+			    strokeThickness: 2,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: false
+			});
+			Lunar.FontStyle.elementNORMAL = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#8b8b5a']
+			});
+			Lunar.FontStyle.elementPOISON = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#823482']
+			});
+			Lunar.FontStyle.elementFIRE = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#dd6711']
+			});
+			Lunar.FontStyle.elementWATER = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#396deb']
+			});
+			Lunar.FontStyle.elementELECTRIC = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#f1c209']
+			});
+			Lunar.FontStyle.elementGRASS = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#5daa36']
+			});
+			Lunar.FontStyle.elementICE = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#6cc7c7']
+			});
+			Lunar.FontStyle.elementFIGHTING = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#9e2822']
+			});
+			Lunar.FontStyle.elementGROUND = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#d5a933']
+			});
+			Lunar.FontStyle.elementFLYING = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#9381c7']
+			});
+			Lunar.FontStyle.elementPSYCHIC = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#f62160']
+			});
+			Lunar.FontStyle.elementBUG = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#8e9b1b']
+			});
+			Lunar.FontStyle.elementROCK = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#96832e']
+			});
+			Lunar.FontStyle.elementGHOST = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#574577']
+			});
+			Lunar.FontStyle.elementDRAGON = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#4d0af0']
+			});
+			Lunar.FontStyle.elementDARK = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#534136']
+			});
+			Lunar.FontStyle.elementSTEEL = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#9898bb']
+			});
+			Lunar.FontStyle.elementFAIRY = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#de6fde']
+			});
+			Lunar.FontStyle.dialog = new PIXI.TextStyle({
 			    fontFamily: 'Arial',
-			    fontSize: game.dx(0.040),
+			    fontSize: game => game.dx(0.040),
 			    fontStyle: '',
 			    fontWeight: 'bold',
 			    fill: ['#ffffff', '#00ff99'], // gradient
@@ -287,11 +362,28 @@
 			    dropShadowAngle: Math.PI / 6,
 			    dropShadowDistance: 6,
 			    wordWrap: true,
-			    wordWrapWidth: game.dx(0.8)
+			    wordWrapWidth: game => game.dx(0.8)
+			});
+			Lunar.FontStyle.input = new PIXI.TextStyle({
+			    fontFamily: 'Arial',
+			    fontSize: game => game.dx(0.030),
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: '#99ff00',
+			    stroke: '#000000',
+			    strokeThickness: 2,
+			    align: 'center',
+			    dropShadow: true,
+			    dropShadowColor: '#558800',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: true,
+			    wordWrapWidth: game => game.dx(0.8)
 			});
 			Lunar.FontStyle.load = new PIXI.TextStyle({
 			    fontFamily: 'Arial',
-			    fontSize: game.dx(0.028),
+			    fontSize: game => game.dx(0.028),
 			    fontStyle: '',
 			    fontWeight: 'bold',
 			    fill: ['#ffffff', '#00ff99'], // gradient
@@ -303,11 +395,31 @@
 			    dropShadowAngle: Math.PI / 6,
 			    dropShadowDistance: 6,
 			    wordWrap: true,
-			    wordWrapWidth: game.w
+			    wordWrapWidth: game => game.w
 			});
+			Lunar.FontStyle.control = new PIXI.TextStyle({
+			    fontFamily: 'Arial',
+			    fontSize: game => game.dx(0.029),
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#99ff66'],
+			    stroke: '#4a1850',
+			    strokeThickness: 5,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: true,
+			    wordWrapWidth: game => game.w
+			});
+			Lunar.FontStyle.controlActive = Object.assign(Lunar.FontStyle.control.clone(), {
+				fill: ['#99ff66', '#ffffff'],
+				fontSize: game => game.dx(0.032),
+			}); 
 			Lunar.FontStyle.button = new PIXI.TextStyle({
 			    fontFamily: 'Arial',
-			    fontSize: game.dx(0.032),
+			    fontSize: game => game.dx(0.032),
 			    fontStyle: '',
 			    fontWeight: 'bold',
 			    fill: ['#ffffff', '#00ff99'], // gradient
@@ -319,11 +431,14 @@
 			    dropShadowAngle: Math.PI / 6,
 			    dropShadowDistance: 6,
 			    wordWrap: true,
-			    wordWrapWidth: game.w
+			    wordWrapWidth: game => game.w
+			});
+			Lunar.FontStyle.buttonDisabled = Object.assign(Lunar.FontStyle.button.clone(), {
+				fill: ['#eeeeee', '#999999']
 			});
 			Lunar.FontStyle.buttonActive = new PIXI.TextStyle({
 			    fontFamily: 'Arial',
-			    fontSize: game.dx(0.036),
+			    fontSize: game => game.dx(0.036),
 			    fontStyle: '',
 			    fontWeight: 'bold',
 			    fill: ['#00ff99', '#ffffff'], // gradient
@@ -335,9 +450,34 @@
 			    dropShadowAngle: Math.PI / 6,
 			    dropShadowDistance: 6,
 			    wordWrap: true,
-			    wordWrapWidth: game.w
+			    wordWrapWidth: game => game.w
 			});
+			// Store computed properties.
+			Object.keys(Lunar.FontStyle).forEach(type => {
+				if (type.startsWith('_'))
+					return;
+				const style = Lunar.FontStyle[type];
+				Object.keys(style).forEach(key => {
+					const value = style[key];
+					if (typeof(value) === 'function') {
+						Lunar.FontStyle._geo[type] = Lunar.FontStyle._geo[type] || {}
+						Lunar.FontStyle._geo[type][key] = value;
+					}
+				});
+			});
+			// Compute current property values.
+			Lunar.FontStyle._layout(game);
 		},
+		_geo: {}, 
+		_layout: function(game) {
+			Object.keys(Lunar.FontStyle._geo).forEach(type => {
+				const properties = Lunar.FontStyle._geo[type];
+				Object.keys(properties).forEach(key => {
+					const value = properties[key];
+					Lunar.FontStyle[type][key] = value(game);
+				});
+			});
+		}		
 	};
 	
 	Lunar.File = {

@@ -20,14 +20,15 @@
 		destroy() {
 			this._hierarchy = {};
 			this._game = undefined;
-			this._view.destroy(true);
+			this._view.destroy({children:true});
 		}
 		
 		sceneToAdd() {
 			return this;
 		}
 		
-		layout() {}
+		layout() {
+		}
 		
 		onAdd() {
 			this.layout();
@@ -63,17 +64,21 @@
 		
 		showConfirmDialog(message) {
 			this._game.pushScene(new Lunar.Scene.Dialog(this._game, { 
-				message: "Could not load the game characters data, please try again later.",
+				message: message || "Please confirm",
 				choices: [
 					{
 						text: "Ok",
-						callback: close => {
+						callback: dialog => {
 							this._game.sfx('resources/translune/static/ping');
-							close()
+							dialog.close()
 						}
 					}
 				]
 			}));
+		}
+		
+		get prompt() {
+			return this.hierarchy.top.$prompt;
 		}
 		
 		geo(dimensionable, geometry, {rotation, scale, anchor, proportional, keepSize} = {}) {
@@ -120,15 +125,15 @@
 			const pixiText = new PIXI.Text(text, style);
 			ninepatch.interactive = true;
 			ninepatch.buttonMode = true;
-			ninepatch.on('pointerover', () => pixiText.style = Lunar.FontStyle.buttonActive);
-			ninepatch.on('pointerout', () => pixiText.style = Lunar.FontStyle.button);
+			ninepatch.on('pointerover', () => pixiText.style = styleActive);
+			ninepatch.on('pointerout', () => pixiText.style = style);
 			return pixiText;
 		}
 	}
 	
 	Lunar.Scene.Dialog = class extends Lunar.Scene.Base {
 		/**
-		 * @param {text: string, callback: function()} choices 
+		 * @param {prompt: {style:PIXI.FontStyle, initial:string}, message: string, choices: array<{text:string,style:PIXI.TextStyle,styleActive:PIXI.TextStyle,callback}>} options 
 		 */
 		constructor(game, options) {
 			super(game);
@@ -142,6 +147,7 @@
 		
 		destroy() {
 			this.options = undefined;
+			super.destroy();
 		}
 		
 		layout() {
@@ -157,27 +163,32 @@
 				},				
 				dimension: 2,
 			});
-			const geoMessage = Lunar.Geometry.layoutHbox({
+			const geoMessage = Lunar.Geometry.layoutVbox({
 				box: geoRoot[0],
+				dimension: this.options.prompt ? 2 : 1,
 				relative: true
 			});
 			const geoButton = Lunar.Geometry.layoutHbox({
 				box: geoRoot[1],
 				dimension: this.options.choices.length,
 				padding: {
-					x: 6
+					x: 6,
+					top:0.2,
+					bottom: 0.2
 				},
 				relative: true
 			});
 			
 			h.$overlay.clear();
-			h.$overlay.beginFill(0x222222, 0.97);
-			h.$overlay.drawRect(this.game.x(-1), this.game.y(-1), this.game.w, this.game.h);
+			h.$overlay.beginFill(0x222222, 0.85);
+			h.$overlay.drawRect(0, 0, this.game.w, this.game.h);
 			h.$overlay.endFill();
 			
 			this.geo(h.$top, geoRoot[0]);
 			this.geo(h.$bottom, geoRoot[1]);
 			this.geo(h.top.$message, geoMessage[0], {anchor: 0.5, keepSize: true});
+			if (this.options.prompt)
+				this.geo(h.top.$prompt, geoMessage[1], {anchor: 0.5});
 			for (let i = this.options.choices.length; i-->0;) {
 				this.geo(h.bottom.$buttons[i].$button, geoButton[i]);
 				this.layoutButtonText(h.bottom.$buttons[i].button.$text, true);
@@ -195,19 +206,19 @@
 		 */
 		_initScene() {
 			const _this = this;
-			const close = this.method('_close');
 			const overlay = new PIXI.Graphics();
 			const topContainer = new PIXI.Container();
 			const bottomContainer = new PIXI.Container();
 			const styleMessage = this.options.style || Lunar.FontStyle.dialog;
 			const textMessage = new PIXI.Text(this.options.message, styleMessage);
+			const prompt = this.options.prompt;
 			
 			const bottomButtons = this.options.choices.map(choice => {
 				const button = new PIXI.NinePatch(_this.game.loaderFor('base').resources.textbox);
 				const buttonText = _this.createButtonText(button, 
 						choice.text, choice.style || Lunar.FontStyle.button,
 						choice.styleActive || Lunar.FontStyle.buttonActive);
-				button.on('pointerdown', () => choice.callback(close));
+				button.on('pointerdown', () => choice.callback(_this));
 				button.body.addChild(buttonText);
 				bottomContainer.addChild(button);
 				return {
@@ -217,18 +228,29 @@
 					}
 				};
 			});
+			
+			const inputPrompt = prompt ? new PIXI.TextInput(Lunar.FontStyle.button) : undefined;
+			if (inputPrompt) {
+				inputPrompt.text = prompt.initial;
+				inputPrompt.style = prompt.style || Lunar.FontStyle.input;
+				inputPrompt.on('change', input => input.text.length === 0 && (input.text = prompt.initial));
+				prompt.setup && prompt.setup(inputPrompt);
+			}
 
+			this.view.addChild(overlay);
 			this.view.addChild(topContainer);
 			this.view.addChild(bottomContainer);
-			this.view.addChild(overlay);
 			topContainer.addChild(textMessage);
+			if (prompt)
+				topContainer.addChild(inputPrompt);
 
 			this.hierarchy = {
 				$top: topContainer,
 				$bottom: bottomContainer,
 				$overlay: overlay,
 				top: {
-					$message: textMessage
+					$message: textMessage,
+					$prompt: inputPrompt		
 				},
 				bottom: {
 					$buttons: bottomButtons
@@ -236,10 +258,7 @@
 			};
 		}
 		
-		/**
-		 * @private
-		 */
-		_close() {
+		close() {
 			this.game.removeScene(this);
 		}
 	}
@@ -268,7 +287,6 @@
 			this.view.addChild(loadText);
 				
 			this.loadText = loadText;
-			this.overlay = overlay;
 			this.loadable = loadable;
 			this.zeroUntil = Lunar.Interpolation.zeroUntil(0.55);
 			this.done = false;

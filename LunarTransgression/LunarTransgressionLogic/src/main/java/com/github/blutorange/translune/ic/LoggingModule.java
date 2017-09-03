@@ -20,6 +20,8 @@ import com.github.blutorange.translune.handler.HandlerInviteRetract;
 import com.github.blutorange.translune.handler.HandlerLoot;
 import com.github.blutorange.translune.handler.HandlerPrepareBattle;
 import com.github.blutorange.translune.handler.HandlerStepBattle;
+import com.github.blutorange.translune.handler.HandlerUpdateData;
+import com.github.blutorange.translune.job.CleanInitId;
 import com.github.blutorange.translune.logic.BattleRunner;
 import com.github.blutorange.translune.logic.BattleStore;
 import com.github.blutorange.translune.media.ImageProcessing;
@@ -147,6 +149,14 @@ public class LoggingModule {
 
 	@Provides @Singleton @Classed(HandlerFetchData.class) static Logger provideLogger30() {
 		return provideLogger(HandlerFetchData.class);
+	}
+
+	@Provides @Singleton @Classed(CleanInitId.class) static Logger provideLogger31() {
+		return provideLogger(CleanInitId.class);
+	}
+
+	@Provides @Singleton @Classed(HandlerUpdateData.class) static Logger provideLogger32() {
+		return provideLogger(HandlerUpdateData.class);
 	}
 
 	private static Logger provideLogger(final Class<?> clazz) {

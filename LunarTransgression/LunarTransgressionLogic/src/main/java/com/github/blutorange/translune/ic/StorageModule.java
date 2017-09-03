@@ -14,6 +14,7 @@ import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 import com.github.blutorange.translune.serial.JsoniterConfig;
 import com.github.blutorange.translune.util.CustomProperties;
 import com.jsoniter.JsonIterator;
+import com.jsoniter.any.Any;
 import com.jsoniter.output.JsonStream;
 
 import dagger.Module;
@@ -55,6 +56,10 @@ public class StorageModule {
 		@Override
 		public <T> T deserialize(final String input, final Class<T> clazz) {
 			return JsonIterator.deserialize(input, clazz);
+		}
+		@Override
+		public Any deserialize(final String data) {
+			return JsonIterator.deserialize(data);
 		}
 	}
 }

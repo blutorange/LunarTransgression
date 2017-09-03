@@ -1,5 +1,6 @@
 package com.github.blutorange.translune.logic;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -159,7 +160,8 @@ public class BattleRunner implements IBattleRunner {
 	}
 
 	private void assertBattlePrep(final int playerIndex, final String[] characters, final String[] items) {
-		final Player player = databaseManager.find(Player.class, players[playerIndex]);
+		Player player;
+		player = databaseManager.find(Player.class, players[playerIndex]);
 		if (player == null)
 			throw new IllegalStateException("Player does not exist");
 		for (final String character : characters)
@@ -220,7 +222,7 @@ public class BattleRunner implements IBattleRunner {
 			}
 	}
 
-	private void battleStep() {
+	private void battleStep() throws IOException {
 		try {
 			phaser.awaitAdvanceInterruptibly(phaser.getPhase(), customProperties.getBattleStepTimeoutMillis(),
 					TimeUnit.MILLISECONDS);
@@ -254,9 +256,10 @@ public class BattleRunner implements IBattleRunner {
 			processBattleEnd(winner);
 	}
 
-	private void processBattleEnd(final int winner) {
+	private void processBattleEnd(final int winner) throws IOException {
 		battleDone = true;
-		final BattleResult[][] battleResults = battleProcessing.distributeExperience(players, characterStates, battleStatus, round);
+		final BattleResult[][] battleResults = battleProcessing.distributeExperience(players, characterStates,
+				battleStatus, round);
 		battleStore.addLoot(players[winner], characterStates.get(winner), items.get(winner));
 		endBattle();
 		if (winner == 0)
@@ -267,7 +270,7 @@ public class BattleRunner implements IBattleRunner {
 		informPlayerAboutEnd(0, winner == 1, battleResults[1]);
 	}
 
-	private int processBattle() {
+	private int processBattle() throws IOException {
 		@SuppressWarnings("null")
 		final List<@NonNull BattleCommand[]> c = (List<BattleCommand[]>) commands;
 		final BattleAction[][] battleResults = battleProcessing.simulateBattleStep(c, players, characterStates, items,
@@ -321,12 +324,14 @@ public class BattleRunner implements IBattleRunner {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattleCancelled(message));
 	}
 
-	private void informPlayerAboutEnd(final int playerIndex, final boolean isVictory, final BattleResult[] battleResults) {
+	private void informPlayerAboutEnd(final int playerIndex, final boolean isVictory,
+			final BattleResult[] battleResults) {
 		// We already checked when battle processing began.
 		@SuppressWarnings("resource")
 		final Session session = sessionStore.retrieve(players[playerIndex]);
 		if (session != null)
-			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattleEnded(isVictory, battleResults));
+			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
+					new MessageBattleEnded(isVictory, battleResults));
 	}
 
 	private void informPlayerAboutPrepared(final int playerIndex) {
@@ -337,7 +342,8 @@ public class BattleRunner implements IBattleRunner {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattlePrepared());
 	}
 
-	private void informPlayerAboutStepped(final int playerIndex, final int winner, final BattleAction[][] battleResults) {
+	private void informPlayerAboutStepped(final int playerIndex, final int winner,
+			final BattleAction[][] battleResults) {
 		final int causesEnd = winner < 0 ? 0 : winner == playerIndex ? 1 : -1;
 		final BattleAction[] br = battleResults[playerIndex];
 		if (br == null)

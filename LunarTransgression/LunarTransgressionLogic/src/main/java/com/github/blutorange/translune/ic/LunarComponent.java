@@ -26,8 +26,10 @@ import com.github.blutorange.translune.handler.HandlerInviteRetract;
 import com.github.blutorange.translune.handler.HandlerLoot;
 import com.github.blutorange.translune.handler.HandlerPrepareBattle;
 import com.github.blutorange.translune.handler.HandlerStepBattle;
+import com.github.blutorange.translune.handler.HandlerUpdateData;
 import com.github.blutorange.translune.i18n.ILocalizationBundle;
 import com.github.blutorange.translune.i18n.LocalizationBundle;
+import com.github.blutorange.translune.job.CleanInitId;
 import com.github.blutorange.translune.job.SaveDb;
 import com.github.blutorange.translune.logic.ABattleCommandHandler;
 import com.github.blutorange.translune.logic.AExecutor;
@@ -82,6 +84,7 @@ public interface LunarComponent {
 	void inject(BattleProcessing battle);
 	void inject(BattleStore battleStore);
 	void inject(SaveDb jobSaveDb);
+	void inject(CleanInitId cleanInitId);
 	void inject(AExecutor executor);
 	void inject(ABattleCommandHandler battleCommandHandler);
 
@@ -94,6 +97,7 @@ public interface LunarComponent {
 	@NonNull @LunarMessageTyped(ELunarMessageType.STEP_BATTLE) ILunarMessageHandler ihandlerStepBattle();
 	@NonNull @LunarMessageTyped(ELunarMessageType.LOOT) ILunarMessageHandler ihandlerLoot();
 	@NonNull @LunarMessageTyped(ELunarMessageType.FETCH_DATA) ILunarMessageHandler ihandlerFetchData();
+	@NonNull @LunarMessageTyped(ELunarMessageType.UPDATE_DATA) ILunarMessageHandler ihandlerUpdateData();
 	@NonNull ISocketProcessing iSocketProcessing();
 
 	ILunarDatabaseManager iLunarDatabaseManager();
@@ -131,6 +135,7 @@ public interface LunarComponent {
 	HandlerStepBattle _handlerStepBattle();
 	HandlerLoot _handlerLoot();
 	HandlerFetchData _handlerFetchData();
+	HandlerUpdateData _handlerUpdateData();
 
 	SessionStore _sessionStore();
 	InvitationStore _invitationStore();

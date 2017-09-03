@@ -69,7 +69,8 @@ public class HandlerLoot implements ILunarMessageHandler {
 			return;
 		}
 
-		final Player player = databaseManager.find(EEntityMeta.PLAYER, user);
+		Player player;
+		player = databaseManager.find(EEntityMeta.PLAYER, user);
 		if (player == null) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
 					new MessageLootResponse(message, "Player does not exist."));
