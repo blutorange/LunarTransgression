@@ -264,12 +264,26 @@
 	
 	Lunar.FontStyle = {
 		_setup: function(game) {
+			Lunar.FontStyle.charIconLevel = new PIXI.TextStyle({
+				fontFamily: 'Arial,sans-serif',
+			    fontSize: game => game.wh*0.020,
+			    fontWeight: 'bold',
+			    fill: '#ffffff',
+			    stroke: '#777777',
+			    strokeThickness: 2,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 3,
+			    wordWrap: false
+			});
 			Lunar.FontStyle.stat = new PIXI.TextStyle({
 			    fontFamily: 'Arial,sans-serif',
 			    fontSize: game => game.dx(0.020),
 			    fontStyle: '',
 			    fontWeight: 'bold',
-			    fill: ['#ffffff', '#ff9900'], // gradient
+			    fill: ['#ffffff', '#ff9900'],
 			    stroke: '#4a1850',
 			    strokeThickness: 2,
 			    dropShadow: true,

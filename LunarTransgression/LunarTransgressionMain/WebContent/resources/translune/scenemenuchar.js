@@ -72,8 +72,8 @@
 			geoGrid.flatten().forEach((geo, index) => {
 				const characterState = _this.menu.player.characterStates[index];
 				if (characterState) {
-					const sprite = h.grid[index].$icon;
-					this.geo(sprite, geo, {anchor: 0.5, proportional: true});
+					this.geo(h.grid[index].$icon, geo, {anchor: 0.5, proportional: true});
+					this.geo(h.grid[index].$level, geo, {anchor: 0.80, keepSize: true});
 				}
 			});
 		}
@@ -111,6 +111,7 @@
 			const grid = this.menu.player.characterStates.map(characterState => {
 				const texture = loader.resources.icons.spritesheet.textures[characterState.character.imgIcon];
 				const sprite = new PIXI.Sprite(texture);
+				const level = new PIXI.Text(characterState.level, Lunar.FontStyle.charIconLevel);
 				sprite.interactive = true;
 				sprite.buttonMode = true;
 				sprite.on('pointerover', () => {
@@ -123,8 +124,10 @@
 				});				
 				sprite.on('pointerdown', () => _this._menu.onSelectChar(characterState));
 				_this.view.addChild(sprite);
+				_this.view.addChild(level);
 				return {
-					$icon: sprite
+					$icon: sprite,
+					$level: level
 				};
 			});
 			
