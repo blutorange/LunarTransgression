@@ -5,10 +5,11 @@
 	 * Example for the structure of a scene with all methods
 	 * that must be implemented.
 	 */
-	Lunar.Scene.Base = class {
+	Lunar.Scene.Base = class extends PIXI.utils.EventEmitter {
 		constructor(game) {
+			super();
 			this._game = game;
-			this._view = new PIXI.Container();
+			this._view = new PIXI.ClipContainer();
 			this._time = 0;
 			this._hierarchy = {};
 		}
@@ -28,6 +29,8 @@
 		}
 		
 		layout() {
+			this._view.width = this._view.parent.width;
+			this._view.height = this._view.parent.height;
 		}
 		
 		onAdd() {
@@ -81,26 +84,8 @@
 			return this.hierarchy.top.$prompt;
 		}
 		
-		geo(dimensionable, geometry, {rotation, scale, anchor, proportional, keepSize} = {}) {
-			if (dimensionable.constructor !== PIXI.Container && !keepSize) {
-				if (proportional)
-					Lunar.Geometry.proportionalScale(dimensionable, geometry.w, geometry.h);	
-				else {
-					dimensionable.width = geometry.w;
-					dimensionable.height = geometry.h;
-				}
-			}
-			const a = anchor !== undefined ? Array.isArray(anchor) ? anchor : [anchor] : [0];
-			const ax = a[0];
-			const ay = a.length > 1 ? a[1] : ax;
-			dimensionable.position.set(geometry.x + ax*geometry.w, geometry.y + ay*geometry.h)
-			if (rotation !== undefined)
-				dimensionable.rotation = rotation;
-			if (scale !== undefined)
-				dimensionable.scale.set(...Array.isArray(scale)?scale:[scale]);
-			if (anchor !== undefined)
-				dimensionable.anchor.set(...a);
-			return dimensionable;
+		geo(dimensionable, geometry, options) {
+			return Lunar.Geometry.apply(dimensionable, geometry, options)
 		}
 
 		/**
@@ -129,7 +114,7 @@
 			ninepatch.on('pointerout', () => pixiText.style = style);
 			return pixiText;
 		}
-	}
+	};
 	
 	Lunar.Scene.Dialog = class extends Lunar.Scene.Base {
 		/**
@@ -207,8 +192,8 @@
 		_initScene() {
 			const _this = this;
 			const overlay = new PIXI.Graphics();
-			const topContainer = new PIXI.Container();
-			const bottomContainer = new PIXI.Container();
+			const topContainer = new PIXI.ClipContainer();
+			const bottomContainer = new PIXI.ClipContainer();
 			const styleMessage = this.options.style || Lunar.FontStyle.dialog;
 			const textMessage = new PIXI.Text(this.options.message, styleMessage);
 			const prompt = this.options.prompt;
@@ -236,6 +221,8 @@
 				inputPrompt.on('change', input => input.text.length === 0 && (input.text = prompt.initial));
 				prompt.setup && prompt.setup(inputPrompt);
 			}
+			
+			overlay.interactive = true;
 
 			this.view.addChild(overlay);
 			this.view.addChild(topContainer);
@@ -261,7 +248,7 @@
 		close() {
 			this.game.removeScene(this);
 		}
-	}
+	};
 	
 	Lunar.Scene.Load = class extends Lunar.Scene.Base {
 		/**
@@ -275,6 +262,7 @@
 			const style = Lunar.FontStyle.load;
 			
 			const overlay = new PIXI.Graphics();
+			overlay.interactive = true;
 			overlay.beginFill(0x222222, 0.75);
 			overlay.drawRect(game.x(-1), game.y(-1), game.x(1)-game.x(-1), game.y(1)-game.y(-1));
 			overlay.endFill();
@@ -313,5 +301,134 @@
 			this.loadText.scale.set(1.0+0.2*Lunar.Interpolation.slowInSlowOut(Lunar.Interpolation.backAndForth((this.time%2)/2.0)));
 			this.loadText.rotation = Lunar.Constants.pi2*Lunar.Interpolation.slowInSlowOut(this.zeroUntil((this.time%2.5)/2.5));
 		}
-	}
+	};
+	
+	/**
+	 * Page numbers start at 0. Rendering starts at 1.
+	 * Events:
+	 *   - page-change(PIXI.Pager) Emitted when the user switches to a different page.
+	 */	
+	Lunar.Scene.Pager = class extends Lunar.Scene.Base {
+		/**
+		 * - prev (required) Icon for the previous page button.
+		 * - next (required) Icon for the next page button.
+		 * - style (optional) Text style of the indicator. Default is new text style.
+		 * - format (optional) How to format the page indicator. Default is '__cur__ / __max__'
+		 * - pageCount (optional) Initial page count. Default is 1.
+		 * - page (optional) Initial page. Default is 0.
+		 * @param {pageCount: number, page: number, format: string, prev: PIXI.Texture, next: PIXI.Texture, style: PIXI.TextStyle} options. 
+		 */
+		constructor(game, options) {
+			super(game);
+			this._pagerPageCount = 1;
+			this._pagerPage = options.page||0;
+			this._pagerStyle = options.style || new PIXI.TextStyle();
+			this._pagerFormat = options.format || '__cur__ / __max__';
+			this._pagerPrev = new PIXI.Sprite(options.prev);
+			this._pagerNext = new PIXI.Sprite(options.next);
+			this._pagerIndicator = new PIXI.Text("", this._pagerStyle);
+			if (options.pageCount)
+				this.pageCount = options.pageCount
+		}
+		
+		onAdd() {
+			this._initScene();
+			super.onAdd();
+			// Go to page 1 initially.
+			const initialPage = this._pagerPage;
+			this._pagerPage = -1;
+			this.setPage(initialPage );
+		}
+		
+		destroy() {
+			this._pagerFormat = undefined;
+			this._pagerPrev = undefined;
+			this._pagerNext = undefined;
+			this._pagerIndicator = undefined;			
+			super.destroy();
+		}
+		
+		layout() {
+			super.layout();
+			const layout = Lunar.Geometry.layoutHbox({
+				box: {w: this.view.width, h: this.view.height},
+				dimension: [1,3,1],
+				padding: {
+					left: 0.05,
+					right: 0.05,
+					top: 0.05,
+					bottom: 0.05,
+					x: 12
+				},
+				relative: true
+			});
+			Lunar.Geometry.apply(this._pagerPrev, layout[0], {proportional: true, anchor: 0.5});
+			Lunar.Geometry.apply(this._pagerIndicator, layout[1], {keepSize: true, anchor: 0.5});
+			Lunar.Geometry.apply(this._pagerNext, layout[2], {proportional: true, anchor: 0.5});
+		}
+
+		/**
+		 * @private
+		 */
+		_initScene() {
+			this.view.addChild(this._pagerPrev);
+			this.view.addChild(this._pagerNext);
+			this.view.addChild(this._pagerIndicator);
+			this._pagerPrev.interactive = true;
+			this._pagerNext.interactive = true;
+			this._pagerPrev.buttonMode = true;
+			this._pagerNext.buttonMode = true;
+			this._pagerPrev.on('pointertap', () => this._onClickChange(-1), this);
+			this._pagerNext.on('pointertap', () => this._onClickChange(1), this);
+		}
+
+		/**
+		 * @private
+		 */
+		_onClickChange(amount) {
+			this.setPage(this.page + amount, true);
+		}
+		
+		setPage(page, playSound = false) {
+			let newPage = Math.round(page);
+			if (newPage < 0)
+				newPage = 0;
+			else if (newPage >= this._pagerPageCount)
+				newPage = this._pagerPageCount - 1;
+			if (newPage === this._pagerPage) {
+				if (playSound)
+					this.game.sfx('resources/translune/static/unable');
+				return;
+			}
+			if (playSound)
+				this.game.sfx('resources/translune/static/ping');
+			const textIndicator = this._pagerFormat.replace('__cur__', newPage+1).replace('__max__', this._pagerPageCount);
+			this._pagerIndicator.text = textIndicator;			
+			this._pagerPage = newPage;
+			this._pagerPrev.visible = newPage !== 0; 
+			this._pagerNext.visible = newPage < this.pageCount - 1;
+			this.emit('page-change', this);
+		}
+		
+		set page(value) {
+			this.setPage(value, false);
+		}
+		
+		get page() {
+			return this._pagerPage;
+		}
+		
+		/**
+		 * @param value pageCount Number of pages. Rounded to the smallest integer equal or greater.
+		 */
+		get pageCount() {
+			return this._pagerPageCount;
+		}
+		
+		set pageCount(value) {
+			if (value < 1) value = 1;
+			this._pagerPageCount = Math.ceil(value||1);
+			this.setPage(this._pagerPage, false);
+		}
+	};
 })(window.Lunar, window);

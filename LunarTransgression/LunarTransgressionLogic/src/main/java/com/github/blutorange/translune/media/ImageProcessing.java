@@ -37,9 +37,8 @@ public class ImageProcessing implements IImageProcessing {
 	}
 
 	@Override
-	public IAtlasImage packResources(final String imageName, final List<Resource> resourceList) throws IOException {
-		final int width = 512;
-		final int height = 512;
+	public IAtlasImage packResources(final String imageName, final List<Resource> resourceList, final int width,
+			final int height) throws IOException {
 		final BufferedImage output = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		final Graphics graphics = output.getGraphics();
 		final JSONObject frames = new JSONObject();
@@ -128,7 +127,8 @@ public class ImageProcessing implements IImageProcessing {
 	}
 
 	@Override
-	public IAtlasImage packResources(final String imageName, final String[] resources) throws IOException {
+	public IAtlasImage packResources(final String imageName, final String[] resources, final int width,
+			final int height) throws IOException {
 		final List<Resource> resourceList = databaseManager.withEm(false, em -> {
 			final List<Resource> list = em.unwrap(Session.class).byMultipleIds(Resource.class).multiLoad(resources);
 			if (list == null || list.size() != resources.length || list.contains(null)) {

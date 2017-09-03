@@ -14,6 +14,8 @@
 		}
 		
 		destroy() {
+			if (this._sceneSkill)
+				this.game.removeScene(this._sceneSkill);
 			this._menu = undefined;
 			this._characterState = undefined;
 			this._sceneSkill = undefined;
@@ -150,8 +152,8 @@
 
 			const level = new PIXI.Text(`Lv ${cs.level}`, style);
 			const name = new PIXI.Text(c.name, style);
-			const element1 = new PIXI.Text(c.elements[0], Lunar.FontStyle[`element${c.elements[0]}`] || style);
-			const element2 = new PIXI.Text(c.elements[1], Lunar.FontStyle[`element${c.elements[1]}`] || style);
+			const element1 = new PIXI.Text(c.elements[0], Lunar.FontStyle[`stat${c.elements[0]}`] || style);
+			const element2 = new PIXI.Text(c.elements[1], Lunar.FontStyle[`stat${c.elements[1]}`] || style);
 
 			const nickname = new PIXI.Text(`»${cs.nickname}«`, style);
 			const nature = new PIXI.Text(cs.nature, style);
@@ -174,17 +176,17 @@
 			const valueSpeed = new PIXI.Text(this.fmtStat(ms.computedSpeed), styleValue);
 			const valueExp = new PIXI.Text(cs.exp, styleValue);
 			
-			const buttonSkills = new PIXI.NinePatch(this.game.loaderFor('base').resources.textbox);
+			const buttonSkills = new PIXI.NinePatch(this.game.baseLoader.resources.textbox);
 			const buttonTextSkills = this.createButtonText(buttonSkills, "Moves", Lunar.FontStyle.control, Lunar.FontStyle.controlActive);
 			
-			const containerRoot = new PIXI.Container();
-			const containerHead = new PIXI.Container();
-			const containerStat = new PIXI.Container();
-			const containerSprite = new PIXI.Container();
-			const containerControl = new PIXI.Container();
-			const containerBase = new PIXI.Container();
-			const containerTitle = new PIXI.Container();
-			const containerElement = new PIXI.Container();
+			const containerRoot = new PIXI.ClipContainer();
+			const containerHead = new PIXI.ClipContainer();
+			const containerStat = new PIXI.ClipContainer();
+			const containerSprite = new PIXI.ClipContainer();
+			const containerControl = new PIXI.ClipContainer();
+			const containerBase = new PIXI.ClipContainer();
+			const containerTitle = new PIXI.ClipContainer();
+			const containerElement = new PIXI.ClipContainer();
 						
 			this.view.addChild(containerHead);
 			this.view.addChild(containerStat);
@@ -226,9 +228,9 @@
 			
 			nickname.interactive = true;
 			nickname.buttonMode = true;
-			nickname.on('pointerdown', this.method('_onClickNickname'));
+			nickname.on('pointerdown', this._onClickNickname, this);
 			
-			buttonSkills.on('pointerdown', this.method('_onClickSkills'));
+			buttonSkills.on('pointerdown', this._onClickSkills, this);
 			
 			this.hierarchy = {
 				head: {
@@ -287,7 +289,15 @@
 				return;
 			}
 			this.game.sfx('resources/translune/static/buttonclick');
-			this._sceneSkill = new Lunar.Scene.SkillSelect(this.game, this._characterState);
+			this._sceneSkill = new Lunar.Scene.SkillSelect(this.game, this._characterState, 'Close', false);
+			this._sceneSkill.on('skill-select', scene => {
+				this._sceneSkill = undefined;
+				this.game.removeScene(scene);
+			}, this);
+			this._sceneSkill.on('skill-exit', scene => {
+				this._sceneSkill = undefined;
+				this.game.removeScene(scene);
+			}, this);
 			this.game.pushScene(this._sceneSkill);
 		}
 		

@@ -1,7 +1,7 @@
 /**
  * 
  */
-(function(Lunar, window, undefined) {
+(function(PIXI, window, undefined) {
 	PIXI.TextInput = class extends PIXI.DisplayObject {
 		
 		/**
@@ -30,6 +30,9 @@
 			this.on('added', this._onAdded, this);
 			this.on('removed', this._onRemoved, this);
 			enabledEvents.forEach(event => _this._input.addEventListener(event, e => _this.emit(event, _this, e)));
+		}
+		
+		calculateBounds() {
 		}
 		
 		_attr(name, value) {
@@ -211,4 +214,4 @@
 		}
 		
 	}
-})(window.Lunar, window);
+})(window.PIXI, window);

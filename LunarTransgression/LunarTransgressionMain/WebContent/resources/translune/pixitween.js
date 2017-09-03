@@ -1,7 +1,7 @@
 /**
  * Smoothly transitions to the target transform values.
  */
-(function(Lunar, window, undefined) {
+(function(PIXI, window, undefined) {
 	PIXI.Tween = class {
 		
 		constructor(delegate, tweenFactors) {
@@ -228,6 +228,10 @@
 			this._delegate.renderWebGL(renderer);
 		}
 		
+		calculateBounds() {
+			this._delegate.calculateBounds();
+		}
+		
 		getLocalBounds(rect) {
 			return this._delegate.getLocalBounds(rect);
 		}
@@ -359,4 +363,4 @@
 			return Math.abs(delta) < 1E-2 ? to : (from + factor*delta);
 		}
 	}
-})(window.Lunar, window);
+})(window.PIXI, window);

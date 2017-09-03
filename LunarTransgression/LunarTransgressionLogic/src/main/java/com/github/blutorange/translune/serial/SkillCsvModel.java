@@ -81,7 +81,7 @@ public class SkillCsvModel {
 		builder.setAttackPower(power);
 	}
 
-	public void setCondition(final EStatusCondition condition) {
+	public void setCondition(@Nullable final EStatusCondition condition) {
 		builder.setCondition(condition);
 	}
 

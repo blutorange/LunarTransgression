@@ -122,7 +122,7 @@ public class SkillBuilder implements Builder<Skill> {
 		return this;
 	}
 
-	public SkillBuilder setCondition(final EStatusCondition condition) {
+	public SkillBuilder setCondition(@Nullable final EStatusCondition condition) {
 		this.condition = condition;
 		return this;
 	}

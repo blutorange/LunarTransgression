@@ -39,7 +39,7 @@ public class PackSprite {
 			}
 			final String basename = FilenameUtils.getBaseName(args[0]);
 			final String pathBase = FilenameUtils.removeExtension(args[0]);
-			final IAtlasImage img = imageProcessing.packResources(basename + ".png", resourceList);
+			final IAtlasImage img = imageProcessing.packResources(basename + ".png", resourceList, 512, 512);
 			FileUtils.write(new File(pathBase + ".json"), img.getAtlasJson());
 			FileUtils.writeByteArrayToFile(new File(pathBase + ".png"), img.getImageBytes());
 		}

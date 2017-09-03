@@ -40,9 +40,9 @@
 		}
 		
 		onRemove() {
-			super.onRemove();
 			if (this._loadScene)
 				this.game.removeScene(this._loadScene);
+			super.onRemove();
 		}
 		
 		layout() {

@@ -294,60 +294,6 @@
 			    dropShadowDistance: 6,
 			    wordWrap: false
 			});
-			Lunar.FontStyle.elementNORMAL = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#8b8b5a']
-			});
-			Lunar.FontStyle.elementPOISON = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#823482']
-			});
-			Lunar.FontStyle.elementFIRE = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#dd6711']
-			});
-			Lunar.FontStyle.elementWATER = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#396deb']
-			});
-			Lunar.FontStyle.elementELECTRIC = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#f1c209']
-			});
-			Lunar.FontStyle.elementGRASS = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#5daa36']
-			});
-			Lunar.FontStyle.elementICE = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#6cc7c7']
-			});
-			Lunar.FontStyle.elementFIGHTING = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#9e2822']
-			});
-			Lunar.FontStyle.elementGROUND = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#d5a933']
-			});
-			Lunar.FontStyle.elementFLYING = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#9381c7']
-			});
-			Lunar.FontStyle.elementPSYCHIC = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#f62160']
-			});
-			Lunar.FontStyle.elementBUG = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#8e9b1b']
-			});
-			Lunar.FontStyle.elementROCK = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#96832e']
-			});
-			Lunar.FontStyle.elementGHOST = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#574577']
-			});
-			Lunar.FontStyle.elementDRAGON = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#4d0af0']
-			});
-			Lunar.FontStyle.elementDARK = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#534136']
-			});
-			Lunar.FontStyle.elementSTEEL = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#9898bb']
-			});
-			Lunar.FontStyle.elementFAIRY = Object.assign(Lunar.FontStyle.stat.clone(), {
-				fill: ['#ffffff', '#de6fde']
-			});
 			Lunar.FontStyle.dialog = new PIXI.TextStyle({
 			    fontFamily: 'Arial',
 			    fontSize: game => game.dx(0.040),
@@ -452,6 +398,74 @@
 			    wordWrap: true,
 			    wordWrapWidth: game => game.w
 			});
+			Lunar.FontStyle.skillDesc = new PIXI.TextStyle({
+			    fontFamily: 'Arial,sans-serif',
+			    fontSize: game => game.wh*0.025,
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#ff9900'], // gradient
+			    stroke: '#4a1850',
+			    strokeThickness: 2,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: true,
+			    wordWrapWidth: game => game.dx(0.4)
+			});
+			Lunar.FontStyle.skillStat = new PIXI.TextStyle({
+			    fontFamily: 'Arial,sans-serif',
+			    fontSize: game => game.wh*0.030,
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#C0C0C0'], // gradient
+			    stroke: '#4a1850',
+			    strokeThickness: 2,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: false,
+			    wordWrapWidth: game => game.dx(0.4)
+			});
+			Lunar.FontStyle.skillList = new PIXI.TextStyle({
+			    fontFamily: 'Arial,sans-serif',
+			    fontSize: game => game.wh*0.025,
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#C0C0C0'], // gradient
+			    stroke: '#4a1850',
+			    strokeThickness: 2,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: false,
+			    wordWrapWidth: game => game.dx(0.4)
+			});
+			Lunar.FontStyle.skillTitle = new PIXI.TextStyle({
+			    fontFamily: 'Arial,sans-serif',
+			    fontSize: game => game.wh*0.040,
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#ff9900'], // gradient
+			    stroke: '#4a1850',
+			    strokeThickness: 2,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: false,
+			    wordWrapWidth: game => game.dx(0.4)
+			});
+			// Element variations
+			Lunar.FontStyle._elements(Lunar.FontStyle.stat, 'stat');
+			Lunar.FontStyle._elements(Lunar.FontStyle.skillStat, 'skillStat');
+			Lunar.FontStyle._elements(Lunar.FontStyle.skillList, 'skillList');
 			// Store computed properties.
 			Object.keys(Lunar.FontStyle).forEach(type => {
 				if (type.startsWith('_'))
@@ -468,8 +482,64 @@
 			// Compute current property values.
 			Lunar.FontStyle._layout(game);
 		},
+		_elements: (baseStyle, baseName) => {
+			Lunar.FontStyle[baseName+'NORMAL'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#8b8b5a']
+			});
+			Lunar.FontStyle[baseName+'POISON'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#823482']
+			});
+			Lunar.FontStyle[baseName+'FIRE'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#dd6711']
+			});
+			Lunar.FontStyle[baseName+'WATER'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#396deb']
+			});
+			Lunar.FontStyle[baseName+'ELECTRIC'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#f1c209']
+			});
+			Lunar.FontStyle[baseName+'GRASS'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#5daa36']
+			});
+			Lunar.FontStyle[baseName+'ICE'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#6cc7c7']
+			});
+			Lunar.FontStyle[baseName+'FIGHTING'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#9e2822']
+			});
+			Lunar.FontStyle[baseName+'GROUND'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#d5a933']
+			});
+			Lunar.FontStyle[baseName+'FLYING'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#9381c7']
+			});
+			Lunar.FontStyle[baseName+'PSYCHIC'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#f62160']
+			});
+			Lunar.FontStyle[baseName+'BUG'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#8e9b1b']
+			});
+			Lunar.FontStyle[baseName+'ROCK'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#96832e']
+			});
+			Lunar.FontStyle[baseName+'GHOST'] = Object.assign(baseStyle.clone(), {
+				fill: ['#ffffff', '#574577']
+			});
+			Lunar.FontStyle[baseName+'DRAGON'] = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#4d0af0']
+			});
+			Lunar.FontStyle[baseName+'DARK'] = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#534136']
+			});
+			Lunar.FontStyle[baseName+'STEEL'] = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#9898bb']
+			});
+			Lunar.FontStyle[baseName+'FAIRY'] = Object.assign(Lunar.FontStyle.stat.clone(), {
+				fill: ['#ffffff', '#de6fde']
+			});	
+		},
 		_geo: {}, 
-		_layout: function(game) {
+		_layout: game => {
 			Object.keys(Lunar.FontStyle._geo).forEach(type => {
 				const properties = Lunar.FontStyle._geo[type];
 				Object.keys(properties).forEach(key => {
@@ -618,6 +688,28 @@
 				scalable.width = w*targetHeight/h
 				scalable.height = targetHeight;
 			}
+		},
+		
+		apply(dimensionable, geometry, {rotation, scale, anchor, proportional, keepSize} = {}) {
+			if (dimensionable.constructor !== PIXI.Container && !keepSize) {
+				if (proportional)
+					Lunar.Geometry.proportionalScale(dimensionable, geometry.w, geometry.h);	
+				else {
+					dimensionable.width = geometry.w;
+					dimensionable.height = geometry.h;
+				}
+			}
+			const a = anchor !== undefined ? Array.isArray(anchor) ? anchor : [anchor] : [0];
+			const ax = a[0];
+			const ay = a.length > 1 ? a[1] : ax;
+			dimensionable.position.set(geometry.x + ax*geometry.w, geometry.y + ay*geometry.h)
+			if (rotation !== undefined)
+				dimensionable.rotation = rotation;
+			if (scale !== undefined)
+				dimensionable.scale.set(...Array.isArray(scale)?scale:[scale]);
+			if (anchor !== undefined)
+				dimensionable.anchor.set(...a);
+			return dimensionable;
 		}
 	};
 	

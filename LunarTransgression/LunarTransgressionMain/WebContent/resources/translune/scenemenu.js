@@ -61,7 +61,7 @@
 			delegateLoadable.loadable = loaderLoadable; 
 			loader.reset();
 			loader.add("bg", `resource/${background}`);
-			loader.add("packed", 'resources/translune/static/menu/packed.json');			
+//			loader.add("packed", 'resources/translune/static/menu/packed.json');			
 			loader.load();
 		}
 		
@@ -141,7 +141,7 @@
 			const _this = this;			
 						
 			// Top
-			const topContainer = new PIXI.Container();
+			const topContainer = new PIXI.ClipContainer();
 			
 			// Top-Left
 			const topBar = new PIXI.NinePatch(this.game.baseLoader.resources.textbox);
@@ -152,7 +152,7 @@
 			exitBar.alpha = 0.5;
 			
 			// Mid
-			const midContainer = new PIXI.Container();
+			const midContainer = new PIXI.ClipContainer();
 			
 			// Mid-Left
 			const leftPanel = new PIXI.NinePatch(this.game.baseLoader.resources.textbox);
@@ -177,13 +177,13 @@
 			const textButtonInvite = this.createButtonText(buttonInvite, "Invite");
 			const textButtonCollection = this.createButtonText(buttonCollection, "Collection");
 			
-			buttonItem.on('pointerdown', this.method('onClickItem'));
-			buttonInvite.on('pointerdown', this.method('onClickInvite'));
-			buttonChar.on('pointerdown', this.method('onClickChar'));
-			buttonCollection.on('pointerdown', this.method('onClickCollection'));
+			buttonItem.on('pointerdown', this.onClickItem, this);
+			buttonInvite.on('pointerdown', this.onClickInvite, this);
+			buttonChar.on('pointerdown', this.onClickChar, this);
+			buttonCollection.on('pointerdown', this.onClickCollection, this);
 			
 			// Close button
-			const buttonExit = new PIXI.Sprite(this.game.loaderFor("menu").resources.packed.spritesheet.textures['close.png']);
+			const buttonExit = new PIXI.Sprite(this.game.baseLoader.resources.packed.spritesheet.textures['close.png']);
 			buttonExit.interactive = true;
 			buttonExit.buttonMode = true;
 			buttonExit.on('pointerover', () => {
@@ -196,7 +196,7 @@
 				buttonExit.height = buttonExit.height*8/9;
 				buttonExit.rotation = 0.0;
 			});
-			buttonExit.on('pointerdown', this.method('onClickExit'));
+			buttonExit.on('pointerdown', this._onClickExit, this);
 			
 			//Background
 			const bg = new PIXI.Sprite(this.game.loaderFor("menu").resources.bg.texture);
@@ -264,9 +264,9 @@
 		/**
 		 * @private
 		 */
-		onClickExit() {
+		_onClickExit() {
 			const _this = this;
-			this.game.sfx('resources/translune/static/confirm');
+			this.game.sfx('resources/translune/static/close');
 			const id = this.game.window.setTimeout(() => _this.game.exit(), 10000);
 			const start = new Date().getTime() + 10000;
 			this.game.pushScene(new Lunar.Scene.Dialog(this.game, { 
