@@ -1,5 +1,6 @@
 package com.github.blutorange.translune.message;
 
+import javax.inject.Inject;
 import javax.websocket.Session;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -9,6 +10,7 @@ import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.ModifiableCharacterState;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.ComponentFactory;
+import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 import com.github.blutorange.translune.socket.ISocketProcessing;
 import com.jsoniter.any.Any;
 
@@ -16,20 +18,18 @@ public enum EUpdateDataType {
 	NONE {
 		@Nullable
 		@Override
-		public Object update(final Session session, final String details, final ISocketProcessing socketProcessing,
-				final ILunarDatabaseManager databaseManager) {
+		public Object update(final Session session, final String details) {
 			return null;
 		}
 	},
 	CHARACTER_NICKNAME {
 		@Nullable
 		@Override
-		public Object update(final Session session, final String details, final ISocketProcessing socketProcessing,
-				final ILunarDatabaseManager databaseManager) {
+		public Object update(final Session session, final String details) {
 			final Player player = databaseManager.find(Player.class, socketProcessing.getNickname(session));
 			if (player == null)
 				return null;
-			final Any any = ComponentFactory.getLunarComponent().jsoniter().get().deserialize(details);
+			final Any any = jsoniter.get().deserialize(details);
 			final String targetId = any.toString("id");
 			final String newNickname = any.toString("nickname");
 			if (newNickname == null || targetId == null)
@@ -45,7 +45,19 @@ public enum EUpdateDataType {
 		}
 	},;
 
+	@Inject
+	ILunarDatabaseManager databaseManager;
+
+	@Inject
+	ISocketProcessing socketProcessing;
+
+	@Inject
+	IJsoniterSupplier jsoniter;
+
+	private EUpdateDataType() {
+		ComponentFactory.getLunarComponent().inject(this);
+	}
+
 	@Nullable
-	public abstract Object update(final Session session, String details, final ISocketProcessing socketProcessing,
-			final ILunarDatabaseManager databaseManager) throws Exception;
+	public abstract Object update(final Session session, String details) throws Exception;
 }

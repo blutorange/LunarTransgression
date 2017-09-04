@@ -258,55 +258,78 @@
 		 */
 		constructor(game, loadable = undefined) {
 			super(game);
+			this._loadable = loadable;
+			this._zeroUntil = Lunar.Interpolation.zeroUntil(0.55);
+			this._done = false;
+		}
+		
+		layout() {
+			super.layout();
 			
-			const style = Lunar.FontStyle.load;
+			const h = this.hierarchy;
 			
+			h.$overlay.clear();
+			h.$overlay.beginFill(0x222222, 0.85);
+			h.$overlay.drawRect(0, 0, this.game.w, this.game.h);
+			h.$overlay.endFill();
+			
+			h.$text.x = this.game.x(0);
+			h.$text.y = this.game.y(0);
+			h.$text.anchor.set(0.5,0.5);
+		}
+		
+		/**
+		 * @private
+		 */
+		_initScene() {
 			const overlay = new PIXI.Graphics();
 			overlay.interactive = true;
-			overlay.beginFill(0x222222, 0.75);
-			overlay.drawRect(game.x(-1), game.y(-1), game.x(1)-game.x(-1), game.y(1)-game.y(-1));
-			overlay.endFill();
-			this.view.addChild(overlay);
 			
-			const loadText = new PIXI.Text('Now loading...', style);
-			loadText.x = game.x(0);
-			loadText.y = game.y(0);
-			loadText.anchor.set(0.5,0.5);
+			const loadText = new PIXI.Text('Now loading...', Lunar.FontStyle.load);
+			
+			this.view.addChild(overlay);
 			this.view.addChild(loadText);
-				
-			this.loadText = loadText;
-			this.loadable = loadable;
-			this.zeroUntil = Lunar.Interpolation.zeroUntil(0.55);
-			this.done = false;
+			
+			this.hierarchy = {
+				$text: loadText,
+				$overlay: overlay
+			};
+		}
+		
+		onAdd() {
+			this._initScene();
+			super.onAdd();
 		}
 		
 		destroy() {
-			this.loadable = undefined;
+			this._loadable = undefined;
+			this._zeroUntil = undefined;
 			super.destroy();
 		}
 		
 		update(delta) {
 			super.update(delta);
-			if (this.loadable) {
-				const raw = this.loadable.getProgress();
+			const loadText = this.hierarchy.$text;
+			if (this._loadable) {
+				const raw = this._loadable.getProgress();
 				const progress = Math.round(100.0*raw);
-				this.loadText.text = `Now loading... ${progress < 0 ? 0 : progress > 100 ? 100 : progress}%`;
-				if (raw === 1 && !this.done) {
-					this.loadable.notifyCompletionListeners();
-					this.done = true;
+				loadText.text = `Now loading... ${progress < 0 ? 0 : progress > 100 ? 100 : progress}%`;
+				if (raw === 1 && !this._done) {
+					this._loadable.notifyCompletionListeners();
+					this._done = true;
 					this.game.removeScene(this);
 				}
 			}
-			this.loadText.alpha = 0.25+0.75*Lunar.Interpolation.slowInSlowOut(Lunar.Interpolation.backAndForth((this.time%3)/3.0));
-			this.loadText.scale.set(1.0+0.2*Lunar.Interpolation.slowInSlowOut(Lunar.Interpolation.backAndForth((this.time%2)/2.0)));
-			this.loadText.rotation = Lunar.Constants.pi2*Lunar.Interpolation.slowInSlowOut(this.zeroUntil((this.time%2.5)/2.5));
+			loadText.alpha = 0.25+0.75*Lunar.Interpolation.slowInSlowOut(Lunar.Interpolation.backAndForth((this.time%3)/3.0));
+			loadText.scale.set(1.0+0.2*Lunar.Interpolation.slowInSlowOut(Lunar.Interpolation.backAndForth((this.time%2)/2.0)));
+			loadText.rotation = Lunar.Constants.pi2*Lunar.Interpolation.slowInSlowOut(this._zeroUntil((this.time%2.5)/2.5));
 		}
 	};
 	
 	/**
 	 * Page numbers start at 0. Rendering starts at 1.
 	 * Events:
-	 *   - page-change(PIXI.Pager) Emitted when the user switches to a different page.
+	 *   - page-change(Lunar.Scene.Pager) Emitted when the user switches to a different page.
 	 */	
 	Lunar.Scene.Pager = class extends Lunar.Scene.Base {
 		/**
@@ -395,14 +418,14 @@
 				newPage = 0;
 			else if (newPage >= this._pagerPageCount)
 				newPage = this._pagerPageCount - 1;
-			if (newPage === this._pagerPage) {
+			const textIndicator = this._pagerFormat.replace('__cur__', newPage+1).replace('__max__', this._pagerPageCount);
+			if (newPage === this._pagerPage && this._pagerIndicator.text === textIndicator) {
 				if (playSound)
 					this.game.sfx('resources/translune/static/unable');
 				return;
-			}
+			}		
 			if (playSound)
 				this.game.sfx('resources/translune/static/ping');
-			const textIndicator = this._pagerFormat.replace('__cur__', newPage+1).replace('__max__', this._pagerPageCount);
 			this._pagerIndicator.text = textIndicator;			
 			this._pagerPage = newPage;
 			this._pagerPrev.visible = newPage !== 0; 

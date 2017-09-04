@@ -189,7 +189,7 @@
 				pageCount: this._skills.length / (LIST_X*LIST_Y)
 			});
 			
-			buttonSelect.on('pointerdown', this._onClickSelect, this);
+			buttonSelect.on('pointertap', this._onClickSelect, this);
 			this._scenePager.on('page-change', this._onPageChange, this);
 						
 			// Container
@@ -289,7 +289,7 @@
 				exit.height = exit.height*8/9;
 				exit.rotation = 0.0;
 			});
-			exit.on('pointerdown', this._onClickExit, this);
+			exit.on('pointertap', this._onClickExit, this);
 			return exit;
 		}
 		
@@ -305,7 +305,7 @@
 				text.width = text.width * 5/6,
 				text.height = text.height * 5/6
 			});
-			text.on('pointerdown', callback, this);
+			text.on('pointertap', callback, this);
 			return text;
 		}
 		

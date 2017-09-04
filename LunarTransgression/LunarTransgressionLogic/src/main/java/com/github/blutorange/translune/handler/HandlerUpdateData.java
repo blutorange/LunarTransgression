@@ -42,7 +42,7 @@ public class HandlerUpdateData implements ILunarMessageHandler {
 
 		final Object data;
 		try {
-			data = updateData.getUpdate().update(session, updateData.getDetails(), socketProcessing, databaseManager);
+			data = updateData.getUpdate().update(session, updateData.getDetails());
 		}
 		catch (final Exception e) {
 			logger.error("failed to update the requested data", e);

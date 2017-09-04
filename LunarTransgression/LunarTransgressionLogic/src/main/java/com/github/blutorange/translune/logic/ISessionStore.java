@@ -24,6 +24,8 @@ public interface ISessionStore {
 		});
 	}
 
+	PageableResult findNicknames(Pageable pageable);
+
 	@Nullable Session retrieve(String nickname);
 
 	void remove(String nickname);

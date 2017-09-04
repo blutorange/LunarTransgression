@@ -40,8 +40,7 @@
 		}
 		
 		onRemove() {
-			if (this._loadScene)
-				this.game.removeScene(this._loadScene);
+			this.game.removeScene(this._loadScene);
 			super.onRemove();
 		}
 		
@@ -76,6 +75,8 @@
 					this.geo(h.grid[index].$level, geo, {anchor: 0.80, keepSize: true});
 				}
 			});
+			
+			super.layout();
 		}
 		
 		/**
@@ -100,13 +101,12 @@
 		 * @private
 		 */
 		_initScene() {		
-			const loader = this.game.loaderFor('menu-tab');
-			const panel = this._loadScene.view.parent.parent; 
-			const _this = this;
-			
+			this.game.pushScene(this, this._loadScene.view.parent.parent.body);
 			this._loadScene = undefined;
 			this._loaded = true;
-			this.game.pushScene(this, panel.body);
+
+			const loader = this.game.loaderFor('menu-tab');
+			const _this = this;
 			
 			const grid = this.menu.player.characterStates.map(characterState => {
 				const texture = loader.resources.icons.spritesheet.textures[characterState.character.imgIcon];
@@ -122,7 +122,7 @@
 					sprite.width = sprite.width * 5/6,
 					sprite.height = sprite.height * 5/6
 				});				
-				sprite.on('pointerdown', () => _this._menu.onSelectChar(characterState));
+				sprite.on('pointertap', () => this.menu._onSelectChar(characterState), this);
 				_this.view.addChild(sprite);
 				_this.view.addChild(level);
 				return {

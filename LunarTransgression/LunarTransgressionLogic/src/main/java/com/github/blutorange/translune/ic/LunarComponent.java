@@ -47,6 +47,8 @@ import com.github.blutorange.translune.logic.InvitationStore;
 import com.github.blutorange.translune.logic.SessionStore;
 import com.github.blutorange.translune.media.IImageProcessing;
 import com.github.blutorange.translune.media.ImageProcessing;
+import com.github.blutorange.translune.message.EFetchDataType;
+import com.github.blutorange.translune.message.EUpdateDataType;
 import com.github.blutorange.translune.serial.IImportProcessing;
 import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 import com.github.blutorange.translune.serial.ImportProcessing;
@@ -78,6 +80,9 @@ public interface LunarComponent {
 	void inject(BaseResourceServlet baseResourceServlet);
 	void inject(BaseSpritesheetServlet baseSpritesheetServlet);
 	void inject(LunarServletContextListener lunarServletContextListener);
+
+	void inject(EFetchDataType eFetchDataType);
+	void inject(EUpdateDataType eUpdateDataType);
 
 	void inject(LunarDatabaseManager lunarDatabaseManager);
 	void inject(BattleRunner battle);

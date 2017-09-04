@@ -42,7 +42,7 @@ public class HandlerFetchData implements ILunarMessageHandler {
 
 		final Object data;
 		try {
-			data = fetchData.getFetch().fetch(session, socketProcessing, databaseManager);
+			data = fetchData.getFetch().fetch(session, fetchData.getDetails());
 		}
 		catch (final Exception e) {
 			logger.error("failed to fetch the requested data", e);

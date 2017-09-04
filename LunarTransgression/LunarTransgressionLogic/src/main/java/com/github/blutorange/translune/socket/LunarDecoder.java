@@ -37,7 +37,8 @@ public class LunarDecoder implements Decoder.Text<LunarMessage> {
 			logger.error("failed to decode message", e);
 			throw new DecodeException(message, "failed to decode message", e);
 		}
-
+		if (msg == null)
+			throw new DecodeException(message, "failed to decode message, got null");
 		return msg;
 	}
 

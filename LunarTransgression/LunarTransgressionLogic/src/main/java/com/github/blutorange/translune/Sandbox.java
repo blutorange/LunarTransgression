@@ -12,8 +12,10 @@ import com.github.blutorange.translune.db.ModifiableItem;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.logic.EExperienceGroup;
+import com.github.blutorange.translune.logic.Pageable;
 import com.github.blutorange.translune.media.IAtlasImage;
 import com.github.blutorange.translune.media.IImageProcessing;
+import com.github.blutorange.translune.message.MessageFetchData;
 import com.github.blutorange.translune.message.MessageFetchDataResponse;
 import com.github.blutorange.translune.message.MessageUpdateData;
 import com.github.blutorange.translune.serial.AvailableBgAndBgm;
@@ -24,11 +26,22 @@ public class Sandbox {
 		final LunarServletContextListener scl = new LunarServletContextListener();
 		scl.initialize();
 		try {
-			jsoniter();
+			fetch();
 		}
 		finally {
 			scl.destroy();
 		}
+	}
+
+	static void fetch() throws Exception {
+		final String message = "{\"fetch\":\"OPPONENT\",\"details\":\"{\\\"offset\\\":0,\\\"count\\\":5,\\\"orderBy\\\":[{\\\"name\\\":\\\"nickname\\\",\\\"direction\\\":\\\"ASC\\\"}]}\"}";
+		final MessageFetchData msg = ComponentFactory.getLunarComponent().jsoniter().get().deserialize(message, MessageFetchData.class);
+		System.out.println(msg.getDetails());
+		final Pageable pg = ComponentFactory.getLunarComponent().jsoniter().get().deserialize(msg.getDetails(), Pageable.class);
+		System.out.println(pg.getCount());
+//		final PageableResult r = (PageableResult)EFetchDataType.OPPONENT.fetch(null, "{\"count\":0, \"offset\": 0}");
+//		System.out.println(r.getTotal());
+//		System.out.println(r.getList().length);
 	}
 
 	static void availableBgAndBgm() throws IOException {

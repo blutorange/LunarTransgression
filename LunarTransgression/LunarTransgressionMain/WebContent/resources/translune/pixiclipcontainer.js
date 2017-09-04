@@ -18,24 +18,20 @@
 		}
 		
 		updateTransform() {
-			if (this.width !== this._cachedWidth || this.height !== this._cachedHeight || this.x !=  this._cachedX || this.y !=  this._cachedY) {
-				if (this._clip) {
+			if (this._clip) {
+				if (this.width !== this._cachedWidth || this.height !== this._cachedHeight
+						|| this.x !=  this._cachedX || this.y !=  this._cachedY) {
 					const mask = this.mask || new PIXI.Graphics();
 					mask.clear();
 					mask.beginFill(0x000000, 1);
 					mask.drawRect(this.x, this.y, this.width, this.height);
 					mask.endFill();
 					this.mask = mask;
+					this._cachedX = this.x;
+					this._cachedY = this.y;
+					this._cachedWidth = this.width;
+					this._cachedHeight = this.height;
 				}
-				else {
-					if (this.mask)
-						this.mask.destroy();
-					this.mask = undefined;
-				}
-				this._cachedX = this.x;
-				this._cachedY = this.y;
-				this._cachedWidth = this.width;
-				this._cachedHeight = this.height;
 			}
 			super.updateTransform();
 		}
@@ -146,8 +142,14 @@
 		
 		set clip(value) {
 			value = !!value;
-			if (value != this._clip)
+			if (value && !this._clip) {
 				this._cachedWidth = -1;
+			}
+			else if (!value && this._clip) {
+				if (this.mask)
+					this.mask.destroy();
+				this.mask = undefined;
+			}
 			this._clip = value;
 		}
 		

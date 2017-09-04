@@ -1,6 +1,7 @@
 package com.github.blutorange.translune.logic;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,8 +32,9 @@ public class SessionStore implements ISessionStore {
 	}
 
 	@Override
-	public <T> T store(final String nickname, @NonNull final Session session, final Function<@Nullable Session, T> consumer) {
-		synchronized(map) {
+	public <T> T store(final String nickname, @NonNull final Session session,
+			final Function<@Nullable Session, T> consumer) {
+		synchronized (map) {
 			final Session oldSession = map.put(nickname, session);
 			return consumer.apply(oldSession);
 		}
@@ -41,8 +43,10 @@ public class SessionStore implements ISessionStore {
 	@Override
 	public @Nullable Session retrieve(final String nickname) {
 		final Session s = map.get(nickname);
-		if (s == null) return null;
-		if (s.isOpen()) return s;
+		if (s == null)
+			return null;
+		if (s.isOpen())
+			return s;
 		map.remove(nickname);
 		return null;
 	}
@@ -64,5 +68,19 @@ public class SessionStore implements ISessionStore {
 	@Override
 	public boolean contains(final String nickname) {
 		return retrieve(nickname) != null;
+	}
+
+	@Override
+	public PageableResult findNicknames(final Pageable pageable) {
+		final Orderable[] orderable = pageable.getOrderBy();
+		final int order = orderable.length == 0 || orderable[0].getOrderDirection() == EOrderDirection.ASC ? 1 : -1;
+		final Comparator<Entry<String, ?>> comparator = (e1, e2) -> order * e1.getKey().compareTo(e2.getKey());
+		final String[] list = map.entrySet().stream()
+				.sorted(comparator)
+				.skip(pageable.getOffset())
+				.limit(pageable.getCount())
+				.map(Entry::getKey)
+				.toArray(String[]::new);
+		return new PageableResult(map.size(), map.size(), list);
 	}
 }

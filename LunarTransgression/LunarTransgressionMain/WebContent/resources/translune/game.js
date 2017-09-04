@@ -174,6 +174,8 @@ Scene battle
 		}
 		
 		removeScene(scene) {
+			if (!scene)
+				return;
 			this.operationStack.push({type:'del', scene: scene});
 		}
 		

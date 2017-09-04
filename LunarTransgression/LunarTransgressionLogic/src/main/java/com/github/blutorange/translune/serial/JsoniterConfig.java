@@ -22,9 +22,13 @@ import com.github.blutorange.translune.logic.EBattleCommandType;
 import com.github.blutorange.translune.logic.EElement;
 import com.github.blutorange.translune.logic.EExperienceGroup;
 import com.github.blutorange.translune.logic.ENature;
+import com.github.blutorange.translune.logic.EOrderDirection;
 import com.github.blutorange.translune.logic.ESkillEffect;
 import com.github.blutorange.translune.logic.EStatusCondition;
 import com.github.blutorange.translune.logic.IComputedBattleStatus;
+import com.github.blutorange.translune.logic.Orderable;
+import com.github.blutorange.translune.logic.Pageable;
+import com.github.blutorange.translune.logic.PageableResult;
 import com.github.blutorange.translune.message.EFetchDataType;
 import com.github.blutorange.translune.message.EUpdateDataType;
 import com.github.blutorange.translune.message.MessageAuthorize;
@@ -92,6 +96,7 @@ public class JsoniterConfig implements StaticCodegenConfig {
 		registerEnum(ESkillEffect.class);
 		registerEnum(EStatusValue.class);
 		registerEnum(EStatusCondition.class);
+		registerEnum(EOrderDirection.class);
 
 		JsoniterSpi.registerTypeEncoder(JsoniterEmptyMap.class, new Encoder() {
 			@Override
@@ -202,6 +207,10 @@ public class JsoniterConfig implements StaticCodegenConfig {
 				TypeLiteral.create(BattleCommand.class),
 				TypeLiteral.create(BattleResult.class),
 				TypeLiteral.create(AvailableBgAndBgm.class),
+				TypeLiteral.create(Filterable.class),
+				TypeLiteral.create(Orderable.class),
+				TypeLiteral.create(Pageable.class),
+				TypeLiteral.create(PageableResult.class),
 
 				TypeLiteral.create(MessageFetchData.class),
 				TypeLiteral.create(MessageFetchDataResponse.class),

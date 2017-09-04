@@ -5,6 +5,8 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Singleton;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.github.blutorange.translune.logic.IBattleStore;
 import com.github.blutorange.translune.logic.IInitIdStore;
 import com.github.blutorange.translune.logic.IInvitationStore;
@@ -53,6 +55,7 @@ public class StorageModule {
 			return JsonStream.serialize(object);
 		}
 
+		@Nullable
 		@Override
 		public <T> T deserialize(final String input, final Class<T> clazz) {
 			return JsonIterator.deserialize(input, clazz);

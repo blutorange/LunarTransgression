@@ -5,7 +5,8 @@
 	Lunar.Scene.Menu = class extends Lunar.Scene.Base {
 		constructor(game) {
 			super(game);
-			this.loaded = false;
+			this._loaded = false;
+			this._tabState = undefined;
 			this._tabScene = undefined;
 			this._tabDetails = undefined;
 			this._loadScene = undefined;
@@ -13,7 +14,7 @@
 		}
 		
 		sceneToAdd() {
-			if (this.loaded)
+			if (this._loaded)
 				return super.sceneToAdd();	
 			const _this = this;
 			const requestLoadable = new Lunar.RequestLoadable(this.game, Lunar.Message.fetchData, {
@@ -45,6 +46,10 @@
 				this.game.removeScene(this._tabDetails);
 			this._loadScene = undefined;
 			this._tabScene = undefined;
+		}
+		
+		update(delta) {
+			super.update(delta);
 		}
 		
 		/**
@@ -136,7 +141,7 @@
 		 */
 		_initScene() {
 			this._loadScene = undefined;
-			this.loaded = true;
+			this._loaded = true;
 			this.game.pushScene(this);
 			const _this = this;			
 						
@@ -177,10 +182,10 @@
 			const textButtonInvite = this.createButtonText(buttonInvite, "Invite");
 			const textButtonCollection = this.createButtonText(buttonCollection, "Collection");
 			
-			buttonItem.on('pointerdown', this.onClickItem, this);
-			buttonInvite.on('pointerdown', this.onClickInvite, this);
-			buttonChar.on('pointerdown', this.onClickChar, this);
-			buttonCollection.on('pointerdown', this.onClickCollection, this);
+			buttonItem.on('pointertap', this._onClickItem, this);
+			buttonInvite.on('pointertap', this._onClickInvite, this);
+			buttonChar.on('pointertap', this._onClickChar, this);
+			buttonCollection.on('pointertap', this._onClickCollection, this);
 			
 			// Close button
 			const buttonExit = new PIXI.Sprite(this.game.baseLoader.resources.packed.spritesheet.textures['close.png']);
@@ -196,7 +201,7 @@
 				buttonExit.height = buttonExit.height*8/9;
 				buttonExit.rotation = 0.0;
 			});
-			buttonExit.on('pointerdown', this._onClickExit, this);
+			buttonExit.on('pointertap', this._onClickExit, this);
 			
 			//Background
 			const bg = new PIXI.Sprite(this.game.loaderFor("menu").resources.bg.texture);
@@ -289,23 +294,11 @@
 		/**
 		 * @private
 		 */
-		onClickChar() {
-			if (this._tabState === 'char') {
-				this.game.sfx('resources/translune/static/unable');
-				return;
-			}
-			this.game.sfx('resources/translune/static/buttonclick');
-			if (this._tabScene)
-				this.game.removeScene(this._tabScene);
-			if (this._tabDetails)
-				this.game.removeScene(this._tabDetails);
-			this._tabDetails = undefined;
-			this._tabScene = new Lunar.Scene.MenuChar(this.game, this);
-			this.game.pushScene(this._tabScene, this.hierarchy.mid.$left.body);
-			this._tabState = 'char';
+		_onClickChar() {
+			this._switchTab('char', () => new Lunar.Scene.MenuChar(this.game, this));
 		}
 		
-		onSelectChar(characterState) {
+		_onSelectChar(characterState) {
 			this.game.sfx(`/resource/${characterState.character.cry}`);
 			if (this._tabDetails)
 				this.game.removeScene(this._tabDetails);
@@ -324,41 +317,46 @@
 		/**
 		 * @private
 		 */
-		onClickItem() {
-			if (this._tabState === 'item') {
-				this.game.sfx('resources/translune/static/unable');
-				return;
-			}
-			this.game.sfx('resources/translune/static/buttonclick');
-			this._tabState = 'item';
+		_onClickItem() {
+			this._switchTab('item', () => {
+				console.info("items not yet implemented")
+				return null;
+			});
 		}
 		
 		/**
 		 * @private
 		 */
-		onClickCollection() {
-			if (this._tabState === 'collection') {
-				this.game.sfx('resources/translune/static/unable');
-				return;
-			}
-			this.game.sfx('resources/translune/static/buttonclick');
-			this._tabState === 'collection'
+		_onClickCollection() {
+			this._switchTab('collection', () => {
+				console.info("collection not yet implemented")
+				return null;
+			});
 		}
 		
 		/**
 		 * @private
 		 */
-		onClickInvite() {
-			if (this._tabState === 'invite') {
+		_onClickInvite() {
+			this._switchTab('invite', () => new Lunar.Scene.MenuInvite(this.game, this));
+		}
+		
+		_switchTab(tabName, sceneFactory) {
+			if (this._tabState === tabName) {
 				this.game.sfx('resources/translune/static/unable');
 				return;
 			}
 			this.game.sfx('resources/translune/static/buttonclick');
-			this._tabState === 'invite'
-		}
-	
-		update(delta) {
-			super.update(delta);
-		}
+			if (this._tabScene)
+				this.game.removeScene(this._tabScene);
+			if (this._tabDetails)
+				this.game.removeScene(this._tabDetails);
+			this._tabDetails = undefined;
+			this._tabScene = sceneFactory.call(this);
+			if (!this._tabScene)
+				return;
+			this.game.pushScene(this._tabScene, this.hierarchy.mid.$left.body);
+			this._tabState = tabName;
+		}	
 	};
 })(window.Lunar, window);

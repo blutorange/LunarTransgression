@@ -60,6 +60,10 @@
 			this.completionListeners.push(listener);
 		}
 		
+		removeAllCompletionListeners() {
+			this.completionListeners = [];
+		}
+		
 		notifyCompletionListeners() {
 			for (let listener of this.completionListeners)
 				listener();
@@ -112,12 +116,12 @@
 			this._requestState = 0;
 			this._promise = new Promise((resolve, reject) => {
 				game.net.dispatchMessage(type, data).then(response => {
-					_this._requestState = 1;
 					resolve(response);
+					_this._requestState = 1;
 				})
 				.catch(response => {
-					_this._requestState = 2;
 					reject(response);
+					_this._requestState = 2;
 				});
 			});
 		}
@@ -222,7 +226,8 @@
 	Lunar.FetchType = {
 		none: 'NONE',
 		availableBgAndBgm: 'AVAILABLE_BG_AND_BGM',
-		userPlayer: 'USER_PLAYER'
+		userPlayer: 'USER_PLAYER',
+		activeOpponent: 'ACTIVE_OPPONENT'
 	};
 	
 	Lunar.Object = {
@@ -411,6 +416,22 @@
 			    dropShadowDistance: 6,
 			    wordWrap: true,
 			    wordWrapWidth: game => game.w
+			});
+			Lunar.FontStyle.playerList = new PIXI.TextStyle({
+			    fontFamily: 'Arial,sans-serif',
+			    fontSize: game => game.wh*0.025,
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#C0C0C0'], // gradient
+			    stroke: '#4a1850',
+			    strokeThickness: 2,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: false,
+			    wordWrapWidth: game => game.dx(0.4)
 			});
 			Lunar.FontStyle.skillDesc = new PIXI.TextStyle({
 			    fontFamily: 'Arial,sans-serif',
