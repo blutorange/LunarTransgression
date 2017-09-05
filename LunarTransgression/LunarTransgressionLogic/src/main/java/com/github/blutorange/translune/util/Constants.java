@@ -68,6 +68,8 @@ public final class Constants {
 	public static final int MAX_SKILL_POWER = 999;
 	public static final int MAX_SPEED = 999;
 	public static final int MAX_STAGE = 6;
+	public static final int MAX_LENGTH_PLAYER_NICKNAME = 16;
+	public static final int MAX_LENGTH_PLAYER_DESCRIPTION = 50;
 
 	public static final int MIN_CHARACTERS = 4;
 	public static final int MIN_ITEMS = 0;
@@ -87,4 +89,5 @@ public final class Constants {
 	public static final String SERVLET_KEY_RESOURCES = "resources";
 
 	public static final String USERNAME_SADMIN = "sadmin";
+
 }

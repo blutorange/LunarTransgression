@@ -5,7 +5,7 @@ module.exports = function(grunt)
     grunt.initConfig({
         babel: {
             options: {
-                sourceMap: true,
+                sourceMap: false,
                 presets: ['babel-preset-es2015']
             },
             dist: {
@@ -21,13 +21,19 @@ module.exports = function(grunt)
         },
  
         uglify: {
+            options: {
+                compress: true,
+                mangle: true,
+                sourceMap: false,
+                preserveComments: false
+            },        	
             build: {
-                files: [{
-                    expand: true,
-                    cwd: 'target/generated-sources/js/resources',
-                    src: ['*.js', '**/*.js'],
-                    dest: 'target/generated-sources/js/resources'
-                }]
+                files: {
+//                    expand: true,
+                    'target/generated-sources/js/resources/translune.min.js': ['target/generated-sources/js/resources/translune/*.js']
+                    //src: ['*.js', '**/*.js'],
+                    //dest: 'target/generated-sources/js/resources'
+                }
             }
         }
     });

@@ -224,10 +224,17 @@
 	};
 	
 	Lunar.FetchType = {
-		none: 'NONE',
-		availableBgAndBgm: 'AVAILABLE_BG_AND_BGM',
-		userPlayer: 'USER_PLAYER',
-		activeOpponent: 'ACTIVE_OPPONENT'
+		none: 'none',
+		availableBgAndBgm: 'available-bg-and-bgm',
+		userPlayer: 'user-player',
+		activePlayer: 'active-player',
+		playerDetail: 'player-detail'
+	};
+	
+	Lunar.UpdateType = {
+		none: 'none',
+		playerDescription: 'player-description',
+		characterNickname: 'character-nickname',		
 	};
 	
 	Lunar.Object = {
@@ -346,6 +353,22 @@
 			    wordWrap: true,
 			    wordWrapWidth: game => game.dx(0.8)
 			});
+			Lunar.FontStyle.playerSearch = new PIXI.TextStyle({
+			    fontFamily: 'Arial',
+			    fontSize: game => game.dx(0.026),
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: '#99ff99',
+			    stroke: '#000000',
+			    strokeThickness: 2,
+			    align: 'left',
+			    dropShadow: true,
+			    dropShadowColor: '#558800',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: false,
+			});
 			Lunar.FontStyle.load = new PIXI.TextStyle({
 			    fontFamily: 'Arial',
 			    fontSize: game => game.dx(0.028),
@@ -417,7 +440,7 @@
 			    wordWrap: true,
 			    wordWrapWidth: game => game.w
 			});
-			Lunar.FontStyle.playerList = new PIXI.TextStyle({
+			Lunar.FontStyle.playerDesc = new PIXI.TextStyle({
 			    fontFamily: 'Arial,sans-serif',
 			    fontSize: game => game.wh*0.025,
 			    fontStyle: '',
@@ -430,8 +453,43 @@
 			    dropShadowBlur: 4,
 			    dropShadowAngle: Math.PI / 6,
 			    dropShadowDistance: 6,
+			    breakWords: true,
+			    wordWrap: true,
+			    wordWrapWidth: game => game.dx(0.36)
+			});
+			Lunar.FontStyle.playerTitle = new PIXI.TextStyle({
+			    fontFamily: 'Arial,sans-serif',
+			    fontSize: game => game.wh*0.035,
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#ff9900'],
+			    stroke: '#4a1850',
+			    strokeThickness: 2,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: false
+			});			
+			Lunar.FontStyle.playerList = new PIXI.TextStyle({
+			    fontFamily: 'Arial,sans-serif',
+			    fontSize: game => game.wh*0.022,
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#99ff66'],
+			    stroke: '#4a1850',
+			    strokeThickness: 2,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
 			    wordWrap: false,
 			    wordWrapWidth: game => game.dx(0.4)
+			});
+			Lunar.FontStyle.playerListActive = Object.assign({}, Lunar.FontStyle.playerList, {
+				fill: ['#99ff66', '#ffffff']
 			});
 			Lunar.FontStyle.skillDesc = new PIXI.TextStyle({
 			    fontFamily: 'Arial,sans-serif',

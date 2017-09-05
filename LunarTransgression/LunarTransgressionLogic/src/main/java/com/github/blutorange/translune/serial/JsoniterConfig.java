@@ -201,6 +201,8 @@ public class JsoniterConfig implements StaticCodegenConfig {
 				TypeLiteral.create(CharacterState.class),
 				TypeLiteral.create(Character.class),
 				TypeLiteral.create(Skill.class),
+				TypeLiteral.create(PlayerViewInvite.class),
+				TypeLiteral.create(CharacterViewInvite.class),
 
 				TypeLiteral.create(LunarMessage.class),
 				TypeLiteral.create(BattleAction.class),

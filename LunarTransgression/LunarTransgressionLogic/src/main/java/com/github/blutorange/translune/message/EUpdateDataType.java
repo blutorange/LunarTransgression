@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.ModifiableCharacterState;
+import com.github.blutorange.translune.db.ModifiablePlayer;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
@@ -43,7 +44,20 @@ public enum EUpdateDataType {
 			});
 			return characterState.getNickname();
 		}
-	},;
+	},
+	PLAYER_DESCRIPTION {
+		@Override
+		public @Nullable Object update(final Session session, final String details) throws Exception {
+			final Player player = databaseManager.find(Player.class, socketProcessing.getNickname(session));
+			if (player == null)
+				return null;
+			databaseManager.modify(player, ModifiablePlayer.class, mp -> {
+				mp.setDescription(details);
+			});
+			return player.getDescription();
+		}
+	}
+	;
 
 	@Inject
 	ILunarDatabaseManager databaseManager;

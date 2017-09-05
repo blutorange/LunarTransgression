@@ -171,7 +171,7 @@ public class SessionBean extends AbstractBean {
 		final CharacterState cs2 = characterStateBuilder.randomIvs().randomNature().setCharacter(characters[1]).build();
 		final CharacterState cs3 = characterStateBuilder.randomIvs().randomNature().setCharacter(characters[2]).build();
 		final CharacterState cs4 = characterStateBuilder.randomIvs().randomNature().setCharacter(characters[3]).build();
-		final Player player = new PlayerBuilder(nickname).setPassword(password).addCharacterStates(cs1,cs2,cs3,cs4).build();
+		final Player player = new PlayerBuilder(nickname).setDescription("I joined the transmigration.").setPassword(password).addCharacterStates(cs1,cs2,cs3,cs4).build();
 
 		databaseManager.persist(player, cs1, cs2, cs3, cs4);
 	}

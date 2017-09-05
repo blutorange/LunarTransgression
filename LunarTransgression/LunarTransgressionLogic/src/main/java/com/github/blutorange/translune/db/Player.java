@@ -38,8 +38,8 @@ public class Player extends AbstractStoredEntity {
 	private Set<CharacterState> characterStates = new HashSet<>();
 
 	@NotNull
-	@Size(min = 1, max = 2048)
-	@Column(name = "description", nullable = false, length = 2048, unique = false)
+	@Size(min = 1, max = Constants.MAX_LENGTH_PLAYER_DESCRIPTION)
+	@Column(name = "description", nullable = false, length = Constants.MAX_LENGTH_PLAYER_DESCRIPTION, unique = false)
 	private String description = StringUtils.EMPTY;
 
 	@NotNull
@@ -50,19 +50,19 @@ public class Player extends AbstractStoredEntity {
 
 	@NonNull
 	@Id
-	@Column(name = "nickname", nullable = false, length = 63, unique = true, updatable = false)
+	@Size(min = 1, max = Constants.MAX_LENGTH_PLAYER_NICKNAME)
+	@Column(name = "nickname", nullable = false, length = Constants.MAX_LENGTH_PLAYER_NICKNAME, unique = true, updatable = false)
 	private String nickname = StringUtils.EMPTY;
 
 	@NotNull
-	@Size(min = 1)
+	@Size(min = 1, max = 255)
 	@Column(name = "passwordhash", nullable = false, length = 255, unique = false)
 	private String passwordHash = StringUtils.EMPTY;
 
 	@NotNull
 	@OneToMany(targetEntity = CharacterState.class, orphanRemoval = true, cascade = {}, fetch = FetchType.LAZY, mappedBy = "player")
 	@Size(min = 0)
-	@JsonIgnore
-	private Set<CharacterState> releasedCharacterStates;
+	private Set<CharacterState> releasedCharacterStates = new HashSet<>();
 
 	public Player() {
 	}

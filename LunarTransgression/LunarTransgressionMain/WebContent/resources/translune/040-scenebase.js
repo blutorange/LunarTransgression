@@ -141,8 +141,8 @@
 			const geoRoot = Lunar.Geometry.layoutVbox({
 				box: {w: this.game.w, h: this.game.h},
 				padding: {
-					left: 0.2,
-					right: 0.2,
+					left: 0.1,
+					right: 0.1,
 					top: 0.2,
 					bottom: 0.2
 				},				
@@ -157,7 +157,7 @@
 				box: geoRoot[1],
 				dimension: this.options.choices.length,
 				padding: {
-					x: 6,
+					x: 12,
 					top:0.2,
 					bottom: 0.2
 				},
@@ -213,12 +213,17 @@
 					}
 				};
 			});
-			
+
 			const inputPrompt = prompt ? new PIXI.TextInput(Lunar.FontStyle.button) : undefined;
 			if (inputPrompt) {
 				inputPrompt.text = prompt.initial;
 				inputPrompt.style = prompt.style || Lunar.FontStyle.input;
-				inputPrompt.on('change', input => input.text.length === 0 && (input.text = prompt.initial));
+				inputPrompt.placeholder = prompt.placeholder || '';
+				if (prompt.minlength)
+					inputPrompt.minlength = prompt.minlength;
+				if (prompt.maxlength)
+					inputPrompt.maxlength = prompt.maxlength;
+				//inputPrompt.on('change', input => input.text.length === 0 && (input.text = prompt.initial));
 				prompt.setup && prompt.setup(inputPrompt);
 			}
 			
@@ -268,31 +273,37 @@
 			
 			const h = this.hierarchy;
 			
-			h.$overlay.clear();
-			h.$overlay.beginFill(0x222222, 0.85);
-			h.$overlay.drawRect(0, 0, this.game.w, this.game.h);
-			h.$overlay.endFill();
+			h.container.$overlay.clear();
+			h.container.$overlay.beginFill(0x222222, 0.85);
+			h.container.$overlay.drawRect(0, 0, this.game.w, this.game.h);
+			h.container.$overlay.endFill();
 			
-			h.$text.x = this.game.x(0);
-			h.$text.y = this.game.y(0);
-			h.$text.anchor.set(0.5,0.5);
+			h.container.$text.x = this.game.x(0);
+			h.container.$text.y = this.game.y(0);
+			h.container.$text.anchor.set(0.5,0.5);
 		}
 		
 		/**
 		 * @private
 		 */
 		_initScene() {
+			const container = new PIXI.ClipContainer();
+			
 			const overlay = new PIXI.Graphics();
 			overlay.interactive = true;
 			
 			const loadText = new PIXI.Text('Now loading...', Lunar.FontStyle.load);
 			
-			this.view.addChild(overlay);
-			this.view.addChild(loadText);
+			this.game.app.stage.addChild(container);
+			container.addChild(overlay);
+			container.addChild(loadText);
 			
 			this.hierarchy = {
-				$text: loadText,
-				$overlay: overlay
+				container: {
+					$text: loadText,
+					$overlay: overlay					
+				},
+				$container: container
 			};
 		}
 		
@@ -304,12 +315,14 @@
 		destroy() {
 			this._loadable = undefined;
 			this._zeroUntil = undefined;
+			this.game.app.stage.removeChild(this.hierarchy.container);
+			this.hierarchy.$container.destroy();
 			super.destroy();
 		}
 		
 		update(delta) {
 			super.update(delta);
-			const loadText = this.hierarchy.$text;
+			const loadText = this.hierarchy.container.$text;
 			if (this._loadable) {
 				const raw = this._loadable.getProgress();
 				const progress = Math.round(100.0*raw);

@@ -31,7 +31,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jdt.annotation.Nullable;
-import org.sfm.csv.CsvParser;
+import org.simpleflatmapper.csv.CsvColumnDefinition;
+import org.simpleflatmapper.csv.CsvParser;
 import org.slf4j.Logger;
 
 import com.github.blutorange.common.StringUtil;
@@ -41,6 +42,7 @@ import com.github.blutorange.translune.db.Resource;
 import com.github.blutorange.translune.db.Resource_;
 import com.github.blutorange.translune.db.Skill;
 import com.github.blutorange.translune.ic.Classed;
+import com.github.blutorange.translune.logic.EStatusCondition;
 import com.github.blutorange.translune.util.Constants;
 
 @Singleton
@@ -257,7 +259,16 @@ public final class ImportProcessing implements IImportProcessing {
 	}
 
 	private Set<SkillCsvModel> readSkillCsv(final InputStream inputStream) throws IOException {
-		return readTCsv(inputStream, SkillCsvModel.class);
+		try (Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+			return CsvParser
+					.quote('\"')
+					.separator(',')
+					.mapTo(SkillCsvModel.class)
+					.columnDefinition("condition", CsvColumnDefinition.customReaderDefinition(
+							new CsmEnumCellValueReader<>(EStatusCondition.class)))
+					.stream(reader)
+					.collect(Collectors.toSet());
+		}
 	}
 
 	private <T> Set<T> readTCsv(final InputStream inputStream, final Class<T> clazz) throws IOException {

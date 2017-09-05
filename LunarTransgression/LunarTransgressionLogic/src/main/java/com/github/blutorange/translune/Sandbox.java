@@ -26,7 +26,7 @@ public class Sandbox {
 		final LunarServletContextListener scl = new LunarServletContextListener();
 		scl.initialize();
 		try {
-			fetch();
+			importing();
 		}
 		finally {
 			scl.destroy();
@@ -36,8 +36,12 @@ public class Sandbox {
 	static void fetch() throws Exception {
 		final String message = "{\"fetch\":\"OPPONENT\",\"details\":\"{\\\"offset\\\":0,\\\"count\\\":5,\\\"orderBy\\\":[{\\\"name\\\":\\\"nickname\\\",\\\"direction\\\":\\\"ASC\\\"}]}\"}";
 		final MessageFetchData msg = ComponentFactory.getLunarComponent().jsoniter().get().deserialize(message, MessageFetchData.class);
+		if (msg == null)
+			throw new Exception();
 		System.out.println(msg.getDetails());
 		final Pageable pg = ComponentFactory.getLunarComponent().jsoniter().get().deserialize(msg.getDetails(), Pageable.class);
+		if (pg == null)
+			throw new Exception();
 		System.out.println(pg.getCount());
 //		final PageableResult r = (PageableResult)EFetchDataType.OPPONENT.fetch(null, "{\"count\":0, \"offset\": 0}");
 //		System.out.println(r.getTotal());

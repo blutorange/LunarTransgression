@@ -36,6 +36,11 @@
 			super.destroy();
 		}
 		
+		onAdd() {
+			super.onAdd();
+			this._onClickChar();
+		}
+		
 		onRemove() {
 			super.onRemove();
 			if (this._loadScene)
@@ -52,6 +57,14 @@
 			super.update(delta);
 		}
 		
+		set player(player) {
+			this._player = player;
+		}
+		
+		get player() {
+			return this._player;
+		}
+			
 		/**
 		 * @private
 		 */
@@ -114,6 +127,19 @@
 			this.geo(h.mid.$left, geoMid[0]);
 			this.geo(h.mid.$right, geoMid[1]);
 			
+			const geoAction = Lunar.Geometry.layoutHbox({
+				box: geoRoot[2],
+				dimension: 2,
+				padding: {
+					top: 0.1,
+					bottom: 0.1,
+					left: 0.1,
+					right: 0.1,
+					x: 0.05
+				},
+				relative: true
+			});
+			
 			const geoTab = Lunar.Geometry.layoutHbox({
 				box: h.top.$tabs.bodyDimension,
 				dimension: 4,
@@ -134,6 +160,20 @@
 			this.layoutButtonText(h.top.tabs.item.$text, true);
 			this.layoutButtonText(h.top.tabs.invite.$text, true);
 			this.layoutButtonText(h.top.tabs.collection.$text, true);
+
+			this.geo(h.bottom.$action1, geoAction[0]);
+			this.geo(h.bottom.$action2, geoAction[1]);
+			
+			this.layoutButtonText(h.bottom.action1.$text, true);
+			this.layoutButtonText(h.bottom.action2.$text, true);
+		}
+		
+		get actionButton1() {
+			return this.hierarchy.bottom.$action1;
+		}
+		
+		get actionButton2() {
+			return this.hierarchy.bottom.$action2;
 		}
 		
 		/**
@@ -170,6 +210,16 @@
 			// Bottom
 			const bottomBar = new PIXI.NinePatch(this.game.baseLoader.resources.textbox);
 			bottomBar.alpha = 0.5;
+			
+			// Action buttons
+			const buttonAction1 = new PIXI.NinePatch(this.game.baseLoader.resources.textbox);
+			const buttonAction2 = new PIXI.NinePatch(this.game.baseLoader.resources.textbox);
+			
+			const textAction1 = this.createButtonText(buttonAction1, "");
+			const textAction2 = this.createButtonText(buttonAction2, "");
+			
+			buttonAction1.visible = false;
+			buttonAction2.visible = false;
 			
 			// Tab buttons		
 			const buttonChar = new PIXI.NinePatch(this.game.baseLoader.resources.button);
@@ -214,6 +264,9 @@
 
 			topContainer.addChild(topBar);
 
+			bottomBar.addChild(buttonAction1);
+			bottomBar.addChild(buttonAction2);
+			
 			midContainer.addChild(leftPanel);
 			midContainer.addChild(rightPanel);
 			
@@ -226,6 +279,9 @@
 			buttonItem.body.addChild(textButtonItem);
 			buttonInvite.body.addChild(textButtonInvite);
 			buttonCollection.body.addChild(textButtonCollection);
+			
+			buttonAction1.body.addChild(textAction1);
+			buttonAction2.body.addChild(textAction2);
 
 			exitBar.body.addChild(buttonExit);
 						
@@ -259,6 +315,16 @@
 					$left: leftPanel,
 					$right: rightPanel,					
 				},
+				bottom: {
+					action1: {
+						$text: textAction1
+					},
+					action2: {
+						$text: textAction2
+					},
+					$action1: buttonAction1,
+					$action2: buttonAction2
+				},
 				$top: topContainer,
 				$mid: midContainer,
 				$bottom: bottomBar,
@@ -271,7 +337,7 @@
 		 */
 		_onClickExit() {
 			const _this = this;
-			this.game.sfx('resources/translune/static/close');
+			this.game.sfx('resources/translune/static/cancel');
 			const id = this.game.window.setTimeout(() => _this.game.exit(), 10000);
 			const start = new Date().getTime() + 10000;
 			this.game.pushScene(new Lunar.Scene.Dialog(this.game, { 
@@ -298,20 +364,19 @@
 			this._switchTab('char', () => new Lunar.Scene.MenuChar(this.game, this));
 		}
 		
+		/**
+		 * @private
+		 */
 		_onSelectChar(characterState) {
 			this.game.sfx(`/resource/${characterState.character.cry}`);
-			if (this._tabDetails)
-				this.game.removeScene(this._tabDetails);
-			this._tabDetails = new Lunar.Scene.MenuCharDetails(this.game, this, characterState);
-			this.game.pushScene(this._tabDetails, this.hierarchy.mid.$right.body);
+			this._switchTabDetails(() => new Lunar.Scene.MenuCharDetails(this.game, this, characterState));
 		}
 		
-		set player(player) {
-			this._player = player;
-		}
-		
-		get player() {
-			return this._player;
+		/**
+		 * @private
+		 */
+		_onSelectInvite(characterState) {
+			this._switchTabDetails(() => new Lunar.Scene.MenuInviteDetails(this.game, this, characterState))
 		}
 		
 		/**
@@ -341,22 +406,47 @@
 			this._switchTab('invite', () => new Lunar.Scene.MenuInvite(this.game, this));
 		}
 		
+		/**
+		 * @private
+		 */
 		_switchTab(tabName, sceneFactory) {
 			if (this._tabState === tabName) {
 				this.game.sfx('resources/translune/static/unable');
 				return;
 			}
 			this.game.sfx('resources/translune/static/buttonclick');
+			this._clearActionButton(this.actionButton1);
+			this._clearActionButton(this.actionButton2);
 			if (this._tabScene)
 				this.game.removeScene(this._tabScene);
 			if (this._tabDetails)
 				this.game.removeScene(this._tabDetails);
 			this._tabDetails = undefined;
 			this._tabScene = sceneFactory.call(this);
-			if (!this._tabScene)
-				return;
-			this.game.pushScene(this._tabScene, this.hierarchy.mid.$left.body);
+			if (this._tabScene)
+				this.game.pushScene(this._tabScene, this.hierarchy.mid.$left.body);
 			this._tabState = tabName;
-		}	
+		}
+
+		/**
+		 * @private
+		 */
+		_switchTabDetails(sceneFactory) {
+			if (this._tabDetails)
+				this.game.removeScene(this._tabDetails);
+			this._clearActionButton(this.actionButton1);
+			this._clearActionButton(this.actionButton2);			
+			this._tabDetails = sceneFactory.call(this);
+			this.game.pushScene(this._tabDetails, this.hierarchy.mid.$right.body);
+		}
+		
+		/**
+		 * @private
+		 */
+		_clearActionButton(button) {
+			button.visible = false;
+			button.removeAllListeners('pointertap');
+			button.body.children[0].text = '';
+		}		
 	};
 })(window.Lunar, window);

@@ -65,10 +65,6 @@ public class SkillCsvModel {
 		return result;
 	}
 
-	/**
-	 * @param accuracy
-	 *            the accuracy to set
-	 */
 	public void setAccuracy(final int accuracy) {
 		builder.setAccuracy(accuracy);
 	}

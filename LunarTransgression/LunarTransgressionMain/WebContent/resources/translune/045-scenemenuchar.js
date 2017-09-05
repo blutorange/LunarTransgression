@@ -1,4 +1,6 @@
 (function(Lunar, window, undefined) {
+	const LIST_X = 7;
+	const LIST_Y = 4;
 	Lunar.Scene.MenuChar = class extends Lunar.Scene.Base {
 		constructor(game, menu) {
 			super(game);
@@ -64,8 +66,8 @@
 					y: 4
 				},
 				dimension: {
-					n: 7,
-					m: 4
+					n: LIST_X,
+					m: LIST_Y
 				}
 			});
 			geoGrid.flatten().forEach((geo, index) => {

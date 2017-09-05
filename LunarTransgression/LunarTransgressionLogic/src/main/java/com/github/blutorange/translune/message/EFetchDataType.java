@@ -14,6 +14,7 @@ import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.logic.Pageable;
 import com.github.blutorange.translune.serial.IImportProcessing;
 import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
+import com.github.blutorange.translune.serial.PlayerViewInvite;
 import com.github.blutorange.translune.socket.ISocketProcessing;
 
 public enum EFetchDataType {
@@ -38,7 +39,17 @@ public enum EFetchDataType {
 			return importProcessing.availableBgAndBgm();
 		}
 	},
-	ACTIVE_OPPONENT {
+	PLAYER_DETAIL {
+		@Override
+		@Nullable
+		public Object fetch(final Session session, final String details) throws Exception {
+			final Player player = databaseManager.find(Player.class, details);
+			if (player == null)
+				return null;
+			return new PlayerViewInvite(player);
+		}
+	},
+	ACTIVE_PLAYER {
 		@Override
 		@Nullable
 		public Object fetch(final Session session, final String details) throws Exception {

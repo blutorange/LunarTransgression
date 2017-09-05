@@ -2,6 +2,7 @@
 	Lunar.Scene.MenuCharDetails = class extends Lunar.Scene.Base {
 		constructor(game, menu, characterState) {
 			super(game);
+			this._dialog = undefined;
 			this._menu = menu;
 			this._characterState = characterState;
 			this._releasable = menu.player.characterStates.length > 4 && characterState.level >= Lunar.Constants.minReleaseLevel;
@@ -14,8 +15,7 @@
 		}
 		
 		destroy() {
-			if (this._sceneSkill)
-				this.game.removeScene(this._sceneSkill);
+			this._dialog = undefined;
 			this._menu = undefined;
 			this._characterState = undefined;
 			this._sceneSkill = undefined;
@@ -24,8 +24,8 @@
 		}
 		
 		onRemove() {
-			if (this._sceneSkill)
-				this.game.removeScene(this._sceneSkill);
+			this.game.removeScene(this._sceneSkill);
+			this.game.removeScene(this._dialog);
 			super.onRemove();
 		}
 		
@@ -232,6 +232,12 @@
 			
 			buttonSkills.on('pointerdown', this._onClickSkills, this);
 			
+			if (true || this._releasable) {
+				this.menu.actionButton1.visible = true;
+				this.menu.actionButton1.body.children[0].text = 'Release';
+				this.menu.actionButton1.on('pointertap', this._onClickRelease, this);
+			}
+			
 			this.hierarchy = {
 				head: {
 					base: {
@@ -301,17 +307,55 @@
 			this.game.pushScene(this._sceneSkill);
 		}
 		
+		_onClickRelease() {
+			const _this = this;
+			if (this._dialog)
+				return;
+			this.game.sfx('resources/translune/static/ping');
+			this._dialog = new Lunar.Scene.Dialog(this.game, {
+				message: `Release ${_this._characterState.nickname} into the wild? You cannot make ${_this._characterState.character.name} battle anymore!`,
+				choices: [
+					{
+						text: 'Keep',
+						callback: dialog => {
+							_this.game.sfx('resources/translune/static/cancel');
+							_this._dialog = undefined;
+							dialog.close();
+						},
+					},
+					{
+						text: 'Release',
+						callback: dialog => {
+							_this.game.sfx('resources/translune/static/confirm');
+							_this._dialog = undefined;
+							dialog.close();
+							_this._performRelease();							
+						}
+					}
+				]
+			});
+			this.game.pushScene(this._dialog);
+		}
+		
+		_performRelease() {
+			// TODO implement me
+			console.error("TODO - not yet implemented!")
+		}
+		
 		/**
 		 * @private
 		 */
 		_onClickNickname() {
 			const _this = this;
+			if (this._dialog)
+				return;
 			this.game.sfx('resources/translune/static/ping');
-			const dialog = new Lunar.Scene.Dialog(this.game, {
+			this._dialog = new Lunar.Scene.Dialog(this.game, {
 				message: `Give ${this._characterState.nickname} a new name`,
 				prompt: {
 					initial: this._characterState.nickname,
 					style: Lunar.FontStyle.input,
+					placeholder: 'nickname...',
 					setup: input => {
 						input.minlength = 1;
 						input.maxlength = 24;
@@ -319,23 +363,25 @@
 				},
 				choices: [
 					{
-						text: 'Change name',
-						callback: dialog => {
-							_this.game.sfx('resources/translune/static/confirm');
-							_this._changeNickname(dialog.prompt.text);
-							dialog.close();
-						},
-					},
-					{
 						text: 'Keep old name',
 						callback: dialog => {
 							_this.game.sfx('resources/translune/static/cancel');
 							dialog.close();
+							_this._dialog = undefined
 						}
+					},
+					{
+						text: 'Change name',
+						callback: dialog => {
+							_this.game.sfx('resources/translune/static/confirm');
+							_this._changeNickname(dialog.prompt.text);
+							_this._dialog = undefined;
+							dialog.close();
+						},
 					}
 				]
 			});
-			this.game.pushScene(dialog);
+			this.game.pushScene(this._dialog);
 		}
 		
 		/**
@@ -346,13 +392,12 @@
 			if (newNickname === this._characterState.nickname || !newNickname)
 				return;
 			this.game.net.dispatchMessage(Lunar.Message.updateData, {
-				update: 'character-nickname',
+				update: Lunar.UpdateType.characterNickname,
 				details: JSON.stringify({
 					id: this._characterState.id,
 					nickname: newNickname
 				})
 			}).then(response => {
-				console.log(response);
 				_this._characterState.nickname = response.data.data;
 				_this.hierarchy.stat.$nickname.text = `»${_this._characterState.nickname}«`;
 			}).catch(() => {

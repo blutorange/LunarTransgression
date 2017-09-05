@@ -109,7 +109,7 @@
 		<primefaces-version>6.1</primefaces-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<quartz-version>2.3.0</quartz-version>
-		<sfm-version>2.14.1</sfm-version>
+		<sfm-version>3.13</sfm-version>
 		<slf4j-api-version>1.7.25</slf4j-api-version>
 		<slf4j-log4j12-version>1.7.25</slf4j-log4j12-version>
 		<tika-version>1.16</tika-version>
@@ -151,7 +151,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.simpleflatmapper</groupId>
-				<artifactId>sfm</artifactId>
+				<artifactId>sfm-csv</artifactId>
 				<version>${sfm-version}</version>
 			</dependency>
 			<dependency>

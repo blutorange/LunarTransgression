@@ -143,6 +143,14 @@
 	    	return this._width;
 	    }
 	    
+	    get placeholder() {
+	    	return this._input.placeholder;
+	    }
+	    
+	    set placeholder(value) {
+			this._input.placeholder = value;
+	    }
+	    
 	    set height(value) {
 	        this._height = value;
 	        this._dirty = true;
