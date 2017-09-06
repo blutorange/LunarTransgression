@@ -11,7 +11,8 @@
 				scale: 0,
 				dimension: 0,
 				alpha: 0,
-				skew: 0
+				skew: 0,
+				tint: 0
 			}, tweenFactors);
 			this._delegate = delegate;
 			this._position = new PIXI.ObservablePoint(this._onChange, this);
@@ -19,6 +20,7 @@
 			this._skew = new PIXI.ObservablePoint(this._onChange, this);
 			this._rotation = delegate.rotation;
 			this._width = delegate.width;
+			this._tint = delegate.tint;
 			this._height = delegate.height;
 			this._alpha = delegate.alpha;
 			this._position.copy(delegate.position);
@@ -38,6 +40,10 @@
 		
 		_onChange() {
 			
+		}
+		
+		get tint() {
+			return this._tint;
 		}
 		
 		get position() {
@@ -74,6 +80,10 @@
 		
 		set scale(value) {
 			this._scale.copy(value);
+		}
+		
+		set tint(value) {
+			this._tint = value;
 		}
 		
 		set skew(value) {
@@ -356,6 +366,8 @@
 			}
 			if (f.alpha != 0)
 				this._delegate.alpha = this._tween(this._delegate.alpha, this.alpha, f.alpha);
+			if (f.tint != 0)
+				this._delegate.tint = this._tween(this._delegate.tint, this.tint, f.tint);
 		}
 		
 		_tween(from, to, factor) {

@@ -217,10 +217,16 @@
 	 * @const {IObject<string, string>}
 	 */
 	Lunar.Message = {
-		authorize: 'AUTHORIZE',
-		fetchData: 'FETCH_DATA',
-		updateData: 'UPDATE_DATA',
-		unknown: 'UNKNOWN'
+		authorize: 'authorize',
+		fetchData: 'fetch-data',
+		updateData: 'update-data',
+		invite: 'invite',
+		inviteRetract: 'invite-retract',
+		
+		invited: 'invited',
+		inviteRetracted: 'invite-retracted',
+		
+		unknown: 'unknown'
 	};
 	
 	Lunar.FetchType = {
@@ -242,10 +248,14 @@
 		 * @param {object}
 		 * @return {key: object, value: object}
 		 */
-		randomEntry: (object) => {
+		randomEntry: object => {
 			const keys = Object.keys(object);
 			const key = keys[Lunar.Random.int(keys.length)];
 			return {key: key, value: object[key]};
+		},
+		isEmpty: object => {
+			for (let $ in object) return false;
+			return true;
 		}
 	};
 	

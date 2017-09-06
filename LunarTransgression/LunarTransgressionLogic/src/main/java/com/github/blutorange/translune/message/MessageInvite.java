@@ -8,7 +8,6 @@ import com.jsoniter.annotation.JsonIgnore;
 import com.jsoniter.annotation.JsonProperty;
 
 public class MessageInvite extends AMessageMessage {
-	@JsonProperty(required = true)
 	String nickname = StringUtils.EMPTY;
 
 	long created = System.currentTimeMillis();
@@ -25,6 +24,7 @@ public class MessageInvite extends AMessageMessage {
 	/**
 	 * @return the nickname
 	 */
+	@JsonProperty(required = true)
 	public String getNickname() {
 		return nickname;
 	}

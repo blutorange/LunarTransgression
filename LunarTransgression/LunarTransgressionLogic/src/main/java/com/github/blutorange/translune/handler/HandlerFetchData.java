@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.ic.Classed;
-import com.github.blutorange.translune.logic.EGameState;
 import com.github.blutorange.translune.message.MessageFetchData;
 import com.github.blutorange.translune.message.MessageFetchDataResponse;
 import com.github.blutorange.translune.socket.ELunarStatusCode;
@@ -32,7 +31,6 @@ public class HandlerFetchData implements ILunarMessageHandler {
 
 	@Override
 	public void handle(final String user, final Session session, final LunarMessage message) {
-				socketProcessing.setGameState(session, EGameState.BATTLE_PREPARATION);
 		final MessageFetchData fetchData = socketProcessing.getMessage(message, MessageFetchData.class);
 		if (fetchData == null) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,

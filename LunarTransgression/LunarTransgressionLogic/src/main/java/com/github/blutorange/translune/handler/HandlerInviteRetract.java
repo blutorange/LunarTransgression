@@ -47,6 +47,7 @@ public class HandlerInviteRetract implements ILunarMessageHandler {
 					message, "Game state must be waiting for invitation response for retracting invitations."));
 			return;
 		}
+		socketProcessing.setGameState(session, EGameState.IN_MENU);
 
 		final MessageInviteRetract inviteRetract = socketProcessing.getMessage(message, MessageInviteRetract.class);
 
@@ -64,18 +65,20 @@ public class HandlerInviteRetract implements ILunarMessageHandler {
 			return;
 		}
 
-		final MessageInvite invitation = invitationStore.remove(inviteRetract.getNickname(), user);
+		final MessageInvite invitation = invitationStore.remove(user, inviteRetract.getNickname());
 		if (invitation == null) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageInviteRetractResponse(
 					message, "Invitation does not exist anymore, possibly because it was retracted."));
+			informOtherUser(otherSession, user);
 			return;
 		}
 
-		informOtherUser(otherSession, invitation);
+		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageInviteRetractResponse(message, "Retracted."));
+		informOtherUser(otherSession, user);
 	}
 
-	private void informOtherUser(final Session session, final MessageInvite invitation) {
+	private void informOtherUser(final Session session, final String from) {
 		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
-				new MessageInviteRetracted(invitation.getNickname()));
+				new MessageInviteRetracted(from));
 	}
 }

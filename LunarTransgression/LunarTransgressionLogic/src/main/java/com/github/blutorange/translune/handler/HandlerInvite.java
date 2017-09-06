@@ -67,7 +67,7 @@ public class HandlerInvite implements ILunarMessageHandler {
 			return;
 		}
 
-		informOtherUser(otherSession, invitation);
+		informOtherUser(otherSession, user, invitation.getMessage());
 
 		invitationStore.add(user, invitation);
 		socketProcessing.setGameState(session, EGameState.WAITING_FOR_INVITATION_RESPONSE);
@@ -75,8 +75,8 @@ public class HandlerInvite implements ILunarMessageHandler {
 				new MessageInviteResponse(message, "Invitation successful"));
 	}
 
-	private void informOtherUser(final Session session, final MessageInvite invitation) {
+	private void informOtherUser(final Session session, final String user, final String message) {
 		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
-				new MessageInvited(invitation.getNickname(), invitation.getMessage()));
+				new MessageInvited(user, message));
 	}
 }

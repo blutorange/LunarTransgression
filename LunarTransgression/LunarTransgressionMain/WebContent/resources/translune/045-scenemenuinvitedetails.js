@@ -182,13 +182,31 @@
 						text: 'Cancel',
 						callback: dialog => {
 							_this.game.sfx('resources/translune/static/cancel');
-							_this._dialog = undefined;
-							dialog.close();
+							this.game.net.dispatchMessage(Lunar.Message.inviteRetract, {
+								nickname: _this._playerDetails.nickname
+							}).then(response => {
+							}).catch(error => {
+								console.error("failed to retract invitation", error);
+							}).then(() => {
+								_this.game.removeScene(this._dialog);
+								_this._dialog = undefined;
+							});
 						},
 					}
 				]
 			});
 			this.game.pushScene(this._dialog);
+			this.game.net.dispatchMessage(Lunar.Message.invite, {
+				nickname: _this._playerDetails.nickname
+			}).then(response => {
+				// Server accepted the invitation, now we need to
+				// wait for the opponent to answer.
+			}).catch(error => {
+				console.error("failed to invite player", error);
+				_this.game.removeScene(this._dialog);
+				_this._dialog = undefined;
+				_this.showConfirmDialog("Player seems to be offline, please try again later.");
+			});			
 		}
 		
 		_onClickDescription() {

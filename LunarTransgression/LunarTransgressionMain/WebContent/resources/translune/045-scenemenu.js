@@ -5,6 +5,7 @@
 	Lunar.Scene.Menu = class extends Lunar.Scene.Base {
 		constructor(game) {
 			super(game);
+			this._invitations = {};
 			this._loaded = false;
 			this._tabState = undefined;
 			this._tabScene = undefined;
@@ -31,14 +32,25 @@
 		}
 		
 		destroy() {
+			this.game.net.removeMessageHandlers(Lunar.Message.invited);
+			this.game.net.removeMessageHandlers(Lunar.Message.inviteRetracted);
 			this.game.loaderFor("menu").reset();
 			this._player = undefined;
+			this._invitations = {};
 			super.destroy();
 		}
 		
 		onAdd() {
 			super.onAdd();
 			this._onClickChar();
+			this.game.net.registerMessageHandler(Lunar.Message.invited, {
+				handle: this.method('_onMessageInvited'),
+				error: () => null
+			});
+			this.game.net.registerMessageHandler(Lunar.Message.inviteRetracted, {
+				handle: this.method('_onMessageInviteRetracted'),
+				error: () => null
+			});
 		}
 		
 		onRemove() {
@@ -54,6 +66,9 @@
 		}
 		
 		update(delta) {
+			if (!Lunar.Object.isEmpty(this._invitations)) {
+				this.hierarchy.side.$battle.rotation = Math.sin(Lunar.Interpolation.slowInSlowOut(Lunar.Interpolation.backAndForth(2*this.time%1))*0.3+0.1);
+			}
 			super.update(delta);
 		}
 		
@@ -79,56 +94,57 @@
 			delegateLoadable.loadable = loaderLoadable; 
 			loader.reset();
 			loader.add("bg", `resource/${background}`);
-//			loader.add("packed", 'resources/translune/static/menu/packed.json');			
 			loader.load();
 		}
 		
 		layout() {
 			super.layout();
 			const h = this.hierarchy;
-			const geoRoot = Lunar.Geometry.layoutVbox({
+			const geoRoot = Lunar.Geometry.layoutHbox({
 				box: {
 					w: this.game.w,
 					h: this.game.h
 				},
+				dimension: [7, 93]
+			});
+			const geoCenter = Lunar.Geometry.layoutVbox({
+				box: geoRoot[1],
 				dimension: [15, 70, 15]
 			});
 			const geoTop = Lunar.Geometry.layoutHbox({
-				box: geoRoot[0],
-				dimension: [9,1],
+				box: geoCenter[0],
 				relative: true
 			});
 			const geoMid = Lunar.Geometry.layoutHbox({
-				box: geoRoot[1],
+				box: geoCenter[1],
 				dimension: [3, 2],
 				relative: true
 			});
 			
 			h.$background.width = this.game.w;
 			h.$background.height = this.game.h;
-			this.geo(h.$top, geoRoot[0]);
-			this.geo(h.$mid, geoRoot[1]);
-			this.geo(h.$bottom, geoRoot[2]);
+
+			this.geo(h.$side, geoRoot[0]);
+			this.geo(h.$top, geoCenter[0]);
+			this.geo(h.$mid, geoCenter[1]);
+			this.geo(h.$bottom, geoCenter[2]);
 			this.geo(h.top.$tabs, geoTop[0]);
-			this.geo(h.top.$exit, geoTop[1]);
-			
-			const geoExit = Lunar.Geometry.layoutVbox({
-				box: h.top.$exit.bodyDimension,
-				padding: {
-					top: 0.1,
-					bottom: 0.1,
-					left: 0.1,
-					right: 0.1
-				},
+
+			const geoLeft = Lunar.Geometry.layoutVbox({
+				box: h.$side.bodyDimension,
+				dimension: [2,1,1],
 				relative: true
 			});
 			
-			this.geo(h.top.exit.$icon, geoExit[0], {anchor: 0.5});
+			this.geo(h.side.$battle, geoLeft[0], {proportional: true, anchor: 0.5});
+			this.geo(h.side.$settings, geoLeft[1], {proportional: true, anchor: 0.5});
+			this.geo(h.side.$exit, geoLeft[2], {proportional: true, anchor: 0.5});
+			
 			this.geo(h.mid.$left, geoMid[0]);
 			this.geo(h.mid.$right, geoMid[1]);
 			
 			const geoAction = Lunar.Geometry.layoutHbox({
-				box: geoRoot[2],
+				box: geoCenter[2],
 				dimension: 2,
 				padding: {
 					top: 0.1,
@@ -188,13 +204,13 @@
 			// Top
 			const topContainer = new PIXI.ClipContainer();
 			
-			// Top-Left
+			// Top
 			const topBar = new PIXI.NinePatch(this.game.baseLoader.resources.textbox);
 			topBar.alpha = 0.5;
 			
-			// Top-Right
-			const exitBar = new PIXI.NinePatch(this.game.baseLoader.resources.textbox);
-			exitBar.alpha = 0.5;
+			// Left side bar
+			const sideContainer = new PIXI.NinePatch(this.game.baseLoader.resources.textbox);
+			sideContainer.alpha = 0.5;
 			
 			// Mid
 			const midContainer = new PIXI.ClipContainer();
@@ -237,28 +253,19 @@
 			buttonChar.on('pointertap', this._onClickChar, this);
 			buttonCollection.on('pointertap', this._onClickCollection, this);
 			
-			// Close button
-			const buttonExit = new PIXI.Sprite(this.game.baseLoader.resources.packed.spritesheet.textures['close.png']);
-			buttonExit.interactive = true;
-			buttonExit.buttonMode = true;
-			buttonExit.on('pointerover', () => {
-				buttonExit.width = buttonExit.width*9/8;
-				buttonExit.height = buttonExit.height*9/8;
-				buttonExit.rotation = 0.2;
-			});
-			buttonExit.on('pointerout', () => {
-				buttonExit.width = buttonExit.width*8/9;
-				buttonExit.height = buttonExit.height*8/9;
-				buttonExit.rotation = 0.0;
-			});
-			buttonExit.on('pointertap', this._onClickExit, this);
+			// Side buttons
+			const buttonBattle = this._createSideButton('battle.png', this._onClickBattle);
+			const buttonExit = this._createSideButton('close.png', this._onClickExit);
+			const buttonSettings = this._createSideButton('settings.png', this._onClickSettings);
+			
+			buttonBattle.tint = 0x111111;
 			
 			//Background
 			const bg = new PIXI.Sprite(this.game.loaderFor("menu").resources.bg.texture);
 			
 			this.view.addChild(bg);
 			this.view.addChild(topContainer);
-			this.view.addChild(exitBar);
+			this.view.addChild(sideContainer);
 			this.view.addChild(midContainer);
 			this.view.addChild(bottomBar);
 
@@ -283,7 +290,9 @@
 			buttonAction1.body.addChild(textAction1);
 			buttonAction2.body.addChild(textAction2);
 
-			exitBar.body.addChild(buttonExit);
+			sideContainer.body.addChild(buttonBattle);
+			sideContainer.body.addChild(buttonSettings);
+			sideContainer.body.addChild(buttonExit);
 						
 			this.hierarchy = {
 				top: {
@@ -305,11 +314,12 @@
 							$text: textButtonCollection
 						}
 					},
-					exit: {
-						$icon: buttonExit
-					},
 					$tabs: topBar,
-					$exit: exitBar,
+				},
+				side: {
+					$battle: buttonBattle,
+					$settings: buttonSettings,
+					$exit: buttonExit,
 				},
 				mid: {
 					$left: leftPanel,
@@ -325,11 +335,44 @@
 					$action1: buttonAction1,
 					$action2: buttonAction2
 				},
+				$side: sideContainer,
 				$top: topContainer,
 				$mid: midContainer,
 				$bottom: bottomBar,
 				$background: bg
 			};
+		}
+		
+		_createSideButton(icon, handler) {
+			const button = new PIXI.Sprite(this.game.baseLoader.resources.packed.spritesheet.textures[icon]);
+			button.interactive = true;
+			button.buttonMode = true;
+			button.on('pointerover', () => {
+				button.width = button.width*9/8;
+				button.height = button.height*9/8;
+				button.rotation = 0.2;
+			});
+			button.on('pointerout', () => {
+				button.width = button.width*8/9;
+				button.height = button.height*8/9;
+				button.rotation = 0.0;
+			});
+			button.on('pointertap', handler, this);
+			return button;
+		}
+		
+		_onClickSettings() {
+			const _this = this;
+			this.game.sfx('resources/translune/static/confirm');
+		}
+		
+		_onClickBattle() {
+			if (Lunar.Object.isEmpty(this._invitations)) {
+				this.game.sfx('resources/translune/static/unable');
+				return;
+			}
+			this.game.sfx('resources/translune/static/confirm');
+			// TODO open accept/reject
 		}
 		
 		/**
@@ -404,6 +447,34 @@
 		 */
 		_onClickInvite() {
 			this._switchTab('invite', () => new Lunar.Scene.MenuInvite(this.game, this));
+		}
+		
+		/**
+		 * @private
+		 */
+		_onMessageInvited(response) {
+			const from = response.data.nickname;
+			if (!from)
+				return;
+			this._invitations[from] = true;
+			this.game.sfx('resources/translune/static/bell', 0.5);
+			this.hierarchy.side.$battle.tint = 0xFFFF00;
+			console.log("invited", response.data.nickname);
+		}
+
+		/**
+		 * @private
+		 */
+		_onMessageInviteRetracted(response) {
+			const from = response.data.nickname;
+			if (!from)
+				return;
+			delete this._invitations[from];
+			if (Lunar.Object.isEmpty(this._invitations)) {
+				this.hierarchy.side.$battle.rotation = 0;
+				this.hierarchy.side.$battle.tint = 0x111111;
+			}
+			console.log("retracted", response.data.nickname);
 		}
 		
 		/**

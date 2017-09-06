@@ -24,7 +24,7 @@
 			this._httpBase = window.location.protocol + "//" + window.location.host + base;
 			this.time = 0;
 			this.serverTime = 0;
-			this.messageHandlers = [];
+			this.messageHandlers = {};
 			this.messageQueue = new Lunar.PriorityQueue();
 			this.waitingForAuthorization = 0;
 			this.connectQueue = [];
@@ -232,7 +232,8 @@
 				// Message initiated by the server
 				_this.messageQueue.push({
 					resolve: () => {
-						const handlers = _this.messageHandlers[type];
+						const typeDowncase = type.replace('_', '-').toLowerCase();
+						const handlers = _this.messageHandlers[typeDowncase];
 						if (!handlers || handlers.length === 0) {
 							window.console.warn(`received message of ${type}, but no handlers were registered`);
 							return;
@@ -260,6 +261,7 @@
 	      
 			websocket.onclose = () => {
 				window.console.info("connection closed");
+				_this.finalize();
 				_this.websocket = null;
 			};
 	
@@ -303,9 +305,15 @@
 		 *            handler for this type of message.
 		 */
 		registerMessageHandler(type, handler) {
-			if (!this.messageHandlers)
-				this.messageHandlers = {};
-			this.message.push(handler);
+			if (!this.messageHandlers[type])
+				this.messageHandlers[type] = [];
+			this.messageHandlers[type].push(handler);
+		}
+		
+		removeMessageHandlers(type) {
+			if (!this.messageHandlers[type])
+				return;
+			this.messageHandlers[type] = [];
 		}
 		
 		registerConnectListener(listener) {

@@ -64,14 +64,14 @@ public class HandlerInviteReject implements ILunarMessageHandler {
 			return;
 		}
 
+		socketProcessing.setGameState(otherSession, EGameState.IN_MENU);
+
 		final MessageInvite invitation = invitationStore.remove(inviteReject.getNickname(), user);
 		if (invitation == null) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageInviteRejectResponse(message,
 					"Invitation does not exist anymore, possibly because it was retracted."));
 			return;
 		}
-
-		socketProcessing.setGameState(otherSession, EGameState.IN_MENU);
 
 		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
 				new MessageInviteRejected(invitation.getNickname()));

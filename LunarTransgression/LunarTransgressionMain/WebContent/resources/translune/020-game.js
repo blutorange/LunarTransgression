@@ -1,31 +1,3 @@
-/*
-- 1 Loader/Scene
-
-Scene menu
- Resources:
-   - 20 poke icons
-   - 30 item icons
-   - Menu BGM music
-   - other UI elements
-
-Scene opponent select
- Resources:
-   
-Scene battlePreparation
- Resources:
-   - 2 * 20 poke icons (+opponent)
-   - 30 item icons 
-   - Prep BGM music
-   - other UI elements
-
-Scene battle
- Resources:
-   - 2players * 2*backFront * 4 poke images
-   - battleBackground
-   - 2*4 poke cries
-   - Battle BGM music
-   - other UI elements
-*/
 (function(Lunar, window, undefined){
 	Lunar.Game = class {
 		/**

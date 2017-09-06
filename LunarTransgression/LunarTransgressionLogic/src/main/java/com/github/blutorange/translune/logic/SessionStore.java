@@ -17,6 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.common.Predicate;
+import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.serial.Filterable;
 import com.github.blutorange.translune.socket.ISocketProcessing;
 
@@ -24,8 +25,6 @@ import com.github.blutorange.translune.socket.ISocketProcessing;
 public class SessionStore implements ISessionStore {
 
 	final Map<String, Session> map;
-
-	@Inject ISocketProcessing socketProcessing;
 
 	@Inject
 	public SessionStore() {
@@ -79,6 +78,7 @@ public class SessionStore implements ISessionStore {
 
 	@Override
 	public PageableResult findNicknames(final Pageable pageable) {
+		final ISocketProcessing socketProcessing = ComponentFactory.getLunarComponent().iSocketProcessing();
 		final Orderable[] orderable = pageable.getOrderBy();
 		final int order = orderable.length == 0 || orderable[0].getOrderDirection() == EOrderDirection.ASC ? 1 : -1;
 		final Filterable filterable = pageable.getFilter().length == 0 ? null  : pageable.getFilter()[0];
