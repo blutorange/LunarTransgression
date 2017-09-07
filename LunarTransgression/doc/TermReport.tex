@@ -11,6 +11,7 @@
 \usepackage{hgbbib}
 \usepackage{hgbheadings}
 \usepackage{tabularx}
+\usepackage{listings}
 
 \graphicspath{{images/}}   % where are the images?
 \bibliography{literatur}  % requires literatur.bib 
@@ -35,11 +36,6 @@ at the top of this document by
 \begin{quote}
  \verb!\documentclass[german]{hgbtermreport}!.
 \end{quote}
-Also, you may want to place the text of the individual chapters in separate files and 
-include them using \verb!\include{..}! 
-(see file \verb!_DaBa.tex!).
-
-Simply omit this chapter (which could also be called ``Abstract'') if you do not want to provide this kind of summary.
 
 
 %%%----------------------------------------------------------
@@ -100,13 +96,6 @@ und bis auf \textsc{authorize} keine anderen Nachrichten akzeptiert. Das Token u
 der \textsc{authorize}-Nachricht an den Server übermittelt, der mit \textsc{authorize\char`_response} antwortet.
 Bei erfolgreicher Authorisierung wird die Session als authorisiert markiert und der Statuscode \textsc{ok}
 übermittelt, \textsc{generic error} andernfalls.
-
-\begin{center}
-\textbf{Don't just show your program code!} 
-\end{center}
-
-By the way, all you ever need to know about image processing (and more) can be 
-found in \cite{BurgerBurge08}.%
 
 %%%----------------------------------------------------------
 \chapter{Server}
@@ -177,9 +166,14 @@ Einträge haben daher eine kurze Lebensdauer.
 \chapter{Client}
 %%%----------------------------------------------------------
 
-Die Clientsofware ist ES6-JavaScript und läuft in einem Webbrowser. Die Aufgabe
-des Clients besteht in der grafischen Darstellung des Programmzustands zur
-Nutzerinteraktion und Weiterleitung der Nutzereingaben an den Server.
+Die Clientsofware wurde in JavaScript (ES6) und läuft in einem Webbrowser. Dieses wird
+mittels babel\footnote{https://babeljs.io/} transpiliert, sodass die Software auch mit
+älteren Browsern kompatibel ist. Dazu wird auch wird auch
+polyfill\footnote{https://babeljs.io/docs/usage/polyfill} eingesetzt. Die Aufgabe des Clients
+besteht in der grafischen Darstellung des Programmzustands zur Nutzerinteraktion und
+Weiterleitung der Nutzereingaben an den Server. Die Architektur wurde einfach gehalten,
+es gibt eine Komponente für Netzwerk und generelle Aufgaben, sowie Komponenten für die
+einzelnen dargestellten Spieleszenen. Dies ist auch in Abbildung \ref{fig:clientarch} dargestellt.
 
 Für die grafische Darstellung wird die Bibliothek PixiJS\footnote{http://www.pixijs.com/}
 verwendet, die \glqq The HTML5 Creation Engine\grqq. PixiJS nutzt \textsc{WebGL} mit
@@ -189,8 +183,11 @@ Beispielen besitzt.
 
 Für die Ausgabe von Audio wird die Bibliothek HowlerJS\footnote{https://howlerjs.com/}
 verwendet. Diese Bibliothek unterstützt alle gängigen Formate mit Fallbacks. In
-diesem Projekt wird das Format webm verwendet, da es allen modernen Browser Stunden
-unterstützt wird.
+diesem Projekt wird das Format \textit{webm} mit Fallback auf \textit{mp3} verwendet, dies
+wird von allen moderenen Browser
+unterstützt\footnote{https://github.com/goldfire/howler.js#user-content-format-recommendations}.
+
+
 
 %%%----------------------------------------------------------     
 \chapter{Einrichtung und Installation}
@@ -202,7 +199,35 @@ More chapters will follow.
 This could be a good place to describe how you experienced this course, what you liked or didn't, and to provide suggestions for improvement.
 
 %%%----------------------------------------------------------     
-\chapter{Abbildungen und Tabellen}
+\chapter{Optimierungspotential}
+%%%----------------------------------------------------------
+
+Derzeit existiert keine Lastenverteilung, alle Anfragen werden von einem Server bearbeitet.
+
+Bei Analyse des Domain Object Model fällt auf, dass sich Entitäten in statische und dynamische
+trennen lassen. Die statische Entitäten \textit{Resource}, \textit{Item}, \textit{Character}
+und \textit{Skill} werden bei der Einrichtung des Systems angelegt und ändern sich während der
+Laufzeit nicht. Durch diese Immutabilität ist zwischen Servern keine Synchronisation erforderlich.
+Die dynamischen Entitäten sind \textit{Player} mit den dazugehörigen \textit{CharacterState}.
+
+Für \textit{Player} Es können mehrere Server eingerichtet werden, welche jeweils die Websocket-Sessions eines Teils der \textit{Player} übernehmen. Diese Server müssen miteinander kommunizieren können.
+Hierbei ist das Synchronisationsproblem zu lösen, wenn ein Server Daten eines \textit{Players} auf
+einem anderen Server benötigt. Dies kann mittels \textit{Push} oder \textit{Poll} gelöst werden.
+Im ersten Fall übermittelt ein Server bei Änderungen an einem von ihm verwalteten \textit{player}
+diese an die anderen Server im Verband. Dabei muss über einen geeingeten Mechanismus sichergestellt
+werden, dass alle Server die Nachricht erhalten haben. Im zweiten Fall fragt ein Server nach den
+Daten bei Bedarf bei dem enstprechenden Server Daten nach. Diese Möglichkeit ist sicherer, 
+weist allerdings einen höheren Kommunikationsbedarf auf.
+
+Bei der Entität \textit{Resource} handelt es sich um herunterladbare Binärdaten. Sie ist zudem
+unabhängig von anderen Entitäten. Für die Bereitstellungen von \textit{Resourcen} kann mithin
+ein separater Provide-Server erstellt werden.
+
+Auf Seite des Clients kann versucht werden, die Anzahl der Websocket-Frames zu reduzieren, um
+die Server-Last zu reduzieren und die Ladezeiten gering zu halten.
+
+%%%----------------------------------------------------------     
+\chapter{Anhang}
 %%%----------------------------------------------------------
 
 \begin{table}[]
@@ -234,7 +259,7 @@ Bezeichnung            & Wert & Erläuterung \\ \hline
 \end{table}
 
 
-\begin{table}[]
+\begin{table}
 \centering
 \caption{Nachrichtentypen im Eintrag payload einer \textsc{lunarmessage}}
 \label{table:messageType}
@@ -243,7 +268,9 @@ Bezeichnung & Erläuterung \\ \hline
 \textsc{authorize}                           & Authorisierung der Session \\
 \textsc{authorize\char`_response}            & Status \textsc{ok}, wenn authorisiert\\
 \textsc{fetch\char`_data}                    & Ahbolen von benötigten Daten, beispielweise Daten von Items\\
-\textsc{fetch\char`_data\char`_response}     & Antwort mit denangeforderten Daten. \\
+\textsc{fetch\char`_data\char`_response}     & Antwort mit den angeforderten Daten. \\
+\textsc{update\char`_data}                   & Ändern von Daten, beispielsweise einer Beschreibung. \\
+\textsc{update\char`_data\char`_response}    & Antwort, ob die Änderung erfolgreich war. \\
 \textsc{invite}                              & Einladen eines anderen Spielers \\
 \textsc{invite\char`_response}               & Antwort. \\
 \textsc{invited}                             & Nachricht vom Server an Client, wenn Einladung von anderem Client vorliegt \\
@@ -258,6 +285,8 @@ Bezeichnung & Erläuterung \\ \hline
 \textsc{invite\char`_rejected}               & Nachricht vom Server an Client, wenn anderer Client Einladung nicht akzeptiert hat \\
 \textsc{prepare\char`_battle}                & Client sendet Kampfkonfiguration \\
 \textsc{prepare\char`_battle\char`_response} & Antwort. \\
+\textsc{cancel\char`_battle}                 & Client bricht Kampfkonfiguration ab.\\
+\textsc{cancel\char`_battle\char`_response}  & Antwort.\\
 \textsc{step\char`_battle}                   & Client sendet Kampfzugkonfiguration \\
 \textsc{step\char`_battle\char`_response}    & Antwort. \\
 \textsc{battle\char`_prepared}               & Nachricht vom Server an beide Clients, wenn Kampfvorbereitung abgeschlossen \\
@@ -271,9 +300,33 @@ Bezeichnung & Erläuterung \\ \hline
 \end{table}
 
 
+\begin{figure}
+\caption{Sequenzdiagramm für die Zurücknahme einer Einladung. Simon stellt den Server dar, Alice und Bob die beiden Spieler. Quelle: eigene Darstellung}
+\centering
+\includegraphics[width=0.5\textwidth]{InvitationRetracted}
+\end{figure}
+
+\begin{figure}
+\caption{Sequenzdiagramm für die Ablehnung einer Einladung. Simon stellt den Server dar, Alice und Bob die beiden Spieler. Quelle: eigene Darstellung}
+\centering
+\includegraphics[width=0.5\textwidth]{InvitationRejected}
+\end{figure}
+
+\begin{figure}
+\caption{Sequenzdiagramm für die Annahme einer Einladung. Simon stellt den Server dar, Alice und Bob die beiden Spieler. Nach Annahme der Einladung wird ein rundenbasiertes Spiel ausgetragen. Quelle: eigene Darstellung}
+\centering
+\includegraphics[width=0.5\textwidth]{InvitationAccepted}
+\end{figure}
+
+\begin{figure}
+\caption{Architektur der entwickelten Software auf Client-Seite. Pfeile stellen Vererbung beziehungsweise Komposition dar. Quelle: eigene Darstellung}
+\centering
+\includegraphics[width=0.7\textwidth]{ClientFramework}
+\label{fig:clientarch}
+\end{figure}
+
 %%%----------------------------------------------------------
 \MakeBibliography
 %%%----------------------------------------------------------
 
 \end{document}
-

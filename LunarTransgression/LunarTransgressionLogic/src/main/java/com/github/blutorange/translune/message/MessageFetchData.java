@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.github.blutorange.translune.handler.EHandlerFetchData;
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ILunarPayload;
 import com.jsoniter.annotation.JsonProperty;
@@ -11,7 +12,7 @@ import com.jsoniter.annotation.JsonProperty;
 public class MessageFetchData implements ILunarPayload {
 	String details = StringUtils.EMPTY;
 
-	EFetchDataType fetch = EFetchDataType.NONE;
+	EHandlerFetchData fetch = EHandlerFetchData.NONE;
 
 	/**
 	 * @return the details
@@ -25,7 +26,7 @@ public class MessageFetchData implements ILunarPayload {
 	 * @return the fetch
 	 */
 	@JsonProperty(required = true)
-	public EFetchDataType getFetch() {
+	public EHandlerFetchData getFetch() {
 		return fetch;
 	}
 
@@ -41,8 +42,8 @@ public class MessageFetchData implements ILunarPayload {
 	 * @param fetch
 	 *            the fetch to set
 	 */
-	public void setFetch(@Nullable final EFetchDataType fetch) {
-		this.fetch = fetch != null ? fetch : EFetchDataType.NONE;
+	public void setFetch(@Nullable final EHandlerFetchData fetch) {
+		this.fetch = fetch != null ? fetch : EHandlerFetchData.NONE;
 	}
 
 	@Override

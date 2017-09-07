@@ -54,7 +54,7 @@ public final class Constants {
 	public static final int MAX_EXP = 99999;
 	public static final int MAX_HP = 9999;
 	public static final long MAX_ITEM_POWER = 999;
-	public static final int MAX_ITEMS = 20;
+	public static final int MAX_ITEMS = 28;
 	public static final int MAX_IV = 31;
 	public static final int MAX_LEVEL = 100;
 	public static final int MAX_MAGICAL_ATTACK = 9999;

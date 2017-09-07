@@ -1,0 +1,49 @@
+title Invitation Retracted
+Alice->Simon: WS-REQ-Invite
+Simon->Alice: WS-RSP-Invite
+Simon->Bob: WS-Invited
+note over Alice: Has second thoughts
+Alice->Simon: WS-REQ-Retract
+Simon->Alice: WS-RSP-Retract
+Simon->Bob: WS-Retracted
+
+title Invitation Rejected
+Alice->Simon: WS-REQ-Invite
+Simon->Alice: WS-RSP-Invite
+Simon->Bob: WS-Invited
+note over Bob: Thinks Alice is too strong
+Bob->Simon: WS-REQ-Reject
+Simon->Bob: WS-RSP-Reject
+Simon->Alice: WS-Rejected
+
+title Invitation Accepted, Battle Ensues
+Alice->Simon: WS-REQ-Invite
+Simon->Alice: WS-RSP-Invite
+Simon->Bob: WS-Invited
+note over Bob: Wants to have a fun time
+Bob->Simon: WS-REQ-Accept
+Simon->Bob: WS-RSP-Accept
+Simon->Alice: WS-Accepted
+note over Simon: Waits for both players
+Bob->Simon: WS-REQ-PrepareBattle
+Simon->Bob: WS-RSP-PrepareBattle
+note over Alice: Has a cup of coffee...
+Alice->Simon: WS-REQ-PrepareBattle
+Simon->Alice: WS-RSP-PrepareBattle
+note over Simon: Once both players are prepared
+Simon->Bob: WS-BattlePrepared
+Simon->Alice: WS-BattlePrepared
+note over Simon: Battle begins bravely
+Alice->Simon: WS-REQ-StepBattle
+Simon->Alice: WS-RSP-StepBattle
+Bob->Simon: WS-REQ-StepBattle
+Simon->Bob: WS-RSP-StepBattle
+Simon->Alice: WS-BattleStepped
+Simon->Bob: WS-BattleStepped
+note over Simon: Repeat until Alice wins
+Simon->Bob: WS-BattleEnded
+Simon->Alice: WS-BattleEnded
+note over Alice: Wants the spoilsSimon
+Alice->Simon: WS-REQ-Loot
+destroy Bob
+Simon->Alice: WS-RSP-Loot

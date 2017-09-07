@@ -35,6 +35,14 @@
 		calculateBounds() {
 		}
 		
+		show() {
+			this._input.style.zIndex = 999;
+		}
+		
+		hide() {
+			this._input.style.zIndex = -999;
+		}
+		
 		_attr(name, value) {
 			this._input.setAttribute(name, value);
 		}

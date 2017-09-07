@@ -5,13 +5,14 @@
 	Lunar.Scene.Menu = class extends Lunar.Scene.Base {
 		constructor(game) {
 			super(game);
-			this._invitations = {};
+			this._invitations = [];
 			this._loaded = false;
 			this._tabState = undefined;
 			this._tabScene = undefined;
 			this._tabDetails = undefined;
 			this._loadScene = undefined;
 			this._player = undefined;
+			this._inviteConfirm = undefined;
 		}
 		
 		sceneToAdd() {
@@ -21,22 +22,29 @@
 			const requestLoadable = new Lunar.RequestLoadable(this.game, Lunar.Message.fetchData, {
 				 fetch: Lunar.FetchType.availableBgAndBgm
 			});
+			const requestLoadableInvitation = new Lunar.RequestLoadable(this.game, Lunar.Message.fetchData, {
+				 fetch: Lunar.FetchType.openInvitations
+			});
 			const delegateLoadable = new Lunar.DelegateLoadable();
-			const chainedLoadable = new Lunar.ChainedLoadable(requestLoadable, delegateLoadable);
+			const chainedLoadable = new Lunar.ChainedLoadable(requestLoadable, requestLoadableInvitation, delegateLoadable);
 			this._loadScene = new Lunar.Scene.Load(this.game, chainedLoadable);
 			
 			requestLoadable.promise.then(response => _this._initLoader(delegateLoadable, response));
+			requestLoadableInvitation.promise.then(response => this._invitations = response.data.data);
 			chainedLoadable.addCompletionListener(this.method('_initScene'));
 			
 			return this._loadScene;
 		}
 		
 		destroy() {
-			this.game.net.removeMessageHandlers(Lunar.Message.invited);
-			this.game.net.removeMessageHandlers(Lunar.Message.inviteRetracted);
 			this.game.loaderFor("menu").reset();
 			this._player = undefined;
-			this._invitations = {};
+			this._inviteConfirm = undefined;
+			this._battlePrep = undefined;
+			this._loadScene = undefined;
+			this._tabScene = undefined;
+			this._tabDetails = undefined;
+			this._invitations = [];
 			super.destroy();
 		}
 		
@@ -51,22 +59,23 @@
 				handle: this.method('_onMessageInviteRetracted'),
 				error: () => null
 			});
+			this._updateInvitations();
 		}
 		
 		onRemove() {
 			super.onRemove();
-			if (this._loadScene)
-				this.game.removeScene(this._loadScene);
-			if (this._tabScene)
-				this.game.removeScene(this._tabScene);
-			if (this._tabDetails)
-				this.game.removeScene(this._tabDetails);
-			this._loadScene = undefined;
-			this._tabScene = undefined;
+			this.game.net.removeMessageHandlers(Lunar.Message.invited);
+			this.game.net.removeMessageHandlers(Lunar.Message.inviteRetracted);
+			this.game.net.removeMessageHandlers(Lunar.Message.battlePreparationCancelled);
+			this.game.removeScene(this._battlePrep);
+			this.game.removeScene(this._loadScene);
+			this.game.removeScene(this._tabScene);
+			this.game.removeScene(this._tabDetails);
+			this.game.removeScene(this._inviteConfirm);
 		}
 		
 		update(delta) {
-			if (!Lunar.Object.isEmpty(this._invitations)) {
+			if (this._invitations.length !== 0) {
 				this.hierarchy.side.$battle.rotation = Math.sin(Lunar.Interpolation.slowInSlowOut(Lunar.Interpolation.backAndForth(2*this.time%1))*0.3+0.1);
 			}
 			super.update(delta);
@@ -367,12 +376,72 @@
 		}
 		
 		_onClickBattle() {
-			if (Lunar.Object.isEmpty(this._invitations)) {
-				this.game.sfx('resources/translune/static/unable');
+			const invitation = this._invitations.shift();
+			if (!invitation) {
+				this.game.sfx('resources/translune/static/unable', 0.5);
 				return;
 			}
+			this._updateInvitations();
 			this.game.sfx('resources/translune/static/confirm');
-			// TODO open accept/reject
+			this._inviteConfirm = new Lunar.Scene.InviteConfirm(this, invitation);
+			this.game.pushScene(this._inviteConfirm);
+			this.tabModal(true);
+		}
+		
+		closeInviteConfirm() {
+			this.tabModal(false);
+			this.game.removeScene(this._inviteConfirm);
+			this._inviteConfirm = undefined;
+		}
+		
+		onOpponentAccepted(nickname) {
+			const _this = this;
+			this.game.net.registerMessageHandler(Lunar.Message.battlePreparationCancelled, {
+				handle: this.method('_onBattlePrepCancelled'),
+				error: error => {
+					console.error('received error on battle prep cancelled', error)
+					_this._onBattlePrepCancelled();
+				}
+			});
+			this.tabModal(true);
+			this._battlePrep = new Lunar.Scene.BattlePreparation(this);
+			this.game.pushScene(this._battlePrep);
+		}
+		
+		cancelBattlePrep() {
+			this.tabModal(false);
+			this.game.removeScene(this._battlePrep);
+			this.game.net.dispatchMessage(Lunar.Message.cancelBattlePreparation, {
+				
+			}).then(() => {
+				
+			}).catch(error => { 
+				console.log("failed to cancel battle preparations")
+			}).then(() => {
+				this.game.net.removeMessageHandlers(Lunar.Message.battlePreparationCancelled);				
+			});
+			this._battlePrep = undefined;
+		}
+		
+		battle(characterStates, items) {
+			console.log("battle prepared!!!", characterStates);
+			this.game.net.dispatchMessage(Lunar.Message.prepareBattle, {
+				characterStates: characterStates.map(cs => cs.id),
+				items: items.map(item => item.name)
+			}).then(response => {
+				
+			}).catch(error => {
+				console.error("could not prepare battle", error);
+				this.tabModal(false);
+			});
+		}
+		
+		/**
+		 * @private
+		 */
+		_onBattlePrepCancelled() {
+			this.cancelBattlePrep();
+			this.showConfirmDialog("The other player does not want to battle anymore.");
 		}
 		
 		/**
@@ -383,6 +452,7 @@
 			this.game.sfx('resources/translune/static/cancel');
 			const id = this.game.window.setTimeout(() => _this.game.exit(), 10000);
 			const start = new Date().getTime() + 10000;
+			this.tabModal(true);
 			this.game.pushScene(new Lunar.Scene.Dialog(this.game, { 
 				message: "Exiting in 10 seconds...",
 				update: (delta, dialog) =>
@@ -394,10 +464,18 @@
 							_this.game.window.clearTimeout(id);
 							_this.game.sfx('resources/translune/static/ping');
 							dialog.close();
+							this.tabModal(false);
 						}
 					}
 				]
 			}));
+		}
+		
+		tabModal(value) {
+			if (this._tabScene)
+				this._tabScene.modal = value;
+			if (this._tabDetails)
+				this._tabDetails.modal = value;
 		}
 		
 		/**
@@ -449,6 +527,16 @@
 			this._switchTab('invite', () => new Lunar.Scene.MenuInvite(this.game, this));
 		}
 		
+		_updateInvitations() {
+			if (this._invitations.length > 0) {
+				this.hierarchy.side.$battle.tint = 0xFFFF00;
+			}
+			else {
+				this.hierarchy.side.$battle.rotation = 0;
+				this.hierarchy.side.$battle.tint = 0x111111;
+			}
+		}
+		
 		/**
 		 * @private
 		 */
@@ -456,10 +544,9 @@
 			const from = response.data.nickname;
 			if (!from)
 				return;
-			this._invitations[from] = true;
+			this._invitations.push(from);
 			this.game.sfx('resources/translune/static/bell', 0.5);
-			this.hierarchy.side.$battle.tint = 0xFFFF00;
-			console.log("invited", response.data.nickname);
+			this._updateInvitations();
 		}
 
 		/**
@@ -469,14 +556,10 @@
 			const from = response.data.nickname;
 			if (!from)
 				return;
-			delete this._invitations[from];
-			if (Lunar.Object.isEmpty(this._invitations)) {
-				this.hierarchy.side.$battle.rotation = 0;
-				this.hierarchy.side.$battle.tint = 0x111111;
-			}
-			console.log("retracted", response.data.nickname);
+			Lunar.Array.removeElement(this._invitations, from);
+			this._updateInvitations();
 		}
-		
+			
 		/**
 		 * @private
 		 */

@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import com.github.blutorange.translune.Sandbox;
 import com.github.blutorange.translune.i18n.ILocalizationBundle;
 import com.github.blutorange.translune.logic.BattleProcessing;
-import com.github.blutorange.translune.logic.BattleRunner;
 import com.github.blutorange.translune.logic.IBattleProcessing;
 import com.github.blutorange.translune.logic.IBattleRunner;
 import com.github.blutorange.translune.logic.IRandomSupplier;
@@ -38,7 +37,7 @@ public class LogicModule {
 	@Provides
 	@Singleton
 	static IBattleRunner provideBattleRunner() {
-		return new BattleRunner();
+		return ComponentFactory.getLunarComponent()._battleRunner();
 	}
 
 	@Provides

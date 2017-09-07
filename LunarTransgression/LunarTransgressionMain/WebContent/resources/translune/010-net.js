@@ -165,7 +165,7 @@
 				// Handle authorization.
 				if (_this.waitingForAuthorization >= 0) {
 					this.serverTime = serverTime + 1;
-					if (status === Lunar.Status.OK) {
+					if (status === Lunar.Status.OK || status === Lunar.Status.WARN) {
 						_this.waitingForAuthorization = -1;
 						const cq = Array.from(_this.connectQueue);
 						this.connectQueue = [];
@@ -193,7 +193,7 @@
 					_this.messageQueue.push({
 						resolve: () => {
 							if (reqResp) {
-								if (status === Lunar.Status.OK) {
+								if (status === Lunar.Status.OK || status === Lunar.Status.WARN) {
 									reqResp.resolve({
 										status: status,
 										type: type,
@@ -232,14 +232,14 @@
 				// Message initiated by the server
 				_this.messageQueue.push({
 					resolve: () => {
-						const typeDowncase = type.replace('_', '-').toLowerCase();
+						const typeDowncase = type.replace(/_/g, '-').toLowerCase();
 						const handlers = _this.messageHandlers[typeDowncase];
 						if (!handlers || handlers.length === 0) {
-							window.console.warn(`received message of ${type}, but no handlers were registered`);
+							window.console.warn(`received message of type ${type}, but no handlers were registered`);
 							return;
 						}
 						for (let handler of handlers) {
-							if (status === Lunar.Status.OK)  {
+							if (status === Lunar.Status.OK || status === Lunar.Status.WARN)  {
 								handler.handle({
 									status: status,
 									type: type,

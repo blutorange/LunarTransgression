@@ -2,6 +2,7 @@ package com.github.blutorange.translune.socket;
 
 public enum ELunarStatusCode {
 	OK(0),
+	WARN(1),
 	GENERIC_ERROR(20),
 	ACCESS_DENIED(21),
 	TIMEOUT(22),

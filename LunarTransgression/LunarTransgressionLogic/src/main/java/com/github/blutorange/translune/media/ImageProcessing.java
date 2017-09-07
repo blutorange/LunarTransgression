@@ -81,7 +81,7 @@ public class ImageProcessing implements IImageProcessing {
 		}
 		graphics.dispose();
 		final int usedHeight = curY + columnHeight;
-		final BufferedImage result = output.getSubimage(0, 0, output.getWidth(), usedHeight);
+		final BufferedImage result = usedHeight > 0 && output.getWidth() > 0 ? output.getSubimage(0, 0, output.getWidth(), usedHeight) : output;
 
 		final JSONObject atlas = new JSONObject();
 		atlas.put("frames", frames);

@@ -10,4 +10,8 @@ public interface IBattleRunner extends Runnable {
 
 	void battlePlayer(String nickname, BattleCommand character1, BattleCommand character2, BattleCommand character3,
 			BattleCommand character4) throws IllegalStateException, IllegalArgumentException;
+
+	String[] getPlayers();
+
+	void cancel();
 }

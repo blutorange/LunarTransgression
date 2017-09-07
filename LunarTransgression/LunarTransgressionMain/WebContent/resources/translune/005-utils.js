@@ -208,6 +208,7 @@
 	 */
 	Lunar.Status = {
 		OK: 0,
+		WARN: 1,
 		GENERIC_ERROR: 20,
 		ACCESS_DENIED: 21,
 		TIMEOUT: 22,
@@ -220,17 +221,33 @@
 		authorize: 'authorize',
 		fetchData: 'fetch-data',
 		updateData: 'update-data',
+		
 		invite: 'invite',
 		inviteRetract: 'invite-retract',
+		inviteReject: 'invite-reject',
+		inviteAccept: 'invite-accept',
 		
 		invited: 'invited',
+		inviteAccepted: 'invite-accepted',
 		inviteRetracted: 'invite-retracted',
+		inviteRejected: 'invite-rejected',
+		
+		cancelBattlePreparation: 'cancel-battle-preparation',
+		prepareBattle: 'prepare-battle',
+		stepBattle: 'step-battle',
+		loot: 'loot',
+		
+		battlePreparationCancelled: 'battle-preparation-cancelled',
+		battleCancelled: 'battle-cancelled',
+		battlePrepared: 'battle-prepared',
+		battleStepped: 'battle-stepped',
 		
 		unknown: 'unknown'
 	};
 	
 	Lunar.FetchType = {
 		none: 'none',
+		openInvitations: 'open-invitations',
 		availableBgAndBgm: 'available-bg-and-bgm',
 		userPlayer: 'user-player',
 		activePlayer: 'active-player',
@@ -241,6 +258,14 @@
 		none: 'none',
 		playerDescription: 'player-description',
 		characterNickname: 'character-nickname',		
+	};
+	
+	Lunar.Array = {
+		removeElement: (array, element) => {
+			const index = array.indexOf(element);
+			if (index >= 0)
+				array.splice(index, 1);
+		}
 	};
 	
 	Lunar.Object = {
@@ -256,6 +281,9 @@
 		isEmpty: object => {
 			for (let $ in object) return false;
 			return true;
+		},
+		length: object => {
+			return Object.keys(object).length;
 		}
 	};
 	
@@ -450,6 +478,36 @@
 			    wordWrap: true,
 			    wordWrapWidth: game => game.w
 			});
+			Lunar.FontStyle.inviteReceiveTitle = new PIXI.TextStyle({
+				fontFamily: 'Arial,sans-serif',
+			    fontSize: game => game.wh*0.032,
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#c0c0c0'],
+			    stroke: '#4a1850',
+			    strokeThickness: 2,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: false
+			});
+			Lunar.FontStyle.inviteReceiveNickname = new PIXI.TextStyle({
+				fontFamily: 'Arial,sans-serif',
+			    fontSize: game => game.wh*0.045,
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#ff9900'],
+			    stroke: '#4a1850',
+			    strokeThickness: 2,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: false
+			});			
 			Lunar.FontStyle.playerDesc = new PIXI.TextStyle({
 			    fontFamily: 'Arial,sans-serif',
 			    fontSize: game => game.wh*0.025,

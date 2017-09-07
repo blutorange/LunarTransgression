@@ -1,4 +1,4 @@
-package com.github.blutorange.translune.message;
+package com.github.blutorange.translune.handler;
 
 import javax.inject.Inject;
 import javax.websocket.Session;
@@ -15,7 +15,7 @@ import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 import com.github.blutorange.translune.socket.ISocketProcessing;
 import com.jsoniter.any.Any;
 
-public enum EUpdateDataType {
+public enum EHandlerUpdateData {
 	NONE {
 		@Nullable
 		@Override
@@ -68,7 +68,7 @@ public enum EUpdateDataType {
 	@Inject
 	IJsoniterSupplier jsoniter;
 
-	private EUpdateDataType() {
+	private EHandlerUpdateData() {
 		ComponentFactory.getLunarComponent().inject(this);
 	}
 

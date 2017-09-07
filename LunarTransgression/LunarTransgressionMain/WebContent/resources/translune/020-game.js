@@ -1,4 +1,7 @@
 (function(Lunar, window, undefined){
+	// The lower, the higher the preference.
+	const PREFERRED_FORMATS = {'.webm': 0, '.mp3': 1};
+	
 	Lunar.Game = class {
 		/**
 		 * @param {window}
@@ -174,9 +177,10 @@
 		 */
 		switchBgm(path, volume = 0.25, fade = 700) {
 			const bgmHowl = !path ? undefined : new Howl({
-				src: Array.isArray(path) ?
+				src: (Array.isArray(path) ?
 						path.map(file => this.net.httpBase + '/' + file) :
-						[this.net.httpBase + '/' + path + ".webm", path + '.mp3'],
+						[this.net.httpBase + '/' + path + ".webm", path + '.mp3']).sort(
+								file => PREFERRED_FORMATS[file.substring(file.lastIndexOf('.') || 0)] || 999),
 				loop: true,
 				volume: 0
 			});

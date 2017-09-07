@@ -65,6 +65,21 @@
 			return this._view;
 		}
 		
+		get modal() {
+			return this._modal;
+		}
+		
+		set modal(value) {
+			const needsUpdate = value != this._modal;
+			this._modal = value;
+			if (needsUpdate)
+				this.updateModal();
+		}
+		
+		updateModal() {
+			// override
+		}
+		
 		showConfirmDialog(message) {
 			this._game.pushScene(new Lunar.Scene.Dialog(this._game, { 
 				message: message || "Please confirm",

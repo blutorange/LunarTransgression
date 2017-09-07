@@ -34,7 +34,7 @@ import com.github.blutorange.translune.socket.ISocketProcessing;
 import com.github.blutorange.translune.util.CustomProperties;
 
 public class BattleRunner implements IBattleRunner {
-	private boolean battleDone;
+	private volatile boolean battleDone;
 
 	private final List<String[]> characterStates;
 
@@ -186,6 +186,8 @@ public class BattleRunner implements IBattleRunner {
 		catch (final TimeoutException e) {
 			logger.info("battle preparations timed out", e);
 		}
+		if (battleDone)
+			return;
 		boolean player1Done = true;
 		boolean player2Done = true;
 		synchronized (phaser) {
@@ -235,6 +237,8 @@ public class BattleRunner implements IBattleRunner {
 		catch (final TimeoutException e) {
 			logger.info("battle step timed out", e);
 		}
+		if (battleDone)
+			return;
 		boolean player1Done = true;
 		boolean player2Done = true;
 		synchronized (phaser) {
@@ -352,5 +356,15 @@ public class BattleRunner implements IBattleRunner {
 		final Session session = sessionStore.retrieve(players[playerIndex]);
 		if (session != null)
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattleStepped(br, causesEnd));
+	}
+
+	@Override
+	public String[] getPlayers() {
+		return this.players;
+	}
+
+	@Override
+	public void cancel() {
+		this.battleDone = true;
 	}
 }

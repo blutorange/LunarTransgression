@@ -2,7 +2,6 @@
  * 
  */
 (function(Lunar, window, undefined) {
-	// TODO reset this back to sane values, eg. x=2, y=7
 	const LIST_X = 2;
 	const LIST_Y = 8;
 	
@@ -38,6 +37,13 @@
 			this.game.removeScene(this._scenePager);
 			this.game.removeScene(this._loadScene);
 			super.onRemove();
+		}
+		
+		updateModal() {
+			if (this.modal)
+				this.hierarchy.search.field.$input.hide();
+			else
+				this.hierarchy.search.field.$input.show();
 		}
 		
 		layout() {			

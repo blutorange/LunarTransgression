@@ -58,22 +58,30 @@ public class HandlerInviteReject implements ILunarMessageHandler {
 
 		final Session otherSession = sessionStore.retrieve(inviteReject.getNickname());
 		if (otherSession == null || !otherSession.isOpen()) {
-			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
+			socketProcessing.dispatchMessage(session, ELunarStatusCode.WARN,
 					new MessageInviteRejectResponse(message, "Invited user not logged in anymore."));
 			invitationStore.removeAllWith(inviteReject.getNickname());
 			return;
 		}
 
-		socketProcessing.setGameState(otherSession, EGameState.IN_MENU);
-
 		final MessageInvite invitation = invitationStore.remove(inviteReject.getNickname(), user);
+		final String toSend;
+		final ELunarStatusCode code;
 		if (invitation == null) {
-			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageInviteRejectResponse(message,
-					"Invitation does not exist anymore, possibly because it was retracted."));
-			return;
+			toSend = "Invitation does not exist anymore, possibly because it was retracted";
+			code = ELunarStatusCode.WARN;
+		}
+		else {
+			toSend = "Invitation rejected";
+			code = ELunarStatusCode.OK;
 		}
 
-		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
-				new MessageInviteRejected(invitation.getNickname()));
+		if (socketProcessing.getGameState(otherSession) == EGameState.WAITING_FOR_INVITATION_RESPONSE) {
+			socketProcessing.setGameState(otherSession, EGameState.IN_MENU);
+			socketProcessing.dispatchMessage(otherSession, ELunarStatusCode.OK,
+					new MessageInviteRejected(user));
+		}
+
+		socketProcessing.dispatchMessage(session, code, new MessageInviteRejectResponse(message, toSend));
 	}
 }

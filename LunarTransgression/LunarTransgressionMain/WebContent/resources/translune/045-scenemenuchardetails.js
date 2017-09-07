@@ -232,7 +232,7 @@
 			
 			buttonSkills.on('pointerdown', this._onClickSkills, this);
 			
-			if (true || this._releasable) {
+			if (this._releasable) {
 				this.menu.actionButton1.visible = true;
 				this.menu.actionButton1.body.children[0].text = 'Release';
 				this.menu.actionButton1.on('pointertap', this._onClickRelease, this);

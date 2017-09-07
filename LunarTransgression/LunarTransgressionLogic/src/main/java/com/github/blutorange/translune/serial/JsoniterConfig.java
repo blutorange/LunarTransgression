@@ -17,6 +17,8 @@ import com.github.blutorange.translune.db.EStatusValue;
 import com.github.blutorange.translune.db.Item;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.db.Skill;
+import com.github.blutorange.translune.handler.EHandlerFetchData;
+import com.github.blutorange.translune.handler.EHandlerUpdateData;
 import com.github.blutorange.translune.logic.EActionTarget;
 import com.github.blutorange.translune.logic.EBattleCommandType;
 import com.github.blutorange.translune.logic.EElement;
@@ -29,14 +31,15 @@ import com.github.blutorange.translune.logic.IComputedBattleStatus;
 import com.github.blutorange.translune.logic.Orderable;
 import com.github.blutorange.translune.logic.Pageable;
 import com.github.blutorange.translune.logic.PageableResult;
-import com.github.blutorange.translune.message.EFetchDataType;
-import com.github.blutorange.translune.message.EUpdateDataType;
 import com.github.blutorange.translune.message.MessageAuthorize;
 import com.github.blutorange.translune.message.MessageAuthorizeResponse;
 import com.github.blutorange.translune.message.MessageBattleCancelled;
 import com.github.blutorange.translune.message.MessageBattleEnded;
+import com.github.blutorange.translune.message.MessageBattlePreparationCancelled;
 import com.github.blutorange.translune.message.MessageBattlePrepared;
 import com.github.blutorange.translune.message.MessageBattleStepped;
+import com.github.blutorange.translune.message.MessageCancelBattlePreparation;
+import com.github.blutorange.translune.message.MessageCancelBattlePreparationResponse;
 import com.github.blutorange.translune.message.MessageFetchData;
 import com.github.blutorange.translune.message.MessageFetchDataResponse;
 import com.github.blutorange.translune.message.MessageInvite;
@@ -89,8 +92,8 @@ public class JsoniterConfig implements StaticCodegenConfig {
 		registerEnum(EBattleCommandType.class);
 		registerEnum(EElement.class);
 		registerEnum(EExperienceGroup.class);
-		registerEnum(EFetchDataType.class);
-		registerEnum(EUpdateDataType.class);
+		registerEnum(EHandlerFetchData.class);
+		registerEnum(EHandlerUpdateData.class);
 		registerEnum(ELunarMessageType.class);
 		registerEnum(ENature.class);
 		registerEnum(ESkillEffect.class);
@@ -239,6 +242,10 @@ public class JsoniterConfig implements StaticCodegenConfig {
 				TypeLiteral.create(MessageInvited.class),
 				TypeLiteral.create(MessageInviteRetracted.class),
 				TypeLiteral.create(MessageInviteRejected.class),
+
+				TypeLiteral.create(MessageBattlePreparationCancelled.class),
+				TypeLiteral.create(MessageCancelBattlePreparation.class),
+				TypeLiteral.create(MessageCancelBattlePreparationResponse.class),
 
 				TypeLiteral.create(MessagePrepareBattle.class),
 				TypeLiteral.create(MessagePrepareBattleResponse.class),

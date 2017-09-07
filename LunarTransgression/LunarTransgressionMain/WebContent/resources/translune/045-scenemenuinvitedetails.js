@@ -54,6 +54,7 @@
 		}
 		
 		onRemove() {
+			this._removeListeners();
 			this.game.removeScene(this._loadScene);
 			this.game.removeScene(this._dialog);
 			super.onRemove();
@@ -170,11 +171,41 @@
 			};	
 		}
 		
+		_registerListeners() {
+			this.game.net.registerMessageHandler(Lunar.Message.inviteAccepted, {
+				handle: this.method('_onMessageAccepted'),
+				error: () => null
+			});
+			this.game.net.registerMessageHandler(Lunar.Message.inviteRejected, {
+				handle: this.method('_onMessageRejected'),
+				error: () => null
+			});
+		}
+		
+		_removeListeners() {
+			this.game.net.removeMessageHandlers(Lunar.Message.inviteAccepted);
+			this.game.net.removeMessageHandlers(Lunar.Message.inviteRetracted);
+		}
+		
+		_onMessageAccepted() {
+			this._removeListeners();
+			this.game.removeScene(this._dialog);
+			this._dialog = undefined;
+			this.menu.onOpponentAccepted(this._nickname);
+		}
+		
+		_onMessageRejected() {
+			this._removeListeners();
+			this.game.removeScene(this._dialog);
+			this._dialog = undefined;
+		}
+		
 		_onClickInvite() {
 			const _this = this;
 			if (this._dialog)
 				return;
 			this.game.sfx('resources/translune/static/confirm');
+			this.menu.tabModal(true);
 			this._dialog = new Lunar.Scene.Dialog(this.game, {
 				message: `Now calling ${this._playerDetails.nickname}... prepare for battle!`,
 				choices: [
@@ -188,6 +219,8 @@
 							}).catch(error => {
 								console.error("failed to retract invitation", error);
 							}).then(() => {
+								_this.menu.tabModal(false);
+								_this._removeListeners();
 								_this.game.removeScene(this._dialog);
 								_this._dialog = undefined;
 							});
@@ -196,6 +229,7 @@
 				]
 			});
 			this.game.pushScene(this._dialog);
+			this._registerListeners();
 			this.game.net.dispatchMessage(Lunar.Message.invite, {
 				nickname: _this._playerDetails.nickname
 			}).then(response => {
@@ -203,8 +237,10 @@
 				// wait for the opponent to answer.
 			}).catch(error => {
 				console.error("failed to invite player", error);
+				_this.menu.tabModal(false);
 				_this.game.removeScene(this._dialog);
 				_this._dialog = undefined;
+				_this.removeListeners();
 				_this.showConfirmDialog("Player seems to be offline, please try again later.");
 			});			
 		}

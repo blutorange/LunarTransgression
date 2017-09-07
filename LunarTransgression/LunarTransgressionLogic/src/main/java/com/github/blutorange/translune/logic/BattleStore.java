@@ -47,8 +47,10 @@ public class BattleStore implements IBattleStore {
 	@Override
 	public void removeBattle(final String from, final String to) {
 		synchronized(this) {
-			fromBattleMap.remove(from);
+			final IBattleRunner runner = fromBattleMap.remove(from);
 			toFromMap.remove(to);
+			if (runner != null)
+				runner.cancel();
 		}
 	}
 

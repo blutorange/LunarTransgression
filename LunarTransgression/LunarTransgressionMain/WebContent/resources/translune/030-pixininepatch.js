@@ -80,6 +80,13 @@
 	        else
         		this.addChild(...Object.values(textures).map((t) => new PIXI.Sprite(t)));
 
+	        // get original sizes
+	        this._sizes = [];
+	        for(var i = 0; i < 9; i++)
+        		this._sizes.push({w: this.children[i].width, h: this.children[i].height});
+	        this._minWidth = this._sizes[0].width + this._sizes[2].width;
+	        this._minHeight = this._sizes[0].height + this._sizes[2].height;
+	        
             // add content container
             this.addChild(new PIXI.Container());
 
@@ -236,13 +243,23 @@
             if(height !== undefined)
                 this.targetHeight = height;
 
+//            let scaleX = 1;
+//            let scaleY = 1;
+//            if (targetWidth < this._minWidth)
+//            	scaleX = targetWidth / this._minWidth; 
+//        	if (targetHeight < this._minHeight)
+//        		scaleY = targetHeight / this._minHeight;
+            
             var child;
 
+            // top left
+            child = this.children[0];
+            
             // top middle
             child = this.children[1];
             child.position.set(this.children[0].width, 0);
             child.width = this.targetWidth - child.x - this.children[2].width;
-
+            
             // top right
             child = this.children[2];
             child.position.set(this.targetWidth, 0);
@@ -270,7 +287,7 @@
             // bottom middle
             child = this.children[7];
             child.position.set(this.children[1].x, this.targetHeight);
-            child.width = this.children[1].width;
+            child.width = this.children[1].width;            
 
             // bottom right
             child = this.children[8];

@@ -61,7 +61,15 @@ public class HandlerInviteAccept implements ILunarMessageHandler {
 		final MessageInvite invitation = invitationStore.remove(inviteAccept.getNickname(), user);
 		if (invitation == null) {
 			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
-					new MessageInviteAcceptResponse(message, inviteAccept.getNickname(), "Invitation does not exist anymore, possibly because it was retracted."));
+					new MessageInviteAcceptResponse(message, inviteAccept.getNickname(),
+							"Invitation does not exist anymore, possibly because it was retracted."));
+			return;
+		}
+
+		if (socketProcessing.getGameState(otherSession) != EGameState.WAITING_FOR_INVITATION_RESPONSE) {
+			socketProcessing.dispatchMessage(session, ELunarStatusCode.GENERIC_ERROR,
+					new MessageInviteAcceptResponse(message, inviteAccept.getNickname(),
+							"Cannot accept invitation, other user is not ready anymore."));
 			return;
 		}
 
@@ -69,7 +77,7 @@ public class HandlerInviteAccept implements ILunarMessageHandler {
 		socketProcessing.setGameState(otherSession, EGameState.BATTLE_PREPARATION);
 		battleStore.startBattle(inviteAccept.getNickname(), user);
 
-		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageInviteAcceptResponse(message, inviteAccept.getNickname(), "Battle negotiated."));
-		socketProcessing.dispatchMessage(otherSession, ELunarStatusCode.OK, new MessageInviteAccepted(inviteAccept.getNickname()));
+		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageInviteAcceptResponse(message, inviteAccept.getNickname(), "Accepted."));
+		socketProcessing.dispatchMessage(otherSession, ELunarStatusCode.OK, new MessageInviteAccepted(user));
 	}
 }

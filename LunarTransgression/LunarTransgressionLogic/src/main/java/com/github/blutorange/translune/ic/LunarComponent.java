@@ -17,7 +17,10 @@ import com.github.blutorange.translune.gui.ManageBean;
 import com.github.blutorange.translune.gui.PlayerBean;
 import com.github.blutorange.translune.gui.SessionBean;
 import com.github.blutorange.translune.gui.StatusBean;
+import com.github.blutorange.translune.handler.EHandlerFetchData;
+import com.github.blutorange.translune.handler.EHandlerUpdateData;
 import com.github.blutorange.translune.handler.HandlerAuthorize;
+import com.github.blutorange.translune.handler.HandlerCancelBattlePreparation;
 import com.github.blutorange.translune.handler.HandlerFetchData;
 import com.github.blutorange.translune.handler.HandlerInvite;
 import com.github.blutorange.translune.handler.HandlerInviteAccept;
@@ -47,8 +50,6 @@ import com.github.blutorange.translune.logic.InvitationStore;
 import com.github.blutorange.translune.logic.SessionStore;
 import com.github.blutorange.translune.media.IImageProcessing;
 import com.github.blutorange.translune.media.ImageProcessing;
-import com.github.blutorange.translune.message.EFetchDataType;
-import com.github.blutorange.translune.message.EUpdateDataType;
 import com.github.blutorange.translune.serial.IImportProcessing;
 import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 import com.github.blutorange.translune.serial.ImportProcessing;
@@ -81,11 +82,10 @@ public interface LunarComponent {
 	void inject(BaseSpritesheetServlet baseSpritesheetServlet);
 	void inject(LunarServletContextListener lunarServletContextListener);
 
-	void inject(EFetchDataType eFetchDataType);
-	void inject(EUpdateDataType eUpdateDataType);
+	void inject(EHandlerFetchData eFetchDataType);
+	void inject(EHandlerUpdateData eUpdateDataType);
 
 	void inject(LunarDatabaseManager lunarDatabaseManager);
-	void inject(BattleRunner battle);
 	void inject(BattleProcessing battle);
 	void inject(BattleStore battleStore);
 	void inject(SaveDb jobSaveDb);
@@ -103,6 +103,7 @@ public interface LunarComponent {
 	@NonNull @LunarMessageTyped(ELunarMessageType.LOOT) ILunarMessageHandler ihandlerLoot();
 	@NonNull @LunarMessageTyped(ELunarMessageType.FETCH_DATA) ILunarMessageHandler ihandlerFetchData();
 	@NonNull @LunarMessageTyped(ELunarMessageType.UPDATE_DATA) ILunarMessageHandler ihandlerUpdateData();
+	@NonNull @LunarMessageTyped(ELunarMessageType.CANCEL_BATTLE_PREPARATION) ILunarMessageHandler handlerCancelBattlePreparation();
 	@NonNull ISocketProcessing iSocketProcessing();
 
 	ILunarDatabaseManager iLunarDatabaseManager();
@@ -130,6 +131,7 @@ public interface LunarComponent {
 	ImportProcessing _importProcessing();
 	LocalizationBundle _localizationBundle();
 	ImageProcessing _imageProcessing();
+	BattleRunner _battleRunner();
 
 	HandlerAuthorize _handlerAuthorize();
 	HandlerInvite _handlerInvite();
@@ -141,6 +143,7 @@ public interface LunarComponent {
 	HandlerLoot _handlerLoot();
 	HandlerFetchData _handlerFetchData();
 	HandlerUpdateData _handlerUpdateData();
+	HandlerCancelBattlePreparation _handlerCancelBattlePreparation();
 
 	SessionStore _sessionStore();
 	InvitationStore _invitationStore();

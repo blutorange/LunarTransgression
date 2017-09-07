@@ -54,6 +54,8 @@ public class BaseSpritesheetServlet extends HttpServlet {
 	@Override
 	public void doGet(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
+		// Is there a timestamp present?
+		final String timestamp = req.getParameter("_");
 		// Read request parameters and decode if gzipped+base64.
 		final String path = req.getPathInfo();
 		final String extension = FilenameUtils.getExtension(path);
@@ -70,22 +72,26 @@ public class BaseSpritesheetServlet extends HttpServlet {
 		// Get unique ID for spritesheet, sort images by name.
 		Arrays.sort(resourceList);
 		final String spritesheetId = String.join(",", resourceList);
-		final String imageName;
+		final String baseName;
 		if (gzip) {
 			final byte[] bytes = spritesheetId.getBytes(StandardCharsets.UTF_8);
 			try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					GZIPOutputStream gos = new GZIPOutputStream(baos)) {
 				gos.write(bytes);
-				imageName = new String(Base64.getEncoder().encode(baos.toByteArray()), StandardCharsets.UTF_8);
+				baseName = new String(Base64.getEncoder().encode(baos.toByteArray()), StandardCharsets.UTF_8);
 			}
 		}
 		else {
-			imageName = "spritesheet.png?resources=" + URLEncoder.encode(spritesheetId, "UTF-8");
+			baseName = "spritesheet.png?resources=" + URLEncoder.encode(spritesheetId, "UTF-8");
 		}
+		final String imageName = baseName + (timestamp != null ? "&_=" + timestamp : "");
 		// Generate spritesheet, checking the cache first.
 		final IAtlasImage image;
 		try {
-			image = cache.get(spritesheetId, () -> imageProcessing.packResources(imageName, resourceList));
+			if (timestamp == null)
+				image = cache.get(spritesheetId, () -> imageProcessing.packResources(imageName, resourceList));
+			else
+				image = imageProcessing.packResources(imageName, resourceList);
 		}
 		catch (final ExecutionException e) {
 			throw new IOException("failed to get spritesheet: " + spritesheetId, e);

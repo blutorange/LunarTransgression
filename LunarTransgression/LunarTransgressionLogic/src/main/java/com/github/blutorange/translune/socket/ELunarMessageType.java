@@ -31,12 +31,16 @@ public enum ELunarMessageType {
 	INVITE_REJECT_RESPONSE(ELunarMessageHandler.NOOP),
 	INVITE_REJECTED(ELunarMessageHandler.NOOP),
 
+	CANCEL_BATTLE_PREPARATION(ComponentFactory.getLunarComponent().handlerCancelBattlePreparation()),
+	CANCEL_BATTLE_PREPARATION_RESPONSE(ELunarMessageHandler.NOOP),
+
 	PREPARE_BATTLE(ComponentFactory.getLunarComponent().ihandlerPrepareBattle()),
 	PREPARE_BATTLE_RESPONSE(ELunarMessageHandler.NOOP),
 
 	STEP_BATTLE(ComponentFactory.getLunarComponent().ihandlerStepBattle()),
 	STEP_BATTLE_RESPONSE(ELunarMessageHandler.NOOP),
 
+	BATTLE_PREPARATION_CANCELLED(ELunarMessageHandler.NOOP),
 	BATTLE_PREPARED(ELunarMessageHandler.NOOP),
 	BATTLE_STEPPED(ELunarMessageHandler.NOOP),
 	BATTLE_CANCELLED(ELunarMessageHandler.NOOP),
