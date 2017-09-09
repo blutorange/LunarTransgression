@@ -108,6 +108,7 @@ public final class ImportProcessing implements IImportProcessing {
 		final Set<SkillCsvModel> skillModel = new HashSet<>();
 		final Set<CharacterToSkillCsvModel> characterToSkillModels = new HashSet<>();
 		final Map<String, ZipEntry> filesCry = new HashMap<>();
+		final Map<String, ZipEntry> filesDefault = new HashMap<>();
 		final Map<String, ZipEntry> filesImg = new HashMap<>();
 		final Map<String, ZipEntry> filesIcon = new HashMap<>();
 		final Map<String, ZipEntry> filesBgMenu = new HashMap<>();
@@ -126,6 +127,10 @@ public final class ImportProcessing implements IImportProcessing {
 			if (entry.isDirectory())
 				continue;
 			switch (parent.toLowerCase(Locale.ROOT)) {
+			case Constants.IMPORT_DIR_DEFAULT:
+				logger.debug("found default file " + entry.getName());
+				filesDefault.put(Constants.FILE_PREFIX_DEFAULT + FilenameUtils.getName(name), entry);
+				break;
 			case Constants.IMPORT_DIR_CHARACTER_CRY:
 				logger.debug("found cry sound file " + entry.getName());
 				filesCry.put(Constants.FILE_PREFIX_CHARACTER_CRY + FilenameUtils.getName(name), entry);
@@ -186,6 +191,7 @@ public final class ImportProcessing implements IImportProcessing {
 					character);
 			assertCharFile(filesCry, requiredFiles, character.getCry(), Constants.FILE_PREFIX_CHARACTER_CRY, character);
 		}
+		assertDefaultFiles(filesDefault);
 		addFiles(requiredFiles, filesImg, Constants.FILE_PREFIX_CHARACTER_IMG);
 		addFiles(requiredFiles, filesIcon, Constants.FILE_PREFIX_CHARACTER_ICON);
 		addFiles(requiredFiles, filesCry, Constants.FILE_PREFIX_CHARACTER_CRY);
@@ -193,9 +199,15 @@ public final class ImportProcessing implements IImportProcessing {
 		addFiles(requiredFiles, filesBgmBattle, Constants.FILE_PREFIX_BGM_BATTLE);
 		addFiles(requiredFiles, filesBgMenu, Constants.FILE_PREFIX_BG_MENU);
 		addFiles(requiredFiles, filesBgmMenu, Constants.FILE_PREFIX_BGM_MENU);
+		addFiles(requiredFiles, filesDefault, Constants.FILE_PREFIX_DEFAULT);
 		logger.debug("writing imported files to database");
 		writeImportToDb(requiredFiles, characters, skills, zipFile);
 		return characters.size() + skills.size() + requiredFiles.size();
+	}
+
+	private void assertDefaultFiles(final Map<String, ZipEntry> filesDefault) throws IOException {
+		if (!filesDefault.containsKey(Constants.DEFAULT_PLAYER_AVATAR))
+			throw new IOException("No default player avatar found, must be named def/pavatar");
 	}
 
 	@Override

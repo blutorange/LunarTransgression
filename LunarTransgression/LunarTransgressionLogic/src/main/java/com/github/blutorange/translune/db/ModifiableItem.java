@@ -10,6 +10,10 @@ public class ModifiableItem extends ModifiableEntity<Item> {
 		entity.setEffect(effect);
 	}
 
+	public void setImgIcon(final String imgIcon) {
+		entity.setImgIcon(imgIcon);
+	}
+
 	public void setName(@NonNull final String name) {
 		entity.setName(name);
 	}

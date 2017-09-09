@@ -19,7 +19,6 @@ import com.github.blutorange.translune.Sandbox;
 import com.github.blutorange.translune.i18n.ILocalizationBundle;
 import com.github.blutorange.translune.logic.BattleProcessing;
 import com.github.blutorange.translune.logic.IBattleProcessing;
-import com.github.blutorange.translune.logic.IBattleRunner;
 import com.github.blutorange.translune.logic.IRandomSupplier;
 import com.github.blutorange.translune.media.IImageProcessing;
 
@@ -32,12 +31,6 @@ public class LogicModule {
 	@Singleton
 	static IBattleProcessing provideBattleProcessing() {
 		return new BattleProcessing();
-	}
-
-	@Provides
-	@Singleton
-	static IBattleRunner provideBattleRunner() {
-		return ComponentFactory.getLunarComponent()._battleRunner();
 	}
 
 	@Provides

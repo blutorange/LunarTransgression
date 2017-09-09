@@ -22,8 +22,10 @@ import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.Item;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.Classed;
+import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.message.MessageBattleCancelled;
 import com.github.blutorange.translune.message.MessageBattleEnded;
+import com.github.blutorange.translune.message.MessageBattlePreparationCancelled;
 import com.github.blutorange.translune.message.MessageBattlePrepared;
 import com.github.blutorange.translune.message.MessageBattleStepped;
 import com.github.blutorange.translune.socket.BattleAction;
@@ -78,21 +80,16 @@ public class BattleRunner implements IBattleRunner {
 	ISocketProcessing socketProcessing;
 
 	@Inject
-	public BattleRunner() {
+	public BattleRunner(final String from, final String to) {
 		round = 0;
 		characterStates = new CopyOnWriteArrayList<>(new String[2][]);
 		items = new CopyOnWriteArrayList<>(new String[2][]);
 		commands = Collections.synchronizedList(new ArrayList<>(2));
 		phaser = new Phaser(2);
 		effectorStack = new ArrayList<>();
-	}
-
-	@Override
-	public void forPlayers(final String from, final String to) {
-		synchronized (players) {
-			players[0] = from;
-			players[1] = to;
-		}
+		players[0] = from;
+		players[1] = to;
+		ComponentFactory.getLunarComponent().inject(this);
 	}
 
 	@Override
@@ -100,7 +97,7 @@ public class BattleRunner implements IBattleRunner {
 			throws IllegalStateException, IllegalArgumentException {
 		synchronized (phaser) {
 			if (phaser.isTerminated())
-				return;
+				throw new IllegalStateException("Not waiting for battle, phaser already terminated.");
 			final int playerIndex = getPlayerIndex(nickname);
 			if (this.characterStates.get(playerIndex) != null)
 				throw new IllegalStateException("Player is already prepared");
@@ -111,7 +108,7 @@ public class BattleRunner implements IBattleRunner {
 			assertBattlePrep(playerIndex, characterStates, items);
 			this.characterStates.set(playerIndex, characterStates);
 			this.items.set(playerIndex, items);
-			phaser.arriveAndAwaitAdvance();
+			phaser.arrive();
 		}
 	}
 
@@ -127,12 +124,8 @@ public class BattleRunner implements IBattleRunner {
 				throw new IllegalStateException("Player already finalized the current turn.");
 			final BattleCommand[] cmds = new BattleCommand[] { character1, character2, character3, character4 };
 			commands.set(playerIndex, cmds);
-			phaser.arriveAndAwaitAdvance();
+			phaser.arrive();
 		}
-	}
-
-	private static void assertBattleStep(final IBattleCommandHandler[] commands) {
-		// nothing to assert yet
 	}
 
 	@Override
@@ -153,7 +146,7 @@ public class BattleRunner implements IBattleRunner {
 		catch (final Exception e) {
 			logger.error("error occured during battle processing", e);
 			if (!battleDone) {
-				cancelBattle("Internal server error");
+				cancelBattle("Internal server error", round == 0);
 				battleDone = true;
 			}
 		}
@@ -180,7 +173,7 @@ public class BattleRunner implements IBattleRunner {
 		}
 		catch (final InterruptedException e) {
 			logger.error("battle preparations interrupted", e);
-			cancelBattle("Internal server error");
+			cancelBattle("Internal server error", true);
 			return;
 		}
 		catch (final TimeoutException e) {
@@ -201,7 +194,7 @@ public class BattleRunner implements IBattleRunner {
 			}
 		}
 		if (!player1Done || !player2Done) {
-			cancelBattle("The other player did not complete battle preparations in time.");
+			cancelBattle("The other player did not complete battle preparations in time.", true);
 			return;
 		}
 		informPlayerAboutPrepared(0);
@@ -231,7 +224,7 @@ public class BattleRunner implements IBattleRunner {
 		}
 		catch (final InterruptedException e) {
 			logger.error("battle step was interrupted", e);
-			cancelBattle("Internal server error");
+			cancelBattle("Internal server error", false);
 			return;
 		}
 		catch (final TimeoutException e) {
@@ -252,7 +245,7 @@ public class BattleRunner implements IBattleRunner {
 			}
 		}
 		if (!player1Done || !player2Done) {
-			cancelBattle("The other player did enter battle commands in time.");
+			cancelBattle("The other player did enter battle commands in time.", true);
 			return;
 		}
 		final int winner = processBattle();
@@ -264,7 +257,11 @@ public class BattleRunner implements IBattleRunner {
 		battleDone = true;
 		final BattleResult[][] battleResults = battleProcessing.distributeExperience(players, characterStates,
 				battleStatus, round);
-		battleStore.addLoot(players[winner], characterStates.get(winner), items.get(winner));
+		final String[] characterStatesWinner = characterStates.get(winner);
+		final String[] itemsWinner = items.get(winner);
+		if (characterStatesWinner == null || itemsWinner == null)
+			throw new IOException("Winner items or characters not found.");
+		battleStore.addLoot(players[winner], characterStatesWinner, itemsWinner);
 		endBattle();
 		if (winner == 0)
 			setGameStateForBoth(EGameState.BATTLE_LOOT, EGameState.IN_BATTLE);
@@ -305,11 +302,11 @@ public class BattleRunner implements IBattleRunner {
 		}
 	}
 
-	private void cancelBattle(final String message) {
+	private void cancelBattle(final String message, final boolean isPrep) {
 		endBattle();
-		setGameStateForBoth(EGameState.IN_MENU, EGameState.IN_BATTLE);
-		informPlayerAboutCancel(0, message);
-		informPlayerAboutCancel(1, message);
+		setGameStateForBoth(EGameState.IN_MENU, EGameState.IN_MENU);
+		informPlayerAboutCancel(0, message, isPrep);
+		informPlayerAboutCancel(1, message, isPrep);
 	}
 
 	private int getPlayerIndex(final String nickname) {
@@ -321,11 +318,12 @@ public class BattleRunner implements IBattleRunner {
 	}
 
 	@SuppressWarnings("resource")
-	private void informPlayerAboutCancel(final int playerIndex, final String message) {
+	private void informPlayerAboutCancel(final int playerIndex, final String message, final boolean isPrep) {
 		// We already checked when battle processing began.
 		final Session session = sessionStore.retrieve(players[playerIndex]);
 		if (session != null)
-			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattleCancelled(message));
+			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
+					isPrep ? new MessageBattlePreparationCancelled(message) : new MessageBattleCancelled(message));
 	}
 
 	private void informPlayerAboutEnd(final int playerIndex, final boolean isVictory,

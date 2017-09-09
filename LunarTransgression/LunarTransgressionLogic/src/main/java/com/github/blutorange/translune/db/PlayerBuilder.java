@@ -12,15 +12,21 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.github.blutorange.common.CannotPerformOperationException;
 import com.github.blutorange.common.PasswordStorage;
 import com.github.blutorange.translune.ic.ComponentFactory;
+import com.github.blutorange.translune.util.Constants;
 
 public class PlayerBuilder implements Builder<Player> {
-	private final String nickname;
-	@Nullable private String passwordHash = null;
+	private final Set<CharacterState> characterStates = new HashSet<>();
 
 	private String description = StringUtils.EMPTY;
 
-	private final Set<CharacterState> characterStates = new HashSet<>();
+	private String imgAvatar = Constants.DEFAULT_PLAYER_AVATAR;
+
 	private final Set<Item> items = new HashSet<>();
+
+	private final String nickname;
+
+	@Nullable
+	private String passwordHash = null;
 
 	public PlayerBuilder(final String nickname) {
 		this.nickname = nickname;
@@ -52,14 +58,27 @@ public class PlayerBuilder implements Builder<Player> {
 		return this;
 	}
 
-	public PlayerBuilder setDescription(final String description) {
-		this.description = description;
-		return this;
-	}
-
-	public PlayerBuilder setPassword(final String password) throws CannotPerformOperationException {
-		this.passwordHash = PasswordStorage.createHash(password);
-		return this;
+	@Override
+	public Player build() {
+		final String nickname = this.nickname;
+		String imgAvatar = this.imgAvatar;
+		final String passwordHash = this.passwordHash;
+		if (passwordHash == null)
+			throw new IllegalStateException("No password was set.");
+		if (nickname == null)
+			throw new IllegalStateException("No nickname was set.");
+		if (imgAvatar == null)
+			imgAvatar = Constants.DEFAULT_PLAYER_AVATAR;
+		final Player player = new Player();
+		player.setCharacterStates(characterStates);
+		player.setDescription(description);
+		player.setImgAvatar(imgAvatar);
+		player.setItems(items);
+		player.setNickname(nickname);
+		player.setPasswordHash(passwordHash);
+		for (final CharacterState cs : characterStates)
+			cs.setPlayer(player);
+		return player;
 	}
 
 	public PlayerBuilder generateRandomPassword(final int byteCount) throws CannotPerformOperationException {
@@ -68,22 +87,18 @@ public class PlayerBuilder implements Builder<Player> {
 		return setPassword(Base64.getEncoder().encodeToString(bytes));
 	}
 
-	@Override
-	public Player build() {
-		final String nickname = this.nickname;
-		final String passwordHash = this.passwordHash;
-		if (passwordHash == null)
-			throw new IllegalStateException("No password was set.");
-		if (nickname == null)
-			throw new IllegalStateException("No nickname was set.");
-		final Player player = new Player();
-		player.setCharacterStates(characterStates);
-		player.setDescription(description);
-		player.setItems(items);
-		player.setNickname(nickname);
-		player.setPasswordHash(passwordHash);
-		for (final CharacterState cs : characterStates)
-			cs.setPlayer(player);
-		return player;
+	public PlayerBuilder setDescription(final String description) {
+		this.description = description;
+		return this;
+	}
+
+	public PlayerBuilder setImgAvatar(final String imgAvatar) {
+		this.imgAvatar = imgAvatar;
+		return this;
+	}
+
+	public PlayerBuilder setPassword(final String password) throws CannotPerformOperationException {
+		this.passwordHash = PasswordStorage.createHash(password);
+		return this;
 	}
 }

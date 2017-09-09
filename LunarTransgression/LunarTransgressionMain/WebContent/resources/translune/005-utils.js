@@ -510,7 +510,7 @@
 			});			
 			Lunar.FontStyle.playerDesc = new PIXI.TextStyle({
 			    fontFamily: 'Arial,sans-serif',
-			    fontSize: game => game.wh*0.025,
+			    fontSize: game => game.wh*0.022,
 			    fontStyle: '',
 			    fontWeight: 'bold',
 			    fill: ['#ffffff', '#C0C0C0'], // gradient

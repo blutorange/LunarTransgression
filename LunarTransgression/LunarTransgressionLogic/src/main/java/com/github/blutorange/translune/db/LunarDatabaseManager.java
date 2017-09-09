@@ -128,7 +128,10 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 				final List<T> resultList = tq.getResultList();
 				if (resultList.isEmpty())
 					return (T[])Array.newInstance(clazz, 0);
-				result[i] = resultList.get(0);
+				@Nullable final T object = resultList.get(0);
+				if (object == null)
+					return (T[])Array.newInstance(clazz, 0);
+				result[i] = object;
 			}
 			if (result == null)
 				return (T[])Array.newInstance(clazz, 0);
@@ -463,5 +466,26 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 				throw new JobExecutionException("could not write changes to database", e);
 			}
 		}
+	}
+
+	@Override
+	public void persistResource(final String name, final byte @NonNull [] data, final String mime, final String filename) throws IOException {
+		final Resource resource = new Resource();
+		resource.setData(data);
+		resource.setFilename(filename);
+		resource.setMime(mime);
+		resource.setName(name);
+		persistNonManaged(resource);
+	}
+
+	@Override
+	public void persistNonManaged(final AbstractUnstoredEntity... entities) throws IOException {
+		final Object result = withEm(true, em -> {
+			for (final AbstractEntity entity : entities)
+				em.persist(entity);
+			return Boolean.TRUE;
+		});
+		if (result == null)
+			throw new IOException("failed to persist entity");
 	}
 }

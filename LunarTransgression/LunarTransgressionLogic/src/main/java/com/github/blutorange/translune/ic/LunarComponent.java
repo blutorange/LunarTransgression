@@ -21,6 +21,7 @@ import com.github.blutorange.translune.handler.EHandlerFetchData;
 import com.github.blutorange.translune.handler.EHandlerUpdateData;
 import com.github.blutorange.translune.handler.HandlerAuthorize;
 import com.github.blutorange.translune.handler.HandlerCancelBattlePreparation;
+import com.github.blutorange.translune.handler.HandlerDropItem;
 import com.github.blutorange.translune.handler.HandlerFetchData;
 import com.github.blutorange.translune.handler.HandlerInvite;
 import com.github.blutorange.translune.handler.HandlerInviteAccept;
@@ -28,6 +29,7 @@ import com.github.blutorange.translune.handler.HandlerInviteReject;
 import com.github.blutorange.translune.handler.HandlerInviteRetract;
 import com.github.blutorange.translune.handler.HandlerLoot;
 import com.github.blutorange.translune.handler.HandlerPrepareBattle;
+import com.github.blutorange.translune.handler.HandlerReleaseCharacter;
 import com.github.blutorange.translune.handler.HandlerStepBattle;
 import com.github.blutorange.translune.handler.HandlerUpdateData;
 import com.github.blutorange.translune.i18n.ILocalizationBundle;
@@ -40,7 +42,6 @@ import com.github.blutorange.translune.logic.BattleProcessing;
 import com.github.blutorange.translune.logic.BattleRunner;
 import com.github.blutorange.translune.logic.BattleStore;
 import com.github.blutorange.translune.logic.IBattleProcessing;
-import com.github.blutorange.translune.logic.IBattleRunner;
 import com.github.blutorange.translune.logic.IInitIdStore;
 import com.github.blutorange.translune.logic.IInvitationStore;
 import com.github.blutorange.translune.logic.IRandomSupplier;
@@ -92,6 +93,7 @@ public interface LunarComponent {
 	void inject(CleanInitId cleanInitId);
 	void inject(AExecutor executor);
 	void inject(ABattleCommandHandler battleCommandHandler);
+	void inject(BattleRunner battleRunner);
 
 	@NonNull @LunarMessageTyped(ELunarMessageType.AUTHORIZE) ILunarMessageHandler ihandlerAuthorize();
 	@NonNull @LunarMessageTyped(ELunarMessageType.INVITE) ILunarMessageHandler ihandlerInvite();
@@ -104,6 +106,9 @@ public interface LunarComponent {
 	@NonNull @LunarMessageTyped(ELunarMessageType.FETCH_DATA) ILunarMessageHandler ihandlerFetchData();
 	@NonNull @LunarMessageTyped(ELunarMessageType.UPDATE_DATA) ILunarMessageHandler ihandlerUpdateData();
 	@NonNull @LunarMessageTyped(ELunarMessageType.CANCEL_BATTLE_PREPARATION) ILunarMessageHandler handlerCancelBattlePreparation();
+	@NonNull @LunarMessageTyped(ELunarMessageType.RELEASE_CHARACTER) ILunarMessageHandler ihandlerReleaseCharacter();
+	@NonNull @LunarMessageTyped(ELunarMessageType.DROP_ITEM) ILunarMessageHandler ihandlerDropItem();
+
 	@NonNull ISocketProcessing iSocketProcessing();
 
 	ILunarDatabaseManager iLunarDatabaseManager();
@@ -111,7 +116,6 @@ public interface LunarComponent {
 	IImportProcessing iImportProcessing();
 	IImageProcessing imageProcessing();
 
-	IBattleRunner battleRunner();
 	IBattleProcessing battleProcessing();
 
 	ILocalizationBundle iLocalizationBundle();
@@ -131,7 +135,6 @@ public interface LunarComponent {
 	ImportProcessing _importProcessing();
 	LocalizationBundle _localizationBundle();
 	ImageProcessing _imageProcessing();
-	BattleRunner _battleRunner();
 
 	HandlerAuthorize _handlerAuthorize();
 	HandlerInvite _handlerInvite();
@@ -144,6 +147,8 @@ public interface LunarComponent {
 	HandlerFetchData _handlerFetchData();
 	HandlerUpdateData _handlerUpdateData();
 	HandlerCancelBattlePreparation _handlerCancelBattlePreparation();
+	HandlerReleaseCharacter _handlerReleaseCharacter();
+	HandlerDropItem _handlerDropItem();
 
 	SessionStore _sessionStore();
 	InvitationStore _invitationStore();

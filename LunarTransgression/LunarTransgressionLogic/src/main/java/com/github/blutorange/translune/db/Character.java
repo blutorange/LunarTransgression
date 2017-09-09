@@ -72,15 +72,18 @@ public class Character extends AbstractStoredEntity {
 	private EExperienceGroup experienceGroup;
 
 	@NotEmpty
-	@Column(name = "imgback", nullable = false, unique = false, updatable = false)
+	@Size(max = 64)
+	@Column(name = "imgback", nullable = false, unique = false, updatable = false, length = 64)
 	private String imgBack;
 
 	@NotEmpty
-	@Column(name = "imgfront", nullable = false, unique = false, updatable = false)
+	@Size(max = 64)
+	@Column(name = "imgfront", nullable = false, unique = false, updatable = false, length = 64)
 	private String imgFront;
 
 	@NotEmpty
-	@Column(name = "imgicon", nullable = false, unique = false, updatable = false)
+	@Size(max = 64)
+	@Column(name = "imgicon", nullable = false, unique = false, updatable = false, length = 64)
 	private String imgIcon;
 
 	@Min(0)

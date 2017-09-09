@@ -21,6 +21,8 @@ public final class Constants {
 	public static final String CUSTOM_KEY_TIMEOUT_INITID_MILLIS = "translune.initid.timeout";
 	public static final String CUSTOM_KEY_TIMEOUT_MESSAGEQUEUE_MILLIS = "translune.messages.timeout";
 
+	public static final String FILE_PREFIX_AVATAR = "ava/";
+	public static final String FILE_PREFIX_DEFAULT = "def/";
 	public static final String FILE_PREFIX_CHARACTER_CRY = "cry/";
 	public static final String FILE_PREFIX_CHARACTER_ICON = "ico/";
 	public static final String FILE_PREFIX_CHARACTER_IMG = "img/";
@@ -43,6 +45,7 @@ public final class Constants {
 	public static final String IMPORT_DIR_BGM_MENU= "bgm-menu";
 	public static final String IMPORT_DIR_BG_BATTLE= "bg-battle";
 	public static final String IMPORT_DIR_BGM_BATTLE= "bgm-battle";
+	public static final String IMPORT_DIR_DEFAULT = "default";
 
 	public static final String IMPORT_FILE_CHARACTER = "character.csv";
 	public static final String IMPORT_FILE_CHARACTER_SKILL = "character_skill.csv";
@@ -71,6 +74,7 @@ public final class Constants {
 	public static final int MAX_LENGTH_PLAYER_NICKNAME = 16;
 	public static final int MAX_LENGTH_PLAYER_DESCRIPTION = 50;
 
+	public static final int MIN_RELEASE_LEVEL = 80;
 	public static final int MIN_CHARACTERS = 4;
 	public static final int MIN_ITEMS = 0;
 	public static final int MIN_LEVEL = 1;
@@ -90,4 +94,5 @@ public final class Constants {
 
 	public static final String USERNAME_SADMIN = "sadmin";
 
+	public static final String DEFAULT_PLAYER_AVATAR = FILE_PREFIX_DEFAULT + "pavatar.png";
 }

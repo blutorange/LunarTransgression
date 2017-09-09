@@ -1,5 +1,6 @@
 package com.github.blutorange.translune.gui;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +25,7 @@ import com.github.blutorange.translune.db.ILunarDatabaseManager.ELunarDatabaseMa
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.db.PlayerBuilder;
 import com.github.blutorange.translune.ic.ComponentFactory;
+import com.github.blutorange.translune.media.IImageProcessing;
 import com.github.blutorange.translune.util.Constants;
 import com.github.blutorange.translune.util.CustomProperties;
 
@@ -46,6 +48,10 @@ public class SessionBean extends AbstractBean {
 	@Transient
 	@Inject
 	CustomProperties customProperties;
+
+	@Transient
+	@Inject
+	IImageProcessing imageProcessing;
 
 	private EUserType userType = EUserType.ANONYMOUS;
 
@@ -166,13 +172,25 @@ public class SessionBean extends AbstractBean {
 			addMessage(FacesMessage.SEVERITY_ERROR, "Failed to generate characters");
 			return;
 		}
+		final String avatarName = Constants.FILE_PREFIX_AVATAR + nickname + ".png";
+		final BufferedImage avatar = imageProcessing.generateRandomAvatar(nickname);
+		try {
+			databaseManager.persistResource(avatarName, imageProcessing.writeToByteArray(avatar, "png"), "image/png", avatarName);
+		}
+		catch (final IOException e) {
+			throw new CannotPerformOperationException("Could not persist avatar", e);
+		}
 		final CharacterStateBuilder characterStateBuilder = new CharacterStateBuilder();
 		final CharacterState cs1 = characterStateBuilder.randomIvs().randomNature().setCharacter(characters[0]).build();
 		final CharacterState cs2 = characterStateBuilder.randomIvs().randomNature().setCharacter(characters[1]).build();
 		final CharacterState cs3 = characterStateBuilder.randomIvs().randomNature().setCharacter(characters[2]).build();
 		final CharacterState cs4 = characterStateBuilder.randomIvs().randomNature().setCharacter(characters[3]).build();
-		final Player player = new PlayerBuilder(nickname).setDescription("I joined the transmigration.").setPassword(password).addCharacterStates(cs1,cs2,cs3,cs4).build();
-
+		final Player player = new PlayerBuilder(nickname)
+				.setDescription("I joined the transmigration.")
+				.setPassword(password)
+				.setImgAvatar(avatarName)
+				.addCharacterStates(cs1,cs2,cs3,cs4)
+				.build();
 		databaseManager.persist(player, cs1, cs2, cs3, cs4);
 	}
 

@@ -191,9 +191,12 @@
 				_this.bgmHowl.fade(0, volume, fade, _this.bgmId);
 			}
 			if (this.bgmHowl) {
-				if (path)
+				if (path) {
 					this.bgmHowl.once('fade', playNew, this.bgmHowlId);
-				this.bgmHowl.fade(this.bgmHowl.volume(this.bgmId), 0.0, fade, this.bgmId);
+					this.bgmHowl.fade(this.bgmHowl.volume(this.bgmId), 0.0, fade, this.bgmId);
+				}
+				else
+					this.bgmHowl.fade(this.bgmHowl.volume(this.bgmId), volume, fade, this.bgmId);
 			}
 			else if (path) {
 				playNew();

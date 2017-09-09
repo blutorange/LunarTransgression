@@ -12,7 +12,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 
 import com.github.blutorange.translune.ic.Classed;
-import com.github.blutorange.translune.ic.ComponentFactory;
 
 @Singleton
 public class BattleStore implements IBattleStore {
@@ -36,8 +35,7 @@ public class BattleStore implements IBattleStore {
 	@Override
 	public void startBattle(final String from, final String to) {
 		synchronized(this) {
-			final IBattleRunner battle = ComponentFactory.getLunarComponent().battleRunner();
-			battle.forPlayers(from, to);
+			final IBattleRunner battle = new BattleRunner(from, to);
 			executorService.submit(battle);
 			toFromMap.put(to, from);
 			fromBattleMap.put(from, battle);

@@ -17,6 +17,7 @@ import javax.inject.Singleton;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.Fraction;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.common.CollectionUtil;
 import com.github.blutorange.common.ComparatorUtil;
@@ -291,8 +292,11 @@ public class BattleProcessing implements IBattleProcessing {
 		final IComputedBattleStatus[][] computedBattleStatus = new IComputedBattleStatus[2][4];
 		for (int player = 1; player-- > 0;) {
 			for (int character = 4; character-- > 0;) {
-				computedBattleStatus[player][character] = getComputedStatus(characterStates.get(0)[0],
-						battleStatus[0][0]);
+				final String[] states = characterStates.get(player);
+				if (states == null)
+					throw new IOException("character states are null: " + player + "," + character);
+				computedBattleStatus[player][character] = getComputedStatus(states[character],
+						battleStatus[player][character]);
 			}
 		}
 		return computedBattleStatus;
@@ -443,11 +447,14 @@ public class BattleProcessing implements IBattleProcessing {
 		final CharacterState[][] retrievedCharacterStates = new CharacterState[2][4];
 		for (int player = 1; player-- > 0;) {
 			for (int character = 1; character-- > 0;) {
+				final String[] states = characterStates.get(player);
+				if (states == null)
+					throw new IOException("character states are null: " + player + "," + character);
 				final CharacterState characterState = databaseManager.find(CharacterState.class,
-						characterStates.get(player)[character]);
+						states[character]);
 				if (characterState == null)
 					throw new IllegalStateException(
-							"character does not exist: " + characterStates.get(player)[character]);
+							"character does not exist: " + player + "," + character);
 				retrievedCharacterStates[player][character] = characterState;
 			}
 		}
@@ -477,13 +484,14 @@ public class BattleProcessing implements IBattleProcessing {
 	}
 
 	private void makeCommandHandler(final IBattleContext context, final int player,
-			final IBattleCommandHandler[] out, final int offset, final BattleCommand... battleCommands) {
+			final IBattleCommandHandler[] out, final int offset, final BattleCommand@Nullable... battleCommands) throws IOException {
+		if (battleCommands == null)
+			throw new IOException("battle commands are null");
 		for (int character = 4; character-- > 0;) {
 			final CharacterState characterState = context.getCharacterState(player, character);
 			if (characterState == null)
 				throw new IllegalArgumentException("Character state does not exist: " + player + ", " + character);
-			out[character + offset] = IBattleCommandHandler.create(context, player, character,
-					battleCommands[character]);
+			out[character + offset] = IBattleCommandHandler.create(context, player, character, battleCommands[character]);
 		}
 	}
 

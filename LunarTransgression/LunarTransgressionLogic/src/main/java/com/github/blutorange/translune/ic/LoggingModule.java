@@ -13,6 +13,7 @@ import com.github.blutorange.translune.gui.PlayerBean;
 import com.github.blutorange.translune.gui.StatusBean;
 import com.github.blutorange.translune.handler.HandlerAuthorize;
 import com.github.blutorange.translune.handler.HandlerCancelBattlePreparation;
+import com.github.blutorange.translune.handler.HandlerDropItem;
 import com.github.blutorange.translune.handler.HandlerFetchData;
 import com.github.blutorange.translune.handler.HandlerInvite;
 import com.github.blutorange.translune.handler.HandlerInviteAccept;
@@ -20,6 +21,7 @@ import com.github.blutorange.translune.handler.HandlerInviteReject;
 import com.github.blutorange.translune.handler.HandlerInviteRetract;
 import com.github.blutorange.translune.handler.HandlerLoot;
 import com.github.blutorange.translune.handler.HandlerPrepareBattle;
+import com.github.blutorange.translune.handler.HandlerReleaseCharacter;
 import com.github.blutorange.translune.handler.HandlerStepBattle;
 import com.github.blutorange.translune.handler.HandlerUpdateData;
 import com.github.blutorange.translune.job.CleanInitId;
@@ -162,6 +164,14 @@ public class LoggingModule {
 
 	@Provides @Singleton @Classed(HandlerCancelBattlePreparation.class) static Logger provideLogger33() {
 		return provideLogger(HandlerCancelBattlePreparation.class);
+	}
+
+	@Provides @Singleton @Classed(HandlerReleaseCharacter.class) static Logger provideLogger34() {
+		return provideLogger(HandlerReleaseCharacter.class);
+	}
+
+	@Provides @Singleton @Classed(HandlerDropItem.class) static Logger provideLogger35() {
+		return provideLogger(HandlerDropItem.class);
 	}
 
 	private static Logger provideLogger(final Class<?> clazz) {

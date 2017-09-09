@@ -2,6 +2,8 @@ package com.github.blutorange.translune.logic;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.db.Item;
 import com.github.blutorange.translune.socket.BattleAction;
@@ -56,6 +58,7 @@ public interface IBattleContext {
 
 	List<IGlobalBattleEffector> getEffectorStack();
 
+	@Nullable
 	String getItem(int player, int item);
 
 	List<String[]> getItems();

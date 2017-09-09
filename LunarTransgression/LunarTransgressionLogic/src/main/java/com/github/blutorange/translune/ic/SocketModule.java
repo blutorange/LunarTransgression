@@ -70,4 +70,14 @@ public class SocketModule {
 	static ILunarMessageHandler provideMessageHandlerCancelBattlePreparation() {
 		return ComponentFactory.getLunarComponent()._handlerCancelBattlePreparation();
 	}
+
+	@Provides @Singleton @LunarMessageTyped(ELunarMessageType.RELEASE_CHARACTER)
+	static ILunarMessageHandler provideMessageHandlerReleaseCharacter() {
+		return ComponentFactory.getLunarComponent()._handlerReleaseCharacter();
+	}
+
+	@Provides @Singleton @LunarMessageTyped(ELunarMessageType.DROP_ITEM)
+	static ILunarMessageHandler provideMessageHandlerDropItem() {
+		return ComponentFactory.getLunarComponent()._handlerDropItem();
+	}
 }

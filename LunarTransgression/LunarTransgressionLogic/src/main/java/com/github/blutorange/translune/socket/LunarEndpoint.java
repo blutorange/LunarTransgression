@@ -3,6 +3,7 @@ package com.github.blutorange.translune.socket;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
@@ -68,10 +69,13 @@ public class LunarEndpoint {
 			return;
 		}
 		logger.debug("opening lunar session " + session.getId());
-		if (session.getOpenSessions().size() > 1) {
-			logger.info("more than one session open to same endpoint, closing: " + session.getId());
-			socketProcessing.close(session, CloseCodes.VIOLATED_POLICY, "Only one session may be opened.");
-			return;
+		final Set<Session> sessions = session.getOpenSessions();
+		if (sessions.size() > 1) {
+			logger.info("more than one session open to same endpoint, closing them");
+			sessions.forEach(openSession -> {
+				if (openSession.isOpen())
+					socketProcessing.close(session, CloseCodes.PROTOCOL_ERROR, "New session from same user requested.");
+			});
 		}
 		socketProcessing.initSession(session);
 	}

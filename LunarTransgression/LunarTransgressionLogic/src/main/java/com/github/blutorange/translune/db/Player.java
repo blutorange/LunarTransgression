@@ -43,6 +43,11 @@ public class Player extends AbstractStoredEntity {
 	private String description = StringUtils.EMPTY;
 
 	@NotNull
+	@Size(max = 64)
+	@Column(name = "imgavatar", nullable = false, unique = false, updatable = false, length = 64)
+	private String imgAvatar;
+
+	@NotNull
 	@Size(min = Constants.MIN_ITEMS, max = Constants.MAX_ITEMS)
 	@ManyToMany(targetEntity = Item.class, cascade = {}, fetch = FetchType.LAZY)
 	@JoinTable(name = "playeritem", joinColumns = @JoinColumn(name = "playeritem_player", nullable = false, foreignKey = @ForeignKey(name = "fk_playeritem_player")), inverseJoinColumns = @JoinColumn(name = "playeritem_item", foreignKey = @ForeignKey(name = "fk_playeritem_item")))
@@ -78,6 +83,13 @@ public class Player extends AbstractStoredEntity {
 	@Override
 	public EEntityMeta getEntityMeta() {
 		return EEntityMeta.PLAYER;
+	}
+
+	/**
+	 * @return the imgAvatar
+	 */
+	public String getImgAvatar() {
+		return imgAvatar;
 	}
 
 	/**
@@ -150,6 +162,11 @@ public class Player extends AbstractStoredEntity {
 		characterState.setPlayer(this);
 	}
 
+	void addReleasedCharacterState(final CharacterState characterState) {
+		releasedCharacterStates.add(characterState);
+		characterState.setPlayer(this);
+	}
+
 	void addItem(final Item item) {
 		items.add(item);
 	}
@@ -205,6 +222,14 @@ public class Player extends AbstractStoredEntity {
 	 */
 	void setDescription(final String description) {
 		this.description = description;
+	}
+
+	/**
+	 * @param imgAvatar
+	 *            the imgAvatar to set
+	 */
+	void setImgAvatar(final String imgAvatar) {
+		this.imgAvatar = imgAvatar;
 	}
 
 	/**

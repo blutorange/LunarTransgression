@@ -1,8 +1,11 @@
 package com.github.blutorange.translune;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.zip.ZipFile;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 
@@ -119,6 +122,21 @@ public class Sandbox {
 			ldm.modify(item, ModifiableItem.class, s -> s.setPower(43));
 
 		System.out.println("OK");
+	}
+
+	static void avatar() throws IOException {
+		// startup
+		final BufferedImage  img = ComponentFactory.getLunarComponent().imageProcessing().generateDisabledAvatar();
+		ImageIO.write(img, "png", new File(String.format("/tmp/avatar.png")));
+		final int n = 100;
+		final BufferedImage[] array = new BufferedImage[n];
+		final long t1 = System.currentTimeMillis();
+		for (int i = n; i --> 0;)
+			array[i] = ComponentFactory.getLunarComponent().imageProcessing().generateRandomAvatar();
+		final long t2 = System.currentTimeMillis();
+		System.out.println("Took " + (t2-t1)/1000.0f + "millis");
+		for (int i = n; i --> 0;)
+			ImageIO.write(array[i], "png", new File(String.format("/tmp/avatar_%05d.png", i)));
 	}
 
 	static void jsoniter() {

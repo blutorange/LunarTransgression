@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -31,6 +32,11 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 	@Enumerated(value = EnumType.STRING)
 	@Column(name = "effect", unique = false, nullable = false, updatable = false)
 	private EItemEffect effect = EItemEffect.HEAL;
+
+	@NotEmpty
+	@Size(max = 64)
+	@Column(name = "imgicon", nullable = false, unique = false, updatable = false, length = 64)
+	private String imgIcon;
 
 	@NonNull
 	@NotNull
@@ -58,11 +64,6 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 	public Item() {
 	}
 
-	@Override
-	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
-		// no associations
-	}
-
 	/**
 	 * @return the effect
 	 */
@@ -74,6 +75,13 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 	@JsonIgnore
 	public EEntityMeta getEntityMeta() {
 		return EEntityMeta.ITEM;
+	}
+
+	/**
+	 * @return the imgIcon
+	 */
+	public String getImgIcon() {
+		return imgIcon;
 	}
 
 	/**
@@ -109,12 +117,29 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 		return target;
 	}
 
+	@Override
+	public @NonNull String toString() {
+		return String.format("Item(%s,%d,%s)", name, Integer.valueOf(power), effect);
+	}
+
+	@Override
+	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
+		// no associations
+	}
+
 	/**
 	 * @param effect
 	 *            the effect to set
 	 */
 	void setEffect(final EItemEffect effect) {
 		this.effect = effect;
+	}
+
+	/**
+	 * @param imgIcon the imgIcon to set
+	 */
+	void setImgIcon(final String imgIcon) {
+		this.imgIcon = imgIcon;
 	}
 
 	/**
@@ -143,10 +168,5 @@ public class Item extends AbstractStoredEntity implements ITargettable {
 
 	void setTarget(final EActionTarget target) {
 		this.target = target != null ? target : EActionTarget.OPPONENTS_FIELD;
-	}
-
-	@Override
-	public @NonNull String toString() {
-		return String.format("Item(%s,%d,%s)", name, Integer.valueOf(power), effect);
 	}
 }

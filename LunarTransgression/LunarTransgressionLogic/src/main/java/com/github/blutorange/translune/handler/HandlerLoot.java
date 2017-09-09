@@ -168,8 +168,10 @@ public class HandlerLoot implements ILunarMessageHandler {
 				mp.removeItem(dropItem);
 			if (addItem != null)
 				mp.addItem(addItem);
-			if (dropCharacterState != null)
+			if (dropCharacterState != null) {
 				mp.removeCharacterState(dropCharacterState);
+				mp.addReleasedCharacterState(dropCharacterState);
+			}
 			if (newCharacterState != null)
 				mp.addCharacterState(newCharacterState);
 		});

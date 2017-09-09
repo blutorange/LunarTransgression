@@ -63,15 +63,16 @@
 		}
 		
 		onRemove() {
-			super.onRemove();
 			this.game.net.removeMessageHandlers(Lunar.Message.invited);
 			this.game.net.removeMessageHandlers(Lunar.Message.inviteRetracted);
 			this.game.net.removeMessageHandlers(Lunar.Message.battlePreparationCancelled);
+			this.game.net.removeMessageHandlers(Lunar.Message.battlePrepared);
 			this.game.removeScene(this._battlePrep);
 			this.game.removeScene(this._loadScene);
 			this.game.removeScene(this._tabScene);
 			this.game.removeScene(this._tabDetails);
 			this.game.removeScene(this._inviteConfirm);
+			super.onRemove();
 		}
 		
 		update(delta) {
@@ -254,7 +255,7 @@
 
 			const textButtonChar = this.createButtonText(buttonChar, "Pokémon");
 			const textButtonItem = this.createButtonText(buttonItem, "Item");
-			const textButtonInvite = this.createButtonText(buttonInvite, "Invite");
+			const textButtonInvite = this.createButtonText(buttonInvite, "Players");
 			const textButtonCollection = this.createButtonText(buttonCollection, "Collection");
 			
 			buttonItem.on('pointertap', this._onClickItem, this);
@@ -396,10 +397,11 @@
 		
 		onOpponentAccepted(nickname) {
 			const _this = this;
+			this.game.switchBgm(null, 0.01,2000);
 			this.game.net.registerMessageHandler(Lunar.Message.battlePreparationCancelled, {
 				handle: this.method('_onBattlePrepCancelled'),
 				error: error => {
-					console.error('received error on battle prep cancelled', error)
+					console.error('received error on battle prep cancelled', error);
 					_this._onBattlePrepCancelled();
 				}
 			});
@@ -410,7 +412,9 @@
 		
 		cancelBattlePrep() {
 			this.tabModal(false);
+			this.game.removeScene(this._loadScene);
 			this.game.removeScene(this._battlePrep);
+			this.game.switchBgm(null, null, 2000);
 			this.game.net.dispatchMessage(Lunar.Message.cancelBattlePreparation, {
 				
 			}).then(() => {
@@ -418,22 +422,53 @@
 			}).catch(error => { 
 				console.log("failed to cancel battle preparations")
 			}).then(() => {
-				this.game.net.removeMessageHandlers(Lunar.Message.battlePreparationCancelled);				
+				this.game.net.removeMessageHandlers(Lunar.Message.battlePrepared);
+				this.game.net.removeMessageHandlers(Lunar.Message.battlePreparationCancelled);
 			});
 			this._battlePrep = undefined;
 		}
 		
+		_cancelBattle() {
+			this.tabModal(false);
+			this.game.switchBgm(null, null, 2000);
+			this.game.net.removeMessageHandlers(Lunar.Message.battlePrepared);
+			this.game.net.removeMessageHandlers(Lunar.Message.battlePreparationCancelled);
+			this.game.removeScene(this._battlePrep);
+			this.game.removeScene(this._loadScene);
+			this.showConfirmDialog("Could not start battle, please try again later.");
+			this._battlePrep = undefined;
+			this._loadScene = undefined;
+		}
+		
 		battle(characterStates, items) {
-			console.log("battle prepared!!!", characterStates);
+			this.tabModal(true);
+			this._loadScene = new Lunar.Scene.Load(this.game);
+			this.game.pushScene(this._loadScene);
+			this.game.net.registerMessageHandler(Lunar.Message.battlePrepared, {
+				handle: this.method('_onBattlePrepared'),
+				errror: error => {
+					console.error('received error on battle prepared', error);
+					this._cancelBattle();
+				}
+			});
 			this.game.net.dispatchMessage(Lunar.Message.prepareBattle, {
 				characterStates: characterStates.map(cs => cs.id),
 				items: items.map(item => item.name)
 			}).then(response => {
-				
 			}).catch(error => {
 				console.error("could not prepare battle", error);
-				this.tabModal(false);
+				this._cancelBattle();
+			}).then(() => {
 			});
+		}
+		
+		_onBattlePrepared() {
+			this.game.net.removeMessageHandlers(Lunar.Message.battlePrepared);
+			this.game.net.removeMessageHandlers(Lunar.Message.battlePreparationCancelled);
+			this.game.removeScene(this._battlePrep);
+			this.game.removeScene(this._loadScene);
+			this.game.removeScene(this);
+			this.game.pushScene(new Lunar.Scene.Battle(this.game));
 		}
 		
 		/**

@@ -66,16 +66,35 @@
 			
 			const geoBase = Lunar.Geometry.layoutVbox({
 				box: panel.bodyDimension,
-				dimension: [10,20,70],
+				dimension: [20,15,65],
 				relative: true
 			});
 			
-			const geoDesc = Lunar.Geometry.layoutHbox({
+			const geoTop = Lunar.Geometry.layoutHbox({
+				box: geoBase[0],
+				dimension: [1,2],
+				relative: true
+			});
+			
+			const geoAvatar = Lunar.Geometry.layoutHbox({
+				box: geoTop[0],
+				padding: {
+					left: 0.04,
+					right: 0.04,
+					top: 0.04,
+					bottom: 0.04
+				},
+				relative: true
+			});
+			
+			const geoDescription = Lunar.Geometry.layoutHbox({
 				box: geoBase[1],
 				padding: {
-					top: 0.2
+					top: 0.3,
+					left: 0.05,
+					right: 0.05
 				},
-				relative: false
+				relative: true
 			});
 			
 			const geoIcons = Lunar.Geometry.layoutGrid({
@@ -87,9 +106,15 @@
 				relative: true
 			});
 			
-			this.geo(h.$nickname, geoBase[0], {keepSize: true, anchor: 0.5});
-			this.geo(h.$description, geoDesc[0], {keepSize: true, anchor: 0.5});
+			this.geo(h.$top, geoBase[0]);
+			this.geo(h.$description, geoBase[1]);
 			this.geo(h.$icons, geoBase[2]);
+			
+			this.geo(h.top.$avatar, geoTop[0]);
+			this.geo(h.top.$nickname, geoTop[1], {keepSize: true, anchor: [0,0.5]});
+			
+			this.geo(h.top.avatar.$image, geoAvatar[0], {proportional: true, anchor: 0.5});
+			this.geo(h.description.$text, geoDescription[0], {keepSize: true, anchor: 0.5});
 			
 			geoIcons.flatten().forEach((geo, index) => {
 				const characterState = this._playerDetails.characterStates[index];
@@ -117,6 +142,7 @@
 			delegateLoadable.loadable = loaderLoadable;
 			loader.reset();
 			loader.add("icons", `spritesheet/spritesheet.json?resources=${icons}`);
+			loader.add("avatar", `resource/${this._playerDetails.imgAvatar}`);
 			loader.load();
 		}
 		
@@ -129,10 +155,15 @@
 			this._loaded = true;
 			
 			const loader = this.game.loaderFor('menu-detail');
+			const avatar = new PIXI.Sprite(loader.resources.avatar.texture);
 			const nickname = new PIXI.Text(this._nickname, Lunar.FontStyle.playerTitle);
 			const formatted = this._playerDetails.description  ? `»${this._playerDetails.description}«` : '(no description)'
 			const description = new PIXI.Text(formatted, Lunar.FontStyle.playerDesc);
+			
 			const containerIcons = new PIXI.ClipContainer();
+			const containerTop = new PIXI.ClipContainer();
+			const containerDescription = new PIXI.ClipContainer();
+			const containerAvatar = new PIXI.ClipContainer();
 			
 			const icons = this._playerDetails.characterStates.map(characterState => {
 				const texture = loader.resources.icons.spritesheet.textures[characterState.imgIcon];
@@ -159,14 +190,28 @@
 				this.menu.actionButton1.on('pointertap', this._onClickInvite, this);
 			}
 			
-			this.view.addChild(nickname);
-			this.view.addChild(description);
+			this.view.addChild(containerTop);
+			this.view.addChild(containerDescription);
 			this.view.addChild(containerIcons);
+			containerTop.addChild(containerAvatar);
+			containerTop.addChild(nickname);
+			containerAvatar.addChild(avatar);
+			containerDescription.addChild(description);
 			
 			this.hierarchy = {
+				top: {
+					avatar: {
+						$image: avatar
+					},
+					$nickname: nickname,
+					$avatar: containerAvatar
+				},
+				description: {
+					$text: description
+				},
 				icons: icons,
-				$nickname: nickname,
-				$description: description,
+				$top: containerTop,
+				$description: containerDescription,
 				$icons: containerIcons
 			};	
 		}
@@ -292,7 +337,7 @@
 				details: description
 			}).then(response => {
 				_this._playerDetails.description = response.data.data;
-				_this.hierarchy.$description.text = `»${_this._playerDetails.description}«`;
+				_this.hierarchy.description.$text.text = `»${_this._playerDetails.description}«`;
 			}).catch(() => {
 				_this.showConfirmDialog("Could not change the description, please try again later.");
 			});

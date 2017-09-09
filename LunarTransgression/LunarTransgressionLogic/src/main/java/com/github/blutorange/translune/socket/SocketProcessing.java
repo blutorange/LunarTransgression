@@ -27,7 +27,6 @@ import com.github.blutorange.translune.message.MessageInviteRejected;
 import com.github.blutorange.translune.message.MessageInviteRetracted;
 import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 import com.github.blutorange.translune.util.Constants;
-import com.jsoniter.output.JsonStream;
 
 @Singleton
 public class SocketProcessing implements ISocketProcessing {
@@ -62,7 +61,7 @@ public class SocketProcessing implements ISocketProcessing {
 	@Override
 	public Future<@Nullable Void> dispatchMessage(final Session session, final ELunarStatusCode status,
 			final ILunarPayload message) {
-		final String payload = JsonStream.serialize(message);
+		final String payload = jsoniter.get().serialize(message);
 		final AtomicInteger time = (AtomicInteger) session.getUserProperties().get(Constants.SESSION_KEY_SERVER_TIME);
 		if (time == null)
 			throw new RuntimeException("initSession not called, sever time is null");

@@ -17,7 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 @Entity
 @Table(name = "resource")
-public class Resource extends AbstractEntity {
+public class Resource extends AbstractUnstoredEntity {
 
 	@Lob
 	@Basic(optional = false, fetch = FetchType.EAGER)

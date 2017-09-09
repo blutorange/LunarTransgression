@@ -3,6 +3,7 @@ package com.github.blutorange.translune.logic;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.db.Item;
@@ -200,9 +201,10 @@ class BattleContext implements IBattleContext {
 		return effectorStack;
 	}
 
+	@Nullable
 	@Override
 	public String getItem(final int player, final int item) {
-		return items.get(player)[item];
+		return getItems(player)[item];
 	}
 
 	@Override
@@ -212,7 +214,10 @@ class BattleContext implements IBattleContext {
 
 	@Override
 	public String[] getItems(final int player) {
-		return items.get(player);
+		final String[] items = this.items.get(player);
+		if (items == null)
+			throw new RuntimeException("Items array is null for player " + player);
+		return items;
 	}
 
 	@Override

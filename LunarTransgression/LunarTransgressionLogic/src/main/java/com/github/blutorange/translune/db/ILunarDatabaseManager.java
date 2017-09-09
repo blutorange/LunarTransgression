@@ -125,6 +125,16 @@ public interface ILunarDatabaseManager {
 				final ThrowingFunction<@NonNull EntityManager, T, Exception> runnable) {
 			throw new RuntimeException("mock - injection probably failed");
 		}
+
+		@Override
+		public void persistResource(final String name, final byte @NonNull [] data, final String mime, final String filename) {
+			throw new RuntimeException("mock - injection probably failed");
+		}
+
+		@Override
+		public void persistNonManaged(final AbstractUnstoredEntity... resource) throws IOException {
+			throw new RuntimeException("mock - injection probably failed");
+		}
 	}
 
 	void checkConnection() throws Exception;
@@ -171,4 +181,8 @@ public interface ILunarDatabaseManager {
 
 	@Nullable
 	<@Nullable T> T withEm(boolean transactional, ThrowingFunction<@NonNull EntityManager, T, Exception> runnable);
+
+	void persistResource(String name, byte @NonNull[] data, String mime, String filename) throws IOException;
+
+	void persistNonManaged(AbstractUnstoredEntity... entities) throws IOException;
 }
