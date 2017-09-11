@@ -28,6 +28,7 @@ import com.github.blutorange.translune.message.MessageBattleEnded;
 import com.github.blutorange.translune.message.MessageBattlePreparationCancelled;
 import com.github.blutorange.translune.message.MessageBattlePrepared;
 import com.github.blutorange.translune.message.MessageBattleStepped;
+import com.github.blutorange.translune.serial.PlayerViewBattle;
 import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 import com.github.blutorange.translune.socket.BattleResult;
@@ -166,7 +167,7 @@ public class BattleRunner implements IBattleRunner {
 				throw new IllegalArgumentException("Player does not own this item: " + item);
 	}
 
-	private void battlePreparations() {
+	private void battlePreparations() throws IOException {
 		try {
 			phaser.awaitAdvanceInterruptibly(phaser.getPhase(), customProperties.getBattlePreparationTimeoutMillis(),
 					TimeUnit.MILLISECONDS);
@@ -336,12 +337,21 @@ public class BattleRunner implements IBattleRunner {
 					new MessageBattleEnded(isVictory, battleResults));
 	}
 
-	private void informPlayerAboutPrepared(final int playerIndex) {
+	private void informPlayerAboutPrepared(final int playerIndex) throws IOException {
 		// We already checked when battle processing began.
 		@SuppressWarnings("resource")
 		final Session session = sessionStore.retrieve(players[playerIndex]);
-		if (session != null)
-			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattlePrepared());
+		if (session != null) {
+			final IComputedBattleStatus[][] computed = battleProcessing.computedBattleStatus(characterStates, battleStatus);
+			final Player p1 = databaseManager.find(Player.class, players[playerIndex]);
+			final Player p2 = databaseManager.find(Player.class, players[1-playerIndex]);
+			if (p1 == null || p2 == null)
+				throw new IOException("Player not found: " + players[0] + ", " + players[1]);
+			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattlePrepared(
+					new PlayerViewBattle(p1, computed[playerIndex]),
+					new PlayerViewBattle(p2, computed[1-playerIndex])
+			));
+		}
 	}
 
 	private void informPlayerAboutStepped(final int playerIndex, final int winner,

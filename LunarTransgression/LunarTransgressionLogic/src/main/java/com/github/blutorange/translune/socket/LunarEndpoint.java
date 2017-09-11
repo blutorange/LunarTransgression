@@ -73,7 +73,7 @@ public class LunarEndpoint {
 		if (sessions.size() > 1) {
 			logger.info("more than one session open to same endpoint, closing them");
 			sessions.forEach(openSession -> {
-				if (openSession.isOpen())
+				if (openSession.isOpen() && !openSession.getId().equals(session.getId()))
 					socketProcessing.close(session, CloseCodes.PROTOCOL_ERROR, "New session from same user requested.");
 			});
 		}

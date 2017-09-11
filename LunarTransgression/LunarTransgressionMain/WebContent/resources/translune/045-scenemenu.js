@@ -29,10 +29,10 @@
 			const chainedLoadable = new Lunar.ChainedLoadable(requestLoadable, requestLoadableInvitation, delegateLoadable);
 			this._loadScene = new Lunar.Scene.Load(this.game, chainedLoadable);
 			
-			requestLoadable.promise.then(response => _this._initLoader(delegateLoadable, response));
-			requestLoadableInvitation.promise.then(response => this._invitations = response.data.data);
 			chainedLoadable.addCompletionListener(this.method('_initScene'));
-			
+			requestLoadableInvitation.promise.then(response => this._invitations = response.data.data);
+			requestLoadable.promise.then(response => _this._initLoader(delegateLoadable, response));
+						
 			return this._loadScene;
 		}
 		
@@ -103,7 +103,7 @@
 			const loaderLoadable = new Lunar.LoaderLoadable(loader);
 			delegateLoadable.loadable = loaderLoadable; 
 			loader.reset();
-			loader.add("bg", `resource/${background}`);
+			loader.add("bg", `resource/${background}`);			
 			loader.load();
 		}
 		
@@ -266,7 +266,7 @@
 			// Side buttons
 			const buttonBattle = this._createSideButton('battle.png', this._onClickBattle);
 			const buttonExit = this._createSideButton('close.png', this._onClickExit);
-			const buttonSettings = this._createSideButton('settings.png', this._onClickSettings);
+			const buttonSettings = this._createSideButton('large.png', this._onClickSettings);
 			
 			buttonBattle.tint = 0x111111;
 			
@@ -374,12 +374,13 @@
 		_onClickSettings() {
 			const _this = this;
 			this.game.sfx('resources/translune/static/confirm');
+			this.game.toogleFullscreen();
 		}
 		
 		_onClickBattle() {
 			const invitation = this._invitations.shift();
 			if (!invitation) {
-				this.game.sfx('resources/translune/static/unable', 0.5);
+				this.game.sfx('resources/translune/static/unable', {volume: 0.5});
 				return;
 			}
 			this._updateInvitations();
@@ -462,13 +463,15 @@
 			});
 		}
 		
-		_onBattlePrepared() {
+		_onBattlePrepared(response) {
+			const battleData = response.data;
 			this.game.net.removeMessageHandlers(Lunar.Message.battlePrepared);
 			this.game.net.removeMessageHandlers(Lunar.Message.battlePreparationCancelled);
 			this.game.removeScene(this._battlePrep);
 			this.game.removeScene(this._loadScene);
 			this.game.removeScene(this);
-			this.game.pushScene(new Lunar.Scene.Battle(this.game));
+			this.game.removeAllScenes();
+			this.game.pushScene(new Lunar.Scene.Battle(this.game, battleData));
 		}
 		
 		/**
@@ -580,7 +583,7 @@
 			if (!from)
 				return;
 			this._invitations.push(from);
-			this.game.sfx('resources/translune/static/bell', 0.5);
+			this.game.sfx('resources/translune/static/bell', {volume: 0.5});
 			this._updateInvitations();
 		}
 

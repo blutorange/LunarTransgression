@@ -59,4 +59,7 @@ public interface IBattleProcessing {
 	void changeStages(IStaged skill, IComputedBattleStatus target, List<String> messages, IBattleContext context);
 
 	void performHeal(IHealing healData, IComputedBattleStatus user, List<String> messages, IBattleContext context);
+
+	IComputedBattleStatus[][] computedBattleStatus(List<String[]> characterStates, BattleStatus[][] battleStatus)
+			throws IOException;
 }

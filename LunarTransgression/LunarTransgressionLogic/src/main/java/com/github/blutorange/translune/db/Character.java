@@ -124,7 +124,7 @@ public class Character extends AbstractStoredEntity {
 	private int physicalDefense;
 
 	@NotNull
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "charskill", uniqueConstraints = @UniqueConstraint(name = "uk_charskill", columnNames = {
 			"level", "skill",
 			"\"character\"" }), foreignKey = @ForeignKey(name = "fk_charskill_char"), joinColumns = @JoinColumn(name = "\"character\"", nullable = false, unique = false, updatable = false, insertable = true))

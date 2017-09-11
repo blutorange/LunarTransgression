@@ -83,7 +83,7 @@ public enum EHandlerFetchData {
 		@Nullable
 		@Override
 		public Object fetch(final Session session, final String details) throws Exception {
-			return invitationStore.removeAllTo(socketProcessing.getNickname(session))
+			return invitationStore.getAllTo(socketProcessing.getNickname(session))
 					.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
 		}
 	};

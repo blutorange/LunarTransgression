@@ -135,6 +135,7 @@ public interface LunarComponent {
 	ImportProcessing _importProcessing();
 	LocalizationBundle _localizationBundle();
 	ImageProcessing _imageProcessing();
+	BattleProcessing _battleProcessing();
 
 	HandlerAuthorize _handlerAuthorize();
 	HandlerInvite _handlerInvite();
@@ -153,4 +154,5 @@ public interface LunarComponent {
 	SessionStore _sessionStore();
 	InvitationStore _invitationStore();
 	IJsoniterSupplier jsoniter();
+
 }

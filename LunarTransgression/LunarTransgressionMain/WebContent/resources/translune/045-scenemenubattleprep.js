@@ -38,6 +38,7 @@
 					_this.showConfirmDialog("Could not load your character and item data.");
 				});
 			chainedLoadable.addCompletionListener(this.method('_initScene'));
+			
 			return this._loadScene;
 		}
 		

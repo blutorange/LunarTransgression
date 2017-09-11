@@ -80,7 +80,7 @@
 			// override
 		}
 		
-		showConfirmDialog(message) {
+		showConfirmDialog(message, onClose) {
 			this._game.pushScene(new Lunar.Scene.Dialog(this._game, { 
 				message: message || "Please confirm",
 				choices: [
@@ -89,6 +89,7 @@
 						callback: dialog => {
 							this._game.sfx('resources/translune/static/ping');
 							dialog.close()
+							onClose && onClose();
 						}
 					}
 				]

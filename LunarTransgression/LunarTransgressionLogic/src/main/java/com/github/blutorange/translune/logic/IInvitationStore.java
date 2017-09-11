@@ -16,4 +16,5 @@ public interface IInvitationStore {
 	void removeAllWith(String nickname);
 	@Nullable
 	MessageInvite retrieve(String from, String to);
+	Set<String> getAllTo(String to);
 }

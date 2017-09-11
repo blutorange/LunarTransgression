@@ -306,10 +306,16 @@
 	 */
 	Lunar.Constants = {
 		minReleaseLevel: 80,
-		reponseTimeout: 10, // seconds
-		queueTimeout: 5, // seconds
+		reponseTimeout: location.pathname.endsWith("_debug.html") ? 1999 : 20, // seconds
+		queueTimeout: location.pathname.endsWith("_debug.html") ? 999 : 10, // seconds
 		queueInterval: 0.25, // seconds,
-		pi2: 2*Math.PI
+		pi2: 2*Math.PI,
+		degToRad: Math.PI/180,
+		deg90AsRad: Math.PI/2,
+		deg180AsRad: Math.PI,
+		deg270AsRad: Math.PI*270/180,
+		deg135AsRad: Math.PI*135/180,
+		deg315AsRad: Math.PI*315/180
 	};
 	
 	Lunar.FontStyle = {
@@ -348,7 +354,7 @@
 			    fontSize: game => game.dx(0.020),
 			    fontStyle: '',
 			    fontWeight: 'bold',
-			    fill: ['#ffffff', '#99ff00'], // gradient
+			    fill: ['#ffffff', '#99ff00'],
 			    stroke: '#4a1850',
 			    strokeThickness: 2,
 			    dropShadow: true,
@@ -358,12 +364,27 @@
 			    dropShadowDistance: 6,
 			    wordWrap: false
 			});
+			Lunar.FontStyle.battleTextbox = new PIXI.TextStyle({
+			    fontFamily: 'Arial',
+			    fontSize: game => game.dx(0.026),
+			    fontStyle: '',
+			    fontWeight: 'bold',
+			    fill: ['#ffffff', '#ff9900'],
+			    stroke: '#4a1850',
+			    strokeThickness: 5,
+			    dropShadow: true,
+			    dropShadowColor: '#000000',
+			    dropShadowBlur: 4,
+			    dropShadowAngle: Math.PI / 6,
+			    dropShadowDistance: 6,
+			    wordWrap: false
+			});			
 			Lunar.FontStyle.dialog = new PIXI.TextStyle({
 			    fontFamily: 'Arial',
 			    fontSize: game => game.dx(0.040),
 			    fontStyle: '',
 			    fontWeight: 'bold',
-			    fill: ['#ffffff', '#00ff99'], // gradient
+			    fill: ['#ffffff', '#00ff99'],
 			    stroke: '#4a1850',
 			    strokeThickness: 5,
 			    dropShadow: true,
@@ -713,10 +734,11 @@
 	
 	Lunar.File = {
 		removeExtension: filename => {
-			const index = filename.lastIndexOf('.');
-			if (index < 0)
+			const slash = filename.lastIndexOf('/');
+			const dot = filename.lastIndexOf('.');
+			if (dot < 0 || dot < slash)
 				return filename;
-			return filename.substr(0, index);
+			return filename.substr(0, dot);
 		}
 	};
 	
@@ -872,6 +894,10 @@
 				dimensionable.anchor.set(...a);
 			return dimensionable;
 		}
+	};
+	
+	Lunar.Math = {
+		modulo: (x,m) => x < 0 ? (x%m + m) : (x % m) 
 	};
 	
 	/**

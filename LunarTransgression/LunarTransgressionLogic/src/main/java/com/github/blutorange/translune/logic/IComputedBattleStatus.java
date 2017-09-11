@@ -18,6 +18,7 @@ public interface IComputedBattleStatus extends IComputedStatus {
 	public final static String JSON_PHYSICAL_ATTACK = "physicalAttack";
 	public final static String JSON_PHYSICAL_DEFENSE = "physicalAttack";
 	public final static String JSON_SPEED = "speed";
+
 	static void encodeJson(@Nullable final Object object, final JsonStream stream) throws IOException {
 		if (object == null) {
 			stream.writeNull();
@@ -60,7 +61,6 @@ public interface IComputedBattleStatus extends IComputedStatus {
 
 		stream.writeObjectField(JSON_SPEED);
 		stream.writeVal(s.getComputedBattleSpeed());
-		stream.writeMore();
 
 		stream.writeObjectEnd();
 	}

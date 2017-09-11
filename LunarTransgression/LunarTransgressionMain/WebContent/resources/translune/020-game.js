@@ -16,6 +16,16 @@
 			this.window = window;
 			this.scenes = [];
 			this.loaders = {};
+			this._fmath = new FMath({resolution:360*4});
+			this._debug = location.pathname.endsWith("_debug.html");
+		}
+		
+		get debug() {
+			return this._debug;
+		}
+		
+		get fmath() {
+			return this._fmath;
 		}
 		
 		start() {
@@ -63,16 +73,31 @@
 				document.documentElement.msRequestFullscreen;
 	        if (!requestFullscreen)
 	        	return;
-	        const onFullscreenChange =
-	        		document.documentElement.onfullscreenchange ? 'onfullscreenchange' :
-	        		document.documentElement.onmozfullscreenchange  ? 'onmozfullscreenchange' :
-	        		document.documentElement.MSFullscreenChange ? 'MSFullscreenChange' :
-	        		document.documentElement.onwebkitfullscreenchange ? 'onwebkitfullscreenchange' : undefined;
-	        if (onFullscreenChange) {
-	        	document.documentElement[onFullscreenChange] = () => {
-	    			_this.updateScreen();
-	        	}
-	        }
+//	        document.documentElement.onfullscreenchange =
+//	        	document.documentElement.onmozfullscreenchange =
+//	        		document.documentElement.MSFullscreenChange =
+//	        			document.documentElement.onwebkitfullscreenchange =
+//	        				() => _this._updateScreen();
+			requestFullscreen.call(document.documentElement);
+		}
+		
+		leaveFullscreen() {
+	        const exitFullscreen =
+	        	document.exitFullscreen ||
+	        	document.webkitExitFullscreen ||
+	            document.mozCancelFullScreen ||
+	            document.msExitFullscreen;
+	        if (exitFullscreen)
+	        	exitFullscreen.call(document);
+		}
+		
+		toogleFullscreen() {
+		    const isInFullScreen =
+		    	(document.fullscreenElement && document.fullscreenElement !== null) ||
+		    	(document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+		    	(document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+		    	(document.msFullscreenElement && document.msFullscreenElement !== null);
+		    isInFullScreen ? this.leaveFullscreen() : this.goFullscreen();
 		}
 		
 		/**
@@ -148,6 +173,11 @@
 			this.operationStack.push({type: 'add', scene: scene, container: container || this.app.stage});
 		}
 		
+		removeAllScenes() {
+			for (let scene of this.scenes)
+				this.removeScene(scene);
+		}
+		
 		removeScene(scene) {
 			if (!scene)
 				return;
@@ -157,7 +187,8 @@
 		/**
 		 * @private
 		 */
-		sfx(path, volume = 0.25) {
+		sfx(path, {volume = 0.25, play = true} = {}) {
+			const _this = this;
 			const base = Lunar.File.removeExtension(this.net.httpBase + "/" + path);
 			let howler = this.sfx[base];
 			if (!howler) {
@@ -167,7 +198,11 @@
 					volume: volume
 				});
 			}
-			howler.play();
+			if (play) {
+				const id = howler.play();
+				howler.volume(volume, id);
+			}
+			return howler;
 		}
 		
 		/**
@@ -182,6 +217,7 @@
 						[this.net.httpBase + '/' + path + ".webm", path + '.mp3']).sort(
 								file => PREFERRED_FORMATS[file.substring(file.lastIndexOf('.') || 0)] || 999),
 				loop: true,
+				html5: true,
 				volume: 0
 			});
 			const _this = this;

@@ -14,6 +14,7 @@
 		<class>com.github.blutorange.translune.db.Resource</class>
 		
 		<properties>
+			<property name="hibernate.enable_lazy_load_no_trans" value="true"/>
 			<property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
 			<property name="hibernate.hikari.minimumIdle" value="5"/>
 			<property name="hibernate.hikari.maximumPoolSize" value="10"/>

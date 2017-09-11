@@ -1,0 +1,57 @@
+{
+	"meta": {
+		"image": "packed.png",
+		"size": {"w":1024,"h":1024},
+		"scale": "1"
+	},
+	"frames": {
+		"curtainleft.png":
+		{
+			"frame": {"x":0,"y":0,"w":439,"h":480},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":439,"h":480},
+			"sourceSize": {"w":439,"h":480}
+		},
+		"curtainright.png":
+		{
+			"frame": {"x":439,"y":0,"w":424,"h":480},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":424,"h":480},
+			"sourceSize": {"w":424,"h":480}
+		},
+		"barbase.png":
+		{
+			"frame": {"x":0,"y":480,"w":46,"h":282},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":46,"h":282},
+			"sourceSize": {"w":46,"h":282}
+		},
+		"barfill.png":
+		{
+			"frame": {"x":46,"y":480,"w":46,"h":282},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":46,"h":282},
+			"sourceSize": {"w":46,"h":282}
+		},
+		"avatarside.png":
+		{
+			"frame": {"x":92,"y":480,"w":133,"h":215},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":133,"h":215},
+			"sourceSize": {"w":133,"h":215}
+		},
+		"pokeball.png":
+		{
+			"frame": {"x":225,"y":480,"w":84,"h":83},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":84,"h":83},
+			"sourceSize": {"w":84,"h":83}
+		}
+	}
+}

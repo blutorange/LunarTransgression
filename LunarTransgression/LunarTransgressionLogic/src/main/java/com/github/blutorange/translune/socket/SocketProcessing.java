@@ -23,7 +23,6 @@ import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.logic.EGameState;
 import com.github.blutorange.translune.logic.IInvitationStore;
 import com.github.blutorange.translune.logic.ISessionStore;
-import com.github.blutorange.translune.message.MessageInviteRejected;
 import com.github.blutorange.translune.message.MessageInviteRetracted;
 import com.github.blutorange.translune.serial.IJsoniter.IJsoniterSupplier;
 import com.github.blutorange.translune.util.Constants;
@@ -184,8 +183,6 @@ public class SocketProcessing implements ISocketProcessing {
 	@Override
 	public void finalizeSession(@NonNull final Session session) {
 		final String nickname = getNickname(session);
-		for (final String from : invitationStore.removeAllTo(nickname))
-			dispatchMessage(nickname, ELunarStatusCode.OK, new MessageInviteRejected(from));
 		for (final String to : invitationStore.removeAllFrom(nickname))
 			dispatchMessage(nickname, ELunarStatusCode.OK, new MessageInviteRetracted(to));
 		if (!nickname.isEmpty())

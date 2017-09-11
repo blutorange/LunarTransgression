@@ -287,10 +287,11 @@ public class BattleProcessing implements IBattleProcessing {
 				battleActions2.toArray(EMPTY_BATTLE_ACTION) };
 	}
 
-	private IComputedBattleStatus[][] computedBattleStatus(final List<String @NonNull []> characterStates,
+	@Override
+	public IComputedBattleStatus[][] computedBattleStatus(final List<String @NonNull []> characterStates,
 			final BattleStatus[][] battleStatus) throws IOException {
 		final IComputedBattleStatus[][] computedBattleStatus = new IComputedBattleStatus[2][4];
-		for (int player = 1; player-- > 0;) {
+		for (int player = 2; player-- > 0;) {
 			for (int character = 4; character-- > 0;) {
 				final String[] states = characterStates.get(player);
 				if (states == null)
@@ -445,7 +446,7 @@ public class BattleProcessing implements IBattleProcessing {
 
 	private CharacterState[][] getCharacterStates(final List<String[]> characterStates) throws IOException {
 		final CharacterState[][] retrievedCharacterStates = new CharacterState[2][4];
-		for (int player = 1; player-- > 0;) {
+		for (int player = 2; player-- > 0;) {
 			for (int character = 1; character-- > 0;) {
 				final String[] states = characterStates.get(player);
 				if (states == null)

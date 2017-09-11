@@ -16,7 +16,7 @@ import com.google.common.collect.Table;
 
 @Singleton
 public class InvitationStore implements IInvitationStore {
-	Table<String, String, MessageInvite> table;
+	final Table<String, String, MessageInvite> table;
 
 	@Inject
 	public InvitationStore() {
@@ -71,6 +71,14 @@ public class InvitationStore implements IInvitationStore {
 	public MessageInvite retrieve(final String from, @NonNull final String to) {
 		synchronized (table) {
 			return table.get(from, to);
+		}
+	}
+
+	@Override
+	public Set<String> getAllTo(final String to) {
+		synchronized (table) {
+			final Map<String,MessageInvite> column = table.column(to);
+			return column.keySet();
 		}
 	}
 }
