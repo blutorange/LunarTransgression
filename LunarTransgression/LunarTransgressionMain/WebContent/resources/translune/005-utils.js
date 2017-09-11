@@ -190,14 +190,20 @@
 	 * @const {IObject<string, function(number)>}
 	 */
 	Lunar.Interpolation = {
-		backAndForth: function(t) {
+		backAndForth: t => {
 			return t < 0.5 ? 2*t : 2-2*t;
 		},
-		slowInSlowOut: function(t) {
+		slowInSlowOut: t => {
 			return 16*t*t*(t-1)*(t-1);
 		},
-		zeroUntil: function(until) {
-			return function(t) {
+		slowInSlowOutOnce: t => {
+			return t*t*(t-2)*(t-2);
+		},
+		slowInFastOutOnce: t => {
+			return t*t;
+		},
+		zeroUntil: until => {
+			return t => {
 				return t < until ? 0 : 1.0/(1.0-until)*(t-until);
 			};
 		}
@@ -261,10 +267,14 @@
 	};
 	
 	Lunar.Array = {
+		/**
+		 * @return {boolean} True iff the array contained the element.  
+		 */
 		removeElement: (array, element) => {
 			const index = array.indexOf(element);
 			if (index >= 0)
 				array.splice(index, 1);
+			return index >= 0;
 		}
 	};
 	

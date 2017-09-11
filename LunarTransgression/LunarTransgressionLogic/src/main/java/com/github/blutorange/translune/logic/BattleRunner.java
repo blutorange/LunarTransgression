@@ -236,6 +236,8 @@ public class BattleRunner implements IBattleRunner {
 		boolean player1Done = true;
 		boolean player2Done = true;
 		synchronized (phaser) {
+			if (battleDone)
+				return;
 			// Check if both players responded in time with a character/item
 			// select.
 			if (commands.get(0) == null) {
@@ -292,10 +294,11 @@ public class BattleRunner implements IBattleRunner {
 	}
 
 	private void endBattle() {
-		battleDone = true;
 		synchronized (phaser) {
+			battleDone = true;
 			characterStates.clear();
-			commands.clear();
+			commands.set(0, null);
+			commands.set(1, null);
 			items.clear();
 			// We already checked for null when battle processing began.
 			battleStore.removeBattle(players[0], players[1]);

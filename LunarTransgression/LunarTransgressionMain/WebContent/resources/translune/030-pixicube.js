@@ -81,9 +81,55 @@
             this._vBackTopRight     = vec4.create();
             this._vBackBottomLeft   = vec4.create();
             this._vBackBottomRight  = vec4.create();
+            
+            const _this = this;
+            let flag = false;
+            const originalRenderWebGL = this._container._renderWebGL;
+            const originalRenderCanvas = this._container._renderCanvas;
+            this._container._renderWebGL = renderer => {
+            	originalRenderWebGL.call(this, renderer);
+            	_this.update();
+            	if (flag)
+            		this._container._renderWebGL = originalRenderWebGL;
+            	flag = true;
+            };
+            this._container._renderWebGL = renderer => {
+            	originalRenderCanvas.call(this, renderer);
+            	_this.update();
+            	if (flag)
+            		this._container._renderCanvas = originalRenderCanvas;
+            	flag = true;
+            };
 
             this.update();
         }
+    	
+    	destroy(destroyContainer = true) {
+    		if (destroyContainer)
+    			this._container.destroy(true);
+    		this._frontTopLeft = undefined;
+    		this._frontTopRight = undefined;
+    		this._frontBottomLeft = undefined;
+    		this._frontBottomRight = undefined;
+    		this._backTopLeft = undefined;
+    		this._backTopRight = undefined;
+    		this._backBottomLeft = undefined;
+    		this._backBottomRight = undefined;
+    		
+    		this._vFrontTopLeft = undefined;
+    		this._vFrontTopRight = undefined;
+    		this._vFrontBottomLeft = undefined;
+    		this._vFrontBottomRight = undefined;
+    		this._vBackTopLeft = undefined;
+    		this._vBackTopRight = undefined;
+    		this._vBackBottomLeft = undefined;
+    		this._vBackBottomRight = undefined;
+    		
+    		this._tmp = undefined;
+    		this._localTransform = undefined;
+    		this._worldTransform = undefined;
+    		this._combined = undefined;
+    	}
 
         setDimensions(halfwidth, halfheight, halfdepth) {
             vec4.set(this._frontTopLeft,    -halfwidth,  halfdepth, -halfheight, 1);

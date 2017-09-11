@@ -4,10 +4,10 @@
 (function(Lunar, window, undefined) {
 	const LINE_THRESHOLD = 75;
 	const State = {
-		IDLE: 0,
-		SETTLING: 1,
-		PRINT_CHARACTERS: 2,
-		WAIT_AFTER_LINE: 3
+		IDLE: Symbol("State-IDLE"),
+		SETTLING: Symbol("State-Settling"),
+		PRINT_CHARACTERS: Symbol("State-PRINT_CHARACTERS"),
+		WAIT_AFTER_LINE: Symbol("State-WAIT_AFTER_LINE")
 	};
 	
 	/**

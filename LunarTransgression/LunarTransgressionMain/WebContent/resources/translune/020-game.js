@@ -254,11 +254,8 @@
 					delegate.onAdd();
 					break;
 				case 'del':
-					const index = this.scenes.indexOf(entry.scene);
-					if (index >= 0) {
-						this.scenes.splice(index,1);
+					if (Lunar.Array.removeElement(this.scenes, entry.scene))
 						entry.scene.onRemove();
-					}
 					if (entry.scene.view.parent)
 						entry.scene.view.parent.removeChild(entry.scene.view);
 					break;

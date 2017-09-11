@@ -18,6 +18,14 @@
 			return this[name].bind(this);
 		}
 		
+		hide() {
+			this.view.visible = false;
+		}
+		
+		show() {
+			this.view.visible = true;
+		}
+		
 		destroy() {
 			this._hierarchy = {};
 			this._game = undefined;

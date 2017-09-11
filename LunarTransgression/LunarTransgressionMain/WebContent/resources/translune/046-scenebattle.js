@@ -1,23 +1,33 @@
 /**
- * 
+ * The main battle scene.
  */
 (function(Lunar, window, undefined) {
-	/**
-	 * The main menu.
-	 */
-	const BATTLE_CIRCLE_CENTER_X = 0;
-	const BATTLE_CIRCLE_CENTER_Y = 0.2;
-	const BATTLE_CIRCLE_RADIUS_X = 0.42;
-	const BATTLE_CIRCLE_RADIUS_Y = 0.12;
-	const BATTLE_CIRCLE_SCALE = 0.4;
-	
 	Lunar.Scene.Battle = class extends Lunar.Scene.Base {
 		constructor(game, battleData) {
 			super(game);
 			this._battleData = battleData;
 			this._loaded = false;
 			this._loadScene = undefined
+			this._textScene = undefined
+			this._field = undefined;
 			this._fieldRotation = 0;
+			this._battlers = [];
+			this._childScenes = [];
+			this._camera = {
+				degree: 0, // current angle
+				moveStartAngle: 0, // transition start angle
+				moveTargetAngle: 0, // target angle in degree
+				moveStartTime: 0, // transition start time
+				moveDuration: 0, // transition time in seconds , 0 to disable
+				moveInverseDuration: 0, // seconds
+			};
+			this._battleCircle = {
+					centerX: 0,
+					centerY: 0.2,
+					radiusX: 0.42,
+					radiusY: 0.12,
+					scale: 0.4
+			};
 		}
 		
 		sceneToAdd() {
@@ -47,27 +57,43 @@
 		}
 		
 		destroy() {
-			//
+			this._field.destroy();
+			this._camera = {};
+			this._battlers = [];
+			this._childScenes = [];
 			this._loadScene = undefined
+			this._textScene = undefined;
+			this._field = undefined;
 			super.destroy();
 		}
 		
 		onAdd() {
 			super.onAdd();
-			if (true || this.game.debug) {
-				let g=()=>{let f;let a=this;window.keep=true;let d=0;return f=()=>{a.positionBattlers(d+=1.4);a.positionBackground(d);if(window.keep)window.setTimeout(f, 20)}}
-				g()();
-			}
+			
+//			// TODO remove this is debug
+//			if (true || this.game.debug) {
+//				let g=()=>{let f;let a=this;window.keep=true;let d=0;return f=()=>{a.positionBattlers(d+=1.4);a.positionBackground(d);if(window.keep)window.setTimeout(f, 20)}}
+//				g()();
+//			}
+			this._pushChildScene(new Lunar.Scene.BattleCurtain(this), this.hierarchy.$front);
+			this.positionCameraOpponent(1, 8);
 		}
-		
+	
 		onRemove() {
+			this._battlers.forEach(battler => this.game.removeScene(battler));
+			this._childScenes.forEach(scene => this.game.removeScene(scene));
+			this.game.removeScene(this._textScene);
+			this._battlers = [];
+			this._childScenes = [];
 			super.onRemove();
 		}
 
 		update(delta) {
 			super.update(delta);
+			this._updateCamera(this._camera);
+//			this._field.update();
 		}
-
+		
 		layout() {
 			super.layout();
 			const h = this.hierarchy;
@@ -99,7 +125,50 @@
 			this._field.setDimensions(this.game.dx(0.7),this.game.dy(0.025), this.game.dx(0.80));
 			this._field.translate3(this.game.x(-0.1), this.game.y(-0.0), this.game.dx(0.50+0.20));
 		    this._field.rotate3Deg(10, [1,0,0]);
-		    this._field.rotate3Deg(5, [0,0,1]);
+		    this._field.rotate3Deg(5, [0,0,1]);		    
+		}
+		
+		get resources() {
+			return this.game.loaderFor('battle').resources;
+		}
+		
+		moveCameraPlayer(index, seconds = 1, deltaDegree = 0, shortest = true) {
+			this.moveCamera(180+95+16*(index+1) + deltaDegree, seconds, undefined, shortest);
+		}
+		
+		moveCameraOpponent(index, seconds = 1, deltaDegree = 0, shortest = true) {
+			this.moveCamera(95+16*(index+1) + deltaDegree, seconds, undefined, shortest);
+		}
+		
+		moveCamera(targetDegree, seconds = 1, startDegree = undefined, shortest = true) {
+			startDegree = startDegree  !== undefined ? startDegree : this._camera.degree;
+			if (shortest) {
+				startDegree = Lunar.Math.modulo(startDegree, 360);
+				targetDegree = Lunar.Math.modulo(targetDegree, 360);
+				if (targetDegree - startDegree > 180)
+					targetDegree -= 360;
+				else if (startDegree - targetDegree > 180)
+					targetDegree += 360;
+			}
+			this._camera.moveTargetAngle = targetDegree;
+			this._camera.moveStartAngle = startDegree;
+			this._camera.moveStartTime = this.time;
+			this._camera.moveDuration = seconds;
+			this._camera.moveInverseDuration = 1/seconds;
+		}
+		
+		positionCameraPlayer(index, deltaDegree = 0) {
+			this.positionCamera(180+95+16*(index+1) + deltaDegree);
+		}
+		
+		positionCameraOpponent(index, deltaDegree = 0) {
+			this.positionCamera(95+16*(index+1) + deltaDegree);
+		}
+		
+		positionCamera(cameraDegree) {
+			this.positionBackground(cameraDegree);
+			this.positionBattlers(cameraDegree);
+			this._camera.degree = cameraDegree;
 		}
 		
 		positionBackground(cameraDegree) {
@@ -119,10 +188,10 @@
 			
 			Lunar.Math.modulo(cameraDegree, 360.0);
 			const fmath = this.game.fmath;
-			const centerX = this.game.x(BATTLE_CIRCLE_CENTER_X);
-			const centerY = this.game.y(BATTLE_CIRCLE_CENTER_Y);
-			const radiusX = this.game.dx(BATTLE_CIRCLE_RADIUS_X);
-			const radiusY = this.game.dy(BATTLE_CIRCLE_RADIUS_Y);
+			const centerX = this.game.x(this._battleCircle.centerX);
+			const centerY = this.game.y(this._battleCircle.centerY);
+			const radiusX = this.game.dx(this._battleCircle.radiusX);
+			const radiusY = this.game.dy(this._battleCircle.radiusY);
 			
 			for (let i = 4; i --> 0;) {
 				const angle = Lunar.Math.modulo(-cameraDegree+185+(i+1)*16,360)*Lunar.Constants.degToRad;
@@ -141,6 +210,37 @@
 	        this._field.preRotate3Deg(cameraDegree-this._fieldRotation, [0,0,1]);
 	        this._fieldRotation = cameraDegree;
 			this._field.update();
+		}
+		
+		_updateCamera(camera) {
+			// Transition smoothly
+			if (camera.moveDuration > 0) {
+				let t = (this.time - camera.moveStartTime) * camera.moveInverseDuration
+				if (t >= 1) {
+					this.positionCamera(camera.moveTargetAngle);
+					camera.moveDuration = 0;
+					this.emit('camera-reached');
+				}
+				else {
+					const diff = camera.moveTargetAngle-camera.moveStartAngle;
+					const newAngle = camera.moveStartAngle + diff * Lunar.Interpolation.slowInSlowOutOnce(t);
+					this.positionCamera(newAngle);
+				}
+			}
+		}
+		
+		/**
+		 * We keep a reference to the pushed scene so that we
+		 * can clean up later.
+		 */
+		_pushChildScene(scene) {
+			this.game.pushScene(scene)
+			this._childScenes.push(scene);
+		}
+		
+		_removeChildScene(scene) {
+			this.game.removeScene(scene)
+			Lunar.Array.removeElement(this._childScenes, scene);
 		}
 		
 		/**
@@ -207,15 +307,17 @@
 			const containerAction = new PIXI.ClipContainer();
 			const containerBattlers = new PIXI.ClipContainer();
 			const groupBattler = new PIXI.DisplayGroup(0, true);
-			containerBattlers.displayList = new PIXI.DisplayList();
 			
 			actionAvatar.alpha = 0.7;
+			containerBattlers.displayList = new PIXI.DisplayList();
+			containerUi.visible = false;
 			
 			containerUi.addChild(containerAction);
 			containerUi.addChild(actionAvatar);
-			this._textScene = new Lunar.Scene.BattleText(this.game);		
-			this.game.pushScene(this._textScene, containerUi);
 			
+			this._textScene = new Lunar.Scene.BattleText(this.game);
+			this.game.pushScene(this._textScene, containerUi);
+						
 			this.view.addChild(bgNormal);
 			this.view.addChild(bgMirrored);
 			this.view.addChild(containerBack);
@@ -226,19 +328,20 @@
 			containerBack.addChild(containerBattlers);
 			
 			this._battlers = [
-				new Lunar.Scene.Battler(this.game, resources.me_back_1, resources.me_front_1),
-				new Lunar.Scene.Battler(this.game, resources.me_back_2, resources.me_front_2),
-				new Lunar.Scene.Battler(this.game, resources.me_back_3, resources.me_front_3),
-				new Lunar.Scene.Battler(this.game, resources.me_back_4, resources.me_front_4),
-				new Lunar.Scene.Battler(this.game, resources.u_back_1, resources.u_front_1),
-				new Lunar.Scene.Battler(this.game, resources.u_back_2, resources.u_front_2),
-				new Lunar.Scene.Battler(this.game, resources.u_back_3, resources.u_front_3),
-				new Lunar.Scene.Battler(this.game, resources.u_back_4, resources.u_front_4)
+				new Lunar.Scene.BattleBattler(this.game, resources.me_back_1, resources.me_front_1, this._battleCircle),
+				new Lunar.Scene.BattleBattler(this.game, resources.me_back_2, resources.me_front_2, this._battleCircle),
+				new Lunar.Scene.BattleBattler(this.game, resources.me_back_3, resources.me_front_3, this._battleCircle),
+				new Lunar.Scene.BattleBattler(this.game, resources.me_back_4, resources.me_front_4, this._battleCircle),
+				new Lunar.Scene.BattleBattler(this.game, resources.u_back_1, resources.u_front_1, this._battleCircle),
+				new Lunar.Scene.BattleBattler(this.game, resources.u_back_2, resources.u_front_2, this._battleCircle),
+				new Lunar.Scene.BattleBattler(this.game, resources.u_back_3, resources.u_front_3, this._battleCircle),
+				new Lunar.Scene.BattleBattler(this.game, resources.u_back_4, resources.u_front_4, this._battleCircle)
 			];
 			
 			for (let i = 0; i < this._battlers.length; ++i) {
 				this.game.pushScene(this._battlers[i], containerBattlers);
 				this._battlers[i].view.displayGroup = groupBattler;
+				this._battlers[i].view.visible = false;
 			}
 			
 			this.hierarchy = {
@@ -254,114 +357,6 @@
 				$front: containerFront,
 				$ui: containerUi
 			};
-		}
-		
-		_pushBattler(battler) {
-			
-			battlers.push(container);
-		}
-	}
-	
-	Lunar.Scene.Battler = class extends Lunar.Scene.Base {
-		constructor(game, back, front) {
-			super(game);
-			this._back = Object.values(back.spritesheet.textures);
-			this._front = Object.values(front.spritesheet.textures);
-			this._mode = 'back';
-			this._sprite = new PIXI.extras.AnimatedSprite(this._back);
-			this._sprite.anchor.set(0.5,0.5);
-			this.view.width = this._sprite.width;
-			this.view.height = this._sprite.height;
-			this._scale = 1;
-		}
-		
-		ringPosition(x, y, angle, centerY, radiusY) {
-			this.setPosition(x,y);
-			this.setScaling(1+BATTLE_CIRCLE_SCALE*(y-centerY)/radiusY);
-			this.view.zOrder = -y;
-			if (angle < Lunar.Constants.deg180AsRad) {
-				this.asFront();
-				this.setMirroring(angle > Lunar.Constants.deg90AsRad);
-			} 
-			else {
-				this.asBack();
-				this.setMirroring(angle > Lunar.Constants.deg270AsRad);
-			}
-		}
-		
-		ringPositionOutwards(x, y, angle, centerY, radiusY) {
-			this.setPosition(x,y);
-			this.setScaling(1+BATTLE_CIRCLE_SCALE*(y-centerY)/radiusY);
-			this.view.zOrder = -y;
-			if (angle < Lunar.Constants.deg180AsRad) {
-				this.asBack();
-				this.setMirroring(angle > Lunar.Constants.deg90AsRad);
-			} 
-			else {
-				this.asFront();
-				this.setMirroring(angle > Lunar.Constants.deg270AsRad);
-			}
-		}
-
-
-		asBack() {
-			if (this._mode === 'back')
-				return;
-			this._toSwitch = this._back;
-			this._mode = 'back';
-		}
-		
-		update(delta) {
-			if (this._toSwitch)
-				this._switch(this._toSwitch);
-			if (this._dirty) {
-				this._rescale();
-				this._dirty = false;
-			}
-		}
-		
-		asFront() {
-			if (this._mode === 'front')
-				return;
-			this._toSwitch = this._front;
-			this._mode = 'front';
-		}
-		
-		layout() {
-			this._rescale();
-		}
-		
-		onAdd() {
-			this.view.addChild(this._sprite);
-			this._sprite.play();
-		}
-		
-		setScaling(scale) {
-			this._scale = scale;
-			this._dirty = true;
-		}
-		
-		setMirroring(doMirror) {
-			const isMirrored = this._sprite.scale.x < 0;
-			if (isMirrored != doMirror)
-				this._sprite.scale.x *= -1;
-		}
-		
-		setPosition(x,y) {
-			this.view.position.set(x,y);
-		}
-		
-		_switch(textures) {
-			this._sprite.stop();
-			const frame = this._sprite.currentFrame;
-			this._sprite.textures = textures;
-			this._sprite.gotoAndPlay(frame % this._sprite.totalFrames);
-			this._toSwitch = null;
-			this._dirty = true;
-		}
-		
-		_rescale() {
-			Lunar.Geometry.proportionalScale(this._sprite, this.view.width*this._scale, this.view.height*this._scale);
 		}		
-	};
+	}
 })(window.Lunar, window);
