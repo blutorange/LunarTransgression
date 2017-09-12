@@ -32,7 +32,6 @@
 			this._initScene();
 			this._startTime = this.time;
 			super.onAdd();
-			console.log(this._battler.characterState.cry);
 			this.game.sfx(`resource/${this._battler.characterState.cry}`, 1);
 		}
 

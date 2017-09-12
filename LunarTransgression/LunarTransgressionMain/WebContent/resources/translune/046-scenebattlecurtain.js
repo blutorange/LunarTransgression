@@ -26,6 +26,8 @@
 		}
 
 		onRemove() {
+			this._curtainLeft.visible = false;
+			this._curtainRight.visible = false;
 			super.onRemove();
 		}
 		
@@ -73,7 +75,9 @@
 		
 		_initScene() {		
 			this._curtainLeft.anchor.set(1, 0);
-			this._curtainRight.anchor.set(0, 0);			
+			this._curtainRight.anchor.set(0, 0);
+			this._curtainLeft.visible = true;
+			this._curtainRight.visible = true;
 		}
 	}
 })(window.Lunar, window);

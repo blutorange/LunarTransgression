@@ -37,7 +37,7 @@
 			}
 
 			const alpha = Lunar.Interpolation.fastInSlowOutOnce(t);
-			this._battle.hierarchy.$ui.alpha = alpha;
+			this._battle.hierarchy.$ui.alpha = 0.9*alpha;
 		}		
 		
 		_initScene() {

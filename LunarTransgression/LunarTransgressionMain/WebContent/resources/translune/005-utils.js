@@ -190,6 +190,19 @@
 	 * @const {IObject<string, function(number)>}
 	 */
 	Lunar.Interpolation = {
+		linearSpeed: (from, to, speed) => {
+			const sign = Math.sign(to-from);
+			from += sign*speed;
+			if (sign !== Math.sign(to-from))
+				from = to;
+			return from;
+		},
+		exponentialSpeed: (from, to, speed, threshold = 1E-2) => {
+			from += speed*(to-from);
+			if (Math.abs(to-from) < threshold)
+				from = to;
+			return from;
+		},
 		backAndForth: t => {
 			return t < 0.5 ? 2*t : 2-2*t;
 		},
@@ -937,9 +950,9 @@
 			return layout;
 		},
 		
-		proportionalScale: (scalable, targetWidth, targetHeight) => {
-			let w = scalable.width;
-			let h = scalable.height;
+		proportionalScale: (scalable, targetWidth, targetHeight, w = undefined, h = undefined) => {
+			w = w !== undefined ? w : scalable.width;
+			h = h !== undefined ? h : scalable.height;
 			if (w*h < 1E-2) {
 				scalable.width = 0;
 				scalable.height = 0;
@@ -957,12 +970,22 @@
 		},
 		
 		apply(dimensionable, geometry, {rotation, scale, anchor, proportional, keepSize} = {}) {
+			let sx = 1;
+			let sy = 1;
+			if (scale !== undefined) {
+				if (Array.isArray(scale)) {
+					sx = scale[0];
+					sy = scale[1];
+				}
+				else
+					sx = sy = scale;
+			}
 			if (dimensionable.constructor !== PIXI.Container && !keepSize) {
 				if (proportional)
-					Lunar.Geometry.proportionalScale(dimensionable, geometry.w, geometry.h);	
+					Lunar.Geometry.proportionalScale(dimensionable, geometry.w*sx, geometry.h*sy);	
 				else {
-					dimensionable.width = geometry.w;
-					dimensionable.height = geometry.h;
+					dimensionable.width = geometry.w*sx;
+					dimensionable.height = geometry.h*sy;
 				}
 			}
 			const a = anchor !== undefined ? Array.isArray(anchor) ? anchor : [anchor] : [0];
@@ -971,8 +994,8 @@
 			dimensionable.position.set(geometry.x + ax*geometry.w, geometry.y + ay*geometry.h)
 			if (rotation !== undefined)
 				dimensionable.rotation = rotation;
-			if (scale !== undefined)
-				dimensionable.scale.set(...Array.isArray(scale)?scale:[scale]);
+//			if (scale !== undefined)
+//				dimensionable.scale.set(...Array.isArray(scale)?scale:[scale]);
 			if (anchor !== undefined)
 				dimensionable.anchor.set(...a);
 			return dimensionable;

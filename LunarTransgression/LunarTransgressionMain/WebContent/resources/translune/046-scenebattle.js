@@ -26,7 +26,7 @@
 			};
 			this._battleCircle = {
 					centerX: 0,
-					centerY: 0.2,
+					centerY: 0.25,
 					radiusX: 0.42,
 					radiusY: 0.12,
 					scale: 0.4
@@ -121,7 +121,9 @@
 			this._field.setDimensions(this.game.dx(0.7),this.game.dy(0.025), this.game.dx(0.80));
 			this._field.translate3(this.game.x(-0.1), this.game.y(-0.0), this.game.dx(0.50+0.20));
 		    this._field.rotate3Deg(10, [1,0,0]);
-		    this._field.rotate3Deg(5, [0,0,1]);		    
+		    this._field.rotate3Deg(5, [0,0,1]);
+		    
+		    this.positionCamera(this._camera.degree);
 		}
 		
 		get textScene() {
@@ -130,6 +132,14 @@
 		
 		get resources() {
 			return this.game.loaderFor('battle').resources;
+		}
+		
+		getPlayer(index) {
+			return this._battlers[index];
+		}
+		
+		getOpponent(index) {
+			return this._battlers[4+index];
 		}
 		
 		moveCameraPlayer(index, seconds = 1, deltaDegree = 0, shortest = true) {
@@ -233,9 +243,9 @@
 		 * We keep a reference to the pushed scene so that we
 		 * can clean up later.
 		 */
-		_pushChildScene(scene) {
+		_pushChildScene(scene, container) {
 			this.game.pushScene(scene)
-			this._childScenes.push(scene);
+			this._childScenes.push(scene, container);
 		}
 		
 		_removeChildScene(scene) {
@@ -303,14 +313,14 @@
 				new PIXI.Sprite(resources.packed.spritesheet.textures['pokeball.png'])
 			];
 			this._battlers = [
-				new Lunar.Scene.BattleBattler(this.game, resources.me_back_1, resources.me_front_1, this._battleCircle, this._battleData.player.characterStates[0]),
-				new Lunar.Scene.BattleBattler(this.game, resources.me_back_2, resources.me_front_2, this._battleCircle, this._battleData.player.characterStates[1]),
-				new Lunar.Scene.BattleBattler(this.game, resources.me_back_3, resources.me_front_3, this._battleCircle, this._battleData.player.characterStates[2]),
-				new Lunar.Scene.BattleBattler(this.game, resources.me_back_4, resources.me_front_4, this._battleCircle, this._battleData.player.characterStates[3]),
-				new Lunar.Scene.BattleBattler(this.game, resources.u_back_1, resources.u_front_1, this._battleCircle, this._battleData.opponent.characterStates[0]),
-				new Lunar.Scene.BattleBattler(this.game, resources.u_back_2, resources.u_front_2, this._battleCircle, this._battleData.opponent.characterStates[1]),
-				new Lunar.Scene.BattleBattler(this.game, resources.u_back_3, resources.u_front_3, this._battleCircle, this._battleData.opponent.characterStates[2]),
-				new Lunar.Scene.BattleBattler(this.game, resources.u_back_4, resources.u_front_4, this._battleCircle, this._battleData.opponent.characterStates[3])
+				new Lunar.Scene.BattleBattler(this, resources.me_back_1, resources.me_front_1, this._battleCircle, this._battleData.player.characterStates[0]),
+				new Lunar.Scene.BattleBattler(this, resources.me_back_2, resources.me_front_2, this._battleCircle, this._battleData.player.characterStates[1]),
+				new Lunar.Scene.BattleBattler(this, resources.me_back_3, resources.me_front_3, this._battleCircle, this._battleData.player.characterStates[2]),
+				new Lunar.Scene.BattleBattler(this, resources.me_back_4, resources.me_front_4, this._battleCircle, this._battleData.player.characterStates[3]),
+				new Lunar.Scene.BattleBattler(this, resources.u_back_1, resources.u_front_1, this._battleCircle, this._battleData.opponent.characterStates[0]),
+				new Lunar.Scene.BattleBattler(this, resources.u_back_2, resources.u_front_2, this._battleCircle, this._battleData.opponent.characterStates[1]),
+				new Lunar.Scene.BattleBattler(this, resources.u_back_3, resources.u_front_3, this._battleCircle, this._battleData.opponent.characterStates[2]),
+				new Lunar.Scene.BattleBattler(this, resources.u_back_4, resources.u_front_4, this._battleCircle, this._battleData.opponent.characterStates[3])
 			];
 			
 			// Create scenes
@@ -329,6 +339,7 @@
 			const containerUi = new PIXI.ClipContainer();
 			const containerFront = new PIXI.ClipContainer();
 			const containerAction = new PIXI.ClipContainer();
+			const containerCommand = new PIXI.ClipContainer();
 			const containerBattlers = new PIXI.ClipContainer();
 			const groupBattler = new PIXI.DisplayGroup(0, true);
 
@@ -359,17 +370,19 @@
 			containerFront.addChild(curtainLeft);
 			containerFront.addChild(curtainRight);
 			containerFront.addChild(battleLogo);
-			containerUi.addChild(containerAction);
 			containerUi.addChild(actionAvatar);
+			containerUi.addChild(containerAction);
+			containerUi.addChild(containerCommand);
 			this.game.pushScene(this._textScene, containerUi);
-						
+			
 			// Save hierarchy.
 			this.hierarchy = {
 				ui: {
 					action: {
 						$avatar: actionAvatar
 					},
-					$action: containerAction
+					$action: containerAction,
+					$command: containerCommand
 				},
 				other: {
 					$curtainLeft: curtainLeft,
@@ -386,6 +399,12 @@
 			};
 		}
 		
+		_turn() {
+			const scene = new Lunar.Scene.BattleActionSelect(this, this.getPlayer(0));
+			
+			this._pushChildScene(scene, this.hierarchy.ui.$command);
+		}
+		
 		_animationOpening() {
 			const h = this.hierarchy;
 			const o = h.other;
@@ -396,49 +415,69 @@
 			const sceneLogoIn = new Lunar.Scene.BattleLogoIn(this, o.$battleLogo);
 			const sceneOpponentWiggle = new Lunar.Scene.BattleOpponentWiggle(this, o.$opponentCube);
 			
-			sceneCurtain.on('animation-done', data => this._removeChildScene(data.scene));
-			sceneLogoIn.on('animation-done', dataIn => {
+			sceneCurtain.once('animation-done', data => this._removeChildScene(data.scene));
+			sceneLogoIn.once('animation-done', dataIn => {
 				this._removeChildScene(dataIn.scene);
 				const sceneLogoOut = new Lunar.Scene.BattleLogoOut(this, o.$battleLogo);
 				const sceneUiIn = new Lunar.Scene.BattleUiIn(this, this._battleData.opponent.nickname);
-				sceneLogoOut.on('animation-done', data => this._removeChildScene(data.scene));
-				sceneUiIn.on('animation-done', data => this._removeChildScene(data.scene));
+				sceneLogoOut.once('animation-done', data => this._removeChildScene(data.scene));
+				sceneUiIn.once('animation-done', data => this._removeChildScene(data.scene));
 				this._pushChildScene(sceneLogoOut);
 				this._pushChildScene(sceneUiIn);
 			}, this);
-			sceneOpponentWiggle.on('animation-done', data => {
+			sceneOpponentWiggle.once('animation-done', data => {
+				const textOpponent = battler => `The opponent sent out ${battler.characterState.nickname}!&`;
 				this._removeChildScene(data.scene);
+				for (let i = 4; i <= 7; ++i)
+					this._battlers[i].look = Lunar.Scene.BattleBattler.Look.DOWN;
+				this._pushCharIn(4, {delay: 0, text: textOpponent, duration: 0.75, midHeight: 0.7});
+				this._pushCharIn(5, {delay: DELAY_BALL, text: textOpponent, duration: 0.75, midHeight: 0.7});
+				this._pushCharIn(6, {delay: 2*DELAY_BALL, text: textOpponent, duration: 0.75, midHeight: 0.7});
+				this._pushCharIn(7, {delay: 3*DELAY_BALL, text: textOpponent, duration: 0.75, midHeight: 0.7});
 				const sceneOpponentOut = new Lunar.Scene.BattleOpponentOut(this, o.$opponentCube);
-				
-				this._pushCharInOpponent(0, 0);
-				this._pushCharInOpponent(1, DELAY_BALL);
-				this._pushCharInOpponent(2, 2*DELAY_BALL);
-				this._pushCharInOpponent(3, 3*DELAY_BALL);
-				
-				sceneOpponentOut.on('animation-done', data => this._removeChildScene(data.scene));
-				
+				sceneOpponentOut.once('animation-done', data => this._removeChildScene(data.scene));
+				this.textScene.once('text-processed', () => {
+					this.moveCameraPlayer(1, 2, 8);
+					this.once('camera-reached', () => {
+						const textPlayer = battler => `Go,  ${battler.characterState.nickname}!&`;
+						const startX = this.hierarchy.ui.action.$avatar.x + 0.5*this.hierarchy.ui.action.$avatar.width;
+						const startY = this.hierarchy.ui.action.$avatar.y + 0.5*this.hierarchy.ui.action.$avatar.height;
+						for (let i = 4; i <= 7; ++i)
+							this._battlers[i].look = Lunar.Scene.BattleBattler.Look.INWARD;
+						this._pushCharIn(0, {delay: 0, text: textPlayer, midHeight: 1, startX, startY});
+						this._pushCharIn(1, {delay: DELAY_BALL, text: textPlayer, midHeight: 1.5, startX, startY});
+						this._pushCharIn(2, {delay: 2*DELAY_BALL, text: textPlayer, midHeight: 1.5, startX, startY});
+						this._pushCharIn(3, {delay: 3*DELAY_BALL, text: textPlayer, midHeight: 1.5, startX, startY});
+						this.textScene.once('text-processed', () => {
+							this.moveCamera(0, 2);
+							this.once('camera-reached', () => {
+								this._turn();
+							});
+						});
+					}, this);
+				}, this);
 				this._pushChildScene(sceneOpponentOut);
-			});
+			}, this);
 			
 			this._pushChildScene(sceneCurtain);
 			this._pushChildScene(sceneLogoIn);
 			this._pushChildScene(sceneOpponentWiggle);
 		}
 		
-		_pushCharInOpponent(index, delaySeconds) {
+		_pushCharIn(index, options) {
 			const _this = this;
-			const battler = _this._battlers[4+index];
+			const battler = _this._battlers[index];
 			window.setTimeout(() => {
-				const sceneCharIn = new Lunar.Scene.BattleCharIn(_this, _this.hierarchy.other.$balls[index], battler);
-				_this.textScene.pushText(`The opposing ${_this._battleData.opponent.nickname} sent out ${battler.characterState.nickname}!&`)
-				sceneCharIn.on('animation-done', data => {
+				const sceneCharIn = new Lunar.Scene.BattleCharIn(_this, _this.hierarchy.other.$balls[index%4], battler, options);
+				_this.textScene.pushText(options.text(battler));
+				sceneCharIn.once('animation-done', data => {
 					_this._removeChildScene(data.scene);
 					const sceneCharShow = new Lunar.Scene.BattleCharShow(_this, battler);
-					sceneCharShow.on('animation-done', dataShow => this._removeChildScene(dataShow.scene), _this);
+					sceneCharShow.once('animation-done', dataShow => this._removeChildScene(dataShow.scene), _this);
 					_this._pushChildScene(sceneCharShow);
 				}, this);
 				_this._pushChildScene(sceneCharIn);
-			}, delaySeconds*1000);
+			}, options.delay*1000);
 		}
 	}
 })(window.Lunar, window);

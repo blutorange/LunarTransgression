@@ -17,8 +17,11 @@
 	function doDebugStuff() {
 		function debug1() {
 		    hardcore(() => {
-		        Lunar.instance.scenes[0]._onClickInvite();
+//		        Lunar.instance.scenes[0]._onClickInvite();
+		    	Lunar.instance.scenes[0].hierarchy.top.tabs.$invite.emit("pointertap");
 		        hardcore(() => {
+		        	if (!Lunar.instance.scenes[1].hierarchy.$list)
+		        		throw new Error("no player name found");
 		            Lunar.instance.scenes[1].hierarchy.list[1].$text.emit('pointertap');
 		            hardcore(() => {
 		                if (!Lunar.instance.scenes[0].actionButton1.visible)
