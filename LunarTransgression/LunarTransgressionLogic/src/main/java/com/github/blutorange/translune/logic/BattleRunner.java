@@ -2,6 +2,7 @@ package com.github.blutorange.translune.logic;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -85,7 +86,7 @@ public class BattleRunner implements IBattleRunner {
 		round = 0;
 		characterStates = new CopyOnWriteArrayList<>(new String[2][]);
 		items = new CopyOnWriteArrayList<>(new String[2][]);
-		commands = Collections.synchronizedList(new ArrayList<>(2));
+		commands = Collections.synchronizedList(new ArrayList<>(Arrays.asList(null,null)));
 		phaser = new Phaser(2);
 		effectorStack = new ArrayList<>();
 		players[0] = from;

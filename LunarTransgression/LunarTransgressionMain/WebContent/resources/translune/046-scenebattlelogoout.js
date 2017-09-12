@@ -2,10 +2,13 @@
  * Logo rotates in.
  */
 (function(Lunar, window, undefined) {
-	const CURTAIN_OVERLAP = 0.05;
+	const CENTER_X = 0.5;
+	const CENTER_Y = 0.5;
+	
 	Lunar.Scene.BattleLogoOut = class extends Lunar.Scene.Base {
-		constructor(battle, {duration = 1} = {}) {
+		constructor(battle, spriteLogo, {duration = 1.5} = {}) {
 			super(battle.game);
+			this._spriteLogo = spriteLogo;
 			this._startTime = 0;
 			this._battle = battle;
 			this._duration = duration;
@@ -14,6 +17,7 @@
 		}
 		
 		destroy() {
+			this._spriteLogo = undefined;
 			super.destroy();
 		}
 		
@@ -21,6 +25,7 @@
 			this._initScene();
 			this._startTime = this.time;
 			super.onAdd();
+//			this.game.sfx('resources/translune/static/battle/battlein', 1);
 		}
 
 		onRemove() {
@@ -30,7 +35,7 @@
 		layout() {			
 			super.layout();
 			const h = this.hierarchy;			
-            h.$battleText.position.set(this.game.w*0.5, this.game.h*0.5);
+			this._spriteLogo.position.set(this.game.w*CENTER_X, this.game.h*CENTER_Y);
 		}
 		
 		update(delta) {
@@ -39,22 +44,19 @@
 			if (t > 1) {
 				t = 1;
 				if (!this._done)
-					this.emit('logo-out');
+					this.emit('animation-done', {scene: this});
 				this._done = true;
 			}
 			const alpha = Lunar.Interpolation.slowInFastOutOnce(t);
-            h.$logo.scale.set(1-alpha2);
-            h.$logo.alpha = 1-alpha;
+			this._spriteLogo.scale.set(1-0.5*alpha);
+			this._spriteLogo.alpha = 1-0.5*alpha;
+			this._spriteLogo.y = this.game.h*0.5*(1-1.8*alpha);
 		}		
 		
 		_initScene() {
-            const logo = new PIXI.Sprite(this._battle.resources.packed.spritesheet.textures['battletext.png']);
-			this.view.addChild(battleText);
-            logo.anchor.set(0.5,0.5);
-            logo.rotation = 0;
-			this.hierarchy = {
-				$logo: logo,
-			};
+			this._spriteLogo.anchor.set(0.5,0.5);
+			this._spriteLogo.rotation = 0;
+			this._spriteLogo.visible = true;
 		}
 	}
 })(window.Lunar, window);

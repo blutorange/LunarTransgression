@@ -202,9 +202,75 @@
 		slowInFastOutOnce: t => {
 			return t*t;
 		},
+		fastInSlowOutOnce: t => {
+			return -t * (t-2);
+		},
 		zeroUntil: until => {
 			return t => {
 				return t < until ? 0 : 1.0/(1.0-until)*(t-until);
+			};
+		},
+		quadraticBezierFromPoints(x1,y1,x2,y2,x3,y3) {
+			return t => {
+				const a = (1-t)*(1-t);
+				const b = 2*t*(1-t);
+				const c = t*t;
+				return {
+					x: x1*a+x2*b+x3*c,
+					y: y1*a+y2*b+y3*c,
+				};
+			};
+		},
+		// not symmetric!!
+		parabolaFromPoints(x1,y1,x2,y2,x3,y3) {
+			// sort
+			let tmp1,tmp2;
+			if (x2 < x1) {
+				tmp1 = x1;
+				tmp2 = y1;
+				x1 = x2;
+				y1 = y2;
+				x2 = tmp1;
+				y2 = tmp2;
+			}
+			if (x3 < x1) {
+				tmp1 = x1;
+				tmp2 = y3;
+				x1 = x3;
+				y1 = y3;
+				x3 = tmp1;
+				y3 = tmp2;
+			}
+			else if (x3 < x2) {
+				tmp1 = x2;
+				tmp2 = y2;
+				x2 = x3;
+				y2 = y3;
+				x3 = tmp1;
+				y3 = tmp2;
+			}
+			const da = ((x1*x1-x2*x2)*(x2-x3)-(x2*x2-x3*x3)*(x1-x2));
+			const db = (x1-x2);
+			if (Math.abs(da) < 1E-5 || Math.abs(db) < 1E-5) {
+				// Points lie on a vertical line
+				const d2 = y2-y1;
+				const d3 = y3-y1;
+				const dist = (Math.abs(d2) > Math.abs(d3)) ? d2 : d3;					
+				const x = (x1+x2+x3)/3;
+				return t => ({
+					x: x,
+					y: y1 + t*dist
+				});
+			}
+			const a = ((y1-y2)*(x2-x3)-(y2-y3)*(x1-x2)) / da;
+			const b = (y1-y2-a*(x1*x1-x2*x2)) / db;
+			const c = y1-a*x1*x1-b*x1;
+			return t => {
+				const x = x1+(x3-x1)*t;
+				return {
+					x: x,
+					y: (a*x+b)*x+c	
+				};
 			};
 		}
 	};
@@ -275,7 +341,9 @@
 			if (index >= 0)
 				array.splice(index, 1);
 			return index >= 0;
-		}
+		},
+		last: array => array[array.length-1],
+		mapLast: (array,mapper) => array[array.length-1] = mapper(array[array.length-1]) 
 	};
 	
 	Lunar.Object = {
@@ -872,6 +940,11 @@
 		proportionalScale: (scalable, targetWidth, targetHeight) => {
 			let w = scalable.width;
 			let h = scalable.height;
+			if (w*h < 1E-2) {
+				scalable.width = 0;
+				scalable.height = 0;
+				return;
+			}
 			let hTest = h*targetWidth/w;
 			if (hTest <= targetHeight) {
 				scalable.width = targetWidth;

@@ -30,6 +30,7 @@
 			this._displayedLine = -1;
 			this._waitAfterLine = 1.000;
 			this._waitAfterCharacter = 1/30;
+			this._autoAdvance = false;
 			this._wantsAdvance = false;
 			this._sfxCharHowler = undefined;
 			this._sfxCharId = undefined;
@@ -215,8 +216,9 @@
 		_stateSettling() {
 			// Are there any more sentences waiting to be printed?
 			if (this._sentences.length > 0) {
-				if (this._wantsAdvance || this._displayedLine < 0) {
+				if (this._wantsAdvance || this._displayedLine < 0 || this._autoAdvance) {
 					this._wantsAdvance = false;
+					this._autoAdvance = false;
 					this.hierarchy.textbox.$cursor.visible = false;
 					this._prepareNextSentence();
 					this.emit('text-advance');
@@ -240,6 +242,10 @@
 		
 		_prepareNextSentence() {
 			this._activeSentence = this._sentences.shift();
+			if (Lunar.Array.last(this._activeSentence).endsWith('&')) {
+				Lunar.Array.mapLast(this._activeSentence, s => s.substr(0, s.length-1));
+				this._autoAdvance = true;
+			}
 			this._positionLine = 0;
 			this._positionSentence = 0;
 			this._switchState(State.PRINT_CHARACTERS);
@@ -277,7 +283,7 @@
 		 */
 		_splitTextIntoSentences(text) {
 			// Split into sentences and trim spaces.
-			return (text.match(/[^.!?]+[.!?]+/g)||[text])
+			return (text.match(/[^.!?&]+[.!?&]+/g)||[text])
 				.map(s => s.trim())
 				// Split sentences so that the maximum line length is not exceeded.
 				.map(sentence => {

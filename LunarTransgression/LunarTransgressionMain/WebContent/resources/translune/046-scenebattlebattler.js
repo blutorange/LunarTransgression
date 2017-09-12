@@ -4,17 +4,24 @@
 (function(Lunar, window, undefined) {
 	
 	Lunar.Scene.BattleBattler = class extends Lunar.Scene.Base {
-		constructor(game, back, front, battleCircle) {
+		constructor(game, back, front, battleCircle, characterState) {
 			super(game);
 			this._back = Object.values(back.spritesheet.textures);
 			this._front = Object.values(front.spritesheet.textures);
 			this._mode = 'back';
+			this._characterState = characterState;
 			this._sprite = new PIXI.extras.AnimatedSprite(this._back);
 			this._sprite.anchor.set(0.5,0.5);
+			this._targetWidth = this._sprite.width;
+			this._targetHeight = this._sprite.height;
 			this.view.width = this._sprite.width;
 			this.view.height = this._sprite.height;
 			this._battleCircle = battleCircle;
 			this._scale = 1;
+		}
+		
+		get characterState() {
+			return this._characterState;
 		}
 		
 		ringPosition(x, y, angle, centerY, radiusY) {
@@ -29,6 +36,10 @@
 				this.asBack();
 				this.setMirroring(angle > Lunar.Constants.deg270AsRad);
 			}
+		}
+		
+		getPosition() {
+			return this.view.position;
 		}
 		
 		ringPositionOutwards(x, y, angle, centerY, radiusY) {
@@ -109,7 +120,9 @@
 		}
 		
 		_rescale() {
-			Lunar.Geometry.proportionalScale(this._sprite, this.view.width*this._scale, this.view.height*this._scale);
+			this._sprite.width = this._targetWidth;
+			this._sprite.height = this._targetHeight;
+			Lunar.Geometry.proportionalScale(this._sprite, this._targetWidth*this._scale, this._targetHeight*this._scale);
 		}		
 	};
 })(window.Lunar, window);

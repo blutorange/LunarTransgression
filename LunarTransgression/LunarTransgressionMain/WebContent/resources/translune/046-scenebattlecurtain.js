@@ -4,12 +4,14 @@
 (function(Lunar, window, undefined) {
 	const CURTAIN_OVERLAP = 0.05;
 	Lunar.Scene.BattleCurtain = class extends Lunar.Scene.Base {
-		constructor(battle, {duration = 3} = {}) {
+		constructor(battle, curtainLeft, curtainRight, {duration = 3} = {}) {
 			super(battle.game);
 			this._startTime = 0;
 			this._battle = battle;
 			this._duration = duration;
 			this._inverseDuration = 1/duration;
+			this._curtainLeft = curtainLeft;
+			this._curtainRight = curtainRight;
 			this._done = false;
 		}
 		
@@ -29,27 +31,26 @@
 		
 		layout() {			
 			super.layout();
-			const h = this.hierarchy;
 			
-			h.$curtainLeft.width = this.game.w*(0.5+CURTAIN_OVERLAP);
-			h.$curtainLeft.height = this.game.h;
-			h.$curtainLeft.y = 0;
+			this._curtainLeft.width = this.game.w*(0.5+CURTAIN_OVERLAP);
+			this._curtainLeft.height = this.game.h;
+			this._curtainLeft.y = 0;
 			
-			h.$curtainRight.width = this.game.w*(0.5+CURTAIN_OVERLAP);
-			h.$curtainRight.height = this.game.h;
-			h.$curtainRight.y = 0;
+			this._curtainRight.width = this.game.w*(0.5+CURTAIN_OVERLAP);
+			this._curtainRight.height = this.game.h;
+			this._curtainRight.y = 0;
 		}
 		
 		update(delta) {
 			super.update(delta);
-			const l = this.hierarchy.$curtainLeft;
-			const r = this.hierarchy.$curtainRight;
+			const l = this._curtainLeft;
+			const r = this._curtainRight;
 			let t = this._inverseDuration * (this.time-this._startTime);
 			
 			if (t > 1) {
 				t = 1;
 				if (!this._done)
-					this.emit('curtain-done');
+					this.emit('animation-done', {scene: this});
 				this._done = true;
 			}
 
@@ -70,20 +71,9 @@
 			r.height = this.game.h*(1+alpha*0.2);
 		}		
 		
-		_initScene() {
-			const curtainLeft = new PIXI.Sprite(this._battle.resources.packed.spritesheet.textures['curtainleft.png']);
-			const curtainRight = new PIXI.Sprite(this._battle.resources.packed.spritesheet.textures['curtainright.png']);
-			
-			this.view.addChild(curtainRight);
-			this.view.addChild(curtainLeft);
-			
-			curtainLeft.anchor.set(1, 0);
-			curtainRight.anchor.set(0, 0);
-			
-			this.hierarchy = {
-				$curtainLeft: curtainLeft,
-				$curtainRight : curtainRight,
-			};
+		_initScene() {		
+			this._curtainLeft.anchor.set(1, 0);
+			this._curtainRight.anchor.set(0, 0);			
 		}
 	}
 })(window.Lunar, window);
