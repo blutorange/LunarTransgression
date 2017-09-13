@@ -110,7 +110,7 @@ public enum EActionTarget {
 	},
 
 	/**
-	 * Move targets one character, which must be specified by the player.
+	 * Move targets one character, either player or opponent. Player must select one target.
 	 */
 	SELECTED_POKEMON {
 		@Override
@@ -144,6 +144,7 @@ public enum EActionTarget {
 		@Override
 		public IComputedBattleStatus[] getTargets(final IBattleContext context, final BattleCommand battleCommand,
 				final int player, final int character) {
+			// TODO to be implemented
 			return new IComputedBattleStatus[0];
 		}
 	},
@@ -183,7 +184,7 @@ public enum EActionTarget {
 	},
 
 	/**
-	 * Targets on character of the player. User must select one target.
+	 * Targets one character of the player. User must select one target.
 	 */
 	USERS_FIELD {
 		@Override

@@ -45,6 +45,14 @@
 			"spriteSourceSize": {"x":0,"y":0,"w":46,"h":282},
 			"sourceSize": {"w":46,"h":282}
 		},
+		"avatarside.png":
+		{
+			"frame": {"x":0,"y":587,"w":133,"h":215},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":133,"h":215},
+			"sourceSize": {"w":133,"h":215}
+		},
 		"pokeball.png":
 		{
 			"frame": {"x":909,"y":212,"w":84,"h":83},
@@ -55,7 +63,7 @@
 		},
 		"actionSpecial.png":
 		{
-			"frame": {"x":133,"y":587,"w":115,"h":112},
+			"frame": {"x":341,"y":587,"w":115,"h":112},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":115,"h":112},
@@ -85,13 +93,13 @@
 			"spriteSourceSize": {"x":0,"y":0,"w":94,"h":99},
 			"sourceSize": {"w":94,"h":99}
 		},
-		"avatarside.png":
+		"target.png":
 		{
-			"frame": {"x":0,"y":587,"w":133,"h":215},
+			"frame": {"x":133,"y":587,"w":208,"h":208},
 			"rotated": false,
 			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":133,"h":215},
-			"sourceSize": {"w":133,"h":215}
+			"spriteSourceSize": {"x":0,"y":0,"w":208,"h":208},
+			"sourceSize": {"w":208,"h":208}
 		}
 	}
 }

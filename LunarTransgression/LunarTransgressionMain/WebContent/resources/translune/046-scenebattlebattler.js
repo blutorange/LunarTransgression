@@ -4,7 +4,7 @@
 (function(Lunar, window, undefined) {
 	
 	Lunar.Scene.BattleBattler = class extends Lunar.Scene.Base {
-		constructor(battle, back, front, battleCircle, characterState) {
+		constructor(battle, index, back, front, battleCircle, characterState) {
 			super(battle.game);
 			this._targetHpRatio = 1;
 			this._battleScale = 1;
@@ -19,6 +19,7 @@
 			this._sprite.anchor.set(0.5,0.5);
 			this._barWidth = 5;
 			this._barHeight = 1 ;
+			this._index = index,
 			this._targetWidth = this._sprite.width;
 			this._targetHeight = this._sprite.height;
 			this.view.width = this._sprite.width;
@@ -31,6 +32,10 @@
 		
 		moveHpRatio(targetHpRatio) {
 			this._targetHpRatio = Math.clamp(targetHpRatio, 0, 1);
+		}
+
+		get isPlayer() {
+			return this._index <= 3;
 		}
 		
 		set hpRatio(targetHpRatio) {

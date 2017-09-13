@@ -355,6 +355,7 @@
 				array.splice(index, 1);
 			return index >= 0;
 		},
+		containsElement: (array, element) => array.indexOf(element) >= 0,
 		last: array => array[array.length-1],
 		mapLast: (array,mapper) => array[array.length-1] = mapper(array[array.length-1]) 
 	};
@@ -407,6 +408,73 @@
 		deg270AsRad: Math.PI*270/180,
 		deg135AsRad: Math.PI*135/180,
 		deg315AsRad: Math.PI*315/180
+	};
+	
+	Lunar.TargetType = {
+		allOpponents: {
+			accepts: targets => targets.length === 0,
+			name: 'ALL_OPPONENTS',
+		},
+		allOtherPokemon: {
+			accepts: targets => targets.length === 1 && !targets[0].isUser,
+			name: 'ALL_OTHER_POKEMON',
+		},
+		allPokemon: {
+			accepts: targets => targets.length === 0,
+			name: 'ALL_POKEMON'
+		},
+		ally: {
+			accepts: targets => targets.length === 1 && !targets[0].isUser && targets[0].isPlayer,
+			name: 'ALLY',
+		},
+		entireField: {
+			accepts: targets => targets.length === 0,
+			name: 'ENTIRE_FIELD',
+		},
+		opponentsField: {
+			accepts: targets => targets.length === 1 && !targets[0].isPlayer, 
+			name: 'OPPONENTS_FIELD',
+		},
+		randomOpponent: {
+			accepts: targets => targets.length === 0, 
+			name: 'RANDOM_OPPONENT',
+		},
+		selectedPokemon: {
+			accepts: targets => targets.length === 1,
+			name: 'SELECTED_POKEMON',
+		},
+		selectedPokemonMeFirst: {
+			accepts: targets => targets.length === 0,
+			name: 'SELECTED_POKEMON_ME_FIRST'
+		},
+		specificMove: {
+			accepts: targets => targets.length === 0,
+			name: 'SPECIFIC_MOVE'
+		},
+		user: {
+			accepts: targets => targets.length === 0,
+			name: 'USER',
+		},
+		userAndAllies: {
+			accepts: targets => targets.length === 0,
+			name: 'USER_AND_ALLIES'
+		},
+		userOrAlly: {
+			accepts: targets => targets.length === 1 && targets[0].isPlayer,
+			name: 'USER_OR_ALLY'
+		},
+		usersField: {
+			accepts: targets => targets.length === 1 && targets[0].isPlayer,
+			name: 'USERS_FIELD'	
+		}
+	};
+	
+	const targetTypeMap = {};
+	for (let key of Object.keys(Lunar.TargetType)) {
+		targetTypeMap[Lunar.TargetType[key].name] = Lunar.TargetType[key]; 
+	}
+	Lunar.TargetTypeByName = name => {
+		return targetTypeMap[name.toUpperCase()];
 	};
 	
 	Lunar.FontStyle = {

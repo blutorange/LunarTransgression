@@ -29,6 +29,7 @@
 		}
 
 		onRemove() {
+			this._spriteLogo.visible = false;
 			super.onRemove();
 		}
 		

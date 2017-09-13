@@ -12,6 +12,7 @@
 			super(battle.game);
 			this._battle = battle;
 			this._battler = battler;
+			this._skillSelect = undefined;
 			this._filterAttack = new PIXI.filters.ColorMatrixFilter();
 			this._filterSkill = new PIXI.filters.ColorMatrixFilter();
 			this._filterItem = new PIXI.filters.ColorMatrixFilter();
@@ -20,6 +21,7 @@
 		
 		destroy() {
 			this._battler = undefined;
+			this._skillSelect = undefined;
 			this._filterAttack = undefined;
 			this._filterSkill = undefined;
 			this._filterItem = undefined;
@@ -55,6 +57,7 @@
 		}
 		
 		onRemove() {
+			this.game.removeScene(this._skillSelect);
 			this._battle = undefined;
 			this._battler = undefined;
 			super.onRemove();
@@ -199,10 +202,25 @@
 		
 		_onClickAttack() {
 			this.game.sfx('resources/translune/static/confirm');
+			this._selectTarget({
+				actionTarget: Lunar.TargetType.opponentsField,
+				onCharSelected: targets => {
+					console.log("attack", targets);
+				}
+			});
 		}
 		
 		_onClickSkill() {
 			this.game.sfx('resources/translune/static/confirm');
+			this._skillSelect = new Lunar.Scene.SkillSelect(this.game, {
+				skills: this._battler.characterState.skills,
+				level: this._battler.characterState.level,
+				selectText: 'Select',
+				selectRequired: true
+			});
+			this._skillSelect.on('skill-select', this._onSkillSelect, this);
+			this._skillSelect.on('skill-exit', this._onSkillExit, this);
+			this.game.pushScene(this._skillSelect);
 		}
 		
 		_onClickItem() {
@@ -211,6 +229,30 @@
 		
 		_onClickSpecial() {
 			this.game.sfx('resources/translune/static/unable');
+		}
+		
+		_onSkillSelect(skillSelect) {
+			this._selectTarget({
+				actionTarget: Lunar.TargetTypeByName(skillSelect.selectedSkill.target),
+				onCharSelected: targets => {
+					console.log("skill", targets);
+				}
+			});
+			this.game.removeScene(this._skillSelect);
+		}
+		
+		_onSkillExit() {
+			this.game.removeScene(this._skillSelect);
+		}
+		
+		_selectTarget({actionTarget, onCharSelected}) {
+			for (let element of Object.values(this.hierarchy))
+				element.visible = false;
+			this._battle.selectTarget({
+				actionTarget,
+				user: this._battler,
+				onCharSelected
+			});
 		}
 	}
 })(window.Lunar, window);

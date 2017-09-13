@@ -313,14 +313,14 @@
 				new PIXI.Sprite(resources.packed.spritesheet.textures['pokeball.png'])
 			];
 			this._battlers = [
-				new Lunar.Scene.BattleBattler(this, resources.me_back_1, resources.me_front_1, this._battleCircle, this._battleData.player.characterStates[0]),
-				new Lunar.Scene.BattleBattler(this, resources.me_back_2, resources.me_front_2, this._battleCircle, this._battleData.player.characterStates[1]),
-				new Lunar.Scene.BattleBattler(this, resources.me_back_3, resources.me_front_3, this._battleCircle, this._battleData.player.characterStates[2]),
-				new Lunar.Scene.BattleBattler(this, resources.me_back_4, resources.me_front_4, this._battleCircle, this._battleData.player.characterStates[3]),
-				new Lunar.Scene.BattleBattler(this, resources.u_back_1, resources.u_front_1, this._battleCircle, this._battleData.opponent.characterStates[0]),
-				new Lunar.Scene.BattleBattler(this, resources.u_back_2, resources.u_front_2, this._battleCircle, this._battleData.opponent.characterStates[1]),
-				new Lunar.Scene.BattleBattler(this, resources.u_back_3, resources.u_front_3, this._battleCircle, this._battleData.opponent.characterStates[2]),
-				new Lunar.Scene.BattleBattler(this, resources.u_back_4, resources.u_front_4, this._battleCircle, this._battleData.opponent.characterStates[3])
+				new Lunar.Scene.BattleBattler(this, 0, resources.me_back_1, resources.me_front_1, this._battleCircle, this._battleData.player.characterStates[0]),
+				new Lunar.Scene.BattleBattler(this, 1, resources.me_back_2, resources.me_front_2, this._battleCircle, this._battleData.player.characterStates[1]),
+				new Lunar.Scene.BattleBattler(this, 2, resources.me_back_3, resources.me_front_3, this._battleCircle, this._battleData.player.characterStates[2]),
+				new Lunar.Scene.BattleBattler(this, 3, resources.me_back_4, resources.me_front_4, this._battleCircle, this._battleData.player.characterStates[3]),
+				new Lunar.Scene.BattleBattler(this, 4, resources.u_back_1, resources.u_front_1, this._battleCircle, this._battleData.opponent.characterStates[0]),
+				new Lunar.Scene.BattleBattler(this, 5, resources.u_back_2, resources.u_front_2, this._battleCircle, this._battleData.opponent.characterStates[1]),
+				new Lunar.Scene.BattleBattler(this, 6, resources.u_back_3, resources.u_front_3, this._battleCircle, this._battleData.opponent.characterStates[2]),
+				new Lunar.Scene.BattleBattler(this, 7, resources.u_back_4, resources.u_front_4, this._battleCircle, this._battleData.opponent.characterStates[3])
 			];
 			
 			// Create scenes
@@ -340,6 +340,7 @@
 			const containerFront = new PIXI.ClipContainer();
 			const containerAction = new PIXI.ClipContainer();
 			const containerCommand = new PIXI.ClipContainer();
+			const containerTarget = new PIXI.ClipContainer();
 			const containerBattlers = new PIXI.ClipContainer();
 			const groupBattler = new PIXI.DisplayGroup(0, true);
 
@@ -373,6 +374,7 @@
 			containerUi.addChild(actionAvatar);
 			containerUi.addChild(containerAction);
 			containerUi.addChild(containerCommand);
+			containerUi.addChild(containerTarget);
 			this.game.pushScene(this._textScene, containerUi);
 			
 			// Save hierarchy.
@@ -382,7 +384,8 @@
 						$avatar: actionAvatar
 					},
 					$action: containerAction,
-					$command: containerCommand
+					$command: containerCommand,
+					$target: containerTarget
 				},
 				other: {
 					$curtainLeft: curtainLeft,
@@ -478,6 +481,19 @@
 				}, this);
 				_this._pushChildScene(sceneCharIn);
 			}, options.delay*1000);
+		}
+		
+		selectTarget({actionTarget, user, onCharSelected = () => 0}) {
+			if (actionTarget.accepts([])) {
+				onCharSelected.call(this, []);
+				return;
+			}
+			const scene = new Lunar.Scene.BattleTargetSelect(this, actionTarget, user);
+			this._pushChildScene(scene, this.hierarchy.ui.$target);
+			scene.on('char-selected', targets => {
+				onCharSelected.call(this, targets);
+				this._removeChildScene(scene);
+			}, this);
 		}
 	}
 })(window.Lunar, window);

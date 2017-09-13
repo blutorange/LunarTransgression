@@ -3,17 +3,17 @@
 	const LIST_Y = 6;
 	
 	Lunar.Scene.SkillSelect = class extends Lunar.Scene.Base {
-		constructor(game, characterState, selectText = 'Select', selectRequired = true) {
+		constructor(game, {skills, level, selectText = 'Select', selectRequired = true}) {
 			super(game);
 			this._skills = [];
 			this._selectedSkill = undefined;
 			this._textSelect = selectText;
 			this._selectRequired = selectRequired;
-			for (let key of Object.keys(characterState.character.skills)) {
-				if (key <= characterState.level) {
-					const skills = characterState.character.skills[key]
+			for (let key of Object.keys(skills)) {
+				if (key <= level) {
+					const skillsForLevel = skills[key]
 						.sort((s1,s2) => s1.name < s2.name ? -1 : s1.name == s2.name ? 0 : 1);
-					for (let skill of skills) {
+					for (let skill of skillsForLevel) {
 						this._skills.push({
 							level: key,
 							skill: skill

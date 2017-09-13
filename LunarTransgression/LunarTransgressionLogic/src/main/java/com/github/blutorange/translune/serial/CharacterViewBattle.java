@@ -17,10 +17,14 @@ public class CharacterViewBattle {
 	private final int exp;
 	private final int expNext;
 	private final Map<Skill, Integer> skills;
+	private final String name;
+	private final String id;
 
 	@Deprecated
 	public CharacterViewBattle() {
 		level = 1;
+		id = StringUtils.EMPTY;
+		name = StringUtils.EMPTY;
 		imgFront = StringUtils.EMPTY;
 		imgBack = StringUtils.EMPTY;
 		nickname = StringUtils.EMPTY;
@@ -31,6 +35,7 @@ public class CharacterViewBattle {
 	}
 
 	public CharacterViewBattle(final CharacterState characterState) {
+		id = characterState.getId();
 		level = characterState.getLevel();
 		exp = characterState.getExp();
 		cry = characterState.getCharacter().getCry();
@@ -39,6 +44,7 @@ public class CharacterViewBattle {
 		nickname = characterState.getNickname();
 		imgFront = characterState.getCharacter().getImgFront();
 		imgBack = characterState.getCharacter().getImgBack();
+		name = characterState.getCharacter().getName();
 	}
 
 	/**
@@ -64,6 +70,22 @@ public class CharacterViewBattle {
 	@JsonIgnore(ignoreDecoding = true, ignoreEncoding = false)
 	public String getCry() {
 		return cry;
+	}
+
+	/**
+	 * @return the name
+	 */
+	@JsonIgnore(ignoreDecoding = true, ignoreEncoding = false)
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @return the id
+	 */
+	@JsonIgnore(ignoreDecoding = true, ignoreEncoding = false)
+	public String getId() {
+		return id;
 	}
 
 	@JsonIgnore(ignoreDecoding = true, ignoreEncoding = false)

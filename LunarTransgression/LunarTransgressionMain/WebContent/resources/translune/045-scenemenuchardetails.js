@@ -295,7 +295,12 @@
 				return;
 			}
 			this.game.sfx('resources/translune/static/buttonclick');
-			this._sceneSkill = new Lunar.Scene.SkillSelect(this.game, this._characterState, 'Close', false);
+			this._sceneSkill = new Lunar.Scene.SkillSelect(this.game, {
+				skills: this._characterState.character.skills,
+				level: this._characterState.level,
+				selectText: 'Close',
+				selectRequired: false
+			});
 			this._sceneSkill.on('skill-select', scene => {
 				this._sceneSkill = undefined;
 				this.game.removeScene(scene);
