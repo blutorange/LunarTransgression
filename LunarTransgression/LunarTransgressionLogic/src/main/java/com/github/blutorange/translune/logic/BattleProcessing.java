@@ -94,7 +94,7 @@ public class BattleProcessing implements IBattleProcessing {
 			Fraction modifierSeparate = modifier;
 
 			// 1.5 for a critical hit
-			if (random.get().nextInt(100) > getCriticalHitThreshold(skill, attacker, defender)) {
+			if (random.get().nextInt(100) < getCriticalHitThreshold(skill, attacker, defender)) {
 				modifierSeparate = modifierSeparate.multiplyBy(Constants.FRACTION_THREE_HALFS);
 				result.setCritical(true);
 			}
@@ -134,7 +134,7 @@ public class BattleProcessing implements IBattleProcessing {
 		final int userAccuracy = user.getComputedBattleAccuracy();
 		final int opponentEvasion = target.getComputedBattleEvasion();
 		final boolean hit = accuracyData.getAlwaysHits()
-				|| random.get().nextInt(100) * 10000 * opponentEvasion < accuracyData.getAccuracy() * userAccuracy;
+				|| random.get().nextInt(100) * opponentEvasion < accuracyData.getAccuracy() * userAccuracy;
 		if (!hit)
 			messages.add(String.format("But %s evaded the attack", target.getCharacterState().getNickname()));
 		return hit;
@@ -251,8 +251,7 @@ public class BattleProcessing implements IBattleProcessing {
 			final BattleCommand battleCommand, final int player, final int character) {
 		final IComputedBattleStatus[] targets = targettable.getTarget().getTargets(context, battleCommand, player,
 				character);
-		return Arrays.stream(targets).filter(target -> context
-				.getComputedBattleStatus(context.getCharacterIndex(target.getCharacterState())).getComputedMaxHp() > 0)
+		return Arrays.stream(targets).filter(target -> target.getComputedMaxHp() > 0)
 				.toArray(IComputedBattleStatus[]::new);
 	}
 
@@ -447,7 +446,7 @@ public class BattleProcessing implements IBattleProcessing {
 	private CharacterState[][] getCharacterStates(final List<String[]> characterStates) throws IOException {
 		final CharacterState[][] retrievedCharacterStates = new CharacterState[2][4];
 		for (int player = 2; player-- > 0;) {
-			for (int character = 1; character-- > 0;) {
+			for (int character = 4; character-- > 0;) {
 				final String[] states = characterStates.get(player);
 				if (states == null)
 					throw new IOException("character states are null: " + player + "," + character);

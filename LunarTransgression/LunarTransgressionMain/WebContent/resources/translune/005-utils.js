@@ -345,6 +345,14 @@
 		characterNickname: 'character-nickname',		
 	};
 	
+	Lunar.CommandType = {
+		basicAttack: 'basic-attack',
+		skill: 'skill',
+		item: 'item',
+		special: 'special',
+		defend: 'defend'
+	};
+	
 	Lunar.Array = {
 		/**
 		 * @return {boolean} True iff the array contained the element.  
@@ -913,6 +921,8 @@
 			const padBottom = bottom < 1 ? bottom*h : bottom;
 			const padY = py < 1 ? py * h : py;			
 			const dim = Array.isArray(dimension) ? dimension : Array(parseInt(dimension)).fill(1);
+			if (dim.length === 0)
+				return [];
 			const width = w - padLeft - padRight;
 			const availHeight = h - padY*(dim.length-1) - padTop - padBottom;
 			const total = dim.reduce((sum,r) => sum + r);
@@ -942,6 +952,8 @@
 			const padBottom = bottom < 1 ? bottom*h : bottom;
 			const padX = px < 1 ? px * w : px;
 			const dim = Array.isArray(dimension) ? dimension : Array(parseInt(dimension)).fill(1);
+			if (dim.length === 0)
+				return [];
 			const height = h - padTop - padBottom;
 			const availWidth = w - padX*(dim.length-1) - padLeft - padRight;
 			const total = dim.reduce((sum,r) => sum + r);
@@ -973,6 +985,8 @@
 			const padY = py < 1 ? py * h : py;
 			const dimX = Array.isArray(n) ? n : Array(parseInt(n)).fill(1);
 			const dimY = Array.isArray(m) ? m : Array(parseInt(m)).fill(1);
+			if (dimX.length === 0 || dimY.length === 0)
+				return [];
 			const availWidth = w - padX*(dimX.length-1) - padLeft - padRight;
 			const availHeight = h - padY*(dimY.length-1) - padTop - padBottom;
 			const totalX = dimX.reduce((sum,r) => sum + r);

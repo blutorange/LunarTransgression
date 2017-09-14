@@ -438,6 +438,6 @@ public class Character extends AbstractStoredEntity {
 	public String toString() {
 		return String.format("Character(%s,%s,hp=%d,mp=%s,patt=%d,pdef=%d,matt=%d,mdef=%s,speed=%s,acc=%d,ev=%d)", name,
 				elements, maxHp, maxMp, physicalAttack, physicalDefense, magicalAttack, magicalDefense, speed,
-				accuracy);
+				accuracy, evasion);
 	}
 }

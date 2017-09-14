@@ -2,6 +2,7 @@
  * Fades out the opponent cube.
  * new PIXI.Sprite(this._battle.resources.packed.spritesheet.textures['battlelogo.png']);
  */
+// TODO Defend action
 (function(Lunar, window, undefined) {	
 	
 	const ALPHA_ACTION = 0.85;
@@ -205,7 +206,11 @@
 			this._selectTarget({
 				actionTarget: Lunar.TargetType.opponentsField,
 				onCharSelected: targets => {
-					console.log("attack", targets);
+					this.emit('action-selected', {
+						targets: targets.map(t => t.characterState.id),
+						action: '',
+						type: Lunar.CommandType.basicAttack							
+					});
 				}
 			});
 		}
@@ -232,10 +237,15 @@
 		}
 		
 		_onSkillSelect(skillSelect) {
+			const selectedSkill = skillSelect.selectedSkill;
 			this._selectTarget({
-				actionTarget: Lunar.TargetTypeByName(skillSelect.selectedSkill.target),
+				actionTarget: Lunar.TargetTypeByName(selectedSkill.target),
 				onCharSelected: targets => {
-					console.log("skill", targets);
+					this.emit('action-selected', {
+						targets: targets.map(t => t.characterState.id),
+						action: selectedSkill.name,
+						type: Lunar.CommandType.skill							
+					});
 				}
 			});
 			this.game.removeScene(this._skillSelect);

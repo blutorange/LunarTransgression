@@ -239,6 +239,10 @@
 			}
 		}
 		
+		clearQueuedAddScenes() {
+			this.operationStack.filter(operatio => operation.type !== 'add');
+		}
+		
 		/**
 		 * @private
 		 */
@@ -334,7 +338,8 @@
 		 * @private
 		 */
 		_update(delta) {
-			this._applyOperations();
+			while (this.operationStack.length > 0)
+				this._applyOperations();
 			const deltaTime = delta / 60.0;
 			for (let scene of this.scenes)
 				scene.update(deltaTime);

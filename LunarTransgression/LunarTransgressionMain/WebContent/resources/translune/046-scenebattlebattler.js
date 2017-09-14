@@ -152,7 +152,6 @@
 		}
 		
 		destroy() {
-			h.$hpBarMask.destroy();
 			this._battleCircle = undefined;
 			this._back = undefined;
 			this._sprite = undefined;

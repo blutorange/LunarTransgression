@@ -149,7 +149,7 @@ class BattleContext implements IBattleContext {
 
 	@Override
 	public int[] getCharacterIndex(final String character) {
-		for (int player = 1; player-- > 0;)
+		for (int player = 2; player-- > 0;)
 			for (int c = 4; c-- > 0;)
 				if (characterStates[player][c].getPrimaryKey().equals(character))
 					return new int[] { player, c };

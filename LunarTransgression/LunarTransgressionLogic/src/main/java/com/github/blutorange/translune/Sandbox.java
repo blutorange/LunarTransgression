@@ -3,6 +3,8 @@ package com.github.blutorange.translune;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.zip.ZipFile;
 
 import javax.imageio.ImageIO;
@@ -26,14 +28,24 @@ import com.github.blutorange.translune.serial.AvailableBgAndBgm;
 public class Sandbox {
 	public static void main(final String[] args) throws Exception {
 		// testing...
-		final LunarServletContextListener scl = new LunarServletContextListener();
-		scl.initialize();
+//		final LunarServletContextListener scl = new LunarServletContextListener();
+//		scl.initialize();
 		try {
-			importing();
+			queue();
 		}
 		finally {
-			scl.destroy();
+//			scl.destroy();
 		}
+	}
+
+	private static void queue() {
+		final Queue<Integer> q = new PriorityQueue<>(10, (m1, m2) -> Integer.compare(m1, m2));
+		q.add(5);
+		q.add(3);
+		q.add(4);
+		Integer a;
+		while ((a = q.poll())!=null)
+			System.out.println(a);
 	}
 
 	static void fetch() throws Exception {

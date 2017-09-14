@@ -36,8 +36,10 @@
 		}
 
 		onRemove() {
-			this._battler._sprite.filters = [];
-            this._battler.setScaling(1);
+			if (this._battler) {
+				this._battler._sprite.filters = [];
+				this._battler.setScaling(1);
+			}
 			super.onRemove();
 		}
 		

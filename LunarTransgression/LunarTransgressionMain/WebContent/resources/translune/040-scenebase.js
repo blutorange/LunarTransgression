@@ -11,7 +11,20 @@
 			this._game = game;
 			this._view = new PIXI.ClipContainer();
 			this._time = 0;
+			this._isAttached = false;
 			this._hierarchy = {};
+		}
+		
+		setTimeout(seconds, callback, context) {
+			const _this = this;
+			window.setTimeout(() => {
+				if (_this.isAttached)
+					callback.call(context || _this);
+			}, seconds*1000);
+		}
+		
+		get isAttached() {
+			return this._isAttached;
 		}
 		
 		method(name) {
@@ -43,10 +56,12 @@
 		
 		onAdd() {
 			this.layout();
+			this._isAttached = true;
 		}
 		
 		onRemove() {
 			this.destroy();
+			this._isAttached = false;
 		}
 		
 		update(delta) {
@@ -97,7 +112,7 @@
 						callback: dialog => {
 							this._game.sfx('resources/translune/static/ping');
 							dialog.close()
-							onClose && onClose();
+							onClose && onClose.call(this);
 						}
 					}
 				]

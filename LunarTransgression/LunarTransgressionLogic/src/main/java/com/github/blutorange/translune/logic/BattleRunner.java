@@ -88,7 +88,7 @@ public class BattleRunner implements IBattleRunner {
 		items = new CopyOnWriteArrayList<>(new String[2][]);
 		commands = Collections.synchronizedList(new ArrayList<>(Arrays.asList(null,null)));
 		phaser = new Phaser(2);
-		effectorStack = new ArrayList<>();
+		effectorStack = new CopyOnWriteArrayList<>();
 		players[0] = from;
 		players[1] = to;
 		ComponentFactory.getLunarComponent().inject(this);
@@ -141,7 +141,7 @@ public class BattleRunner implements IBattleRunner {
 				if (round == 0)
 					battlePreparations();
 				else
-					battleStep();
+					battleStep(round);
 				++round;
 			}
 		}
@@ -219,10 +219,12 @@ public class BattleRunner implements IBattleRunner {
 			}
 	}
 
-	private void battleStep() throws IOException {
+	private void battleStep(final int round) throws IOException {
+		int timeout = customProperties.getBattleStepTimeoutMillis();
+		if (round < 2)
+			timeout += customProperties.getBattleStepFirstTimeoutMillis();
 		try {
-			phaser.awaitAdvanceInterruptibly(phaser.getPhase(), customProperties.getBattleStepTimeoutMillis(),
-					TimeUnit.MILLISECONDS);
+			phaser.awaitAdvanceInterruptibly(phaser.getPhase(), timeout, TimeUnit.MILLISECONDS);
 		}
 		catch (final InterruptedException e) {
 			logger.error("battle step was interrupted", e);

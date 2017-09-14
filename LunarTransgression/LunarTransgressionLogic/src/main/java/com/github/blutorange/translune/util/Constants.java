@@ -15,6 +15,7 @@ public final class Constants {
 
 	public static final String CUSTOM_KEY_BATTLE_PREPARATION_TIMEOUT = "translune.battle.preparation.timeout";
 	public static final String CUSTOM_KEY_BATTLE_ROUND_TIMEOUT = "translune.battle.round.timeout";
+	public static final String CUSTOM_KEY_BATTLE_FIRST_TIMEOUT = "translune.battle.first.timeout";
 	public static final String CUSTOM_KEY_DATABASE_SAVE_MINUTES = "translune.db.save";
 	public static final String CUSTOM_KEY_MAX_THREAD_COUNT = "translune.threads.maxcount";
 	public static final String CUSTOM_KEY_SADMIN_PASS = "translune.sadmin.pass";

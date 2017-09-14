@@ -32,6 +32,8 @@ public class CustomProperties {
 
 	private final int databaseSaveMinutes;
 
+	private final int firstTimeoutMillis;
+
 	@Inject
 	public CustomProperties() {
 		try (InputStream is = CustomProperties.class.getClassLoader().getResourceAsStream("custom.properties")) {
@@ -64,6 +66,10 @@ public class CustomProperties {
 		int databaseSaveMinutes = Integer.parseInt(get(Constants.CUSTOM_KEY_DATABASE_SAVE_MINUTES, "10"));
 		if (databaseSaveMinutes < 1) databaseSaveMinutes = 1;
 		this.databaseSaveMinutes = databaseSaveMinutes;
+
+		int firstTimeoutMillis = Integer.parseInt(get(Constants.CUSTOM_KEY_BATTLE_FIRST_TIMEOUT, "15000"));
+		if (firstTimeoutMillis < 0) firstTimeoutMillis = 0;
+		this.firstTimeoutMillis = firstTimeoutMillis;
 	}
 
 	@Nullable
@@ -109,5 +115,9 @@ public class CustomProperties {
 
 	public int getDatabaseSaveMinutes() {
 		return databaseSaveMinutes;
+	}
+
+	public int getBattleStepFirstTimeoutMillis() {
+		return firstTimeoutMillis;
 	}
 }

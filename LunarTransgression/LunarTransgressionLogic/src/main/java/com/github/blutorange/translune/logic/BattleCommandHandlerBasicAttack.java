@@ -93,7 +93,7 @@ public class BattleCommandHandlerBasicAttack extends ABattleCommandHandler {
 	@Override
 	public void execute() {
 		// Acquire user and targets.
-		final IComputedBattleStatus[] targets = battleProcessing.getTargetsAlive(() -> EActionTarget.USER, context,
+		final IComputedBattleStatus[] targets = battleProcessing.getTargetsAlive(() -> EActionTarget.OPPONENTS_FIELD, context,
 				battleCommand, player, character);
 		final IComputedBattleStatus user = context.getComputedBattleStatus(player, character);
 
@@ -104,7 +104,7 @@ public class BattleCommandHandlerBasicAttack extends ABattleCommandHandler {
 
 		final List<String> messages = new ArrayList<>();
 		final BasicAttack basicAttack = new BasicAttack(user);
-		final String useMessage = String.format("%s attack %s!", user.getCharacterState().getNickname());
+		final String useMessage = String.format("%s attacks %s!", user.getCharacterState().getNickname(), targets[0].getCharacterState().getNickname());
 		messages.add(useMessage);
 
 		// Check if attack hits.

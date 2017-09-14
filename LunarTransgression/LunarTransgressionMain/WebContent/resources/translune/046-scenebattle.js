@@ -13,9 +13,11 @@
 			this._textScene = undefined
 			this._field = undefined;
 			this._bgm = undefined;
+			this._waitDialog = undefined;
 			this._fieldRotation = 0;
 			this._battlers = [];
 			this._childScenes = [];
+			this._commands = [];
 			this._camera = {
 				degree: 0, // current angle
 				moveStartAngle: 0, // transition start angle
@@ -64,6 +66,7 @@
 			this._camera = {};
 			this._battlers = [];
 			this._childScenes = [];
+			this._waitDialog = undefined;
 			this._bgm = undefined;
 			this._loadScene = undefined
 			this._textScene = undefined;
@@ -72,19 +75,23 @@
 		}
 		
 		onAdd() {
-			super.onAdd();			
+			super.onAdd();
+			this._attachListeners();
 			this._animationOpening();
 		}
 		
 		onRemove() {
+			this._detachListeners();
 			this._battlers.forEach(battler => this.game.removeScene(battler));
 			this._childScenes.forEach(scene => this.game.removeScene(scene));
 			this.game.removeScene(this._textScene);
+			this.game.removeScene(this._waitDialog);
 			this._battlers = [];
+			this._commands = [];
 			this._childScenes = [];
 			super.onRemove();
 		}
-
+		
 		update(delta) {
 			super.update(delta);
 			this._updateCamera(this._camera);
@@ -222,6 +229,19 @@
 			this._field.update();
 		}
 		
+		selectTarget({actionTarget, user, onCharSelected = () => 0}) {
+			if (actionTarget.accepts([])) {
+				onCharSelected.call(this, []);
+				return;
+			}
+			const scene = new Lunar.Scene.BattleTargetSelect(this, actionTarget, user);
+			this._pushChildScene(scene, this.hierarchy.ui.$target);
+			scene.on('char-selected', targets => {
+				onCharSelected.call(this, targets);
+				this._removeChildScene(scene);
+			}, this);
+		}
+		
 		_updateCamera(camera) {
 			// Transition smoothly
 			if (camera.moveDuration > 0) {
@@ -239,13 +259,34 @@
 			}
 		}
 		
+		_attachListeners() {
+			this.game.net.registerMessageHandler(Lunar.Message.battlePreparationCancelled, {
+				handle: this.method('_onMessageCancelled'),
+				error: this.method('_onMessageError')
+			});
+			this.game.net.registerMessageHandler(Lunar.Message.battleCancelled, {
+				handle: this.method('_onMessageCancelled'),
+				error: this.method('_onMessageError')
+			});
+			this.game.net.registerMessageHandler(Lunar.Message.battleStepped, {
+				handle: this.method('_onMessageBattleStepped'),
+				error: this.method('_onMessageError')
+			});
+		}
+		
+		_detachListeners() {
+			this.game.net.removeMessageHandlers(Lunar.Message.battlePreparationCancelled);
+			this.game.net.removeMessageHandlers(Lunar.Message.battleCancelled);
+			this.game.net.removeMessageHandlers(Lunar.Message.battleStepped);
+		}
+		
 		/**
 		 * We keep a reference to the pushed scene so that we
 		 * can clean up later.
 		 */
 		_pushChildScene(scene, container) {
-			this.game.pushScene(scene)
-			this._childScenes.push(scene, container);
+			this.game.pushScene(scene, container)
+			this._childScenes.push(scene);
 		}
 		
 		_removeChildScene(scene) {
@@ -403,9 +444,53 @@
 		}
 		
 		_turn() {
-			const scene = new Lunar.Scene.BattleActionSelect(this, this.getPlayer(0));
-			
+			if (this._commands.length >= 4) {
+				this._performTurn();
+				return;
+			}
+			const scene = new Lunar.Scene.BattleActionSelect(this, this.getPlayer(this._commands.length));
+			scene.once('action-selected', command => {
+				this._removeChildScene(scene);
+				this._commands.push(command);
+				this._turn();
+			}, this);
 			this._pushChildScene(scene, this.hierarchy.ui.$command);
+		}
+		
+		_performTurn() {
+			const _this = this;
+			this._textScene.clearText();
+			this._waitDialog = new Lunar.Scene.Dialog(this._game, { 
+				message: "Waiting for the opponent to make his turn.",
+				choices: [
+				]
+			});
+			this._pushChildScene(this._waitDialog);
+			this.game.net.dispatchMessage(Lunar.Message.stepBattle, {
+				battleCommandCharacter1: this._commands[0],
+				battleCommandCharacter2: this._commands[1],
+				battleCommandCharacter3: this._commands[2],
+				battleCommandCharacter4: this._commands[3],
+			}).then(response => {
+				// Now we wait for the actual response from the server.
+				_this._commands = [];
+			}).catch(error => {
+				console.error("message step battle returned an error", error);
+				_this.game.removeScene(_this._waitDialog);
+				_this._waitDialog = undefined;
+				_this._endBattle("The fight cannot be continued, please try again later.")
+			});
+		}
+		
+		_endBattle(message) {
+			this.game.switchBgm(undefined, 0.01);
+			this.game.clearQueuedAddScenes();
+			this.game.removeScene(this);
+			const menu = new Lunar.Scene.Menu(this.game);
+			if (message)
+				menu.showConfirmDialog(message, () => menu.game.pushScene(menu));
+			else
+				menu.game.pushScene(menu);
 		}
 		
 		_animationOpening() {
@@ -454,6 +539,7 @@
 						this.textScene.once('text-processed', () => {
 							this.moveCamera(0, 2);
 							this.once('camera-reached', () => {
+								this._commands = [];
 								this._turn();
 							});
 						});
@@ -468,32 +554,47 @@
 		}
 		
 		_pushCharIn(index, options) {
-			const _this = this;
-			const battler = _this._battlers[index];
-			window.setTimeout(() => {
-				const sceneCharIn = new Lunar.Scene.BattleCharIn(_this, _this.hierarchy.other.$balls[index%4], battler, options);
-				_this.textScene.pushText(options.text(battler));
+			const battler = this._battlers[index];
+			this.setTimeout(options.delay, () => {
+				const sceneCharIn = new Lunar.Scene.BattleCharIn(this, this.hierarchy.other.$balls[index%4], battler, options);
+				this.textScene.pushText(options.text(battler));
 				sceneCharIn.once('animation-done', data => {
-					_this._removeChildScene(data.scene);
-					const sceneCharShow = new Lunar.Scene.BattleCharShow(_this, battler);
-					sceneCharShow.once('animation-done', dataShow => this._removeChildScene(dataShow.scene), _this);
-					_this._pushChildScene(sceneCharShow);
+					this._removeChildScene(data.scene);
+					const sceneCharShow = new Lunar.Scene.BattleCharShow(this, battler);
+					sceneCharShow.once('animation-done', dataShow => this._removeChildScene(dataShow.scene), this);
+					this._pushChildScene(sceneCharShow);
 				}, this);
-				_this._pushChildScene(sceneCharIn);
-			}, options.delay*1000);
+				this._pushChildScene(sceneCharIn);
+			});
 		}
 		
-		selectTarget({actionTarget, user, onCharSelected = () => 0}) {
-			if (actionTarget.accepts([])) {
-				onCharSelected.call(this, []);
-				return;
-			}
-			const scene = new Lunar.Scene.BattleTargetSelect(this, actionTarget, user);
-			this._pushChildScene(scene, this.hierarchy.ui.$target);
-			scene.on('char-selected', targets => {
-				onCharSelected.call(this, targets);
-				this._removeChildScene(scene);
-			}, this);
+		_onMessageError(status) {
+			console.error("received error message from server", status);
+			this._endBattle('The fight cannot be continued, please try again later.');
+		}
+		
+		_onMessageCancelled(response) {
+			console.error("server cancelled battle", response);
+			this._endBattle('Battle was cancelled.');
+		}
+		
+		_onMessageBattleStepped(response) {
+			this.game.removeScene(this._waitDialog);
+			this._waitDialog = undefined;
+			console.log("battle stepped", response.data);
+			const result = response.data;
+			this._textScene.once('text-processed', () => {
+				if (result.causesEnd) {
+					// TODO
+					console.log("battle done");
+				}
+				else {
+					this._turn();
+				}
+			});
+			result.battleResults.forEach(battleResult => {
+				battleResult.sentences.forEach(sentence => this._textScene.pushText(sentence));
+			});
 		}
 	}
 })(window.Lunar, window);
