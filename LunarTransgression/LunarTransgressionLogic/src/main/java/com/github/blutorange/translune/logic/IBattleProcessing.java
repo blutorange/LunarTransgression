@@ -15,7 +15,7 @@ public interface IBattleProcessing {
 	 * @return <0 iff there is no winner yet, 0 iff it is player 1, 1 iff it is
 	 *         player 2.
 	 */
-	int checkBattleEnd(BattleStatus[][] characterStates);
+	int checkBattleEnd(IBattleStatus[][] characterStates);
 
 	IDamageResult[] computeDamage(ISkilled skillData, IComputedBattleStatus attacker,
 			IComputedBattleStatus... defenders);
@@ -23,11 +23,11 @@ public interface IBattleProcessing {
 	void dealDamage(IDamageResult damageResult, IComputedBattleStatus target, List<String> messages);
 
 	BattleResult[][] distributeExperience(String[] players, List<String[]> characterStates,
-			BattleStatus[][] battleStatus, int turn) throws IOException;
+			IBattleStatus[][] battleStatus, int turn) throws IOException;
 
-	IComputedBattleStatus getComputedStatus(CharacterState characterState, BattleStatus battleStatus);
+	IComputedBattleStatus getComputedStatus(CharacterState characterState, IBattleStatus battleStatus);
 
-	IComputedBattleStatus getComputedStatus(String characterState, BattleStatus status) throws IOException;
+	IComputedBattleStatus getComputedStatus(String characterState, IBattleStatus status) throws IOException;
 
 	IComputedBattleStatus[] getTargetsAlive(ITargettable targettable, IBattleContext context,
 			BattleCommand battleCommand, int player, int character);
@@ -54,12 +54,13 @@ public interface IBattleProcessing {
 	 */
 	BattleAction[][] simulateBattleStep(List<BattleCommand[]> commands, String[] players,
 			List<String[]> characterStates, List<String[]> items, BattleStatus[][] battleStatus,
-			List<IGlobalBattleEffector> effectorStack, int turn) throws IOException;
+			List<IGlobalBattleEffector> effectorStack, IComputedBattleStatus[][] computedBattleStatus, int turn)
+			throws IOException;
 
 	void changeStages(IStaged skill, IComputedBattleStatus target, List<String> messages, IBattleContext context);
 
 	void performHeal(IHealing healData, IComputedBattleStatus user, List<String> messages, IBattleContext context);
 
-	IComputedBattleStatus[][] computedBattleStatus(List<String[]> characterStates, BattleStatus[][] battleStatus)
+	IComputedBattleStatus[][] computedBattleStatus(List<String[]> characterStates, IBattleStatus[][] battleStatus)
 			throws IOException;
 }

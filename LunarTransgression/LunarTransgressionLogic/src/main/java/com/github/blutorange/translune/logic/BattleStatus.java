@@ -1,12 +1,12 @@
 package com.github.blutorange.translune.logic;
 
-import org.apache.commons.lang3.math.Fraction;
+import org.apache.commons.math3.fraction.BigFraction;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.common.MathUtil;
 import com.github.blutorange.translune.util.Constants;
 
-public class BattleStatus {
+public class BattleStatus implements IBattleStatus {
 	private int hp;
 	private int mp;
 	private int stageAccuracy;
@@ -24,181 +24,138 @@ public class BattleStatus {
 		mp = Constants.MAX_RELATIVE_MP;
 	}
 
+	@Override
 	public void changeStageAccuracy(final int amount) {
 		stageAccuracy += amount;
 	}
 
+	@Override
 	public void changeStageEvasion(final int amount) {
 		stageEvasion += amount;
 	}
 
+	@Override
 	public void changeStageMagicalAttack(final int amount) {
 		stageMagicalAttack += amount;
 	}
 
+	@Override
 	public void changeStageMagicalDefense(final int amount) {
 		stageMagicalDefense += amount;
 	}
 
+	@Override
 	public void changeStagePhysicalAttack(final int amount) {
 		stagePhysicalAttack += amount;
 	}
 
+	@Override
 	public void changeStagePhysicalDefense(final int amount) {
 		stagePhysicalDefense += amount;
 	}
 
+	@Override
 	public void changeStageSpeed(final int amount) {
 		stageSpeed += amount;
 	}
 
-	/**
-	 * @return The current HP, relative. The denominator is {@link Constants#MAX_RELATIVE_HP}
-	 */
+	@Override
 	public int getHp() {
 		return hp;
 	}
 
-	/**
-	 * @return The current MP, relative. The denominator is {@link Constants#MAX_RELATIVE_MP}
-	 */
+	@Override
 	public int getMp() {
 		return mp;
 	}
 
-	/**
-	 * @return the stageAccuracy
-	 */
+	@Override
 	public int getStageAccuracy() {
 		return clampStage(stageAccuracy);
 	}
 
-	/**
-	 * @return the stageEvasion
-	 */
+	@Override
 	public int getStageEvasion() {
 		return clampStage(stageEvasion);
 	}
 
-	/**
-	 * @return the stageMagicalAttack
-	 */
+	@Override
 	public int getStageMagicalAttack() {
 		return clampStage(stageMagicalAttack);
 	}
 
-	/**
-	 * @return the stageMagicalDefense
-	 */
+	@Override
 	public int getStageMagicalDefense() {
 		return clampStage(stageMagicalDefense);
 	}
 
-	/**
-	 * @return the stagePhysicalAttack
-	 */
+	@Override
 	public int getStagePhysicalAttack() {
 		return clampStage(stagePhysicalAttack);
 	}
 
-	/**
-	 * @return the stagePhysicalDefense
-	 */
+	@Override
 	public int getStagePhysicalDefense() {
 		return clampStage(stagePhysicalDefense);
 	}
 
-	/**
-	 * @return the stageSpeed
-	 */
+	@Override
 	public int getStageSpeed() {
 		return clampStage(stageSpeed);
 	}
 
-	/**
-	 * @return the statusConditions
-	 */
 	@Nullable
+	@Override
 	public EStatusCondition getStatusCondition() {
 		return statusConditions;
 	}
 
-	/**
-	 * @param hp
-	 *            the hp to set
-	 */
+	@Override
 	public void setHp(final int hp) {
 		this.hp = MathUtil.clamp(hp, 0, Constants.MAX_RELATIVE_HP);
 	}
 
-	/**
-	 * @param mp
-	 *            the mp to set
-	 */
+	@Override
 	public void setMp(final int mp) {
 		this.mp = MathUtil.clamp(mp, 0, Constants.MAX_RELATIVE_MP);
 	}
 
-	/**
-	 * @param stageAccuracy
-	 *            the stageAccuracy to set
-	 */
+	@Override
 	public void setStageAccuracy(final int stageAccuracy) {
 		this.stageAccuracy = stageAccuracy;
 	}
 
-	/**
-	 * @param stageEvasion
-	 *            the stageEvasion to set
-	 */
+	@Override
 	public void setStageEvasion(final int stageEvasion) {
 		this.stageEvasion = stageEvasion;
 	}
 
-	/**
-	 * @param stageMagicalAttack
-	 *            the stageMagicalAttack to set
-	 */
+	@Override
 	public void setStageMagicalAttack(final int stageMagicalAttack) {
 		this.stageMagicalAttack = stageMagicalAttack;
 	}
 
-	/**
-	 * @param stageMagicalDefense
-	 *            the stageMagicalDefense to set
-	 */
+	@Override
 	public void setStageMagicalDefense(final int stageMagicalDefense) {
 		this.stageMagicalDefense = stageMagicalDefense;
 	}
 
-	/**
-	 * @param stagePhysicalAttack
-	 *            the stagePhysicalAttack to set
-	 */
+	@Override
 	public void setStagePhysicalAttack(final int stagePhysicalAttack) {
 		this.stagePhysicalAttack = stagePhysicalAttack;
 	}
 
-	/**
-	 * @param stagePhysicalDefense
-	 *            the stagePhysicalDefense to set
-	 */
+	@Override
 	public void setStagePhysicalDefense(final int stagePhysicalDefense) {
 		this.stagePhysicalDefense = stagePhysicalDefense;
 	}
 
-	/**
-	 * @param stageSpeed
-	 *            the stageSpeed to set
-	 */
+	@Override
 	public void setStageSpeed(final int stageSpeed) {
 		this.stageSpeed = stageSpeed;
 	}
 
-	/**
-	 * @param statusConditions
-	 *            the statusConditions to set
-	 */
+	@Override
 	public void setStatusCondition(final EStatusCondition statusConditions) {
 		this.statusConditions = statusConditions;
 	}
@@ -207,11 +164,117 @@ public class BattleStatus {
 		return MathUtil.clamp(stage, Constants.MIN_STAGE, Constants.MAX_STAGE);
 	}
 
-	public Fraction getHpFraction() {
-		return Fraction.getFraction(hp, Constants.MAX_RELATIVE_HP);
+	/* (non-Javadoc)
+	 * @see com.github.blutorange.translune.logic.IBattleStatus#getHpFraction()
+	 */
+	@Override
+	public BigFraction getHpFraction() {
+		return BigFraction.getReducedFraction(hp, Constants.MAX_RELATIVE_HP);
 	}
-	
-	public Fraction getHMFraction() {
-		return Fraction.getFraction(mp, Constants.MAX_RELATIVE_MP);
+
+	/* (non-Javadoc)
+	 * @see com.github.blutorange.translune.logic.IBattleStatus#getMpFraction()
+	 */
+	@Override
+	public BigFraction getMpFraction() {
+		return BigFraction.getReducedFraction(mp, Constants.MAX_RELATIVE_MP);
+	}
+
+	@Override
+	public IBattleStatus copy() {
+		return new BattleStatusSnapshot();
+	}
+
+	@SuppressWarnings("hiding")
+	private class BattleStatusSnapshot extends BattleStatus {
+		private final int hp;
+		private final int mp;
+		private final int stageAccuracy;
+		private final int stageEvasion;
+		private final int stageMagicalAttack;
+		private final int stageMagicalDefense;
+		private final int stagePhysicalAttack;
+		private final int stagePhysicalDefense;
+		private final int stageSpeed;
+		private @Nullable
+		final EStatusCondition statusCondition;
+
+		public BattleStatusSnapshot() {
+			this.hp = BattleStatus.this.getHp();
+			this.mp = BattleStatus.this.getMp();
+			this.stageAccuracy = BattleStatus.this.getStageAccuracy();
+			this.stageEvasion = BattleStatus.this.getStageEvasion();
+			this.stageMagicalAttack = BattleStatus.this.getStageMagicalAttack();
+			this.stageMagicalDefense = BattleStatus.this.getStageMagicalDefense();
+			this.stagePhysicalAttack = BattleStatus.this.getStagePhysicalAttack();
+			this.stagePhysicalDefense = BattleStatus.this.getStagePhysicalDefense();
+			this.stageSpeed = BattleStatus.this.getStageSpeed();
+			this.statusCondition = BattleStatus.this.getStatusCondition();
+		}
+
+		@Override
+		public int getHp() {
+			return hp;
+		}
+
+		@Override
+		public int getMp() {
+			return mp;
+		}
+
+		@Override
+		public int getStageAccuracy() {
+			return stageAccuracy;
+		}
+
+		@Override
+		public int getStageEvasion() {
+			return stageEvasion;
+		}
+
+		@Override
+		public int getStageMagicalAttack() {
+			return stageMagicalAttack;
+		}
+
+		@Override
+		public int getStageMagicalDefense() {
+			return stageMagicalDefense;
+		}
+
+		@Override
+		public int getStagePhysicalAttack() {
+			return stagePhysicalAttack;
+		}
+
+		@Override
+		public int getStagePhysicalDefense() {
+			return stagePhysicalDefense;
+		}
+
+		@Override
+		public int getStageSpeed() {
+			return stageSpeed;
+		}
+
+		@Override
+		public @Nullable EStatusCondition getStatusCondition() {
+			return statusCondition;
+		}
+
+		@Override
+		public BigFraction getHpFraction() {
+			return BigFraction.getReducedFraction(hp, Constants.MAX_RELATIVE_HP);
+		}
+
+		@Override
+		public BigFraction getMpFraction() {
+			return BigFraction.getReducedFraction(mp, Constants.MAX_RELATIVE_MP);
+		}
+
+		@Override
+		public IBattleStatus copy() {
+			return this;
+		}
 	}
 }

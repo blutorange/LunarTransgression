@@ -9,4 +9,5 @@ public interface IBattleStore {
 	void addLoot(String player, String[] characterStates, String[] items);
 	@Nullable ILootable getLoot(String player);
 	void removeLoot(String player);
+	void removeAllWith(String user);
 }

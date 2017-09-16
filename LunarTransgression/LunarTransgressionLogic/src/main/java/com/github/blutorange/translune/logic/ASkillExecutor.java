@@ -70,7 +70,7 @@ public abstract class ASkillExecutor<T> extends AExecutor implements ISkillExecu
 		}
 
 		// Add result
-		final BattleAction action = new BattleAction.Builder().character(user).targets(targets).addSentences(messages)
+		final BattleAction action = new BattleAction.Builder(context).character(user).targets(targets).addSentences(messages)
 				.build();
 		context.getBattleActions(player).add(action);
 		context.getBattleActionsOpponent(player).add(action);

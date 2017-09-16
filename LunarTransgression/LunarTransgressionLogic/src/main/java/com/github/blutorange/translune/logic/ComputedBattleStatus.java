@@ -16,15 +16,15 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 
 	private final static int[] stageMultiplierNumerator = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8 };
 
-	private final BattleStatus battleStatus;
+	private final IBattleStatus battleStatus;
 
-	public ComputedBattleStatus(final CharacterState characterState, final BattleStatus battleStatus) {
+	public ComputedBattleStatus(final CharacterState characterState, final IBattleStatus battleStatus) {
 		super(characterState);
 		this.battleStatus = battleStatus;
 	}
 
 	@Override
-	public BattleStatus getBattleStatus() {
+	public IBattleStatus getBattleStatus() {
 		return battleStatus;
 	}
 
@@ -94,7 +94,7 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 	}
 
 	@Override
-	public IComputedBattleStatus getSnapshot() {
+	public IComputedBattleStatus copy() {
 		return new ComputedBattleStatusSnapshot();
 	}
 
@@ -188,24 +188,26 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 		private final int battleAccuracy;
 		private final int battleHpAbsolute;
 		private final int battleMpAbsolute;
+		private final IBattleStatus battleStatus;
 
 		public ComputedBattleStatusSnapshot() {
 			super();
-			battleSpeed = getComputedBattleSpeed();
-			battlePhysicalAttack = getComputedBattlePhysicalAttack();
-			battlePhysicalDefense = getComputedBattlePhysicalDefense();
-			battleMaxMp = getComputedBattleMaxMp();
-			battleMaxHp = getComputedBattleMaxHp();
-			battleMagicalAttack = getComputedBattleMagicalAttack();
-			battleMagicalDefense = getComputedBattleMagicalDefense();
-			battleEvasion = getComputedBattleEvasion();
-			battleAccuracy = getComputedBattleAccuracy();
-			battleHpAbsolute = getComputedBattleHpAbsolute();
-			battleMpAbsolute = getComputedBattleMpAbsolute();
+			battleStatus = ComputedBattleStatus.this.getBattleStatus().copy();
+			battleSpeed = ComputedBattleStatus.this.getComputedBattleSpeed();
+			battlePhysicalAttack = ComputedBattleStatus.this.getComputedBattlePhysicalAttack();
+			battlePhysicalDefense = ComputedBattleStatus.this.getComputedBattlePhysicalDefense();
+			battleMaxMp = ComputedBattleStatus.this.getComputedBattleMaxMp();
+			battleMaxHp = ComputedBattleStatus.this.getComputedBattleMaxHp();
+			battleMagicalAttack = ComputedBattleStatus.this.getComputedBattleMagicalAttack();
+			battleMagicalDefense = ComputedBattleStatus.this.getComputedBattleMagicalDefense();
+			battleEvasion = ComputedBattleStatus.this.getComputedBattleEvasion();
+			battleAccuracy = ComputedBattleStatus.this.getComputedBattleAccuracy();
+			battleHpAbsolute = ComputedBattleStatus.this.getComputedBattleHpAbsolute();
+			battleMpAbsolute = ComputedBattleStatus.this.getComputedBattleMpAbsolute();
 		}
 
 		@Override
-		public BattleStatus getBattleStatus() {
+		public IBattleStatus getBattleStatus() {
 			return battleStatus;
 		}
 
@@ -285,7 +287,7 @@ class ComputedBattleStatus extends ComputedStatus implements IComputedBattleStat
 		}
 
 		@Override
-		public IComputedBattleStatus getSnapshot() {
+		public IComputedBattleStatus copy() {
 			return this;
 		}
 	}

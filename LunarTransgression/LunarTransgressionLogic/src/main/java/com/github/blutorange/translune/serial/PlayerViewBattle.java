@@ -27,7 +27,7 @@ public class PlayerViewBattle {
 		this.battleStatus = new IComputedBattleStatus[battleStatus.length];
 		this.characterStates = new CharacterViewBattle[battleStatus.length];
 		for (int i = 0; i < battleStatus.length; ++i) {
-			this.battleStatus[i] = battleStatus[i].getSnapshot();
+			this.battleStatus[i] = battleStatus[i].copy();
 			this.characterStates[i] = new CharacterViewBattle(battleStatus[i].getCharacterState());
 		}
 	}

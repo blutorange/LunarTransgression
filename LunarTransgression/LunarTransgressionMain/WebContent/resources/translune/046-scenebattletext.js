@@ -180,9 +180,11 @@
 				this._wantsAdvance = false;
 				this._setActiveLineText(activeLine);
 				this._switchState(State.WAIT_AFTER_LINE, this._waitAfterLine);
-				this._sfxCharHowler.stop(this._sfxCharId);
-				this._sfxCharHowler = undefined;
-				this._sfxCharId = undefined;
+				if (this._sfxCharHowler) {
+					this._sfxCharHowler.stop(this._sfxCharId);
+					this._sfxCharHowler = undefined;
+					this._sfxCharId = undefined;
+				}
 				return;
 			}
 			if (!this._sfxCharHowler) {

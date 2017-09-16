@@ -9,6 +9,7 @@
 			super(game);
 			this._battleData = battleData;
 			this._loaded = false;
+			this._turnPreparation = false;
 			this._loadScene = undefined
 			this._textScene = undefined
 			this._field = undefined;
@@ -94,6 +95,10 @@
 		
 		update(delta) {
 			super.update(delta);
+			if (this._turnPreparation) {
+				const delta = 28*this.game.fmath.sin(0.2*this.time);
+				this.positionCameraPlayer(1, 8 + delta);				
+			}
 			this._updateCamera(this._camera);
 		}
 		
@@ -236,7 +241,7 @@
 			}
 			const scene = new Lunar.Scene.BattleTargetSelect(this, actionTarget, user);
 			this._pushChildScene(scene, this.hierarchy.ui.$target);
-			scene.on('char-selected', targets => {
+			scene.once('char-selected', targets => {
 				onCharSelected.call(this, targets);
 				this._removeChildScene(scene);
 			}, this);
@@ -270,6 +275,10 @@
 			});
 			this.game.net.registerMessageHandler(Lunar.Message.battleStepped, {
 				handle: this.method('_onMessageBattleStepped'),
+				error: this.method('_onMessageError')
+			});
+			this.game.net.registerMessageHandler(Lunar.Message.battleEnded, {
+				handle: this.method('_onMessageBattleEnded'),
 				error: this.method('_onMessageError')
 			});
 		}
@@ -354,14 +363,14 @@
 				new PIXI.Sprite(resources.packed.spritesheet.textures['pokeball.png'])
 			];
 			this._battlers = [
-				new Lunar.Scene.BattleBattler(this, 0, resources.me_back_1, resources.me_front_1, this._battleCircle, this._battleData.player.characterStates[0]),
-				new Lunar.Scene.BattleBattler(this, 1, resources.me_back_2, resources.me_front_2, this._battleCircle, this._battleData.player.characterStates[1]),
-				new Lunar.Scene.BattleBattler(this, 2, resources.me_back_3, resources.me_front_3, this._battleCircle, this._battleData.player.characterStates[2]),
-				new Lunar.Scene.BattleBattler(this, 3, resources.me_back_4, resources.me_front_4, this._battleCircle, this._battleData.player.characterStates[3]),
-				new Lunar.Scene.BattleBattler(this, 4, resources.u_back_1, resources.u_front_1, this._battleCircle, this._battleData.opponent.characterStates[0]),
-				new Lunar.Scene.BattleBattler(this, 5, resources.u_back_2, resources.u_front_2, this._battleCircle, this._battleData.opponent.characterStates[1]),
-				new Lunar.Scene.BattleBattler(this, 6, resources.u_back_3, resources.u_front_3, this._battleCircle, this._battleData.opponent.characterStates[2]),
-				new Lunar.Scene.BattleBattler(this, 7, resources.u_back_4, resources.u_front_4, this._battleCircle, this._battleData.opponent.characterStates[3])
+				new Lunar.Scene.BattleBattler(this, 0, resources.me_back_1, resources.me_front_1, this._battleCircle, this._battleData.player.characterStates[0], this._battleData.player.battleStatus[0]),
+				new Lunar.Scene.BattleBattler(this, 1, resources.me_back_2, resources.me_front_2, this._battleCircle, this._battleData.player.characterStates[1], this._battleData.player.battleStatus[1]),
+				new Lunar.Scene.BattleBattler(this, 2, resources.me_back_3, resources.me_front_3, this._battleCircle, this._battleData.player.characterStates[2], this._battleData.player.battleStatus[2]),
+				new Lunar.Scene.BattleBattler(this, 3, resources.me_back_4, resources.me_front_4, this._battleCircle, this._battleData.player.characterStates[3], this._battleData.player.battleStatus[3]),
+				new Lunar.Scene.BattleBattler(this, 4, resources.u_back_1, resources.u_front_1, this._battleCircle, this._battleData.opponent.characterStates[0], this._battleData.opponent.battleStatus[0]),
+				new Lunar.Scene.BattleBattler(this, 5, resources.u_back_2, resources.u_front_2, this._battleCircle, this._battleData.opponent.characterStates[1], this._battleData.opponent.battleStatus[1]),
+				new Lunar.Scene.BattleBattler(this, 6, resources.u_back_3, resources.u_front_3, this._battleCircle, this._battleData.opponent.characterStates[2], this._battleData.opponent.battleStatus[2]),
+				new Lunar.Scene.BattleBattler(this, 7, resources.u_back_4, resources.u_front_4, this._battleCircle, this._battleData.opponent.characterStates[3], this._battleData.opponent.battleStatus[3])
 			];
 			
 			// Create scenes
@@ -445,10 +454,22 @@
 		
 		_turn() {
 			if (this._commands.length >= 4) {
+				this._turnPreparation = false;
 				this._performTurn();
 				return;
 			}
-			const scene = new Lunar.Scene.BattleActionSelect(this, this.getPlayer(this._commands.length));
+			this._turnPreparation = true;
+			const battler = this.getPlayer(this._commands.length);
+			if (battler.dead) {
+				this._commands.push({
+					action: '',
+					targets: [],
+					type: Lunar.CommandType.defend,	
+				});
+				this._turn();
+				return;
+			}
+			const scene = new Lunar.Scene.BattleActionSelect(this, battler);
 			scene.once('action-selected', command => {
 				this._removeChildScene(scene);
 				this._commands.push(command);
@@ -578,23 +599,94 @@
 			this._endBattle('Battle was cancelled.');
 		}
 		
+		_onMessageBattleEnded(response) {
+			console.log("battle ended", response)
+		}
+		
 		_onMessageBattleStepped(response) {
 			this.game.removeScene(this._waitDialog);
 			this._waitDialog = undefined;
-			console.log("battle stepped", response.data);
-			const result = response.data;
-			this._textScene.once('text-processed', () => {
+			this._evaluateBattleResult(response.data);
+		}
+		
+		_updateComputedStatusPlayer(index, battleStatus) {
+			this._battleData.player.battleStatus[index] = battleStatus;
+			this._battlers[index].updateComputedStatus(battleStatus);
+		}
+		
+		_updateComputedStatusOpponent(index, battleStatus) {
+			this._battleData.opponent.battleStatus[index] = battleStatus;
+			this._battlers[4+index].updateComputedStatus(battleStatus);
+		}
+		
+		_evaluateBattleResult(result, index = 0) {
+			if (index >= result.battleResults.length) {
 				if (result.causesEnd) {
-					// TODO
+					// TODO wait for BATTLE_ENDED
 					console.log("battle done");
 				}
 				else {
-					this._turn();
+					for (let i = 0; i < 4; ++i) {
+						this._updateComputedStatusPlayer(i, result.player[i]);
+						this._updateComputedStatusOpponent(i, result.opponent[i])
+					}
+					this.moveCamera(0, 2);
+					this.once('camera-reached', () => {
+						this._commands = [];
+						this._turn();
+					});
+				}
+				return;
+			}
+			const battleResult = result.battleResults[index];
+			const battler = this._battlerById(battleResult.user);
+
+			this._textScene.once('text-processed', () => {
+				this._applyStateDelta(result.battleResults[index]);
+				this._evaluateBattleResult(result, index+1);
+			}, this);
+			
+			this._textScene.once('text-advance', () => {
+				if (battler.isPlayer)
+					this.moveCameraPlayer(battler.normalizedIndex, 1, 0);
+				else
+					this.moveCameraOpponent(battler.normalizedIndex, 1, 0);
+			}, this);
+			
+			const len = result.battleResults[index].sentences.length;
+			for (let i = 0; i < len; ++i) {
+				let sentence = result.battleResults[index].sentences[i];
+				if (i < len - 1)
+					sentence += "&";
+				this._textScene.pushText(sentence);					
+			}
+		}
+		
+		_applyStateDelta(battleResult) {
+			battleResult.stateDeltas.forEach(stateDelta => {
+				const battler = this._battlerById(stateDelta.characterState);
+				switch (stateDelta.type) {
+				case Lunar.StatusDeltaType.battleStatus:
+					switch (stateDelta.value) {
+					case Lunar.StatusValue.hp:
+						this.game.sfx('resources/translune/static/battle/hpdown', 1);
+						battler.moveHpRatio(stateDelta.after/Lunar.Constants.hpRatioDenominator);
+						if (battler.dead)
+							this._animateKo(battler);
+					}
+					break;
 				}
 			});
-			result.battleResults.forEach(battleResult => {
-				battleResult.sentences.forEach(sentence => this._textScene.pushText(sentence));
-			});
+		}
+		
+		_animateKo(battler) {
+			const scene = new Lunar.Scene.BattleKo(this, battler);
+			scene.once('action-selected', command => this._removeChildScene(scene));
+			this._pushChildScene(scene);
+		}
+		
+		_battlerById(id) {
+			return this._battlers.find(battler => battler.characterState.id === id);
 		}
 	}
 })(window.Lunar, window);

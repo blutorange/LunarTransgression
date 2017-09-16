@@ -10,7 +10,7 @@ public class SkillExecutorNoEffect implements ISkillExecutor {
 	public void execute(final Skill skill, final IBattleContext context, final BattleCommand battleCommand,
 			final int player, final int character) {
 		final CharacterState user = context.getCharacterState(player, character);
-		final BattleAction action = new BattleAction.Builder().character(user).addSentences(
+		final BattleAction action = new BattleAction.Builder(context).character(user).addSentences(
 				String.format("%s used %s.", user.getNickname(), skill.getName()), "But nothing happended.").build();
 		context.getBattleActions(player).add(action);
 		context.getBattleActionsOpponent(player).add(action);

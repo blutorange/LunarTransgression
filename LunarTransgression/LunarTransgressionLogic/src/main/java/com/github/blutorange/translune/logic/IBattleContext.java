@@ -13,13 +13,15 @@ public interface IBattleContext {
 
 	List<BattleAction> getBattleActionsOpponent(int player);
 
-	BattleStatus[][] getBattleStatus();
+	IBattleStatus[][] getBattleStatus();
 
-	BattleStatus[] getBattleStatus(int player);
+	IBattleStatus[] getBattleStatus(int player);
 
 	BattleStatus getBattleStatus(int player, int character);
 
-	BattleStatus getBattleStatus(int[] characterIndex);
+	IBattleStatus getBattleStatus(int[] characterIndex);
+
+	public CharacterStatsDelta[] differenceToLast();
 
 	default int[] getCharacterIndex(final CharacterState character) {
 		return getCharacterIndex(character.getPrimaryKey().toString());

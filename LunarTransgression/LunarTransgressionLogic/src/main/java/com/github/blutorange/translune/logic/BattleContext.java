@@ -1,5 +1,6 @@
 package com.github.blutorange.translune.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -89,6 +90,7 @@ class BattleContext implements IBattleContext {
 	private final BattleStatus[][] battleStatus;
 	private final CharacterState[][] characterStates;
 	private final IComputedBattleStatus[][] computedBattleStatus;
+	private IComputedBattleStatus[][] computedBattleStatusSnapshot;
 	private final List<IGlobalBattleEffector> effectorStack;
 	private final IItemRemovable itemRemovable;
 	private final List<String[]> items;
@@ -111,6 +113,7 @@ class BattleContext implements IBattleContext {
 		this.battleActions2 = battleActions2;
 		this.itemRemovable = itemRemovable;
 		this.players = players;
+		this.computedBattleStatusSnapshot = snapshotComputedStatus(computedBattleStatus);
 	}
 
 	@Override
@@ -128,12 +131,12 @@ class BattleContext implements IBattleContext {
 	}
 
 	@Override
-	public BattleStatus[][] getBattleStatus() {
+	public IBattleStatus[][] getBattleStatus() {
 		return battleStatus;
 	}
 
 	@Override
-	public BattleStatus[] getBattleStatus(final int player) {
+	public IBattleStatus[] getBattleStatus(final int player) {
 		return battleStatus[player];
 	}
 
@@ -143,7 +146,7 @@ class BattleContext implements IBattleContext {
 	}
 
 	@Override
-	public BattleStatus getBattleStatus(final int[] characterIndex) {
+	public IBattleStatus getBattleStatus(final int[] characterIndex) {
 		return getBattleStatus(characterIndex[0], characterIndex[1]);
 	}
 
@@ -249,5 +252,37 @@ class BattleContext implements IBattleContext {
 		itemRemovable.removeItem(player, item);
 		ArrayUtils.remove(getItems(player), index);
 		return true;
+	}
+
+	@Override
+	public CharacterStatsDelta[] differenceToLast() {
+		final CharacterStatsDelta[] statDeltas = statDeltas(computedBattleStatusSnapshot, computedBattleStatus);
+		this.computedBattleStatusSnapshot = snapshotComputedStatus(computedBattleStatus);
+		return statDeltas;
+	}
+
+	private static CharacterStatsDelta[] statDeltas(final IComputedBattleStatus[][] before,
+			final IComputedBattleStatus[][] after) {
+		final List<CharacterStatsDelta> list = new ArrayList<>();
+		for (int player = 2; player-- > 0;) {
+			for (int character = 4; character-- > 0;) {
+				list.addAll(CharacterStatsDelta.between(before[player][character].getCharacterState().getId(),
+						before[player][character], after[player][character]));
+			}
+		}
+		return list.toArray(new CharacterStatsDelta[list.size()]);
+	}
+
+	private static IComputedBattleStatus[][] snapshotComputedStatus(
+			final IComputedBattleStatus[][] computedBattleStatus) {
+		final IComputedBattleStatus[][] snapshot = new IComputedBattleStatus[2][];
+		for (int player = snapshot.length; player-- > 0;) {
+			final IComputedBattleStatus[] snapshotSub = new IComputedBattleStatus[computedBattleStatus[player].length];
+			for (int character = snapshotSub.length; character-- > 0;) {
+				snapshotSub[character] = computedBattleStatus[player][character].copy();
+			}
+			snapshot[player] = snapshotSub;
+		}
+		return snapshot;
 	}
 }

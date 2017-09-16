@@ -326,6 +326,7 @@
 		battleCancelled: 'battle-cancelled',
 		battlePrepared: 'battle-prepared',
 		battleStepped: 'battle-stepped',
+		battleEnded: 'battle-ended',
 		
 		unknown: 'unknown'
 	};
@@ -352,6 +353,24 @@
 		special: 'special',
 		defend: 'defend'
 	};
+	
+	Lunar.StatusDeltaType = {
+		computed: 'COMPUTED',
+		computedBattle: 'COMPUTED_BATTLE',
+		battleStatus: 'BATTLE_STATUS',
+	};
+	
+	Lunar.StatusValue = {
+			hp: 'HP',
+			mp: 'MP',
+			evasion: 'EVASION',
+			accuracy: 'ACCURACY',
+			speed: 'SPEED',
+			physicalAttack: 'PHYSICAL_ATTACK',
+			physicalDefense: 'PHYSICAL_DEFENSE',
+			magicalAttack: 'MAGICAL_ATTACK',
+			magicalDefense: 'MAGICAL_DEFENSE',
+		};
 	
 	Lunar.Array = {
 		/**
@@ -405,6 +424,7 @@
 	 * @const {IObject<string, ?>}
 	 */
 	Lunar.Constants = {
+		hpRatioDenominator: 999999,
 		minReleaseLevel: 80,
 		reponseTimeout: location.pathname.endsWith("_debug.html") ? 1999 : 20, // seconds
 		queueTimeout: location.pathname.endsWith("_debug.html") ? 999 : 10, // seconds

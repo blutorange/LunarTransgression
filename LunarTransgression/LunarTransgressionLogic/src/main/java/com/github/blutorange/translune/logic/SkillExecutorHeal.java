@@ -13,7 +13,7 @@ public class SkillExecutorHeal extends ASkillExecutor {
 
 		// Perform heal and inform combatants.
 		final String useMessage = String.format("%s uses %s!", user.getCharacterState().getNickname(), skill.getName());
-		final BattleAction.Builder builder = new BattleAction.Builder().character(user)
+		final BattleAction.Builder builder = new BattleAction.Builder(context).character(user)
 				.addSentences(useMessage);
 
 		battleProcessing.performHeal(skill, user, builder.getSentences(), context);

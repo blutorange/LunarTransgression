@@ -164,7 +164,7 @@ class ComputedStatus implements IComputedStatus {
 	}
 
 	@Override
-	public IComputedStatus getSnapshot() {
+	public IComputedStatus copy() {
 		return new ComputedStatusSnapshot();
 	}
 
@@ -180,16 +180,16 @@ class ComputedStatus implements IComputedStatus {
 		private final int speed;
 
 		public ComputedStatusSnapshot() {
-			accuracy = getComputedAccuracy();
-			evasion = getComputedEvasion();
-			maxHp = getComputedMaxHp();
-			maxMp = getComputedMaxMp();
-			magicalAttack = getComputedMagicalAttack();
-			magicalDefense = getComputedMagicalDefense();
-			maxMp = getComputedMaxMp();
-			physicalAttack = getComputedPhysicalAttack();
-			physicalDefense = getComputedPhysicalDefense();
-			speed = getComputedSpeed();
+			accuracy = ComputedStatus.this.getComputedAccuracy();
+			evasion = ComputedStatus.this.getComputedEvasion();
+			maxHp = ComputedStatus.this.getComputedMaxHp();
+			maxMp = ComputedStatus.this.getComputedMaxMp();
+			magicalAttack = ComputedStatus.this.getComputedMagicalAttack();
+			magicalDefense = ComputedStatus.this.getComputedMagicalDefense();
+			maxMp = ComputedStatus.this.getComputedMaxMp();
+			physicalAttack = ComputedStatus.this.getComputedPhysicalAttack();
+			physicalDefense = ComputedStatus.this.getComputedPhysicalDefense();
+			speed = ComputedStatus.this.getComputedSpeed();
 		}
 
 		@Override
@@ -243,7 +243,7 @@ class ComputedStatus implements IComputedStatus {
 		}
 
 		@Override
-		public IComputedStatus getSnapshot() {
+		public IComputedStatus copy() {
 			return this;
 		}
 	}

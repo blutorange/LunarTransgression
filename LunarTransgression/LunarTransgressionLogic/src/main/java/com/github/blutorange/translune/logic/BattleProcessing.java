@@ -16,6 +16,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.Fraction;
+import org.apache.commons.math3.fraction.BigFraction;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -51,7 +52,7 @@ public class BattleProcessing implements IBattleProcessing {
 	}
 
 	@Override
-	public int checkBattleEnd(final BattleStatus[][] battleStatus) {
+	public int checkBattleEnd(final IBattleStatus[][] battleStatus) {
 		if (getKnockoutCount(battleStatus[0]) >= 2)
 			return 0;
 		if (getKnockoutCount(battleStatus[1]) >= 2)
@@ -62,27 +63,24 @@ public class BattleProcessing implements IBattleProcessing {
 	@Override
 	public IDamageResult[] computeDamage(final ISkilled skill, final IComputedBattleStatus attacker,
 			final IComputedBattleStatus... defenders) {
-		final int modifierNumerator = 1;
-		final int modifierDenominator = 1;
-
-		Fraction modifier = Fraction.ONE;
+		BigFraction modifier = BigFraction.ONE;
 		boolean isStab = false;
 
-		// if the move has more than one target,
+		// If the move has more than one target,
 		if (defenders.length > 1)
-			modifier = modifier.multiplyBy(Fraction.THREE_QUARTERS);
+			modifier = modifier.multiply(BigFraction.THREE_QUARTERS);
 
 		// Same-type attack bonus. This is equal to 1.5 if the move's type
 		// matches any
 		// of the user's types, and 1 if otherwise.
 		if (attacker.getCharacterState().getCharacter().getUnmodifiableElements().contains(skill.getElement())) {
-			modifier = modifier.multiplyBy(Constants.FRACTION_THREE_HALFS);
+			modifier = modifier.multiply(Constants.FRACTION_THREE_HALFS);
 			isStab = true;
 		}
 
 		// Halved if the attacker is burned and the used move is a physical move
 		if (skill.getIsPhysical() && EStatusCondition.BURN.equals(attacker.getBattleStatus().getStatusCondition()))
-			modifier.multiplyBy(Fraction.ONE_HALF);
+			modifier.multiply(BigFraction.ONE_HALF);
 
 		// Compute damage for each target
 		final IDamageResult[] results = new IDamageResult[defenders.length];
@@ -91,11 +89,11 @@ public class BattleProcessing implements IBattleProcessing {
 			final DamageResult result = new DamageResult();
 			result.setStab(isStab);
 
-			Fraction modifierSeparate = modifier;
+			BigFraction modifierSeparate = modifier;
 
 			// 1.5 for a critical hit
 			if (random.get().nextInt(100) < getCriticalHitThreshold(skill, attacker, defender)) {
-				modifierSeparate = modifierSeparate.multiplyBy(Constants.FRACTION_THREE_HALFS);
+				modifierSeparate = modifierSeparate.multiply(Constants.FRACTION_THREE_HALFS);
 				result.setCritical(true);
 			}
 
@@ -104,11 +102,13 @@ public class BattleProcessing implements IBattleProcessing {
 			// 2 or 4 (super effective) depending on both the move's
 			// and target's types.
 			final ETypeEffectiveness typeEffectiveness = computeTypeEffectiveness(skill, defender.getCharacterState());
-			modifierSeparate = modifierSeparate.multiplyBy(typeEffectiveness.getMultiplier());
+			final BigFraction typeMultiplier = typeEffectiveness.getMultiplier();
+			modifierSeparate = modifierSeparate.multiply(typeMultiplier);
 			result.setTypeEffectivness(typeEffectiveness);
 
 			// Random factor between 0.85 and 1.00
-			modifierSeparate = modifierSeparate.multiplyBy(Fraction.getFraction(random.get().nextInt(16) + 85, 100));
+			modifierSeparate = modifierSeparate
+					.multiply(BigFraction.getReducedFraction(random.get().nextInt(16) + 85, 100));
 
 			// Attack and defense
 			final int attack = skill.getIsPhysical() ? attacker.getComputedBattlePhysicalAttack()
@@ -117,12 +117,14 @@ public class BattleProcessing implements IBattleProcessing {
 					: defender.getComputedBattleMagicalDefense();
 
 			// Damage calculation
-			final int damage = (((2 * attacker.getCharacterState().getLevel()) / 5 + 2) * skill.getAttackPower()
-					* attack / defense) / 50
-					+ 2 * modifierNumerator * modifierSeparate.getNumerator()
-							/ (modifierDenominator * modifierSeparate.getDenominator());
-			result.setDamage(damage);
+			final int damage;
+			if (typeMultiplier.equals(BigFraction.ZERO))
+				damage = 0;
+			else
+				damage = (((2 * attacker.getCharacterState().getLevel()) / 5 + 2) * skill.getAttackPower() * attack
+						/ defense) / 50 + 2 * modifierSeparate.intValue();
 
+			result.setDamage(damage);
 			results[i] = result;
 		}
 		return results;
@@ -144,14 +146,14 @@ public class BattleProcessing implements IBattleProcessing {
 	public void performHeal(final IHealing healData, final IComputedBattleStatus user, final List<String> messages,
 			final IBattleContext context) {
 		// Computed heal amount and do the healing.
-		final int hpBefore = user.getComputedBattleMaxHp();
+		final int hpBefore = user.getComputedBattleHpAbsolute();
 		final int healAmount = healData.getHealPower() * user.getComputedBattleMaxHp() / 100;
 		user.modifyHp(healAmount);
-		final int hpAfter = user.getComputedBattleMaxHp();
+		final int hpAfter = user.getComputedBattleHpAbsolute();
 
 		// Inform the combatants.
 		if (hpAfter != hpBefore)
-			messages.add(String.format("%s HP healed its HP by %d!", Integer.valueOf(hpAfter - hpBefore)));
+			messages.add(String.format("%s healed its HP by %d!", Integer.valueOf(hpAfter - hpBefore)));
 		else
 			messages.add("But its HP were already full.");
 	}
@@ -206,6 +208,7 @@ public class BattleProcessing implements IBattleProcessing {
 	@Override
 	public void dealDamage(final IDamageResult damageResult, final IComputedBattleStatus target,
 			final List<String> messages) {
+		// When no damage was done, we do not show a separate message.
 		// Have the target take damage.
 		final String effectiveMessage = damageResult.getTypeEffectiveness().getBattleMessage();
 		target.modifyHp(-damageResult.getDamage());
@@ -214,6 +217,8 @@ public class BattleProcessing implements IBattleProcessing {
 			messages.add("Critical hit!");
 		if (effectiveMessage != null)
 			messages.add(effectiveMessage);
+		if (damageResult.getDamage() == 0)
+			return;
 		messages.add(String.format("%s took %d damage!", target.getCharacterState().getNickname(),
 				Integer.valueOf(damageResult.getDamage())));
 		if (target.getBattleStatus().getHp() <= 0) {
@@ -223,7 +228,7 @@ public class BattleProcessing implements IBattleProcessing {
 
 	@Override
 	public BattleResult[][] distributeExperience(final String[] players, final List<String[]> characterStates,
-			final BattleStatus[][] battleStatus, final int turn) throws IOException {
+			final IBattleStatus[][] battleStatus, final int turn) throws IOException {
 		final IComputedBattleStatus[][] computedBattleStatus = computedBattleStatus(characterStates, battleStatus);
 		final Player[] playerEntities = databaseManager.findAll(Player.class, players);
 		final BattleResult[][] result = new BattleResult[2][];
@@ -234,12 +239,13 @@ public class BattleProcessing implements IBattleProcessing {
 
 	@Override
 	public IComputedBattleStatus getComputedStatus(final CharacterState characterState,
-			final BattleStatus battleStatus) {
+			final IBattleStatus battleStatus) {
 		return IComputedBattleStatus.get(characterState, battleStatus);
 	}
 
 	@Override
-	public IComputedBattleStatus getComputedStatus(final String characterState, final BattleStatus status) throws IOException {
+	public IComputedBattleStatus getComputedStatus(final String characterState, final IBattleStatus status)
+			throws IOException {
 		final CharacterState cs = databaseManager.find(CharacterState.class, characterState);
 		if (cs == null)
 			throw new IllegalArgumentException("character state does not exists");
@@ -251,14 +257,14 @@ public class BattleProcessing implements IBattleProcessing {
 			final BattleCommand battleCommand, final int player, final int character) {
 		final IComputedBattleStatus[] targets = targettable.getTarget().getTargets(context, battleCommand, player,
 				character);
-		return Arrays.stream(targets).filter(target -> target.getComputedMaxHp() > 0)
+		return Arrays.stream(targets).filter(target -> target.getBattleStatus().getHp() > 0)
 				.toArray(IComputedBattleStatus[]::new);
 	}
 
 	@Override
 	public void handleError(final IBattleContext context, final CharacterState user, final String... messages) {
-		final BattleAction action = new BattleAction.Builder().character(user).targets(user).addSentences(messages)
-				.build();
+		final BattleAction action = new BattleAction.Builder(context).character(user).targets(user)
+				.addSentences(messages).build();
 		final int player = context.getCharacterIndex(user)[0];
 		context.getBattleActions(player).add(action);
 		context.getBattleActionsOpponent(player).add(action);
@@ -267,8 +273,8 @@ public class BattleProcessing implements IBattleProcessing {
 	@Override
 	public BattleAction[][] simulateBattleStep(final List<BattleCommand[]> commands, final String[] players,
 			final List<String[]> characterStates, final List<String[]> items, final BattleStatus[][] battleStatus,
-			final List<IGlobalBattleEffector> effectorStack, final int turn) throws IOException {
-		final IComputedBattleStatus[][] computedBattleStatus = computedBattleStatus(characterStates, battleStatus);
+			final List<IGlobalBattleEffector> effectorStack, final IComputedBattleStatus[][] computedBattleStatus,
+			final int turn) throws IOException {
 		final IBattleCommandHandler[] battleCommandHandlers = new IBattleCommandHandler[8];
 		final List<BattleAction> battleActions1 = new ArrayList<>(2 * battleCommandHandlers.length);
 		final List<BattleAction> battleActions2 = new ArrayList<>(2 * battleCommandHandlers.length);
@@ -288,7 +294,7 @@ public class BattleProcessing implements IBattleProcessing {
 
 	@Override
 	public IComputedBattleStatus[][] computedBattleStatus(final List<String @NonNull []> characterStates,
-			final BattleStatus[][] battleStatus) throws IOException {
+			final IBattleStatus[][] battleStatus) throws IOException {
 		final IComputedBattleStatus[][] computedBattleStatus = new IComputedBattleStatus[2][4];
 		for (int player = 2; player-- > 0;) {
 			for (int character = 4; character-- > 0;) {
@@ -305,8 +311,9 @@ public class BattleProcessing implements IBattleProcessing {
 	private ETypeEffectiveness computeTypeEffectiveness(final ISkilled skill, final CharacterState characterState) {
 		final Set<EElement> elements = characterState.getCharacter().getUnmodifiableElements();
 		final EElement element = skill.getElement();
-		final Fraction multiplier = elements.stream().collect(Collectors.<EElement, Fraction> reducing(Fraction.ONE,
-				e -> e.typeEffectivness(element), Fraction::multiplyBy)).reduce();
+		final BigFraction multiplier = elements.stream()
+				.collect(Collectors.reducing(BigFraction.ONE, e -> e.typeEffectivness(element), BigFraction::multiply))
+				.reduce();
 		if (multiplier.equals(Fraction.ONE))
 			return ETypeEffectiveness.NORMALLY_EFFECTIVE;
 		if (multiplier.equals(Fraction.ONE_HALF))
@@ -324,17 +331,17 @@ public class BattleProcessing implements IBattleProcessing {
 		// Get total experience by summing the experience for each opponent
 		int totalExp = 0;
 		int knockoutCount = 0;
-		final Fraction partTurns = turn > 10 ? Fraction.ONE
-				: Constants.FRACTION_TWO.subtract(Fraction.getFraction(turn, 10));
+		final BigFraction partTurns = turn > 10 ? BigFraction.ONE
+				: Constants.FRACTION_TWO.subtract(BigFraction.getReducedFraction(turn, 10));
 		for (int i = 4; i-- > 0;) {
 			final IComputedBattleStatus cbs = computedBattleStatus[opponent][i];
 			final int level = cbs.getCharacterState().getLevel();
-			final Fraction partLevel = Fraction.getFraction(level, 1).pow(3);
-			final Fraction partHp = Fraction.ONE.subtract(cbs.getBattleStatus().getHpFraction()).pow(2)
-					.add(Fraction.ONE_HALF).multiplyBy(Constants.FRACTION_TWO).reduce();
+			final BigFraction partLevel = BigFraction.getReducedFraction(level, 1).pow(3);
+			final BigFraction partHp = BigFraction.ONE.subtract(cbs.getBattleStatus().getHpFraction()).pow(2)
+					.add(BigFraction.ONE_HALF).multiply(Constants.FRACTION_TWO).reduce();
 			if (cbs.getBattleStatus().getHp() <= 0)
 				++knockoutCount;
-			final int experience = partLevel.multiplyBy(partHp).multiplyBy(partTurns).intValue();
+			final int experience = partLevel.multiply(partHp).multiply(partTurns).intValue();
 			totalExp += experience;
 		}
 		final Fraction winningFactor = knockoutCount >= 2 ? Fraction.getFraction(5, 4) : Fraction.getFraction(3, 4);
@@ -346,21 +353,21 @@ public class BattleProcessing implements IBattleProcessing {
 		// Level up characters, show info regarding new skills etc.
 		final BattleResult[] result = new BattleResult[4];
 		for (int i = 4; i-- > 0;) {
-			final int exp = 101
-					- computedBattleStatus[opponent][i].getCharacterState().getLevel() * totalExp / levelTotal;
+			final int exp = (101
+					- computedBattleStatus[opponent][i].getCharacterState().getLevel()) * totalExp / levelTotal;
 			result[i] = gainExp(computedBattleStatus[opponent][i], exp);
 		}
 		return result;
 	}
 
 	private void effectorAfter(final IBattleContext battleContext, final List<IGlobalBattleEffector> effectorStack) {
-		for (final Iterator<IGlobalBattleEffector> it = effectorStack.iterator(); it.hasNext();) {
-			final IGlobalBattleEffector effector = it.next();
+		effectorStack.removeIf(effector -> {
 			if (effector.afterTurn(battleContext)) {
-				it.remove();
 				effector.onRemove(battleContext);
+				return true;
 			}
-		}
+			return false;
+		});
 	}
 
 	private boolean effectorAllowTurn(final IBattleCommandHandler handler) {
@@ -389,11 +396,7 @@ public class BattleProcessing implements IBattleProcessing {
 		}
 		for (final IBattleCommandHandler battleCommandHandler : battleCommandHandlers) {
 			if (effectorAllowTurn(battleCommandHandler)) {
-				final int player = battleCommandHandler.getPlayerIndex();
-				if (player == 0)
-					battleCommandHandler.execute();
-				else
-					battleCommandHandler.execute();
+				battleCommandHandler.execute();
 			}
 			final int winningPlayer = checkBattleEnd(battleCommandHandler.getBattleContext().getBattleStatus());
 			if (winningPlayer >= 0) {
@@ -408,13 +411,19 @@ public class BattleProcessing implements IBattleProcessing {
 
 	private BattleResult gainExp(final IComputedBattleStatus status, final int exp) {
 		final CharacterState characterState = status.getCharacterState();
-		final IComputedStatus oldStatus = status.getSnapshot();
+		final IComputedStatus oldStatus = status.copy();
 		final Character character = status.getCharacterState().getCharacter();
 		final List<String> sentences = new ArrayList<>();
 		final int oldLevel = characterState.getLevel();
 		final int newExp = characterState.getExp() + exp;
 		final int newLevel = character.getExperienceGroup().getLevelForExperience(newExp);
 		sentences.add(String.format("%s gained %d XP.", characterState.getNickname(), exp));
+		// Modify level +exp
+		databaseManager.modify(characterState, ModifiableCharacterState.class, modifiable -> {
+			modifiable.setLevel(newLevel);
+			modifiable.setExp(newExp);
+		});
+		// Check which stats went up as a result.
 		if (newLevel > oldLevel) {
 			character.getUnmodifiableSkills().entrySet().stream()
 					.filter(entry -> entry.getValue() > oldLevel && entry.getValue() <= newLevel)
@@ -435,11 +444,6 @@ public class BattleProcessing implements IBattleProcessing {
 			sentences.add(
 					String.format("Speed went up by %d.", status.getComputedSpeed() - oldStatus.getComputedSpeed()));
 		}
-		// Modify level +exp
-		databaseManager.modify(characterState, ModifiableCharacterState.class, modifiable -> {
-			modifiable.setLevel(newLevel);
-			modifiable.setExp(newExp);
-		});
 		return new BattleResult(character.getName(), sentences.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 	}
 
@@ -450,11 +454,9 @@ public class BattleProcessing implements IBattleProcessing {
 				final String[] states = characterStates.get(player);
 				if (states == null)
 					throw new IOException("character states are null: " + player + "," + character);
-				final CharacterState characterState = databaseManager.find(CharacterState.class,
-						states[character]);
+				final CharacterState characterState = databaseManager.find(CharacterState.class, states[character]);
 				if (characterState == null)
-					throw new IllegalStateException(
-							"character does not exist: " + player + "," + character);
+					throw new IllegalStateException("character does not exist: " + player + "," + character);
 				retrievedCharacterStates[player][character] = characterState;
 			}
 		}
@@ -474,24 +476,25 @@ public class BattleProcessing implements IBattleProcessing {
 				mp -> mp.removeItem(item));
 	}
 
-	private int getKnockoutCount(final BattleStatus[] battleStatus) {
+	private int getKnockoutCount(final IBattleStatus[] battleStatus) {
 		int count = 0;
-		for (final BattleStatus bs : battleStatus) {
+		for (final IBattleStatus bs : battleStatus) {
 			if (bs.getHp() <= 0)
 				++count;
 		}
 		return count;
 	}
 
-	private void makeCommandHandler(final IBattleContext context, final int player,
-			final IBattleCommandHandler[] out, final int offset, final BattleCommand@Nullable... battleCommands) throws IOException {
+	private void makeCommandHandler(final IBattleContext context, final int player, final IBattleCommandHandler[] out,
+			final int offset, final BattleCommand @Nullable... battleCommands) throws IOException {
 		if (battleCommands == null)
 			throw new IOException("battle commands are null");
 		for (int character = 4; character-- > 0;) {
 			final CharacterState characterState = context.getCharacterState(player, character);
 			if (characterState == null)
 				throw new IllegalArgumentException("Character state does not exist: " + player + ", " + character);
-			out[character + offset] = IBattleCommandHandler.create(context, player, character, battleCommands[character]);
+			out[character + offset] = IBattleCommandHandler.create(context, player, character,
+					battleCommands[character]);
 		}
 	}
 

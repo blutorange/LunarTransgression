@@ -77,6 +77,14 @@
 			"spriteSourceSize": {"x":0,"y":0,"w":101,"h":113},
 			"sourceSize": {"w":101,"h":113}
 		},
+		"actionDefend.png":
+		{
+			"frame": {"x":456,"y":587,"w":112,"h":112},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":112,"h":112},
+			"sourceSize": {"w":112,"h":112}
+		},
 		"actionSkill.png":
 		{
 			"frame": {"x":374,"y":480,"w":112,"h":104},

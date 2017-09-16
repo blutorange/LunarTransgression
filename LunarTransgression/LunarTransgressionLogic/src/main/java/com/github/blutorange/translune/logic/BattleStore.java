@@ -53,6 +53,21 @@ public class BattleStore implements IBattleStore {
 	}
 
 	@Override
+	public void removeAllWith(final String user) {
+		synchronized(this) {
+			final IBattleRunner runner = fromBattleMap.remove(user);
+			if (runner != null)
+				runner.cancel();
+			final String otherUser = toFromMap.remove(user);
+			if (otherUser != null) {
+				final IBattleRunner otherRunner = fromBattleMap.remove(otherUser);
+				if (otherRunner != null)
+					otherRunner.cancel();
+			}
+		}
+	}
+
+	@Override
 	@Nullable
 	public IBattleRunner retrieve(final String nickname) {
 		final String from = toFromMap.getOrDefault(nickname, nickname);

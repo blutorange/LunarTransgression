@@ -1,9 +1,10 @@
 package com.github.blutorange.translune.logic;
 
+import com.github.blutorange.common.ICopyable;
 import com.github.blutorange.translune.db.CharacterState;
 import com.jsoniter.annotation.JsonIgnore;
 
-public interface IComputedStatus {
+public interface IComputedStatus extends ICopyable<IComputedStatus> {
 	int getComputedAccuracy();
 	int getComputedEvasion();
 	int getComputedMaxHp();
@@ -15,8 +16,9 @@ public interface IComputedStatus {
 	int getComputedSpeed();
 	@JsonIgnore
 	CharacterState getCharacterState();
+	@Override
 	@JsonIgnore
-	IComputedStatus getSnapshot();
+	IComputedStatus copy();
 
 	static IComputedStatus get(final CharacterState characterState) {
 		return new ComputedStatus(characterState);

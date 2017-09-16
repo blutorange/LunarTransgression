@@ -86,7 +86,7 @@ public class BattleRunner implements IBattleRunner {
 		round = 0;
 		characterStates = new CopyOnWriteArrayList<>(new String[2][]);
 		items = new CopyOnWriteArrayList<>(new String[2][]);
-		commands = Collections.synchronizedList(new ArrayList<>(Arrays.asList(null,null)));
+		commands = Collections.synchronizedList(new ArrayList<>(Arrays.asList(null, null)));
 		phaser = new Phaser(2);
 		effectorStack = new CopyOnWriteArrayList<>();
 		players[0] = from;
@@ -251,7 +251,7 @@ public class BattleRunner implements IBattleRunner {
 			}
 		}
 		if (!player1Done || !player2Done) {
-			cancelBattle("The other player did enter battle commands in time.", true);
+			cancelBattle("The other player did not enter battle commands in time.", true);
 			return;
 		}
 		final int winner = processBattle();
@@ -274,18 +274,20 @@ public class BattleRunner implements IBattleRunner {
 		else
 			setGameStateForBoth(EGameState.IN_BATTLE, EGameState.BATTLE_LOOT);
 		informPlayerAboutEnd(0, winner == 0, battleResults[0]);
-		informPlayerAboutEnd(0, winner == 1, battleResults[1]);
+		informPlayerAboutEnd(1, winner == 1, battleResults[1]);
 	}
 
 	private int processBattle() throws IOException {
 		@SuppressWarnings("null")
 		final List<@NonNull BattleCommand[]> c = (List<BattleCommand[]>) commands;
+		final IComputedBattleStatus[][] computedBattleStatus = battleProcessing.computedBattleStatus(characterStates,
+				battleStatus);
 		final BattleAction[][] battleResults = battleProcessing.simulateBattleStep(c, players, characterStates, items,
-				battleStatus, effectorStack, round);
+				battleStatus, effectorStack, computedBattleStatus, round);
 		clearCommands();
 		final int winner = battleProcessing.checkBattleEnd(battleStatus);
-		informPlayerAboutStepped(0, winner, battleResults);
-		informPlayerAboutStepped(1, winner, battleResults);
+		informPlayerAboutStepped(0, winner, computedBattleStatus[0], computedBattleStatus[1], battleResults);
+		informPlayerAboutStepped(1, winner, computedBattleStatus[1], computedBattleStatus[0], battleResults);
 		return winner;
 	}
 
@@ -348,20 +350,20 @@ public class BattleRunner implements IBattleRunner {
 		@SuppressWarnings("resource")
 		final Session session = sessionStore.retrieve(players[playerIndex]);
 		if (session != null) {
-			final IComputedBattleStatus[][] computed = battleProcessing.computedBattleStatus(characterStates, battleStatus);
+			final IComputedBattleStatus[][] computed = battleProcessing.computedBattleStatus(characterStates,
+					battleStatus);
 			final Player p1 = databaseManager.find(Player.class, players[playerIndex]);
-			final Player p2 = databaseManager.find(Player.class, players[1-playerIndex]);
+			final Player p2 = databaseManager.find(Player.class, players[1 - playerIndex]);
 			if (p1 == null || p2 == null)
 				throw new IOException("Player not found: " + players[0] + ", " + players[1]);
-			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattlePrepared(
-					new PlayerViewBattle(p1, computed[playerIndex]),
-					new PlayerViewBattle(p2, computed[1-playerIndex])
-			));
+			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
+					new MessageBattlePrepared(new PlayerViewBattle(p1, computed[playerIndex]),
+							new PlayerViewBattle(p2, computed[1 - playerIndex])));
 		}
 	}
 
-	private void informPlayerAboutStepped(final int playerIndex, final int winner,
-			final BattleAction[][] battleResults) {
+	private void informPlayerAboutStepped(final int playerIndex, final int winner, final IComputedBattleStatus[] player,
+			final IComputedBattleStatus[] opponent, final BattleAction[][] battleResults) {
 		final int causesEnd = winner < 0 ? 0 : winner == playerIndex ? 1 : -1;
 		final BattleAction[] br = battleResults[playerIndex];
 		if (br == null)
@@ -369,7 +371,8 @@ public class BattleRunner implements IBattleRunner {
 		@SuppressWarnings("resource")
 		final Session session = sessionStore.retrieve(players[playerIndex]);
 		if (session != null)
-			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK, new MessageBattleStepped(br, causesEnd));
+			socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
+					new MessageBattleStepped(br, player, opponent, causesEnd));
 	}
 
 	@Override

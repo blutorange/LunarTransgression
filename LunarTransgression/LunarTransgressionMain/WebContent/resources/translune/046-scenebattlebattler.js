@@ -4,7 +4,7 @@
 (function(Lunar, window, undefined) {
 	
 	Lunar.Scene.BattleBattler = class extends Lunar.Scene.Base {
-		constructor(battle, index, back, front, battleCircle, characterState) {
+		constructor(battle, index, back, front, battleCircle, characterState, computedStatus) {
 			super(battle.game);
 			this._targetHpRatio = 1;
 			this._battleScale = 1;
@@ -15,6 +15,7 @@
 			this._front = Object.values(front.spritesheet.textures);
 			this._mode = 'back';
 			this._characterState = characterState;
+			this._computedStatus = computedStatus;
 			this._sprite = new PIXI.extras.AnimatedSprite(this._back);
 			this._sprite.anchor.set(0.5,0.5);
 			this._barWidth = 5;
@@ -30,12 +31,21 @@
 			this._angle = 0;
 		}
 		
+		updateComputedStatus(computedStatus) {
+			this._computedStatus = computedStatus;
+			this.hpRatio = computedStatus.battleStatus.hp / Lunar.Constants.hpRatioDenominator;
+		}
+		
 		moveHpRatio(targetHpRatio) {
 			this._targetHpRatio = Math.clamp(targetHpRatio, 0, 1);
 		}
 
 		get isPlayer() {
 			return this._index <= 3;
+		}
+		
+		get normalizedIndex() {
+			return this._index % 4;
 		}
 		
 		set hpRatio(targetHpRatio) {
@@ -46,6 +56,10 @@
 		
 		endHpRatioAnimation() {
 			this.hpRatio = this._targetHpRatio;
+		}
+		
+		get dead() {
+			return this._targetHpRatio === 0;
 		}
 		
 		get characterState() {
@@ -219,6 +233,10 @@
 				$hpBarMask: hpBarMask,
 				$sprite: this._sprite
 			}
+		}
+		
+		set alpha(value) {
+			this.view.alpha = value;
 		}
 		
 		_layoutHpBar() {

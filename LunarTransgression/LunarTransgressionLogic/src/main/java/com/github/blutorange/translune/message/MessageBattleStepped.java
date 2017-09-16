@@ -2,6 +2,7 @@ package com.github.blutorange.translune.message;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.github.blutorange.translune.logic.IComputedBattleStatus;
 import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.ELunarMessageType;
 import com.github.blutorange.translune.socket.ILunarPayload;
@@ -9,6 +10,9 @@ import com.jsoniter.annotation.JsonProperty;
 
 public class MessageBattleStepped implements ILunarPayload {
 	private BattleAction[] battleResults;
+
+	private final IComputedBattleStatus[] player;
+	private final IComputedBattleStatus[] opponent;
 
 	/**
 	 * 0 iff the battle is not over. 1 iff the player won. -1 iff the player
@@ -20,11 +24,16 @@ public class MessageBattleStepped implements ILunarPayload {
 	@Deprecated
 	public MessageBattleStepped() {
 		battleResults = new BattleAction[0];
+		player = new IComputedBattleStatus[0];
+		opponent = new IComputedBattleStatus[0];
 	}
 
-	public MessageBattleStepped(final BattleAction[] battleResults, final int causesEnd) {
+	public MessageBattleStepped(final BattleAction[] battleResults, final IComputedBattleStatus[] player,
+			final IComputedBattleStatus[] opponent, final int causesEnd) {
 		this.battleResults = battleResults;
 		this.causesEnd = causesEnd;
+		this.player = player;
+		this.opponent = opponent;
 	}
 
 	/**
@@ -38,6 +47,22 @@ public class MessageBattleStepped implements ILunarPayload {
 	@Override
 	public ELunarMessageType messageType() {
 		return ELunarMessageType.BATTLE_STEPPED;
+	}
+
+	/**
+	 * @return the player
+	 */
+	@JsonProperty(required = true)
+	public IComputedBattleStatus[] getPlayer() {
+		return player;
+	}
+
+	/**
+	 * @return the opponent
+	 */
+	@JsonProperty(required = true)
+	public IComputedBattleStatus[] getOpponent() {
+		return opponent;
 	}
 
 	/**

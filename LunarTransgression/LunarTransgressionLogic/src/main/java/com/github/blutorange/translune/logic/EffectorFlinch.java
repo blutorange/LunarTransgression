@@ -3,13 +3,10 @@ package com.github.blutorange.translune.logic;
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.socket.BattleAction;
 
-class EffectorFlinch implements IGlobalBattleEffector {
-	int player;
-	int character;
+class EffectorFlinch extends EffectorSingleCharacter {
 
 	public EffectorFlinch(final int player, final int character) {
-		this.player = player;
-		this.character = character;
+		super(player, character);
 	}
 
 	public EffectorFlinch(final int[] characterIndex) {
@@ -37,9 +34,9 @@ class EffectorFlinch implements IGlobalBattleEffector {
 	}
 
 	@Override
-	public boolean allowTurn(final IBattleContext context, final IComputedBattleStatus characterState) {
-		final CharacterState user = context.getCharacterState(player, character);
-		final BattleAction action = new BattleAction.Builder().character(user).targets(user)
+	public boolean allowCharacterTurn(final IBattleContext context, final IComputedBattleStatus battleStatus) {
+		final CharacterState user = battleStatus.getCharacterState();
+		final BattleAction action = new BattleAction.Builder(context).character(user).targets(user)
 				.addSentences(String.format("%s flinched and couldn't move.", user.getNickname())).build();
 		context.getBattleActions(0).add(action);
 		context.getBattleActions(1).add(action);

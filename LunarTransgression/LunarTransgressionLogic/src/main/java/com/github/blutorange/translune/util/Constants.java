@@ -1,6 +1,6 @@
 package com.github.blutorange.translune.util;
 
-import org.apache.commons.lang3.math.Fraction;
+import org.apache.commons.math3.fraction.BigFraction;
 
 public final class Constants {
 	public static final int BATTLE_BASIC_ATTACK_POWER = 50;
@@ -32,8 +32,8 @@ public final class Constants {
 	public static final String FILE_PREFIX_BG_BATTLE = "bgb/";
 	public static final String FILE_PREFIX_BGM_BATTLE = "bmb/";
 
-	public static final Fraction FRACTION_THREE_HALFS = Fraction.getFraction(3, 2);
-	public static final Fraction FRACTION_TWO = Fraction.getFraction(2, 1);
+	public static final BigFraction FRACTION_THREE_HALFS = BigFraction.getReducedFraction(3, 2);
+	public static final BigFraction FRACTION_TWO = BigFraction.getReducedFraction(2, 1);
 
 	public static final String HEADER_ACCESS_CONTROL = "Access-Control-Allow-Origin";
 	public static final String HEADER_ACCESS_CONTROL_ALL = "*";

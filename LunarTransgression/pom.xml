@@ -69,6 +69,7 @@
 		<commons-dbcp-version>1.4</commons-dbcp-version>
 		<commons-io-version>2.4</commons-io-version>
 		<commons-lang3-version>3.6</commons-lang3-version>
+		<commons-math3-version>3.6.1</commons-math3-version>
 		<commons-text-version>1.1</commons-text-version>
 		<dagger-version>2.11</dagger-version>
 		<eclipse-annotation-version>2.0.0</eclipse-annotation-version>
@@ -119,6 +120,11 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-math3</artifactId>
+				<version>${commons-math3-version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>fastjson</artifactId>

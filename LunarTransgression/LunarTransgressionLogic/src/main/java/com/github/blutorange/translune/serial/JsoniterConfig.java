@@ -10,6 +10,7 @@ import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.db.Skill;
 import com.github.blutorange.translune.handler.EHandlerFetchData;
 import com.github.blutorange.translune.handler.EHandlerUpdateData;
+import com.github.blutorange.translune.logic.CharacterStatsDelta;
 import com.github.blutorange.translune.logic.EActionTarget;
 import com.github.blutorange.translune.logic.EBattleCommandType;
 import com.github.blutorange.translune.logic.EElement;
@@ -18,6 +19,7 @@ import com.github.blutorange.translune.logic.ENature;
 import com.github.blutorange.translune.logic.EOrderDirection;
 import com.github.blutorange.translune.logic.ESkillEffect;
 import com.github.blutorange.translune.logic.EStatusCondition;
+import com.github.blutorange.translune.logic.IBattleStatus;
 import com.github.blutorange.translune.logic.IComputedBattleStatus;
 import com.github.blutorange.translune.logic.Orderable;
 import com.github.blutorange.translune.logic.Pageable;
@@ -90,8 +92,9 @@ public class JsoniterConfig implements StaticCodegenConfig {
 
 		JsoniterSpi.registerTypeEncoder(JsoniterEmptyMap.class, new EmptyMapEncoder());
 		JsoniterSpi.registerTypeDecoder(JsoniterEmptyMap.class, new EmptyMapDecoder());
-
 		JsoniterSpi.registerTypeEncoder(IComputedBattleStatus.class, IComputedBattleStatus::encodeJson);
+		JsoniterSpi.registerTypeEncoder(IBattleStatus.class, IBattleStatus::encodeJson);
+
 		JsoniterSpi.registerPropertyEncoder(LunarMessage.class, "status", new LunarStatusEncoder());
 		JsoniterSpi.registerPropertyDecoder(LunarMessage.class, "status", new LunarStatusDecoder());
 		JsoniterSpi.registerPropertyEncoder(Character.class, "skills", new SkillEncoder());
@@ -141,6 +144,7 @@ public class JsoniterConfig implements StaticCodegenConfig {
 				TypeLiteral.create(Orderable.class),
 				TypeLiteral.create(Pageable.class),
 				TypeLiteral.create(PageableResult.class),
+				TypeLiteral.create(CharacterStatsDelta.class),
 
 				TypeLiteral.create(MessageReleaseCharacter.class),
 				TypeLiteral.create(MessageReleaseCharacterResponse.class),

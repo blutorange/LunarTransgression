@@ -119,7 +119,7 @@ public class BattleCommandHandlerBasicAttack extends ABattleCommandHandler {
 		}
 
 		// Add result
-		final BattleAction action = new BattleAction.Builder().character(user).targets(targets[0]).addSentences(messages).build();
+		final BattleAction action = new BattleAction.Builder(context).character(user).targets(targets[0]).addSentences(messages).build();
 		context.getBattleActions(player).add(action);
 		context.getBattleActionsOpponent(player).add(action);
 	}

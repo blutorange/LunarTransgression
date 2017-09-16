@@ -5,12 +5,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.blutorange.translune.db.CharacterState;
+import com.github.blutorange.translune.logic.CharacterStatsDelta;
+import com.github.blutorange.translune.logic.IBattleContext;
 import com.github.blutorange.translune.logic.IComputedStatus;
 import com.jsoniter.annotation.JsonProperty;
 
@@ -25,44 +26,66 @@ public class BattleAction {
 	 * @return 0 iff the battle continues, 1 iff this command makes the player
 	 *         win, -1 iff it makes the player lose.
 	 */
-	@JsonProperty(required = true)
 	private int causesEnd;
 
 	/**
 	 * @return Message(s) describing the battle action, eg.
 	 *         <code>Chimera uses Slash on Phyrant!</code>.
 	 */
-	@JsonProperty(required = true)
 	private String[] sentences;
 
 	/**
 	 * @return {@link CharacterState#getPrimaryKey()} of the characters affected
 	 *         by this action.
 	 */
-	@JsonProperty(required = true)
 	private String[] targets;
 
 	/**
 	 * @return {@link CharacterState#getPrimaryKey()} of the character that
 	 *         initiated the battle action.
 	 */
-	@JsonProperty(required = true)
 	private String user;
+
+	private CharacterStatsDelta[] stateDeltas;
 
 	@Deprecated
 	public BattleAction() {
 		sentences = new String[0];
 		targets = new String[0];
 		user = StringUtils.EMPTY;
+		stateDeltas = new CharacterStatsDelta[0];
 	}
 
-	private BattleAction(final String user, final String[] targets, final String... sentences) {
+	protected BattleAction(final String user, final String[] targets, final CharacterStatsDelta[] stateDeltas,
+			final String[] sentences) {
 		this.sentences = sentences;
 		this.user = user;
 		this.targets = targets;
+		this.stateDeltas = stateDeltas;
 	}
 
 	public int causesEnd() {
+		return causesEnd;
+	}
+
+	/**
+	 * @return the statusDeltas
+	 */
+	@JsonProperty(required = true, nullable = false)
+	public CharacterStatsDelta[] getStateDeltas() {
+		return stateDeltas;
+	}
+
+	/**
+	 * @param statusDeltas
+	 *            the statusDeltas to set
+	 */
+	public void setStateDeltas(final CharacterStatsDelta @Nullable [] stateDeltas) {
+		this.stateDeltas = stateDeltas != null ? stateDeltas : new CharacterStatsDelta[0];
+	}
+
+	@JsonProperty(required = true)
+	public int getCausesEnd() {
 		return causesEnd;
 	}
 
@@ -74,29 +97,17 @@ public class BattleAction {
 		return causesEnd > 0;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.github.blutorange.translune.logic.IBattleAction#getSentences()
-	 */
+	@JsonProperty(required = true, collectionValueNullable = false)
 	public String[] getSentences() {
 		return sentences;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.github.blutorange.translune.logic.IBattleAction#getTargets()
-	 */
+	@JsonProperty(required = true, collectionValueNullable = false)
 	public String[] getTargets() {
 		return targets;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.github.blutorange.translune.logic.IBattleAction#getUser()
-	 */
+	@JsonProperty(required = true)
 	public String getUser() {
 		return user;
 	}
@@ -135,11 +146,13 @@ public class BattleAction {
 
 	public static class Builder implements org.apache.commons.lang3.builder.Builder<BattleAction> {
 		List<@NonNull String> sentences = new ArrayList<>();
-		String @Nullable[] targets;
+		String @Nullable [] targets;
 		@Nullable
 		String character;
+		IBattleContext context;
 
-		public Builder() {
+		public Builder(final IBattleContext context) {
+			this.context = context;
 		}
 
 		public Builder character(final CharacterState character) {
@@ -154,7 +167,7 @@ public class BattleAction {
 
 		public Builder targets(final CharacterState... targets) {
 			final String[] newTargets = new String[targets.length];
-			for (int i = targets.length; i-->0;)
+			for (int i = targets.length; i-- > 0;)
 				newTargets[i] = targets[i].getId();
 			this.targets = newTargets;
 			return this;
@@ -162,7 +175,7 @@ public class BattleAction {
 
 		public Builder targets(final IComputedStatus... targets) {
 			final String[] newTargets = new String[targets.length];
-			for (int i = targets.length; i-->0;)
+			for (int i = targets.length; i-- > 0;)
 				newTargets[i] = targets[i].getCharacterState().getId();
 			this.targets = newTargets;
 			return this;
@@ -186,7 +199,8 @@ public class BattleAction {
 				targets = new String[0];
 			if (character == null)
 				throw new IllegalStateException("character is not set");
-			return new BattleAction(character, targets, sentences.toArray(ArrayUtils.EMPTY_STRING_ARRAY));
+			final CharacterStatsDelta[] statDeltas = context.differenceToLast();
+			return new BattleAction(character, targets, statDeltas, sentences.toArray(new String[sentences.size()]));
 		}
 
 		public List<String> getSentences() {

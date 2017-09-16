@@ -30,6 +30,11 @@
 			this._startTime = this.time;
 			super.onAdd();
 		}
+		
+		destroy() {
+			this._cube = undefined;
+			super.destroy();
+		}
 
 		onRemove() {
 			super.onRemove();

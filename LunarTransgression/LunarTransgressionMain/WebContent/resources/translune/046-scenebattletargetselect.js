@@ -43,6 +43,7 @@
 		}
 		
 		update(delta) {
+			this.layout();
 			super.update(delta);
 			const alpha = this.game.fmath.sin(SCALE_SPEED*this.time);
 			for (let entry of this.hierarchy.targets) {
@@ -68,7 +69,7 @@
 			const textureTarget = this._battle.resources.packed.spritesheet.textures['target.png'];
 			const targets = [];
 			for (let battler of this._battle._battlers) {
-				if (this._accepts(battler)) {
+				if (!battler.dead && this._accepts(battler)) {
 					const spriteTarget = new PIXI.Sprite(textureTarget);
 					spriteTarget.interactive = true;
 					spriteTarget.buttonMode = true;

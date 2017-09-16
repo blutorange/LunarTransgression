@@ -1,6 +1,5 @@
 package com.github.blutorange.translune.logic;
 
-import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.socket.BattleCommand;
 import com.github.blutorange.translune.util.Constants;
 
@@ -23,12 +22,12 @@ public class BattleCommandHandlerKo extends ABattleCommandHandler {
 
 	@Override
 	public void execute() {
-		final BattleAction action = new BattleAction.Builder().character(getCharacterState())
-				.addSentences(
-						String.format("%s is knocked out cold and cannot move.", getCharacterState().getNickname()))
-				.build();
-		context.getBattleActions(player).add(action);
-		context.getBattleActionsOpponent(player).add(action);
+//		final BattleAction action = new BattleAction.Builder(context).character(getCharacterState())
+//				.addSentences(
+//						String.format("%s is knocked out cold and cannot move.", getCharacterState().getNickname()))
+//				.build();
+//		context.getBattleActions(player).add(action);
+//		context.getBattleActionsOpponent(player).add(action);
 	}
 
 	@Override

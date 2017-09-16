@@ -39,7 +39,7 @@ public class ItemExecutorHeal extends AItemExecutor {
 		}
 
 		@SuppressWarnings("null")
-		final BattleAction action = new BattleAction.Builder().character(context.getCharacterState(player, character))
+		final BattleAction action = new BattleAction.Builder(context).character(context.getCharacterState(player, character))
 				.targets(targets).addSentences(messages).build();
 		context.getBattleActions(player).add(action);
 		context.getBattleActionsOpponent(player).add(action);

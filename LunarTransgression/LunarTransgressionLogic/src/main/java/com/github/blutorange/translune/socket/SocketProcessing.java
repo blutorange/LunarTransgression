@@ -21,6 +21,7 @@ import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.logic.EGameState;
+import com.github.blutorange.translune.logic.IBattleStore;
 import com.github.blutorange.translune.logic.IInvitationStore;
 import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.message.MessageInviteRetracted;
@@ -35,6 +36,9 @@ public class SocketProcessing implements ISocketProcessing {
 
 	@Inject
 	ILunarDatabaseManager databaseManager;
+
+	@Inject
+	IBattleStore battleStore;
 
 	@Inject IJsoniterSupplier jsoniter;
 
@@ -189,6 +193,7 @@ public class SocketProcessing implements ISocketProcessing {
 			sessionStore.remove(nickname);
 		else
 			sessionStore.remove(session);
+		battleStore.removeAllWith(nickname);
 		databaseManager.detach(Player.class, nickname);
 		session.getUserProperties().clear();
 	}

@@ -27,15 +27,18 @@
 \tableofcontents
 %%%----------------------------------------------------------
 
-\chapter*{Summary}
+\chapter*{Abstract}
 
-\begin{quote}
- \verb!\documentclass[english]{hgbtermreport}! 
-\end{quote}
-at the top of this document by
-\begin{quote}
- \verb!\documentclass[german]{hgbtermreport}!.
-\end{quote}
+The author implemented a simple online multiplayer game with one server and
+multiple clients. Employed technologies are Java Server Faces, HTML5 WebGL, Websockets
+and Java Persistence API (Hibernate). The game consists of two scenes, a menu scene and
+a battle scene. Each player may own up to 28 characters. Two onlne players must discover each
+other mediated by the server and agree to have a battle. The server is responsible for 
+managing the game state and game logic, validating messages sent by the client and allow only
+valid game states; as well as mediating invitations between players. The Javascript framework
+\textit{PixiJs} provides an API for rendering 2D graphics via WebGL and Canvas. It was found
+to be efficient and quick to develop with, but does not provide any API for creating user
+interfaces or scenegraphs, requiring more programming work.
 
 
 %%%----------------------------------------------------------
@@ -175,6 +178,19 @@ Weiterleitung der Nutzereingaben an den Server. Die Architektur wurde einfach ge
 es gibt eine Komponente für Netzwerk und generelle Aufgaben, sowie Komponenten für die
 einzelnen dargestellten Spieleszenen. Dies ist auch in Abbildung \ref{fig:clientarch} dargestellt.
 
+Es wurde eine generische Methode \textit{dispatchMessage} der Klasse \textit{Lunar.Net} (Datei \textit{010-net.js} geschaffen, welche analog zu \textsc{jQuery.ajax} die Websocket-Netzwerkkomunikation
+abstrahiert:
+
+\begin{lstlisting}
+Lunar.Net#dispatchMessage(Lunar.Message message, object payload) : Promise
+\end{lstlisting}
+
+Es wird der Nachrichtentyp und der zu sendende Inhalt als Javascript-Objekt übergeben. Mittels
+des zurückgegebenen \textit{ES6-Promise} kann asynchron Logik ausgeführt werden, wenn der Server
+auf die gesendete Nachricht antwortet und auch der Fehlerfall entsprechend behandelt werden (\textit{Promise.catch}.
+
+Ein interaktives Spiel erfordert Nutzereingaben. Pointereingaben (Maus, Touch-Screen) ist problemlos möglich. Bei Texteingaben ist es möglich, diese mittels Abfragen der Tastatur nativ in Canvas beziehungsweise WebGL zu implementieren. Hierfür existieren auch bereits einige Bibliotheken. Allerdings musste ich feststellen, dass diese nur begrenzte Eingabemöglichkeiten erlauben, speziell in Bezug auf Eingabemethoden und mobile Geräte habe ich Mängel bemerkt. Daher wurden Eingaben mittels nativer HTML-Input-Elemente umgesetzt, die mittels \textit{z-order} überhalb des Canvas platziert werden. Optisch können diese Input-Elemente mittels \textsc{css} and das Layout angepasst werden, allerdings kann kein Gradient für die Textfarbe eingstellt werden.
+
 Für die grafische Darstellung wird die Bibliothek PixiJS\footnote{http://www.pixijs.com/}
 verwendet, die \glqq The HTML5 Creation Engine\grqq. PixiJS nutzt \textsc{WebGL} mit
 Fallback auf Canvas, wenn \textsc{WebGL} nicht zur Verfügung steht. Diese Bibliothek
@@ -184,8 +200,7 @@ Beispielen besitzt.
 Für die Ausgabe von Audio wird die Bibliothek HowlerJS\footnote{https://howlerjs.com/}
 verwendet. Diese Bibliothek unterstützt alle gängigen Formate mit Fallbacks. In
 diesem Projekt wird das Format \textit{webm} mit Fallback auf \textit{mp3} verwendet, dies
-wird von allen moderenen Browser
-unterstützt\footnote{https://github.com/goldfire/howler.js#user-content-format-recommendations}.
+wird von allen moderenen Browser unterstützt\footnote{https://github.com/goldfire/howler.js}.
 
 
 
@@ -193,10 +208,29 @@ unterstützt\footnote{https://github.com/goldfire/howler.js#user-content-format-
 \chapter{Einrichtung und Installation}
 %%%----------------------------------------------------------
 
-More chapters will follow.
+Die Installation des Systems erfordert einen Server (Servlet Container) sowie
+eine von Hibernate unterstützes Datenbanksystem. Weiterhin müssen die Datenbankeinstellung
+konfiguriert werden und Initialdaten eingespielt werden.
 
+Application Server. Es muss Java 8 und JSF 2.1+ unterstützt werden. Während der Entwicklung wurde
+Apache Tomcat 8\footnote{http://tomcat.apache.org/download-80.cgi} genutzt und auch mit diesem
+getestet. Es wurde keine spezifischen Funktionen des Tomcat genutzt, sodass auch andere Servlet
+Container genutzt werden können, dies wurde aber nicht getestet.
 
-This could be a good place to describe how you experienced this course, what you liked or didn't, and to provide suggestions for improvement.
+Datenbanksystem. Das Datenbanksystem muss von Hibernate unterstützt werden.\footnote{Inbesonders unterstützt werden PostgreSQL MySQL Microsoft SQL, Oracle. Nicht unterstützt wird SQLite.} Weiterhin muss das Datenbanksystem
+in der Datei \textit{hibernate.cfg.xml} konfiguriert werden.\footnote{Standardformat von Hibernate. Siehe etwa https://docs.jboss.org/hibernate/orm/3.3/reference/en/html/session-configuration.html, Abschnitt 3.7} In der
+mitgelieferten Datei ist bereits eine beispielhafte Konfiguration für MySQL und MariaDB vorhanden.
+
+Nach Starten des Application Servers und dem Deployment der Anwendung kann die Nutzeroberfläche im Webbrowser
+im Context Path aufgerufen werden.\footnote{Zum Beispiel bei lokaler Ausführung \textit{http://localhost:8080/translune}}. Es erscheint eine
+Eingabemaske für das Login. Bereits registrierte Nutzer können sich hier mit ihrem eindeutigen Nutzernamen
+und Passwort anmelden. Mit dem Nutzernamen \textit{sadmin} und Passwort \textit{sadmin} kann eine einfache
+Verwaltungsoberfläche betreten werden. In der Datei \textit{custom.properties} ist das Administratorpassword
+als SHA1-Hash gespeichert und kann dort geändert werden. 
+
+In der Administratoroberfläche muss unter Verwaltung das Paket mit den Initialdaten eingespielt werden. Dabei
+handelt es sich um eine gepackte Datei im \textsc{zip}-Format und enthält die in Tabelle \ref{table:initdata}
+dargestellten Dateien und Ordner.
 
 %%%----------------------------------------------------------     
 \chapter{Optimierungspotential}
@@ -224,7 +258,10 @@ unabhängig von anderen Entitäten. Für die Bereitstellungen von \textit{Resour
 ein separater Provide-Server erstellt werden.
 
 Auf Seite des Clients kann versucht werden, die Anzahl der Websocket-Frames zu reduzieren, um
-die Server-Last zu reduzieren und die Ladezeiten gering zu halten.
+die Server-Last zu reduzieren und die Ladezeiten gering zu halten. Dies kann durch Bündelung einiger
+Nachrichten erreicht werden, dies schränkt aber die gute Strukturierung des Programmes ein.
+
+Es wurden keine Lasttests durchgeführt.
 
 %%%----------------------------------------------------------     
 \chapter{Anhang}
@@ -255,6 +292,27 @@ Bezeichnung            & Wert & Erläuterung \\ \hline
 \textsc{access denied} & 21   & Fehlende Authorisierung. Zur Authorisierung muss die
                                 Nachricht \textsc{authorize} gesendet werden. \\
 \textsc{timeout}       & 22   & Überschreitung des Zeitlimits bei der Verarbeitung.
+\end{tabularx}
+\end{table}
+
+
+\begin{table}[]
+\centering
+\caption{Ordnerstruktur des Intialdatenarchivs (\textsc{ZIP}-Archiv)}
+\label{table:initdata}
+\begin{tabularx}{\textwidth}{l|1|X}
+Pfad & Typ & Erläuterung \\ \hline
+skills.csv      & CSV & Fähigkeiten der Charaktere \\
+chars.csv       & CSV & Daten vorhandener Charktere \\
+chartoskill.csv & CSV & Tabelle mit erlernbaren Fähigkeiten der Charaktere \\
+character-cry   & Ordner & Enthält SFX für Charaktere. Muss jeweils mit Dateiendung \textit{webm} und \textit{mp3} vorliegen. Der Dateiname ist im Feld \textit{cry} der \textit{chars.csv} definiert. \\
+character-icon  & Ordner & Enthält Icons der Charaktere. Sollte  im \textit{png} vorliegen. Dateiname mit Dateiendung ist im Feld \textit{imgIcon} der \textit{chars.csv} definiert. \\
+character-img  & Ordner & Enthält Spritesheets der Charaktere. \textit{json}-Format von PixiJS/TexturePacker\footnote{https://www.codeandweb.com/texturepacker}. Dateiname mit Dateiendung ist im Feld \textit{imgFront} (Vorderansicht) beziehungsweise \textit{imgBack} (Hinteransicht) der \textit{chars.csv} definiert. \\
+bg-menu        & Ordner & Enthält vorhandene Hintergründe für die Menuszene. \\
+bg-battle      & Ordner & Enthält vorhandene Hintergründe für die Kampfszene. \\
+bgm-menu       & Ordner & Enthält vorhandene Hintergrundmusik für die Menuszene. \\
+bgm-battle     & Ordner & Enthält vorhandene Hintergrundmusik für die Kampfszene. \\
+default        & Ordner & Enthält Fallback-Dateien für nutzerkonfigurierbare Inhalte: Derzeit nur \textit{pavatar.png} für das Nutzeravatar.
 \end{tabularx}
 \end{table}
 
@@ -299,6 +357,12 @@ Bezeichnung & Erläuterung \\ \hline
 \end{tabularx}
 \end{table}
 
+\begin{figure}
+\caption{Entity-Relationship-Model für die Datenstruktur. Persistierung mittels Hiberante. Quelle: eigene Darstellung}
+\centering
+\includegraphics[width=0.5\textwidth]{ERM}
+\label{fig:erm}
+\end{figure}
 
 \begin{figure}
 \caption{Sequenzdiagramm für die Zurücknahme einer Einladung. Simon stellt den Server dar, Alice und Bob die beiden Spieler. Quelle: eigene Darstellung}
@@ -325,8 +389,22 @@ Bezeichnung & Erläuterung \\ \hline
 \label{fig:clientarch}
 \end{figure}
 
+\begin{figure}
+\caption{Menüszene des Spiels. Hier kann der Spieler seinen Status einsehen.}
+\centering
+\includegraphics[width=1.0\textwidth]{screenshot1}
+\label{fig:scenemenu}
+\end{figure}
+
+\begin{figure}
+\caption{Kampfzene des Spiels. Hier kann der Spieler seinen Spaß haben.}
+\centering
+\includegraphics[width=1.0\textwidth]{screenshot2}
+\label{fig:scenemenu}
+\end{figure}
+
 %%%----------------------------------------------------------
-\MakeBibliography
+%%%\MakeBibliography
 %%%----------------------------------------------------------
 
 \end{document}

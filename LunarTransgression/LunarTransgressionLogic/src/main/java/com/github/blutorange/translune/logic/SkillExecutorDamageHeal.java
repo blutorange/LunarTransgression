@@ -31,7 +31,7 @@ public class SkillExecutorDamageHeal extends ASkillExecutor<EDamageHealFlavor> {
 			final List<String> messages, final IBattleContext context, final EDamageHealFlavor damageHealFlavor) {
 		if (!damageHealFlavor.preconditionFulfilled(target))
 			return;
-		final int healPower = damageHealFlavor.getRelativeAmount() * damage / target.getComputedBattleHpAbsolute();
+		final int healPower = damageHealFlavor.getRelativeAmount() * damage / target.getComputedBattleMaxHp();
 		battleProcessing.performHeal(() -> healPower, user, messages, context);
 	}
 }

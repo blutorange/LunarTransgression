@@ -8,20 +8,24 @@ import com.jsoniter.annotation.JsonProperty;
 
 public class BattleCommand {
 	@Nullable
-	@JsonProperty(required = false, nullable = true)
 	private String action;
 
-	@JsonProperty(required = true, collectionValueNullable = false, nullable = false)
-	private String[] targets = ArrayUtils.EMPTY_STRING_ARRAY;
+	private String[] targets;
 
-	@JsonProperty(required = true, nullable = false)
-	private EBattleCommandType type = EBattleCommandType.DEFEND;
+	private EBattleCommandType type;
+
+	@Deprecated
+	public BattleCommand() {
+		type = EBattleCommandType.DEFEND;
+		targets = ArrayUtils.EMPTY_STRING_ARRAY;
+	}
 
 	/**
 	 * @return the action
 	 */
 
 	@Nullable
+	@JsonProperty(required = false, nullable = true)
 	public String getAction() {
 		return action;
 	}
@@ -29,7 +33,7 @@ public class BattleCommand {
 	/**
 	 * @return the target
 	 */
-
+	@JsonProperty(required = true, collectionValueNullable = false, nullable = false)
 	public String[] getTargets() {
 		return targets;
 	}
@@ -37,7 +41,7 @@ public class BattleCommand {
 	/**
 	 * @return the type
 	 */
-
+	@JsonProperty(required = true, nullable = false)
 	public EBattleCommandType getType() {
 		return type;
 	}

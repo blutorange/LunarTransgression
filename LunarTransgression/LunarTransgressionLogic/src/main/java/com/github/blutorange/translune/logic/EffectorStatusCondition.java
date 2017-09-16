@@ -8,7 +8,7 @@ import com.github.blutorange.translune.ic.ComponentFactory;
 import com.github.blutorange.translune.socket.BattleAction;
 import com.github.blutorange.translune.util.Constants;
 
-public class EffectorStatusCondition implements IGlobalBattleEffector {
+public class EffectorStatusCondition extends EffectorSingleCharacter {
 
 	private static enum ConfusionAttack implements ISkilled {
 		INSTANCE;
@@ -33,16 +33,13 @@ public class EffectorStatusCondition implements IGlobalBattleEffector {
 			return true;
 		}
 	}
-	private final int character;
 	private final EStatusCondition condition;
 	private String id = StringUtils.EMPTY;
-	private final int player;
 
 	private int turn;
 
 	public EffectorStatusCondition(final int player, final int character, final EStatusCondition condition) {
-		this.player = player;
-		this.character = character;
+		super(player, character);
 		this.condition = condition;
 		this.turn = 0;
 	}
@@ -58,11 +55,11 @@ public class EffectorStatusCondition implements IGlobalBattleEffector {
 	}
 
 	@Override
-	public boolean allowTurn(final IBattleContext context, final IComputedBattleStatus user) {
+	public boolean allowCharacterTurn(final IBattleContext context, final IComputedBattleStatus user) {
 		if (id.equals(user.getCharacterState().getId())) {
 			if (!condition.canMove()) {
-				final CharacterState cs = context.getCharacterState(player, character);
-				final BattleAction action = new BattleAction.Builder().character(user).targets(user)
+				final CharacterState cs = user.getCharacterState();
+				final BattleAction action = new BattleAction.Builder(context).character(user).targets(user)
 						.addSentences(String.format(condition.getCannotMoveMessage(), cs.getNickname())).build();
 				context.getBattleActions(0).add(action);
 				context.getBattleActions(1).add(action);
@@ -78,8 +75,8 @@ public class EffectorStatusCondition implements IGlobalBattleEffector {
 	@Override
 	public boolean beforeTurn(final IBattleContext context) {
 		if (condition.disappears(turn)) {
-			final CharacterState cs = context.getCharacterState(player, character);
-			final BattleAction action = new BattleAction.Builder().character(cs).targets(cs)
+			final CharacterState cs = context.getCharacterState(getPlayer(), getCharacter());
+			final BattleAction action = new BattleAction.Builder(context).character(cs).targets(cs)
 					.addSentences(String.format(condition.getDisappearsMessage(), cs.getNickname())).build();
 			context.getBattleActions(0).add(action);
 			context.getBattleActions(1).add(action);
@@ -90,10 +87,10 @@ public class EffectorStatusCondition implements IGlobalBattleEffector {
 
 	@Override
 	public void onAdd(final IBattleContext context) {
-		final String id = context.getCharacterState(player, character).getId();
+		final String id = context.getCharacterState(getPlayer(), getCharacter()).getId();
 		if (id == null)
 			throw new IllegalStateException("character state does not exits: " + id);
-		context.getBattleStatus(player, character).setStatusCondition(condition);
+		context.getBattleStatus(getPlayer(), getCharacter()).setStatusCondition(condition);
 		this.id = id;
 	}
 
@@ -104,21 +101,21 @@ public class EffectorStatusCondition implements IGlobalBattleEffector {
 
 	private void hurtItself(final IComputedBattleStatus user, final IBattleContext context) {
 		final IBattleProcessing battleProcessing = ComponentFactory.getLunarComponent().battleProcessing();
-		final BattleAction.Builder builder = new BattleAction.Builder().character(user);
+		final BattleAction.Builder builder = new BattleAction.Builder(context).character(user);
 		builder.addSentences(String.format("%s hurt itself in confusion!", user.getCharacterState().getNickname()));
 		final IDamageResult[] damageResult = battleProcessing.computeDamage(ConfusionAttack.INSTANCE, user, user);
 		battleProcessing.dealDamage(damageResult[0], user, builder.getSentences());
 		final BattleAction battleAction = builder.build();
-		context.getBattleActions(player).add(battleAction);
-		context.getBattleActionsOpponent(player).add(battleAction);
+		context.getBattleActions(getPlayer()).add(battleAction);
+		context.getBattleActionsOpponent(getPlayer()).add(battleAction);
 	}
 
 	private void turnEndDamage(final Fraction turnEndDamage, final IBattleContext context) {
-		final IComputedBattleStatus user = context.getComputedBattleStatus(player, character);
+		final IComputedBattleStatus user = context.getComputedBattleStatus(getPlayer(), getCharacter());
 		final int damage = turnEndDamage.getNumerator() * user.getComputedBattleMaxHp()
 				/ turnEndDamage.getDenominator();
 		user.modifyHp(damage);
-		final BattleAction action = new BattleAction.Builder().character(user).targets(user)
+		final BattleAction action = new BattleAction.Builder(context).character(user).targets(user)
 				.addSentences(String.format(condition.getTurnEndDamageMessage(), user.getCharacterState().getNickname(),
 						Integer.valueOf(damage)))
 				.build();
