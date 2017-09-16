@@ -185,8 +185,9 @@ public interface IBattleStatus extends ICopyable<IBattleStatus> {
 		stream.writeVal(getStagePhysicalDefense());
 		stream.writeMore();
 
+		final EStatusCondition statusCondition = getStatusCondition();
 		stream.writeObjectField(JSON_STATUS_CONDITION);
-		stream.writeVal(getStatusCondition());
+		stream.writeVal(statusCondition == null ? null : statusCondition.toString());
 		stream.writeMore();
 
 		stream.writeObjectField(JSON_SPEED);

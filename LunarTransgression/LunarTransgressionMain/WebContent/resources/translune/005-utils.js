@@ -337,7 +337,8 @@
 		availableBgAndBgm: 'available-bg-and-bgm',
 		userPlayer: 'user-player',
 		activePlayer: 'active-player',
-		playerDetail: 'player-detail'
+		playerDetail: 'player-detail',
+		lootableStuff: 'lootable-stuff'
 	};
 	
 	Lunar.UpdateType = {

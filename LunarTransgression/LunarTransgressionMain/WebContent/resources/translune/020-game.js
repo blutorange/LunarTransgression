@@ -240,7 +240,7 @@
 		}
 		
 		clearQueuedAddScenes() {
-			this.operationStack.filter(operatio => operation.type !== 'add');
+			this.operationStack.filter(operation => operation.type !== 'add');
 		}
 		
 		/**
@@ -254,12 +254,15 @@
 				case 'add':
 					const delegate = entry.scene.sceneToAdd();
 					this.scenes.push(delegate);
-					entry.container.addChild(delegate.view);
-					delegate.onAdd();
+					if (!entry.scene.isAttached) {
+						entry.container.addChild(delegate.view);					
+						delegate.onAdd();
+					}
 					break;
 				case 'del':
 					if (Lunar.Array.removeElement(this.scenes, entry.scene))
-						entry.scene.onRemove();
+						if (entry.scene.isAttached)
+							entry.scene.onRemove();
 					if (entry.scene.view.parent)
 						entry.scene.view.parent.removeChild(entry.scene.view);
 					break;

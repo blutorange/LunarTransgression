@@ -38,7 +38,6 @@
 		
 		layout() {			
 			super.layout();
-			const h = this.hierarchy;
 			this._spriteLogo.position.set(this.game.w*CENTER_X, this.game.h*CENTER_Y);
 		}
 		

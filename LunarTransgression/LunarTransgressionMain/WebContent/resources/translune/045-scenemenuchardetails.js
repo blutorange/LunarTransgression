@@ -70,7 +70,7 @@
 			});
 			const geoTitle = Lunar.Geometry.layoutHbox({
 				box: geoBase[0],
-				dimension: [1,4],
+				dimension: [30,70],
 				padding: {
 					x: 16
 				},
@@ -86,7 +86,7 @@
 				padding: {
 					left: 0.05,
 					right: 0.05,
-					x: 0.2
+					x: 0.1
 				},
 				dimension: {
 					n: [1,2,1,2],

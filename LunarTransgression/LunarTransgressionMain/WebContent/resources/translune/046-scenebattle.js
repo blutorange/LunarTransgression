@@ -15,6 +15,7 @@
 			this._field = undefined;
 			this._bgm = undefined;
 			this._waitDialog = undefined;
+			this._countWinLose = 0;
 			this._fieldRotation = 0;
 			this._battlers = [];
 			this._childScenes = [];
@@ -67,9 +68,9 @@
 			this._camera = {};
 			this._battlers = [];
 			this._childScenes = [];
+			this._loadScene = undefined;
 			this._waitDialog = undefined;
 			this._bgm = undefined;
-			this._loadScene = undefined
 			this._textScene = undefined;
 			this._field = undefined;
 			super.destroy();
@@ -85,6 +86,7 @@
 			this._detachListeners();
 			this._battlers.forEach(battler => this.game.removeScene(battler));
 			this._childScenes.forEach(scene => this.game.removeScene(scene));
+			this.game.removeScene(this._loadScene);
 			this.game.removeScene(this._textScene);
 			this.game.removeScene(this._waitDialog);
 			this._battlers = [];
@@ -356,6 +358,8 @@
 			const battleLogo = new PIXI.Sprite(resources.packed.spritesheet.textures['battlelogo.png']);
 			const curtainLeft = new PIXI.Sprite(resources.packed.spritesheet.textures['curtainleft.png']);
 			const curtainRight = new PIXI.Sprite(resources.packed.spritesheet.textures['curtainright.png']);
+			const win = new PIXI.Sprite(resources.packed.spritesheet.textures['win.png']);
+			const lose = new PIXI.Sprite(resources.packed.spritesheet.textures['lose.png']);
 			const balls = [
 				new PIXI.Sprite(resources.packed.spritesheet.textures['pokeball.png']),
 				new PIXI.Sprite(resources.packed.spritesheet.textures['pokeball.png']),
@@ -397,6 +401,8 @@
 			// Initialize elements.
 			actionAvatar.alpha = 0.7;
 			battleLogo.visible = false;
+			win.visible = false;
+			lose.visible = false;
 			containerBattlers.displayList = new PIXI.DisplayList();
 			containerUi.visible = false;
 			opponentCube.container.visible = false;
@@ -421,6 +427,8 @@
 			containerFront.addChild(curtainLeft);
 			containerFront.addChild(curtainRight);
 			containerFront.addChild(battleLogo);
+			containerFront.addChild(win);
+			containerFront.addChild(lose);
 			containerUi.addChild(actionAvatar);
 			containerUi.addChild(containerAction);
 			containerUi.addChild(containerCommand);
@@ -441,6 +449,8 @@
 					$curtainLeft: curtainLeft,
 					$curtainRight: curtainRight,
 					$battleLogo: battleLogo,
+					$win: win,
+					$lose: lose,
 					$opponentCube: opponentCube,
 					$balls: balls
 				},
@@ -589,10 +599,61 @@
 			});
 		}
 		
+		_displayBattleResult() {
+			if (this._countWinLose < 2)
+				return;
+			this._textScene.once('text-processed', () => {
+				if (this._battleResult.isVictory) {
+					this._performLoot();
+				}
+				else {
+					this._endBattle('Keep your eyes on the sun and you will not see the shadows.');
+				}
+			}, this);
+			this._battleResult.battleResults.forEach(result => {
+				result.sentences.forEach(sentence => this._textScene.pushText(sentence));
+			});
+			if (this._battleResult.isVictory) {
+				this._textScene.pushText('You searched the fallen for spoils.&');
+			}
+		}
+
+		_performLoot() {
+			const spoilScene = new Lunar.Scene.BattleLoot(this);
+			spoilScene.on('loot-perform', (characterStates, items) => {
+				console.log("loot", characterStates, items);
+				const requestLoadable = new Lunar.RequestLoadable(this.game, Lunar.Message.loot, {
+					characterState: characterStates.length > 0 ? characterStates[0].id : null,
+					item: items.length > 0 ? items[0].name : null,
+					dropItem: null,
+					dropCharacterState: null
+				});
+				requestLoadable.promise.then(response => {
+					this._endBattle('Both bad bananas besmirch billions of barrels.');					
+				}).catch(error => {
+					console.error('loot failed', error);
+					this._endBattle('Cannot loot right now, please try again later.');	
+				}).then(() => this.game.removeScene(this._loadScene));
+				this._loadScene = new Lunar.Scene.Load(this.game, requestLoadable);
+				this.game.pushScene(this._loadScene);
+			}, this);
+			spoilScene.on('loot-cancel', () => {
+				this.game.removeScene(spoilScene);
+				this._endBattle('Goodness is about how we treat other people.');
+			}, this);
+			spoilScene.on('loot-error', error => {
+				console.error('error occured while selecting loot', error);
+				this.game.removeScene(spoilScene);
+				this._endBattle('Cannot loot right now, please try again later.');
+			}, this);
+			this.game.pushScene(spoilScene);
+		}
+		
 		_onMessageError(status) {
 			console.error("received error message from server", status);
 			this._endBattle('The fight cannot be continued, please try again later.');
 		}
+		
 		
 		_onMessageCancelled(response) {
 			console.error("server cancelled battle", response);
@@ -600,7 +661,9 @@
 		}
 		
 		_onMessageBattleEnded(response) {
-			console.log("battle ended", response)
+			this._countWinLose += 1;
+			this._displayBattleResult();
+			this._battleResult = response.data;
 		}
 		
 		_onMessageBattleStepped(response) {
@@ -622,8 +685,13 @@
 		_evaluateBattleResult(result, index = 0) {
 			if (index >= result.battleResults.length) {
 				if (result.causesEnd) {
-					// TODO wait for BATTLE_ENDED
-					console.log("battle done");
+					const winLoseScene = new Lunar.Scene.BattleWinLoseIn(this, result.causesEnd > 0);
+					winLoseScene.once('animation-done', () => {
+						this._removeChildScene(winLoseScene);
+						this._countWinLose += 1;
+						this._displayBattleResult();
+					}, this);
+					this._pushChildScene(winLoseScene);
 				}
 				else {
 					for (let i = 0; i < 4; ++i) {

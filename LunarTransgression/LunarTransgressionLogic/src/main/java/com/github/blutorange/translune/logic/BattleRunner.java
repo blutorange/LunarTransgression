@@ -13,6 +13,7 @@ import java.util.concurrent.TimeoutException;
 import javax.inject.Inject;
 import javax.websocket.Session;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -263,18 +264,32 @@ public class BattleRunner implements IBattleRunner {
 		battleDone = true;
 		final BattleResult[][] battleResults = battleProcessing.distributeExperience(players, characterStates,
 				battleStatus, round);
-		final String[] characterStatesWinner = characterStates.get(winner);
-		final String[] itemsWinner = items.get(winner);
-		if (characterStatesWinner == null || itemsWinner == null)
-			throw new IOException("Winner items or characters not found.");
-		battleStore.addLoot(players[winner], characterStatesWinner, itemsWinner);
+		addLootForLoser(winner);
 		endBattle();
 		if (winner == 0)
-			setGameStateForBoth(EGameState.BATTLE_LOOT, EGameState.IN_BATTLE);
+			setGameStateForBoth(EGameState.BATTLE_LOOT, EGameState.IN_MENU);
 		else
-			setGameStateForBoth(EGameState.IN_BATTLE, EGameState.BATTLE_LOOT);
+			setGameStateForBoth(EGameState.IN_MENU, EGameState.BATTLE_LOOT);
 		informPlayerAboutEnd(0, winner == 0, battleResults[0]);
 		informPlayerAboutEnd(1, winner == 1, battleResults[1]);
+	}
+
+	private void addLootForLoser(final int winner) throws IOException {
+		// Allow winner to loot one character and item of the loser.
+		final int loser = 1-winner;
+		final String[] itemsLoser = items.get(loser);
+		if (itemsLoser == null)
+			throw new IOException("Loser items not found.");
+		final List<String> characterStatesLoser = new ArrayList<>();
+		for (int i = 4; i-->0;) {
+			if (battleStatus[1-winner][i].getHp() == 0) {
+				final String[] allCharacterStatesLoser = characterStates.get(loser);
+				if (allCharacterStatesLoser == null)
+					throw new IOException("Loser characters not found.");
+				characterStatesLoser.add(allCharacterStatesLoser[i]);
+			}
+		}
+		battleStore.addLoot(players[winner], characterStatesLoser.toArray(ArrayUtils.EMPTY_STRING_ARRAY), itemsLoser);
 	}
 
 	private int processBattle() throws IOException {

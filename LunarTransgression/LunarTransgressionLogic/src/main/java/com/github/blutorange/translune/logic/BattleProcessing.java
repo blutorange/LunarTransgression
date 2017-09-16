@@ -54,9 +54,9 @@ public class BattleProcessing implements IBattleProcessing {
 	@Override
 	public int checkBattleEnd(final IBattleStatus[][] battleStatus) {
 		if (getKnockoutCount(battleStatus[0]) >= 2)
-			return 0;
-		if (getKnockoutCount(battleStatus[1]) >= 2)
 			return 1;
+		if (getKnockoutCount(battleStatus[1]) >= 2)
+			return 0;
 		return -1;
 	}
 
@@ -425,12 +425,12 @@ public class BattleProcessing implements IBattleProcessing {
 		});
 		// Check which stats went up as a result.
 		if (newLevel > oldLevel) {
+			sentences.add(String.format("%s grew to level %d!", characterState.getNickname(), newLevel));
 			character.getUnmodifiableSkills().entrySet().stream()
 					.filter(entry -> entry.getValue() > oldLevel && entry.getValue() <= newLevel)
 					.sorted(ComparatorUtil.byMapper(Entry::getValue)).map(Entry::getKey)
 					.map(skill -> String.format("%s learned %s!", characterState.getNickname(), skill.getName()))
 					.forEachOrdered(sentence -> sentences.add(sentence));
-			sentences.add(String.format("%s grew to level %d!", characterState.getNickname(), newLevel));
 			sentences.add(String.format("HP went up by %d.", status.getComputedMaxHp() - oldStatus.getComputedMaxHp()));
 			sentences.add(String.format("MP went up by %d.", status.getComputedMaxMp() - oldStatus.getComputedMaxMp()));
 			sentences.add(String.format("Attack went up by %d.",
@@ -509,10 +509,10 @@ public class BattleProcessing implements IBattleProcessing {
 
 	private void sortBattleAction(final IBattleCommandHandler[] commands) {
 		Arrays.sort(commands, (command1, command2) -> {
-			final int res1 = Integer.compare(command1.getPriority(), command2.getPriority());
-			if (res1 != 0)
-				return res1;
-			return Integer.compare(command1.getSpeed(), command2.getSpeed());
+			final int res = -Integer.compare(command1.getPriority(), command2.getPriority());
+			if (res != 0)
+				return res;
+			return -Integer.compare(command1.getSpeed(), command2.getSpeed());
 		});
 	}
 }

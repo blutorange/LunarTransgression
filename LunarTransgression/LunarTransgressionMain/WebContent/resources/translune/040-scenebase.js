@@ -41,6 +41,7 @@
 		
 		destroy() {
 			this._hierarchy = {};
+			this._baseConfirmDialog = undefined;
 			this._game = undefined;
 			this._view.destroy({children:true});
 		}
@@ -60,6 +61,7 @@
 		}
 		
 		onRemove() {
+			this.game.removeScene(this._baseConfirmDialog);
 			this.destroy();
 			this._isAttached = false;
 		}
@@ -104,7 +106,8 @@
 		}
 		
 		showConfirmDialog(message, onClose) {
-			this._game.pushScene(new Lunar.Scene.Dialog(this._game, { 
+			this.game.removeScene(this._baseConfirmDialog);
+			this._baseConfirmDialog = new Lunar.Scene.Dialog(this._game, { 
 				message: message || "Please confirm",
 				choices: [
 					{
@@ -112,11 +115,14 @@
 						callback: dialog => {
 							this._game.sfx('resources/translune/static/ping');
 							dialog.close()
+							this.game.removeScene(this._baseConfirmDialog);
+							this._baseConfirmDialog = undefined;
 							onClose && onClose.call(this);
 						}
 					}
 				]
-			}));
+			});
+			this._game.pushScene(this._baseConfirmDialog);
 		}
 		
 		get prompt() {

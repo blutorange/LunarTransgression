@@ -33,6 +33,7 @@ public class EffectorTurnTimed implements IGlobalBattleEffector {
 		if (delegate.afterTurn(battleContext))
 			return true;
 		if (!beforeTurn) {
+			--numberOfTurns;
 			if (numberOfTurns <= 0)
 				return true;
 		}

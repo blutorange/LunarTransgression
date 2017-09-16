@@ -47,6 +47,8 @@ import com.github.blutorange.translune.message.MessageInviteRetract;
 import com.github.blutorange.translune.message.MessageInviteRetractResponse;
 import com.github.blutorange.translune.message.MessageInviteRetracted;
 import com.github.blutorange.translune.message.MessageInvited;
+import com.github.blutorange.translune.message.MessageLoot;
+import com.github.blutorange.translune.message.MessageLootResponse;
 import com.github.blutorange.translune.message.MessagePrepareBattle;
 import com.github.blutorange.translune.message.MessagePrepareBattleResponse;
 import com.github.blutorange.translune.message.MessageReleaseCharacter;
@@ -131,9 +133,11 @@ public class JsoniterConfig implements StaticCodegenConfig {
 				TypeLiteral.create(Skill.class),
 
 				TypeLiteral.create(PlayerViewInvite.class),
-				TypeLiteral.create(CharacterViewInvite.class),
 				TypeLiteral.create(PlayerViewBattle.class),
+				TypeLiteral.create(CharacterViewInvite.class),
 				TypeLiteral.create(CharacterViewBattle.class),
+				TypeLiteral.create(CharacterStateViewLoot.class),
+				TypeLiteral.create(ItemViewLoot.class),
 
 				TypeLiteral.create(LunarMessage.class),
 				TypeLiteral.create(BattleAction.class),
@@ -145,6 +149,7 @@ public class JsoniterConfig implements StaticCodegenConfig {
 				TypeLiteral.create(Pageable.class),
 				TypeLiteral.create(PageableResult.class),
 				TypeLiteral.create(CharacterStatsDelta.class),
+				TypeLiteral.create(LootableStuff.class),
 
 				TypeLiteral.create(MessageReleaseCharacter.class),
 				TypeLiteral.create(MessageReleaseCharacterResponse.class),
@@ -184,6 +189,9 @@ public class JsoniterConfig implements StaticCodegenConfig {
 
 				TypeLiteral.create(MessageStepBattle.class),
 				TypeLiteral.create(MessageStepBattleResponse.class),
+
+				TypeLiteral.create(MessageLoot.class),
+				TypeLiteral.create(MessageLootResponse.class),
 
 				TypeLiteral.create(MessageBattlePrepared.class),
 				TypeLiteral.create(MessageBattleStepped.class),

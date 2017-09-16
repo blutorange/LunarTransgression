@@ -36,7 +36,7 @@ import com.jsoniter.annotation.JsonProperty;
 public class CharacterState extends AbstractStoredEntity {
 	@NotNull
 	@ManyToOne(targetEntity = Character.class, cascade = {}, optional = false, fetch = FetchType.EAGER)
-	@JoinColumn(name = "\"character\"", updatable = false, insertable = true, nullable = false, unique = true, foreignKey = @ForeignKey(name = "fk_charstate_char"))
+	@JoinColumn(name = "\"character\"", updatable = false, insertable = true, nullable = false, unique = false, foreignKey = @ForeignKey(name = "fk_charstate_char"))
 	private Character character;
 
 	@Min(0)

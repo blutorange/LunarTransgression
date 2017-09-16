@@ -1,29 +1,37 @@
 {
 	"meta": {
 		"image": "packed.png",
-		"size": {"w":1024,"h":1024},
+		"size": {"w":2048,"h":1024},
 		"scale": "1"
 	},
 	"frames": {
-		"curtainright.png":
-		{
-			"frame": {"x":439,"y":0,"w":424,"h":480},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":424,"h":480},
-			"sourceSize": {"w":424,"h":480}
-		},
 		"curtainleft.png":
 		{
-			"frame": {"x":0,"y":0,"w":439,"h":480},
+			"frame": {"x":0,"y":288,"w":439,"h":480},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":439,"h":480},
 			"sourceSize": {"w":439,"h":480}
 		},
+		"lose.png":
+		{
+			"frame": {"x":0,"y":0,"w":523,"h":288},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":523,"h":288},
+			"sourceSize": {"w":523,"h":288}
+		},
+		"curtainright.png":
+		{
+			"frame": {"x":523,"y":0,"w":424,"h":480},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":424,"h":480},
+			"sourceSize": {"w":424,"h":480}
+		},
 		"battlelogo.png":
 		{
-			"frame": {"x":0,"y":480,"w":374,"h":107},
+			"frame": {"x":523,"y":480,"w":374,"h":107},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":374,"h":107},
@@ -31,7 +39,7 @@
 		},
 		"barfill.png":
 		{
-			"frame": {"x":863,"y":0,"w":46,"h":282},
+			"frame": {"x":439,"y":288,"w":46,"h":282},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":46,"h":282},
@@ -39,31 +47,39 @@
 		},
 		"barbase.png":
 		{
-			"frame": {"x":863,"y":282,"w":46,"h":282},
+			"frame": {"x":947,"y":0,"w":46,"h":282},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":46,"h":282},
 			"sourceSize": {"w":46,"h":282}
 		},
-		"avatarside.png":
+		"win.png":
 		{
-			"frame": {"x":0,"y":587,"w":133,"h":215},
+			"frame": {"x":993,"y":0,"w":240,"h":240},
 			"rotated": false,
 			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":133,"h":215},
-			"sourceSize": {"w":133,"h":215}
+			"spriteSourceSize": {"x":0,"y":0,"w":240,"h":240},
+			"sourceSize": {"w":240,"h":240}
 		},
 		"pokeball.png":
 		{
-			"frame": {"x":909,"y":212,"w":84,"h":83},
+			"frame": {"x":1105,"y":663,"w":84,"h":83},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":84,"h":83},
 			"sourceSize": {"w":84,"h":83}
 		},
+		"target.png":
+		{
+			"frame": {"x":993,"y":455,"w":208,"h":208},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":208,"h":208},
+			"sourceSize": {"w":208,"h":208}
+		},
 		"actionSpecial.png":
 		{
-			"frame": {"x":341,"y":587,"w":115,"h":112},
+			"frame": {"x":523,"y":587,"w":115,"h":112},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":115,"h":112},
@@ -71,7 +87,7 @@
 		},
 		"actionAttack.png":
 		{
-			"frame": {"x":909,"y":0,"w":101,"h":113},
+			"frame": {"x":1126,"y":240,"w":101,"h":113},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":101,"h":113},
@@ -79,7 +95,7 @@
 		},
 		"actionDefend.png":
 		{
-			"frame": {"x":456,"y":587,"w":112,"h":112},
+			"frame": {"x":638,"y":587,"w":112,"h":112},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":112,"h":112},
@@ -87,7 +103,7 @@
 		},
 		"actionSkill.png":
 		{
-			"frame": {"x":374,"y":480,"w":112,"h":104},
+			"frame": {"x":993,"y":663,"w":112,"h":104},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":112,"h":104},
@@ -95,19 +111,19 @@
 		},
 		"actionItem.png":
 		{
-			"frame": {"x":909,"y":113,"w":94,"h":99},
+			"frame": {"x":1126,"y":353,"w":94,"h":99},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":94,"h":99},
 			"sourceSize": {"w":94,"h":99}
 		},
-		"target.png":
+		"avatarside.png":
 		{
-			"frame": {"x":133,"y":587,"w":208,"h":208},
+			"frame": {"x":993,"y":240,"w":133,"h":215},
 			"rotated": false,
 			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":208,"h":208},
-			"sourceSize": {"w":208,"h":208}
+			"spriteSourceSize": {"x":0,"y":0,"w":133,"h":215},
+			"sourceSize": {"w":133,"h":215}
 		}
 	}
 }

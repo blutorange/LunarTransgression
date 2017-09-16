@@ -16,7 +16,7 @@ public interface IComputedBattleStatus extends IComputedStatus {
 	public final static String JSON_MAX_HP = "maxHp";
 	public final static String JSON_MAX_MP = "maxMp";
 	public final static String JSON_PHYSICAL_ATTACK = "physicalAttack";
-	public final static String JSON_PHYSICAL_DEFENSE = "physicalAttack";
+	public final static String JSON_PHYSICAL_DEFENSE = "physicalDefense";
 	public final static String JSON_SPEED = "speed";
 	public static final String JSON_BATTLE_STATUS = "battleStatus";
 
