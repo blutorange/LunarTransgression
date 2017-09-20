@@ -8,9 +8,13 @@ import javax.websocket.Session;
 import org.eclipse.jdt.annotation.Nullable;
 
 public interface ISessionStore {
-	@Nullable Session store(String nickname, Session session);
+	@Nullable
+	Session store(String nickname, Session session);
+
 	/**
-	 * Same as {@link #store(String, Session)}, but synchronizes on the returned session.
+	 * Same as {@link #store(String, Session)}, but synchronizes on the returned
+	 * session.
+	 *
 	 * @param nickname
 	 * @param session
 	 * @param consumer
@@ -26,11 +30,14 @@ public interface ISessionStore {
 
 	PageableResult findNicknames(Pageable pageable);
 
-	@Nullable Session retrieve(String nickname);
+	@Nullable
+	Session retrieve(String nickname);
 
 	void remove(String nickname);
 
 	void remove(Session session);
 
 	boolean contains(String nickname);
+
+	int count();
 }

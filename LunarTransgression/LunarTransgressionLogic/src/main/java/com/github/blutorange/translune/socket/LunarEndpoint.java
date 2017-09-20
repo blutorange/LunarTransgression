@@ -152,6 +152,8 @@ public class LunarEndpoint {
 			logger.debug("processing lunar message " + message.getTime() + " - session " + session.getId());
 			logger.debug(message.toString());
 		}
+		if (!session.isOpen())
+			return;
 		if (socketProcessing.isAuthorized(session)) {
 			message.getType().handle(session, message);
 		}

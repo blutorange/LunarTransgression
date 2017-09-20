@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.ic.ComponentFactory;
+import com.github.blutorange.translune.logic.ISessionStore;
 import com.github.blutorange.translune.serial.IImportProcessing;
 import com.github.blutorange.translune.util.CustomProperties;
 
@@ -40,6 +41,10 @@ public class StatusBean extends AbstractBean {
 	@Transient
 	@Inject
 	IImportProcessing importProcessing;
+
+	@Transient
+	@Inject
+	ISessionStore sessionStore;
 
 	@Transient
 	@Inject
@@ -127,5 +132,9 @@ public class StatusBean extends AbstractBean {
 	 */
 	public void setOnline(final boolean online) {
 		customProperties.setOnline(online);
+	}
+
+	public int getActiveSessions() {
+		return sessionStore.count();
 	}
 }

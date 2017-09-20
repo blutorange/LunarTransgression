@@ -290,6 +290,20 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 		return count != null ? count.longValue() : 0;
 	}
 
+	@Override
+	public void releaseCharacter(@NonNull final CharacterState characterState) {
+		final CharacterState newCharacterState = characterState.copy();
+		final Player player = characterState.getPlayer();
+		if (player == null)
+			throw new IllegalStateException("Cannot release character, is already released.");
+		delete(characterState);
+		persist(newCharacterState);
+		modify(player, ModifiablePlayer.class, mp -> {
+			mp.removeCharacterState(characterState);
+			mp.addReleasedCharacterState(newCharacterState);
+		});
+	}
+
 	@Nullable
 	private <@NonNull T extends AbstractStoredEntity> Long count(final EntityManager em, final CriteriaBuilder cb, final Class<T> clazz) {
 		final CriteriaQuery<Long> cq = cb.createQuery(Long.class);
@@ -415,7 +429,10 @@ public class LunarDatabaseManager implements ILunarDatabaseManager {
 
 		@Override
 		public void perform(final EntityManager em, final Session session) {
-			session.update(entity);
+			if (!session.contains(entity))
+				session.saveOrUpdate(entity);
+			else
+				session.update(entity);
 		}
 
 		@Override

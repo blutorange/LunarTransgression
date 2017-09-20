@@ -135,6 +135,11 @@ public interface ILunarDatabaseManager {
 		public void persistNonManaged(final AbstractUnstoredEntity... resource) throws IOException {
 			throw new RuntimeException("mock - injection probably failed");
 		}
+
+		@Override
+		public void releaseCharacter(@NonNull final CharacterState characterState) {
+			throw new RuntimeException("mock - injection probably failed");
+		}
 	}
 
 	void checkConnection() throws Exception;
@@ -185,4 +190,6 @@ public interface ILunarDatabaseManager {
 	void persistResource(String name, byte @NonNull[] data, String mime, String filename) throws IOException;
 
 	void persistNonManaged(AbstractUnstoredEntity... entities) throws IOException;
+
+	void releaseCharacter(@NonNull CharacterState characterState);
 }

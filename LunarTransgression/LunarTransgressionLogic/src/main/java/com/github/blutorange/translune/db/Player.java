@@ -65,7 +65,7 @@ public class Player extends AbstractStoredEntity {
 	private String passwordHash = StringUtils.EMPTY;
 
 	@NotNull
-	@OneToMany(targetEntity = CharacterState.class, orphanRemoval = true, cascade = {}, fetch = FetchType.LAZY, mappedBy = "player")
+	@OneToMany(targetEntity = CharacterState.class, orphanRemoval = true, cascade = {}, fetch = FetchType.LAZY, mappedBy = "releasedPlayer")
 	@Size(min = 0)
 	private Set<CharacterState> releasedCharacterStates = new HashSet<>();
 
@@ -140,6 +140,11 @@ public class Player extends AbstractStoredEntity {
 		characterState.setPlayer(null);
 	}
 
+	public void removeReleasedCharacterState(final CharacterState releasedCharacterState) {
+		releasedCharacterStates.remove(releasedCharacterState);
+		releasedCharacterState.setPlayer(null);
+	}
+
 	public void removeItem(final Item item) {
 		items.remove(item);
 	}
@@ -164,7 +169,7 @@ public class Player extends AbstractStoredEntity {
 
 	void addReleasedCharacterState(final CharacterState characterState) {
 		releasedCharacterStates.add(characterState);
-		characterState.setPlayer(this);
+		characterState.setReleasedPlayer(this);
 	}
 
 	void addItem(final Item item) {

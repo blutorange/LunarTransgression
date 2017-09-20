@@ -91,4 +91,44 @@ public class CharacterStateBuilder implements Builder<CharacterState> {
 		this.nickname = nickname;
 		return this;
 	}
+
+	public CharacterStateBuilder setNature(final ENature nature) {
+		this.nature = nature;
+		return this;
+	}
+
+	public CharacterStateBuilder setIvHp(final int ivHp) {
+		this.ivHp = ivHp;
+		return this;
+	}
+
+	public CharacterStateBuilder setIvMp(final int ivMp) {
+		this.ivMp = ivMp;
+		return this;
+	}
+
+	public CharacterStateBuilder setIvPhysicalAttack(final int ivPhysicalAttack) {
+		this.ivPhysicalAttack = ivPhysicalAttack;
+		return this;
+	}
+
+	public CharacterStateBuilder setIvPhysicalDefense(final int ivPhysicalDefense) {
+		this.ivPhysicalDefense = ivPhysicalDefense;
+		return this;
+	}
+
+	public CharacterStateBuilder setIvMagicalAttack(final int ivMagicalAttack) {
+		this.ivMagicalAttack = ivMagicalAttack;
+		return this;
+	}
+
+	public CharacterStateBuilder setIvMagicalDefense(final int ivMagicalDefense) {
+		this.ivMagicalDefense = ivMagicalDefense;
+		return this;
+	}
+
+	public CharacterStateBuilder setIvSpeed(final int ivSpeed) {
+		this.ivSpeed = ivSpeed;
+		return this;
+	}
 }

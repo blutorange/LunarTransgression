@@ -162,21 +162,19 @@ public class HandlerLoot implements ILunarMessageHandler {
 		else
 			newCharacterState = null;
 
+
+		if (dropCharacterState != null)
+			databaseManager.releaseCharacter(dropCharacterState);
+
 		// Write changes to database.
 		databaseManager.modify(player, ModifiablePlayer.class, mp -> {
 			if (dropItem != null)
 				mp.removeItem(dropItem);
 			if (addItem != null)
 				mp.addItem(addItem);
-			if (dropCharacterState != null) {
-				mp.removeCharacterState(dropCharacterState);
-				mp.addReleasedCharacterState(dropCharacterState);
-			}
 			if (newCharacterState != null)
 				mp.addCharacterState(newCharacterState);
 		});
-		if (dropCharacterState != null)
-			databaseManager.delete(dropCharacterState);
 		if (newCharacterState != null)
 			databaseManager.persist(newCharacterState);
 

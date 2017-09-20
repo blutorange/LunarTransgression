@@ -531,6 +531,10 @@
 			this._switchTabDetails(() => new Lunar.Scene.MenuCharDetails(this.game, this, characterState));
 		}
 		
+		_onRemoveChar(characterState) {
+			this._switchTab('char', () => new Lunar.Scene.MenuChar(this.game, this), true);
+		}
+		
 		/**
 		 * @private
 		 */
@@ -601,8 +605,8 @@
 		/**
 		 * @private
 		 */
-		_switchTab(tabName, sceneFactory) {
-			if (this._tabState === tabName) {
+		_switchTab(tabName, sceneFactory, force = false) {
+			if (!force && this._tabState === tabName) {
 				this.game.sfx('resources/translune/static/unable');
 				return;
 			}

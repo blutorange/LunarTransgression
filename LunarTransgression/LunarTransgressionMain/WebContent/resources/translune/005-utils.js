@@ -306,6 +306,7 @@
 		authorize: 'authorize',
 		fetchData: 'fetch-data',
 		updateData: 'update-data',
+		releaseCharacter: 'release-character',
 		
 		invite: 'invite',
 		inviteRetract: 'invite-retract',

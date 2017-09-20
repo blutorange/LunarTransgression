@@ -3,6 +3,7 @@
 		constructor(game, menu, characterState) {
 			super(game);
 			this._dialog = undefined;
+			this._loadScene = undefined;
 			this._menu = menu;
 			this._characterState = characterState;
 			this._releasable = menu.player.characterStates.length > 4 && characterState.level >= Lunar.Constants.minReleaseLevel;
@@ -15,6 +16,7 @@
 		}
 		
 		destroy() {
+			this._loadScene = undefined;
 			this._dialog = undefined;
 			this._menu = undefined;
 			this._characterState = undefined;
@@ -24,6 +26,7 @@
 		}
 		
 		onRemove() {
+			this.game.removeScene(this._loadScene);
 			this.game.removeScene(this._sceneSkill);
 			this.game.removeScene(this._dialog);
 			super.onRemove();
@@ -343,8 +346,20 @@
 		}
 		
 		_performRelease() {
-			// TODO implement me
-			console.error("TODO - not yet implemented!")
+			const loadable = new Lunar.RequestLoadable(this.game, Lunar.Message.releaseCharacter, {
+				characterState: this._characterState.id
+			}); 
+			loadable.promise.then(response => {
+				console.log("removal success");
+				this.menu._onRemoveChar(this._characterState);
+			}).catch(error => {
+				console.error("failed to release character", error);
+				this.showConfirmDialog("Could not release this character, please try again later.");
+			}).then(() => {
+				this.game.removeScene(this._loadScene);
+			});
+			this._loadScene = new Lunar.Scene.Load(this.game, loadable);
+			this.game.pushScene(this._loadScene);
 		}
 		
 		/**

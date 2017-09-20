@@ -117,4 +117,9 @@ public class SessionStore implements ISessionStore {
 				.toArray(String[]::new);
 		return new PageableResult(map.size(), totalFiltered, list);
 	}
+
+	@Override
+	public int count() {
+		return (int) map.values().stream().filter(Session::isOpen).count();
+	}
 }

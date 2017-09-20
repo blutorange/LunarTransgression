@@ -17,6 +17,8 @@ import com.github.blutorange.translune.util.Constants;
 public class PlayerBuilder implements Builder<Player> {
 	private final Set<CharacterState> characterStates = new HashSet<>();
 
+	private final Set<CharacterState> releasedCharacterStates = new HashSet<>();
+
 	private String description = StringUtils.EMPTY;
 
 	private String imgAvatar = Constants.DEFAULT_PLAYER_AVATAR;
@@ -48,6 +50,22 @@ public class PlayerBuilder implements Builder<Player> {
 		return this;
 	}
 
+	public PlayerBuilder addReleasedCharacterState(final CharacterState characterState) {
+		releasedCharacterStates.add(characterState);
+		return this;
+	}
+
+	public PlayerBuilder addReleasedCharacterStates(final CharacterState... characterStates) {
+		for (final CharacterState cs : releasedCharacterStates)
+			addReleasedCharacterState(cs);
+		return this;
+	}
+
+	public PlayerBuilder addReleasedCharacterStates(final Collection<CharacterState> characterStates) {
+		releasedCharacterStates.addAll(characterStates);
+		return this;
+	}
+
 	public PlayerBuilder addItem(final Item item) {
 		items.add(item);
 		return this;
@@ -76,8 +94,12 @@ public class PlayerBuilder implements Builder<Player> {
 		player.setItems(items);
 		player.setNickname(nickname);
 		player.setPasswordHash(passwordHash);
-		for (final CharacterState cs : characterStates)
+		for (final CharacterState cs : characterStates) {
 			cs.setPlayer(player);
+		}
+		for (final CharacterState cs : releasedCharacterStates) {
+			cs.setReleasedPlayer(player);
+		}
 		return player;
 	}
 

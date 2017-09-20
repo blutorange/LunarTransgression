@@ -6,6 +6,9 @@
 	xmlns:of="http://omnifaces.org/functions"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 		<h:panelGrid columns="2" cellpadding="5">
+			<h:outputText value="Active sessions (players)" />
+			<h:outputText value="#{statusBean.activeSessions}" />
+			
 			<h:outputLabel for="online" value="Accept new connections" />
 			<p:inputSwitch id="online" value="#{statusBean.online}"
 				immediate="true">

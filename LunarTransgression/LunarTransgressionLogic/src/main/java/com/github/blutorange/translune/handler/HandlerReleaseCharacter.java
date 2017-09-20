@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 
 import com.github.blutorange.translune.db.CharacterState;
 import com.github.blutorange.translune.db.ILunarDatabaseManager;
-import com.github.blutorange.translune.db.ModifiablePlayer;
 import com.github.blutorange.translune.db.Player;
 import com.github.blutorange.translune.ic.Classed;
 import com.github.blutorange.translune.logic.EGameState;
@@ -84,10 +83,7 @@ public class HandlerReleaseCharacter implements ILunarMessageHandler {
 			return;
 		}
 
-		databaseManager.modify(player, ModifiablePlayer.class, mp -> {
-			mp.removeCharacterState(characterState);
-			mp.addReleasedCharacterState(characterState);
-		});
+		databaseManager.releaseCharacter(characterState);
 
 		socketProcessing.dispatchMessage(session, ELunarStatusCode.OK,
 				new MessageReleaseCharacterResponse(message, "Released"));

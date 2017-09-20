@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.common.IAccessible;
+import com.github.blutorange.common.ICopyable;
 import com.github.blutorange.translune.logic.ENature;
 import com.github.blutorange.translune.logic.IComputedStatus;
 import com.github.blutorange.translune.util.Constants;
@@ -33,7 +34,7 @@ import com.jsoniter.annotation.JsonProperty;
 
 @Entity
 @Table(name = "charstate")
-public class CharacterState extends AbstractStoredEntity {
+public class CharacterState extends AbstractStoredEntity implements ICopyable<CharacterState> {
 	@NotNull
 	@ManyToOne(targetEntity = Character.class, cascade = {}, optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "\"character\"", updatable = false, insertable = true, nullable = false, unique = false, foreignKey = @ForeignKey(name = "fk_charstate_char"))
@@ -103,8 +104,13 @@ public class CharacterState extends AbstractStoredEntity {
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Player.class)
-	@JoinColumn(name = "player", nullable = false, unique = false, updatable = false, insertable = true, foreignKey = @ForeignKey(name = "fk_charstate_player"))
+	@JoinColumn(name = "player", nullable = true, unique = false, updatable = false, insertable = true, foreignKey = @ForeignKey(name = "fk_charstate_player"))
 	private Player player;
+
+	@NotNull
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Player.class)
+	@JoinColumn(name = "releasedplayer", nullable = true, unique = false, updatable = false, insertable = true, foreignKey = @ForeignKey(name = "fk_charstate_relplayer"))
+	private Player releasedPlayer;
 
 	public CharacterState() {
 	}
@@ -221,6 +227,19 @@ public class CharacterState extends AbstractStoredEntity {
 		return player;
 	}
 
+	@JsonIgnore
+	public Player getOwningPlayer() {
+		return this.player != null ? this.player : this.releasedPlayer;
+	}
+
+	/**
+	 * @return the player
+	 */
+	@JsonIgnore
+	public Player getReleasedPlayer() {
+		return releasedPlayer;
+	}
+
 	@Override
 	@JsonIgnore
 	public Serializable getPrimaryKey() {
@@ -291,17 +310,32 @@ public class CharacterState extends AbstractStoredEntity {
 
 	@Override
 	void forEachAssociatedObject(final Consumer<IAccessible<AbstractStoredEntity>> consumer) {
-		consumer.accept(new IAccessible<AbstractStoredEntity>() {
-			@Override
-			public AbstractStoredEntity get() {
-				return getPlayer();
-			}
+		if (player != null) {
+			consumer.accept(new IAccessible<AbstractStoredEntity>() {
+				@Override
+				public AbstractStoredEntity get() {
+					return getPlayer();
+				}
 
-			@Override
-			public void set(final AbstractStoredEntity replacement) {
-				setPlayer((Player) replacement);
-			}
-		});
+				@Override
+				public void set(final AbstractStoredEntity replacement) {
+					setPlayer((Player) replacement);
+				}
+			});
+		}
+		if (releasedPlayer != null) {
+			consumer.accept(new IAccessible<AbstractStoredEntity>() {
+				@Override
+				public AbstractStoredEntity get() {
+					return getReleasedPlayer();
+				}
+
+				@Override
+				public void set(final AbstractStoredEntity replacement) {
+					setReleasedPlayer((Player) replacement);
+				}
+			});
+		}
 		consumer.accept(new IAccessible<AbstractStoredEntity>() {
 			@Override
 			public AbstractStoredEntity get() {
@@ -369,5 +403,34 @@ public class CharacterState extends AbstractStoredEntity {
 	 */
 	void setPlayer(final Player player) {
 		this.player = player;
+		this.releasedPlayer = null;
+	}
+
+	void setReleasedPlayer(final Player releasedPlayer) {
+		this.releasedPlayer = releasedPlayer;
+		this.player = null;
+	}
+
+	@Override
+	public @NonNull CharacterState copy() {
+		final CharacterState clone = new CharacterStateBuilder()
+			.setCharacter(character)
+			.setExp(exp)
+			.setLevel(level)
+			.setNature(nature)
+			.setNickname(nickname)
+			.setIvHp(ivHp)
+			.setIvMp(ivMp)
+			.setIvMagicalAttack(ivMagicalAttack)
+			.setIvMagicalDefense(ivMagicalDefense)
+			.setIvPhysicalAttack(ivPhysicalAttack)
+			.setIvPhysicalDefense(ivPhysicalDefense)
+			.setIvSpeed(ivSpeed)
+			.build();
+		if (player != null)
+			clone.setPlayer(player);
+		else
+			clone.setReleasedPlayer(releasedPlayer);
+		return clone;
 	}
 }

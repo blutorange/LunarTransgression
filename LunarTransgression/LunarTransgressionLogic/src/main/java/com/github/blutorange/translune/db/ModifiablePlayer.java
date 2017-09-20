@@ -6,7 +6,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.github.blutorange.common.CannotPerformOperationException;
 
-public class ModifiablePlayer extends ModifiableEntity<Player> {
+public class ModifiablePlayer extends ModifiableEntity<@NonNull Player> {
 	public void addCharacterState(final CharacterState characterState) {
 		entity.addCharacterState(characterState);
 	}
@@ -25,6 +25,10 @@ public class ModifiablePlayer extends ModifiableEntity<Player> {
 
 	public void removeCharacterState(final CharacterState characterState) {
 		entity.removeCharacterState(characterState);
+	}
+
+	public void removeReleasedCharacterState(final CharacterState releasedCharacterState) {
+		entity.removeReleasedCharacterState(releasedCharacterState);
 	}
 
 	public void removeItem(final Item item) {
